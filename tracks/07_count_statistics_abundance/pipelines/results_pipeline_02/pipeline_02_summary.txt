@@ -1,0 +1,19 @@
+================================================================================
+Track 07 Pipeline 02: Milo kNN DA & CoDa Compositional Regression Report
+================================================================================
+
+Cohort Specification:
+  • Patients: 10 total (5 Responders, 5 Non-Responders)
+  • Cells: 4,000 CD8 T cells across Naive, Memory, Effector, Exhausted
+  • Neighborhoods: 400 sampled index neighborhoods (k=30)
+
+Milo Differential Abundance Results (Spatial FDR < 0.05):
+  • Enriched in Responders     (Effector T)  : 80 neighborhoods
+  • Enriched in Non-Responders (Exhausted T) : 83 neighborhoods
+  • Invariant Neighborhoods   (Naive/Memory): 237 neighborhoods
+
+CoDa Compositional Log-Ratio Regression (Reference = Naive CD8 T):
+  • Naive        | Effect Beta:   0.000 | P-val: 1.00e+00 | Invariant_Baseline
+  • Memory       | Effect Beta:   0.000 | P-val: 1.00e+00 | Statistically_Invariant
+  • Effector     | Effect Beta:   1.099 | P-val: 1.07e-04 | True_Expansion_Responders
+  • Exhausted    | Effect Beta:  -1.099 | P-val: 1.07e-04 | True_Expansion_NonResponders

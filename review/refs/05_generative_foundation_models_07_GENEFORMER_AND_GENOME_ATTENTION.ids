@@ -1,0 +1,12 @@
+[cited]
+PMID:37258680  # Theodoris 2023 Nature
+DOI:10.18653/v1/2020.acl-main.385  # Abnar & Zuidema 2020 ACL
+
+[evidence]
+
+
+[software]
+SW:networkx
+SW:numpy
+SW:pandas
+SW:torch

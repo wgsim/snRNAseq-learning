@@ -1,0 +1,13 @@
+[cited]
+PMID:29925878  # "Berglund et al. 2018", L198  [Berglund E 2018 Nat Commun]
+PMID:35948708  # "Erickson et al. 2022", L201  [Erickson A 2022 Nature]
+
+[evidence]
+
+[software]
+SW:cellpose
+SW:scanpy
+SW:squidpy
+SW:geopandas
+SW:shapely
+SW:spatialdata

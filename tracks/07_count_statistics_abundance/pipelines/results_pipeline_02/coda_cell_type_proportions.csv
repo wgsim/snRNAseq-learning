@@ -1,0 +1,11 @@
+patient_id,condition,is_resp,total_cells,prop_Naive,count_Naive,prop_Memory,count_Memory,prop_Effector,count_Effector,prop_Exhausted,count_Exhausted
+PT_01,Responder,1,400,0.2,80,0.2,80,0.45,180,0.15,60
+PT_02,Responder,1,400,0.2,80,0.2,80,0.45,180,0.15,60
+PT_03,Responder,1,400,0.2,80,0.2,80,0.45,180,0.15,60
+PT_04,Responder,1,400,0.2,80,0.2,80,0.45,180,0.15,60
+PT_05,Responder,1,400,0.2,80,0.2,80,0.45,180,0.15,60
+PT_06,NonResponder,0,400,0.2,80,0.2,80,0.15,60,0.45,180
+PT_07,NonResponder,0,400,0.2,80,0.2,80,0.15,60,0.45,180
+PT_08,NonResponder,0,400,0.2,80,0.2,80,0.15,60,0.45,180
+PT_09,NonResponder,0,400,0.2,80,0.2,80,0.15,60,0.45,180
+PT_10,NonResponder,0,400,0.2,80,0.2,80,0.15,60,0.45,180

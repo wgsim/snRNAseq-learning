@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">단일세포 차등발현 검정: 위양성 가짜 반복(Pseudoreplication) vs 환자 수준 Pseudobulk</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">단일 핵 N-인플레이션 오류(N=10,000) 극복 ➔ 환자 간 생물학적 분산(α_g)을 반영한 음이항 GLM (DESeq2)</text>
+
+  <!-- Left Panel: Pseudoreplication Trap (Red Warning) -->
+  <g transform="translate(30, 70)">
+    <rect width="310" height="265" rx="10" fill="url(#gradCard8)" stroke="#ef4444" stroke-width="1.8"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#ef4444" fill-opacity="0.25"/>
+    <text x="155" y="22" text-anchor="middle" fill="#f87171" font-size="12.5" font-weight="700">❌ 잘못된 단일세포 수준 검정 (가짜 반복)</text>
+
+    <!-- Schematic: 10,000 cells treated as independent -->
+    <rect x="15" y="44" width="280" height="58" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+    <text x="25" y="63" fill="#fca5a5" font-size="11" font-weight="700">5 Responders vs 5 Non-responders</text>
+    <text x="25" y="80" fill="#f87171" font-size="10" font-family="monospace">Wilcoxon test: N = 10,000 single nuclei</text>
+    <text x="25" y="94" fill="#fca5a5" font-size="10" font-weight="700">위양성 폭발: p-value = 10⁻¹⁵⁰ (가짜 유의성)</text>
+
+    <!-- Technical Critiques -->
+    <text x="15" y="122" fill="#cbd5e1" font-size="11" font-weight="600">• 통계적 독립성 가정(i.i.d.) 위반:</text>
+    <text x="25" y="140" fill="#94a3b8" font-size="10.5">동일 환자에게서 나온 1,000개 핵은 강한</text>
+    <text x="25" y="156" fill="#94a3b8" font-size="10.5">환자 내 상관관계(Intra-donor Correlation) 보유</text>
+
+    <text x="15" y="178" fill="#cbd5e1" font-size="11" font-weight="600">• 환자 특이적 잡음(Patient Noise) 과대 포장:</text>
+    <text x="25" y="196" fill="#94a3b8" font-size="10.5">특정 환자 1명의 개체 특이적 유전자가 전체</text>
+    <text x="25" y="212" fill="#f87171" font-size="10.5">치료 반응 핵심 바이오마커로 둔갑</text>
+
+    <text x="15" y="234" fill="#cbd5e1" font-size="11" font-weight="600">• 임상 재현 실패율:</text>
+    <text x="25" y="252" fill="#ef4444" font-size="10.5" font-weight="700">독립 코호트 검증 시 80~90% 이상 재현 불능</text>
+  </g>
+
+  <!-- Center Arrow / Aggregation Mechanism -->
+  <g transform="translate(350, 70)">
+    <rect width="280" height="265" rx="10" fill="url(#gradCard8)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="280" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="140" y="22" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">⚡ Pseudobulk 집계 메커니즘</text>
+
+    <!-- Formula & Aggregation Card -->
+    <rect x="15" y="44" width="250" height="58" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <text x="25" y="63" fill="#38bdf8" font-size="10.5" font-weight="700">patient_id × cell_type_annotation</text>
+    <text x="25" y="80" fill="#34d399" font-size="10" font-family="monospace">Y_gj = Σ_{c ∈ Donor_j} Raw_UMI_gc</text>
+    <text x="25" y="94" fill="#94a3b8" font-size="9.5">Malignant Luminal 세포군 대상 정수 합산</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="122" fill="#cbd5e1" font-size="11" font-weight="600">• 원시 정수(Raw Integer UMI) 단순 합산:</text>
+    <text x="25" y="140" fill="#94a3b8" font-size="10.5">Log 변환이나 정규화 전 카운트 합산 필수</text>
+
+    <text x="15" y="162" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 핵 희소성(Dropout) 완벽 극복:</text>
+    <text x="25" y="180" fill="#94a3b8" font-size="10.5">Zero 드롭아웃 극복 ➔ 신호 대 잡음비(SNR) 급증</text>
+
+    <text x="15" y="202" fill="#cbd5e1" font-size="11" font-weight="600">• 표본 품질 컷오프(QC Filtering):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10.5">환자당 세포 수 ≥ 10~20 nuclei &amp; UMI ≥ 500</text>
+
+    <!-- Bottom summary badge -->
+    <rect x="15" y="235" width="250" height="22" rx="4" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="140" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">10,000 Nuclei ➔ 10 Patient Samples (5 vs 5)</text>
+  </g>
+
+  <!-- Right Panel: Patient-level DESeq2 GLM (Green Success) -->
+  <g transform="translate(640, 70)">
+    <rect width="330" height="265" rx="10" fill="url(#gradCard8)" stroke="#10b981" stroke-width="1.8"/>
+    <rect x="0" y="0" width="330" height="32" rx="10" fill="#10b981" fill-opacity="0.25"/>
+    <text x="165" y="22" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">✅ 환자 수준 음이항 GLM (DESeq2 / PyDESeq2)</text>
+
+    <!-- Schematic: DESeq2 with true biological dispersion -->
+    <rect x="15" y="44" width="300" height="58" rx="6" fill="#064e3b" fill-opacity="0.5" stroke="#10b981" stroke-width="1"/>
+    <text x="25" y="63" fill="#a7f3d0" font-size="11" font-weight="700">음이항 GLM 설계: ~ batch + condition</text>
+    <text x="25" y="80" fill="#34d399" font-size="10" font-family="monospace">Var(Y_gj) = μ_gj + α_g · μ_gj² (N = 5 vs 5)</text>
+    <text x="25" y="94" fill="#a7f3d0" font-size="10" font-weight="600">엄밀한 환자 간 생물학적 분산(α_g) 적합</text>
+
+    <!-- Technical Strengths -->
+    <text x="15" y="122" fill="#cbd5e1" font-size="11" font-weight="600">• 진정한 통계적 자유도 확보 (N = 5 vs 5):</text>
+    <text x="25" y="140" fill="#94a3b8" font-size="10.5">환자 간 개체 차이를 분산 매개변수로 정확히 모델링</text>
+
+    <text x="15" y="162" fill="#cbd5e1" font-size="11" font-weight="600">• 임상 공변량(Covariates) 통제:</text>
+    <text x="25" y="180" fill="#94a3b8" font-size="10.5">배치 효과, 치료 이력, 환자 연령 교란 변수 분리</text>
+
+    <text x="15" y="202" fill="#cbd5e1" font-size="11" font-weight="600">• 경험적 베이즈 분산 수축(Empirical Bayes Shrinkage):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10.5">소규모 코호트에서도 안정적인 Fold Change 추정</text>
+
+    <!-- Badge -->
+    <rect x="15" y="235" width="300" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="165" y="250" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">✓ 임상 재현 가능한 진정한 전립선암 바이오마커 발굴</text>
+  </g>
+</svg>

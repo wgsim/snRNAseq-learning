@@ -1,0 +1,11 @@
+[cited]
+PMID:23842682  # "Korpal 2013", L163  [Korpal M 2013 Cancer Discov]
+PMID:27196756  # ""Mol Cancer Ther 2016" (저자 미표기; Prekovic et al.로 확정)", L163  [Prekovic S 2016 Mol Cancer Ther]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:pandas
+SW:pysam

@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Docker vs. Singularity/Apptainer HPC 컨테이너 보안 및 실행 아키텍처</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">Root 데몬 취약점(Docker) vs HPC 멀티유저 환경 비특권 SIF 사용자 공간 격리(Singularity/Apptainer)</text>
+
+  <!-- Panel 1: Docker Root Daemon & HPC Vulnerability -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. Docker Root 데몬 &amp; HPC 취약점</text>
+
+    <!-- Schematic: Docker Architecture -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    
+    <!-- User CLI -->
+    <rect x="25" y="52" width="65" height="26" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1"/>
+    <text x="57" y="65" text-anchor="middle" fill="#f1f5f9" font-size="8" font-weight="700">User CLI</text>
+    <text x="57" y="74" text-anchor="middle" fill="#94a3b8" font-size="7">UID: 1002</text>
+
+    <!-- Arrow to dockerd -->
+    <line x1="90" y1="65" x2="116" y2="65" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrRose01)"/>
+    <text x="103" y="60" text-anchor="middle" fill="#f43f5e" font-size="6.5">socket</text>
+
+    <!-- dockerd (Root Daemon) -->
+    <rect x="120" y="48" width="68" height="34" rx="4" fill="#881337" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="154" y="62" text-anchor="middle" fill="#ffe4e6" font-size="7.5" font-weight="700">dockerd</text>
+    <text x="154" y="74" text-anchor="middle" fill="#f43f5e" font-size="7" font-weight="700">Root (UID 0)</text>
+
+    <!-- Arrow to container -->
+    <line x1="188" y1="65" x2="208" y2="65" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrRose01)"/>
+
+    <!-- Container -->
+    <rect x="212" y="52" width="63" height="26" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+    <text x="243" y="64" text-anchor="middle" fill="#fb7185" font-size="7.5" font-weight="700">Container</text>
+    <text x="243" y="73" text-anchor="middle" fill="#f43f5e" font-size="6.5">Root 권한상승</text>
+
+    <!-- Threat warning banner -->
+    <rect x="25" y="90" width="250" height="38" rx="4" fill="#4c0519" fill-opacity="0.6" stroke="#e11d48" stroke-width="1"/>
+    <text x="150" y="103" text-anchor="middle" fill="#fecdd3" font-size="7.5" font-weight="700">🚨 보안 결함: 컨테이너 탈출(Breakout) 시</text>
+    <text x="150" y="114" text-anchor="middle" fill="#fda4af" font-size="7">호스트 커널 및 공유 스토리지(/shared) 전체 장악 위험</text>
+    <text x="150" y="123" text-anchor="middle" fill="#fda4af" font-size="6.5">다중 사용자(Multi-tenant) 클러스터에서 사용 불가</text>
+
+    <!-- Bullet description -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 백그라운드 Root 데몬 의존성:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">클라이언트와 분리된 데몬이 호스트 슈퍼유저 권한 행사</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• POSIX 파일 권한 왜곡:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">생성된 파일이 root:root 소유로 생성되어 권한 충돌</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• HPC 보안 정책 위반:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">기관 공유 클러스터에서 일반 연구원 sudo 권한 부여 불가</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#881337" fill-opacity="0.4"/>
+    <text x="150" y="259" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="600">HPC 환경 배제: 슈퍼유저 탈취 및 공유 파일 파괴 위험</text>
+  </g>
+
+  <!-- Panel 2: Singularity/Apptainer Unprivileged SIF Architecture -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. Singularity/Apptainer 비특권 SIF 구조</text>
+
+    <!-- Schematic: Singularity Architecture -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- User CLI -->
+    <rect x="25" y="52" width="70" height="28" rx="4" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+    <text x="60" y="65" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">User Process</text>
+    <text x="60" y="75" text-anchor="middle" fill="#bae6fd" font-size="7">UID: 1002 (Host)</text>
+
+    <!-- Direct invocation arrow -->
+    <line x1="95" y1="66" x2="120" y2="66" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan01)"/>
+
+    <!-- SIF Image -->
+    <rect x="124" y="49" width="74" height="34" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="161" y="62" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">image.sif</text>
+    <text x="161" y="74" text-anchor="middle" fill="#7dd3fc" font-size="6.5">SquashFS (RO)</text>
+
+    <!-- Exec arrow -->
+    <line x1="198" y1="66" x2="220" y2="66" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan01)"/>
+
+    <!-- Executing Container -->
+    <rect x="224" y="52" width="62" height="28" rx="4" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+    <text x="255" y="65" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">Apptainer</text>
+    <text x="255" y="75" text-anchor="middle" fill="#38bdf8" font-size="7">UID: 1002 (유지)</text>
+
+    <!-- Mounts & Security banner -->
+    <rect x="25" y="90" width="260" height="38" rx="4" fill="#082f49" fill-opacity="0.6" stroke="#0284c7" stroke-width="1"/>
+    <text x="155" y="103" text-anchor="middle" fill="#bae6fd" font-size="7.5" font-weight="700">🛡️ 비특권 사용자 공간 마운트 (Unprivileged)</text>
+    <text x="155" y="114" text-anchor="middle" fill="#e0f2fe" font-size="7">데몬 없음 (Daemonless) ➔ 프로세스 포크 방식으로 직접 실행</text>
+    <text x="155" y="123" text-anchor="middle" fill="#7dd3fc" font-size="6.5">호스트 사용자 ID/그룹 ID 및 파일시스템 권한 100% 보존</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 파일 이식성 (SIF 포맷):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">압축된 읽기 전용 SquashFS 파일 하나로 배포 및 공유</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 네이티브 HPC 스토리지 바인드:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">--bind /scratch,/shared 옵션으로 Lustre/GPFS 직접 접근</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• GPU 드라이버 네이티브 패스스루:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">--nv 플래그를 통한 NVIDIA CUDA 라이브러리 직접 바인딩</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">HPC 표준: 일반 유저 권한 실행 및 완전한 격리 보장</text>
+  </g>
+
+  <!-- Panel 3: OCI to SIF Conversion & SLURM Workflow -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. OCI 변환 및 SLURM 파이프라인 연계</text>
+
+    <!-- Workflow Pipeline Graphic -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Step 1: Docker registry -->
+    <rect x="22" y="50" width="72" height="32" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="58" y="62" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">DockerHub/Quay</text>
+    <text x="58" y="74" text-anchor="middle" fill="#94a3b8" font-size="6.5">docker://starsolo</text>
+
+    <line x1="94" y1="66" x2="110" y2="66" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Step 2: SIF cache -->
+    <rect x="114" y="50" width="76" height="32" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+    <text x="152" y="62" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">NXF_SINGULARITY</text>
+    <text x="152" y="74" text-anchor="middle" fill="#6ee7b7" font-size="6.5">CACHEDIR (*.sif)</text>
+
+    <line x1="190" y1="66" x2="206" y2="66" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Step 3: SLURM Task -->
+    <rect x="210" y="50" width="75" height="32" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="247" y="62" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">SLURM Worker</text>
+    <text x="247" y="74" text-anchor="middle" fill="#fde68a" font-size="6.5">cgroups 64GB</text>
+
+    <!-- Execution code snippet -->
+    <rect x="22" y="90" width="263" height="38" rx="4" fill="#022c22" stroke="#059669" stroke-width="1"/>
+    <text x="30" y="103" fill="#a7f3d0" font-family="monospace" font-size="7">$ singularity exec --bind /scratch \</text>
+    <text x="38" y="114" fill="#a7f3d0" font-family="monospace" font-size="7">  starsolo_2.7.sif STAR --soloType Droplet ...</text>
+    <text x="30" y="123" fill="#6ee7b7" font-size="6.5">➔ SLURM 배치 스크립트 내 비대화형(Headless) 자동 실행</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• OCI 레이어 자동 병합 및 변환:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">Nextflow가 docker:// 태그를 감지하여 SIF로 자동 빌드</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 중앙 캐시를 통한 네트워크 I/O 최소화:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">수백 개 워커 노드가 공유 스토리지 SIF를 재참조</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 재현성 및 버전 고정(Digest Pinning):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">sha256 다이제스트를 통한 소프트웨어 빌드 불변성 보장</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">SLURM + Singularity + Nextflow 무결점 통합</text>
+  </g>
+</svg>

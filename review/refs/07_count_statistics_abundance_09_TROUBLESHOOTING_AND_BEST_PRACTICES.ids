@@ -1,0 +1,12 @@
+[cited]
+PMID:27240256  # "Ignatiadis et al. 2016 (IHW)", L102,L123  [Ignatiadis N 2016 Nat Methods]
+
+[evidence]
+PMID:32718323  # Choi K 2020 Genome Biol: Bayesian model selection reveals biological origins of zero inflation in single-cell transcript  [근거: SCI-07-066]
+
+[software]
+SW:deseq2
+SW:ihw
+SW:numpy
+SW:scipy
+SW:ggplot2

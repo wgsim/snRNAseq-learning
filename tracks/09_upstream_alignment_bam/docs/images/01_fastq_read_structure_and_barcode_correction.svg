@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">FASTQ 리드 구조 분석, 1-Hamming 바코드 오류 교정 및 EmptyDrops 세포 식별</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">10x R1/R2 이중 가닥 구조 ➔ 737K 화이트리스트 1-Hamming 해시 복원 ➔ Dirichlet-Multinomial 배경 액적 분리</text>
+
+  <!-- Panel 1: FASTQ Read Architecture -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 10x Genomics v3 R1/R2 리드 아키텍처</text>
+
+    <!-- Schematic: Read 1 -->
+    <rect x="15" y="42" width="270" height="42" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="22" y="55" fill="#94a3b8" font-size="8.5" font-weight="700">Read 1 (28 bp Short Read):</text>
+    <!-- Barcode 16bp -->
+    <rect x="22" y="60" width="130" height="18" rx="3" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+    <text x="87" y="73" text-anchor="middle" fill="#34d399" font-size="9" font-weight="700">Cell Barcode (16 bp)</text>
+    <!-- UMI 12bp -->
+    <rect x="156" y="60" width="120" height="18" rx="3" fill="#d97706" fill-opacity="0.25" stroke="#fbbf24" stroke-width="1"/>
+    <text x="216" y="73" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">UMI (12 bp)</text>
+
+    <!-- Schematic: Read 2 -->
+    <rect x="15" y="92" width="270" height="42" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="22" y="105" fill="#94a3b8" font-size="8.5" font-weight="700">Read 2 (91+ bp Paired cDNA):</text>
+    <rect x="22" y="110" width="254" height="18" rx="3" fill="#0284c7" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1"/>
+    <text x="149" y="123" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">cDNA Transcript Insert (전사항체 서열)</text>
+
+    <!-- Bullet description -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 바코드 다양성: 4^16 = 4.29 × 10^9 조합 공간</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">737,280개 검증된 젤비즈 비드 화이트리스트 매핑</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 고유 분자 식별자: 4^12 = 1.67 × 10^7 UMI 공간</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">PCR 중복 증폭 산물과 단일 전사체 1:1 절대 계수</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• Phred 품질 점수 (Q30 &gt; 99.9% 신뢰도):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">Illumina NovaSeq 광학적 염기 판독 오류 감지</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">Dual-index 비대칭 리드 구조 ➔ 세포 및 분자 태깅</text>
+  </g>
+
+  <!-- Panel 2: 1-Hamming Error Correction -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">2. 1-Hamming 바코드 오류 교정 해시 그래프</text>
+
+    <!-- Graph Schema -->
+    <rect x="15" y="42" width="280" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Whitelist Node -->
+    <circle cx="65" cy="88" r="22" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="85" text-anchor="middle" fill="#a7f3d0" font-size="8" font-weight="700">Whitelist</text>
+    <text x="65" y="97" text-anchor="middle" fill="#34d399" font-size="7.5">ACGT...A</text>
+
+    <!-- 1bp mutant 1 -->
+    <circle cx="165" cy="62" r="15" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="165" y="65" text-anchor="middle" fill="#fbbf24" font-size="7.5">TCGT (1bp)</text>
+
+    <!-- 1bp mutant 2 -->
+    <circle cx="165" cy="114" r="15" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="165" y="117" text-anchor="middle" fill="#fbbf24" font-size="7.5">AGGT (1bp)</text>
+
+    <!-- Corrected Arrow -->
+    <path d="M148,65 L90,82" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrEmerald01)"/>
+    <path d="M148,111 L90,94" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Unresolvable collision node -->
+    <circle cx="255" cy="88" r="15" fill="#1e293b" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="255" y="85" text-anchor="middle" fill="#f43f5e" font-size="7">Ambiguous</text>
+    <text x="255" y="96" text-anchor="middle" fill="#f43f5e" font-size="7">Dist=1 to 2 WL</text>
+    <path d="M238,88 L185,88" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+    <text x="215" y="82" text-anchor="middle" fill="#f43f5e" font-size="7">충돌 폐기</text>
+
+    <!-- Details -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 1-Hamming 근접 이웃: 3 × 16 = 48개 변이 공간</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">사전 인덱싱 해시 테이블로 O(1) 복구 탐색</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 복구율 &gt; 96.5% 달성:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">PCR 1bp 점 돌연변이 및 염기 판독 오류 완벽 복구</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 다중 화이트리스트 충돌(Collision) 방어:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">두 개 이상 정품 바코드와 동등 거리 시 안전 폐기</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">손실 리드의 8~12%를 복원하여 세포 검출 감도 극대화</text>
+  </g>
+
+  <!-- Panel 3: EmptyDrops & Cell Calling -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">3. EmptyDrops &amp; Knee-point 세포 여과</text>
+
+    <!-- Chart: Barcode Rank vs UMI Count -->
+    <rect x="15" y="42" width="280" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Axes -->
+    <line x1="40" y1="120" x2="275" y2="120" stroke="#64748b" stroke-width="1"/>
+    <line x1="40" y1="120" x2="40" y2="52" stroke="#64748b" stroke-width="1"/>
+    <text x="270" y="130" text-anchor="end" fill="#64748b" font-size="7">Log Barcode Rank</text>
+    <text x="35" y="52" text-anchor="end" fill="#64748b" font-size="7">Log UMI</text>
+
+    <!-- Knee Curve -->
+    <path d="M42,56 C70,58 100,60 130,70 C150,80 165,100 185,114 C210,117 250,118 270,119" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    
+    <!-- Knee & Inflection Points -->
+    <circle cx="130" cy="70" r="3.5" fill="#34d399"/>
+    <text x="135" y="67" fill="#34d399" font-size="7.5" font-weight="700">Knee pt (진짜 세포)</text>
+    
+    <circle cx="185" cy="114" r="3.5" fill="#f43f5e"/>
+    <text x="190" y="110" fill="#f43f5e" font-size="7.5" font-weight="700">Inflection (배경)</text>
+
+    <!-- Ambient Threshold Line -->
+    <line x1="40" y1="114" x2="275" y2="114" stroke="#f43f5e" stroke-width="1" stroke-dasharray="2,2"/>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 단순 임계값(Knee-point)의 한계 극복:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">소형 세포(T세포 등)의 UMI 과소 계수 탈락 방지</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• Dirichlet-Multinomial 배경 RNA 프로파일링:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">세포 없는 Ambient RNA 액적의 전사체 분포 모델링</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• Benjamini-Hochberg FDR &lt; 0.01 검정:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">유의미한 전사체 편향 액적만을 진성 세포로 판별</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">파편화된 Ambient RNA 오염을 배제하고 희귀 세포 구제</text>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+[cited]
+PMID:29553579  # "Svensson et al. 2018 (SpatialDE)", L140,L162  [Svensson V 2018 Nat Methods]
+PMID:34154649  # "Zhu et al. 2021 (SPARK-X)", L146,L165,L312  [Zhu J 2021 Genome Biol]
+
+[evidence]
+PMID:21892150  # Lippert C 2011 Nat Methods: FaST linear mixed models for genome-wide association studies.  [근거: SCI-02-037]
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:squidpy

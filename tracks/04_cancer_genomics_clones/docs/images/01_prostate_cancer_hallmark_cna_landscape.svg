@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">전립선암 특징적 염색체 수 이상(CNA) 파노라마 &amp; 핵심 종양 유전자</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">염색체 이데오그램(8p/q, 10q, 13q, 17p, 21q, Xq)과 핵심 드라이버 (PTEN, TP53, RB1, MYC, TMPRSS2-ERG, AR)</text>
+
+  <!-- Panel 1: Deletion Hotspots -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#f43f5e" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="700">1. 주요 결손 핫스팟 (Deletion Hotspots)</text>
+
+    <!-- Schematic: Chromosome Ideograms with Deletions -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#be123c" stroke-width="1"/>
+    
+    <!-- Chr 8p -->
+    <g transform="translate(25, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="1" y="2" width="10" height="24" rx="3" fill="#f43f5e" fill-opacity="0.9"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 8</text>
+      <text x="18" y="16" fill="#f43f5e" font-size="8.5" font-weight="700">8p- (NKX3-1)</text>
+    </g>
+
+    <!-- Chr 10q -->
+    <g transform="translate(95, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="1" y="30" width="10" height="24" rx="3" fill="#f43f5e" fill-opacity="0.9"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 10</text>
+      <text x="18" y="44" fill="#f43f5e" font-size="8.5" font-weight="700">10q- (PTEN)</text>
+    </g>
+
+    <!-- Chr 13q -->
+    <g transform="translate(165, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="1" y="32" width="10" height="22" rx="3" fill="#fbbf24" fill-opacity="0.9"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 13</text>
+      <text x="18" y="46" fill="#fbbf24" font-size="8.5" font-weight="700">13q- (RB1)</text>
+    </g>
+
+    <!-- Chr 17p -->
+    <g transform="translate(235, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="1" y="2" width="10" height="24" rx="3" fill="#e11d48" fill-opacity="0.9"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 17</text>
+      <text x="-4" y="16" text-anchor="end" fill="#e11d48" font-size="8.5" font-weight="700">17p- (TP53)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 8p &amp; 10q 동시 결손 (초기 클론 드라이버):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">NKX3-1(상피분화 소실) &amp; PTEN(PI3K-AKT 활성화)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 13q &amp; 17p 결손 (후기 악성화 드라이버):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">RB1(세포주기 제동 소실) &amp; TP53(게놈 불안정성)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 2-Hit 불활성화 모델 (Knudson):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">대립유전자 결손(LOH) + 점돌연변이 또는 후성 억제</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#f43f5e" fill-opacity="0.2"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="600">결손 빈도: PTEN 40~60%, TP53 30~50%, RB1 25~35%</text>
+  </g>
+
+  <!-- Panel 2: Gains & Fusions -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">2. 증폭 &amp; 염색체 융합 (Gains &amp; Fusions)</text>
+
+    <!-- Schematic: Gains & Amplicons -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <!-- Chr 8q Gain -->
+    <g transform="translate(30, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="1" y="30" width="10" height="24" rx="3" fill="#38bdf8" fill-opacity="0.9"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 8</text>
+      <text x="18" y="45" fill="#38bdf8" font-size="8.5" font-weight="700">8q+ (MYC)</text>
+    </g>
+
+    <!-- Chr 21q Deletion / Fusion -->
+    <g transform="translate(115, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <line x1="6" y1="26" x2="6" y2="38" stroke="#f43f5e" stroke-width="3" stroke-dasharray="2,2"/>
+      <circle cx="6" cy="32" r="5" fill="#c084fc"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 21</text>
+      <text x="18" y="35" fill="#c084fc" font-size="8" font-weight="700">TMPRSS2-ERG</text>
+    </g>
+
+    <!-- Chr Xq High Amplicon (AR) -->
+    <g transform="translate(210, 50)">
+      <rect x="0" y="0" width="12" height="56" rx="6" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <rect x="0" y="16" width="12" height="20" rx="3" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="6" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">Chr X</text>
+      <text x="18" y="29" fill="#fbbf24" font-size="8.5" font-weight="700">Xq12 (AR Amp)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 8q24 증폭 (MYC 과발현):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단백질 합성 및 대사 재프로그래밍으로 성장 촉진</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 21q22.2 결손-융합 (TMPRSS2-ERG):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">안드로겐 유도 프로모터에 의한 발암성 전사인자 폭발 (~50%)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• Xq12 유전자 좌위 증폭 (AR Super-Amp):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">거세 저항성 상태에서 AR 및 인핸서 좌위 10~50배 증폭</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">진행 기전: 호르몬 결핍 후 AR 증폭 및 변이 클론 팽창</text>
+  </g>
+
+  <!-- Panel 3: Clinical Trajectory -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">3. 임상 진행 단계별 이수체 동역학</text>
+
+    <!-- Schematic: Trajectory Arrow -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <!-- Stages Boxes -->
+    <g transform="translate(25, 52)">
+      <!-- Primary -->
+      <rect x="0" y="0" width="68" height="42" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="34" y="16" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">Primary PCa</text>
+      <text x="34" y="30" text-anchor="middle" fill="#94a3b8" font-size="7.5">국소 결손 / ERG</text>
+      <text x="34" y="38" text-anchor="middle" fill="#64748b" font-size="7">CNA &lt; 5%</text>
+
+      <line x1="72" y1="21" x2="88" y2="21" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowCyan01)"/>
+
+      <!-- mCRPC -->
+      <rect x="92" y="0" width="68" height="42" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="126" y="16" text-anchor="middle" fill="#fbbf24" font-size="8.5" font-weight="700">mCRPC</text>
+      <text x="126" y="30" text-anchor="middle" fill="#94a3b8" font-size="7.5">AR Amp / PTEN-</text>
+      <text x="126" y="38" text-anchor="middle" fill="#64748b" font-size="7">CNA 25~40%</text>
+
+      <line x1="164" y1="21" x2="180" y2="21" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrowRose01)"/>
+
+      <!-- t-NEPC -->
+      <rect x="184" y="0" width="66" height="42" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+      <text x="217" y="16" text-anchor="middle" fill="#f43f5e" font-size="8.5" font-weight="700">t-NEPC</text>
+      <text x="217" y="30" text-anchor="middle" fill="#94a3b8" font-size="7.5">TP53/RB1 소실</text>
+      <text x="217" y="38" text-anchor="middle" fill="#64748b" font-size="7">CNA &gt; 55%</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 원발암 (Primary Adenocarcinoma):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">비교적 정적인 유전체, 국소적 8p/PTEN 결손 및 ERG 융합</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 거세저항성 전이암 (mCRPC):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">광범위 염색체 완(Arm) 단위 결손/증폭, AR 고도 증폭</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 치료 유도 신경내분비암 (t-NEPC):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">TP53 &amp; RB1 동시 소실로 인한 극단적 유전체 불안정성</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">임상 지표: CNA 부하(CNA Burden)는 전이 및 사망 위험 예측</text>
+  </g>
+</svg>

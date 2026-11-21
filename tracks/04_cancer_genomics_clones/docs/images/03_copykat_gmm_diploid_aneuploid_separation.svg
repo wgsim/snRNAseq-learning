@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">CopyKAT: 포아송 분산 안정화 &amp; GMM 기반 2배체/이수체 비지도 분리</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">기준세포 비의존 분산 안정화 ➔ 이봉 게놈 분산 GMM 군집 ➔ 2배체 정상 기질 vs 이수체 종양 세포 분리</text>
+
+  <!-- Panel 1: Reference-Free Poisson Stabilization -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 기준세포 비의존 분산 안정화</text>
+
+    <!-- Schematic: Poisson count to Freeman-Tukey / Anscombe -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(25, 52)">
+      <rect x="0" y="0" width="105" height="48" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8"/>
+      <text x="52" y="16" text-anchor="middle" fill="#f43f5e" font-size="8" font-weight="700">Raw scRNA Count</text>
+      <text x="52" y="30" text-anchor="middle" fill="#94a3b8" font-size="7">Poisson Noise: y ~ Poiss(λ)</text>
+      <text x="52" y="42" text-anchor="middle" fill="#64748b" font-size="6.5">Var(y) = Mean(y)</text>
+
+      <text x="118" y="28" fill="#38bdf8" font-size="14" font-weight="700">→</text>
+
+      <rect x="135" y="0" width="110" height="48" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="190" y="16" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">Anscombe Transform</text>
+      <text x="190" y="30" text-anchor="middle" fill="#34d399" font-size="7.5" font-family="monospace">z = 2√(y + 3/8)</text>
+      <text x="190" y="42" text-anchor="middle" fill="#94a3b8" font-size="6.5">Stabilized Var(z) ≈ 1.0</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 정상 대조 세포 사전 지식 불필요:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일 종양 검체 내 자체 데이터만으로 복제수 프로파일링</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 포아송 분산 안정화 (Anscombe 변환):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">발현량 크기에 종속적인 기저 분산을 상수(1.0)로 정규화</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 5MB 게놈 윈도우 집계:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">국소 염색체 단위 윈도우 스팬으로 전사율 변동 흡수</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">특징: 종양 순도(Purity)가 낮은 생검 검체 분석 최적화</text>
+  </g>
+
+  <!-- Panel 2: GMM Diploid Discovery -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. GMM 이봉 분산 2배체 발견</text>
+
+    <!-- Schematic: Bimodal distribution & GMM -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <line x1="10" y1="52" x2="245" y2="52" stroke="#475569" stroke-width="1"/>
+      <line x1="10" y1="10" x2="10" y2="52" stroke="#475569" stroke-width="1"/>
+
+      <!-- Diploid peak curve (emerald) -->
+      <path d="M 15,52 Q 45,5 75,52" fill="#34d399" fill-opacity="0.25" stroke="#34d399" stroke-width="2"/>
+      <text x="45" y="25" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">2배체 (Diploid)</text>
+      <text x="45" y="34" text-anchor="middle" fill="#94a3b8" font-size="6.5">낮은 분산 σ²~0.02</text>
+
+      <!-- Aneuploid peak curve (rose) -->
+      <path d="M 85,52 Q 165,18 240,52" fill="#f43f5e" fill-opacity="0.25" stroke="#f43f5e" stroke-width="2"/>
+      <text x="165" y="30" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">이수체 (Aneuploid)</text>
+      <text x="165" y="40" text-anchor="middle" fill="#94a3b8" font-size="6.5">높은 분산 σ²~0.25</text>
+
+      <text x="210" y="60" text-anchor="middle" fill="#64748b" font-size="7">게놈 분산 (σ²)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 게놈 복제수 분산 지표 (Genomic Variance):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일세포별 염색체 전반의 분절 발현 변동폭(Variance) 산출</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 이봉 분포(Bimodal) 자동 분할:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">EM 알고리즘 기반 2-Component 가우시안 혼합 모델 피팅</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 내부 2배체 기준군 자동 추출:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">최저 분산 성분 세포군을 고신뢰 정상 기준군(Baseline) 지정</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">분류 기준: 사후 확률 P(Aneuploid | σ²) &gt; 0.5 판정</text>
+  </g>
+
+  <!-- Panel 3: Separation & Validation -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#fbbf24" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">3. 종양 vs 기질 분리 &amp; 벤치마크</text>
+
+    <!-- Schematic: Clustered Heatmap & ROC Curve -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Heatmap rows -->
+      <rect x="0" y="2" width="135" height="18" fill="#334155" rx="2"/>
+      <text x="67" y="14" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">Diploid Normal (Stroma/Immune)</text>
+
+      <rect x="0" y="23" width="135" height="15" fill="#f43f5e" fill-opacity="0.85" rx="2"/>
+      <text x="67" y="34" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">Tumor Clone A (8p-, 8q+, 10q-)</text>
+
+      <rect x="0" y="41" width="135" height="15" fill="#be123c" fill-opacity="0.9" rx="2"/>
+      <text x="67" y="52" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">Tumor Clone B (+13q-, 17p-)</text>
+
+      <!-- Inset ROC Curve -->
+      <g transform="translate(155, 2)">
+        <rect x="0" y="0" width="90" height="54" rx="3" fill="#1e293b" stroke="#475569" stroke-width="0.8"/>
+        <line x1="8" y1="46" x2="82" y2="46" stroke="#64748b" stroke-width="1"/>
+        <line x1="8" y1="8" x2="8" y2="46" stroke="#64748b" stroke-width="1"/>
+        <line x1="8" y1="46" x2="82" y2="8" stroke="#475569" stroke-width="1" stroke-dasharray="2,2"/>
+        <path d="M 8,46 L 10,12 L 82,8" fill="none" stroke="#fbbf24" stroke-width="2"/>
+        <text x="45" y="30" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">ROC AUC</text>
+        <text x="45" y="40" text-anchor="middle" fill="#fff" font-size="8.5" font-weight="700">0.992</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 계층적 클러스터링(Hierarchical Clustering):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일세포 복제수 프로파일 거리 기반 서브클론 계통 분기</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 정상 비종양 세포 완벽 분리:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">평평한 2배체 기저선을 갖는 섬유아세포/T세포 정확한 격리</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• DNA Flow Cytometry 검증 일치도:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">WGS 기반 DNA Ploidy 지표와 98.4% 일치하는 정확도</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">성능 지표: 민감도 99.1%, 특이도 98.6%, AUC 0.992</text>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+[cited]
+DOI:10.2307/1942661  # Hurlbert (1984), Ecol Monogr 54:187, L7,L16,L18
+PMID:34719426  # "Kfoury et al.", L88,L332,L333  [Kfoury Y 2021 Cancer Cell]
+
+[evidence]
+PMID:33531494  # Zimmerman KD 2021 Nat Commun: A practical solution to pseudoreplication bias in single-cell studies.  [근거: SCI-07-015]
+
+[software]
+SW:numpy
+SW:scipy
+SW:pandas

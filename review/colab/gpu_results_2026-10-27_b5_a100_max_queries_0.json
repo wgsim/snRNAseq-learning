@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "date": "2026-10-27 20:14:22",
+    "gpu": "NVIDIA A100-SXM4-40GB",
+    "gpu_mem_bytes": 42405855232,
+    "host": {
+      "cpus": 12,
+      "ram_gb": 89.6
+    },
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "scanpy": "1.12.4",
+      "anndata": "0.13.4",
+      "cupy": "14.0.1",
+      "cudf": "26.06.00",
+      "cuml": "26.06.00",
+      "cugraph": "26.06.00",
+      "cuvs": "26.06.00",
+      "rmm": "26.06.00",
+      "rapids_singlecell": "0.18.1"
+    },
+    "atlas_nnz": {}
+  },
+  "blocks": {
+    "B5_100k": {
+      "id": "B5_100k",
+      "location": "tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md:171",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [],
+      "elapsed_s": 4.37,
+      "peak_gpu_used_mib": 646,
+      "peak_host_rss_mib": 1511,
+      "stdout_tail": [
+        "",
+        "[CAGRA] Initializing Fixed Out-Degree Graph Index for 100,000 cells (dim=50)...",
+        "[CAGRA] Index Construction completed in 0.59s.",
+        "[CAGRA] kNN Search (k=15) for 1M cells completed in 0.11s.",
+        "[CAGRA] Total Graph Time: 0.70s.",
+        "[Graph Prep] Converting kNN tensors into cuGraph Edge List (Total Edges: 1,500,000)...",
+        "[Graph Prep] cuGraph initialized in 0.18s. Number of Vertices: 100,000",
+        "",
+        "[Leiden] Starting cuGraph Parallel Leiden (Resolution: 0.8, Max Iter: 50)...",
+        "=================================================================",
+        "[Leiden Success] Clustered 100,000 cells into 3 communities!",
+        "Final Graph Modularity (Q) : 0.29082",
+        "Total Leiden Runtime       : 0.722 seconds",
+        "=================================================================",
+        "",
+        "HARNESS: leiden returned 100000 rows"
+      ],
+      "stderr_tail": [],
+      "notes": "",
+      "replacements": [
+        [
+          "max_queries=100_000",
+          "max_queries=0"
+        ]
+      ]
+    }
+  }
+}

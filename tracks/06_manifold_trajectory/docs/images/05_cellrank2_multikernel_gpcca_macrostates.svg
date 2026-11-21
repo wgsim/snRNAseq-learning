@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">CellRank 2 멀티커널 융합 &amp; 일반화 PCCA+(G-PCCA) 거시상태</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">RNA 속도 + 의시간 + 실시간 최적수송 커널 결합 ➔ 비가역 전이 행렬 P ➔ 슈어(Schur) 분해 &amp; 정상 거시상태</text>
+
+  <!-- Panel 1: Multi-Kernel Fusion -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 다중 커널 융합 (Multi-Kernel)</text>
+
+    <!-- Schematic: Kernel Additions -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(20, 50)">
+      <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="30" y="15" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">K_velo (w1)</text>
+
+      <text x="68" y="16" fill="#cbd5e1" font-size="10" font-weight="700">+</text>
+
+      <g transform="translate(76, 0)">
+        <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+        <text x="30" y="15" text-anchor="middle" fill="#c084fc" font-size="7.5" font-weight="700">K_dpt (w2)</text>
+      </g>
+
+      <text x="144" y="16" fill="#cbd5e1" font-size="10" font-weight="700">+</text>
+
+      <g transform="translate(152, 0)">
+        <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="30" y="15" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">K_ot (w3)</text>
+      </g>
+
+      <line x1="216" y1="12" x2="232" y2="12" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan05)"/>
+      <text x="245" y="16" fill="#fbbf24" font-size="11" font-weight="700">P</text>
+
+      <text x="125" y="42" text-anchor="middle" fill="#94a3b8" font-size="7.2">전이 행렬: P_ij ≥ 0,  Σ_j P_ij = 1 (행 정규화)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단일 모달리티 한계 극복:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">RNA 속도의 국소 노이즈를 전역 DPT 및 OT 방향성으로 상호 보완</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 가중치 볼록 결합 (Convex Combination):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">P = w_1 T_velo + w_2 T_dpt + w_3 T_ot (Σ w_k = 1)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포별 신뢰도 기반 동적 적응:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">속도 벡터 품질이 낮은 미분화 세포는 DPT 가중치 자동 증대</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">견고성 달성: 생물학적 모순 신호 억제 및 안정적 궤적 형성</text>
+  </g>
+
+  <!-- Panel 2: Real Schur Decomposition & Spectrum -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad05)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 실수 슈어(Schur) 분해 &amp; 거시상태</text>
+
+    <!-- Schematic: Schur Form -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="115" height="58" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+      <text x="57" y="16" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">슈어 분해 (Schur Form)</text>
+      <text x="57" y="32" text-anchor="middle" fill="#cbd5e1" font-size="7.5">P = Q R Q^T</text>
+      <text x="57" y="48" text-anchor="middle" fill="#38bdf8" font-size="6.8">Q: 직교, R: 준상삼각</text>
+    </g>
+
+    <g transform="translate(155, 48)">
+      <rect width="135" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="67" y="16" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">스펙트럼 갭 (Gap)</text>
+      <!-- Real eigenvalues plot -->
+      <line x1="15" y1="46" x2="120" y2="46" stroke="#475569" stroke-width="1"/>
+      <circle cx="25" cy="28" r="3" fill="#38bdf8"/>
+      <circle cx="45" cy="30" r="3" fill="#38bdf8"/>
+      <circle cx="65" cy="31" r="3" fill="#38bdf8"/>
+      <circle cx="85" cy="33" r="3" fill="#38bdf8"/>
+      <line x1="95" y1="20" x2="95" y2="46" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <circle cx="108" cy="42" r="2.5" fill="#64748b"/>
+      <text x="67" y="55" text-anchor="middle" fill="#94a3b8" font-size="6.5">k = 6 거시상태 (n_states=6 지정, 예시)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비가역(Non-reversible) 연산자의 안정적 분해:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">전이 행렬 P는 비대칭이므로 복소수 고유값 문제 내포</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 실수 슈어 벡터 (Real Schur Vectors):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">불변 부분공간(Invariant subspace)을 수치적으로 완벽 보존</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 일반화 페론 클러스터 분석 (G-PCCA):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">슈어 기저를 최적 심플렉스(Simplex) 상의 소속 확률로 사상</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#c084fc" font-size="9.5" font-weight="600">수학적 진보: 복소 고유벡터 섭동(Perturbation) 결함 원천 차단</text>
+  </g>
+
+  <!-- Panel 3: 4 Macrostates & Lineage Branches -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. mCRPC 4대 거시상태 분류</text>
+
+    <!-- Schematic: 4 Macrostate Cards -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Root: AR+ Adeno -->
+      <rect width="58" height="24" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="29" y="15" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">AR+ Adeno</text>
+      <text x="29" y="32" text-anchor="middle" fill="#94a3b8" font-size="6">초기 상태</text>
+
+      <path d="M 60 12 L 80 12" stroke="#38bdf8" stroke-width="1.4" marker-end="url(#arrCyan05)"/>
+
+      <!-- Intermediate: Amphicrine -->
+      <g transform="translate(85, 0)">
+        <rect width="58" height="24" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+        <text x="29" y="15" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">Amphicrine</text>
+        <text x="29" y="32" text-anchor="middle" fill="#94a3b8" font-size="6">과도 전이체</text>
+      </g>
+
+      <!-- Fork arrows -->
+      <path d="M 145 12 L 165 4" stroke="#c084fc" stroke-width="1.4" marker-end="url(#arrPurple05)"/>
+      <path d="M 145 12 L 165 20" stroke="#34d399" stroke-width="1.4" marker-end="url(#arrEmerald05)"/>
+
+      <!-- Terminal 1: DNPC -->
+      <g transform="translate(170, -6)">
+        <rect width="55" height="20" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+        <text x="27" y="13" text-anchor="middle" fill="#c084fc" font-size="6.8" font-weight="700">DNPC</text>
+      </g>
+
+      <!-- Terminal 2: t-NEPC -->
+      <g transform="translate(170, 16)">
+        <rect width="55" height="20" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="27" y="13" text-anchor="middle" fill="#34d399" font-size="6.8" font-weight="700">t-NEPC</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 초기(Initial) 및 종말(Terminal) 상태 자동 검증:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">마르코프 연쇄의 유출/유입 플럭스 비율로 생물학적 역할 분별</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 종말 거시상태 1: t-NEPC (ASCL1/SYP/CHGA):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">완전 신경내분비 역분화 (강한 분해 속도 및 비가역 트랩)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 종말 거시상태 2: DNPC (ETV4/FGFR1):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">AR 음성 / NE 음성 이중 음성 표현형 독립 분기</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">임상적 함의: 호르몬 내성 전립선암의 2대 가소성 종착역 정량 규명</text>
+  </g>
+</svg>

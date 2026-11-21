@@ -1,0 +1,644 @@
+{
+ "scanpy": {
+  "name": "Scanpy",
+  "version_checked": "1.12.4",
+  "source": "github.com/scverse/scanpy",
+  "paper": "PMID:29409532"
+ },
+ "scvi-tools": {
+  "name": "scvi-tools",
+  "version_checked": "1.5.1",
+  "source": "github.com/scverse/scvi-tools",
+  "paper": "PMID:35132262"
+ },
+ "cellrank": {
+  "name": "CellRank",
+  "version_checked": "2.3.3",
+  "source": "github.com/scverse/cellrank",
+  "paper": "PMID:38871986"
+ },
+ "scvelo": {
+  "name": "scVelo",
+  "version_checked": "0.3.4",
+  "source": "github.com/theislab/scvelo",
+  "paper": "PMID:32747759"
+ },
+ "liana": {
+  "name": "LIANA (liana-py)",
+  "version_checked": "1.10.0",
+  "source": "github.com/saezlab/liana-py",
+  "paper": "PMID:35680885"
+ },
+ "muon": {
+  "name": "muon",
+  "version_checked": "0.2.0",
+  "source": "github.com/scverse/muon",
+  "paper": "PMID:35105358"
+ },
+ "snapatac2": {
+  "name": "SnapATAC2",
+  "version_checked": "2.10.0",
+  "source": "github.com/scverse/SnapATAC2",
+  "paper": "PMID:38191932"
+ },
+ "decoupler": {
+  "name": "decoupler",
+  "version_checked": "2.2.0",
+  "source": "github.com/scverse/decoupler",
+  "paper": "PMID:36699385"
+ },
+ "squidpy": {
+  "name": "Squidpy",
+  "version_checked": "1.8.3",
+  "source": "github.com/scverse/squidpy",
+  "paper": "PMID:35102346"
+ },
+ "tiledbsoma": {
+  "name": "TileDB-SOMA",
+  "version_checked": "2.3.0",
+  "source": "github.com/single-cell-data/TileDB-SOMA",
+  "paper": ""
+ },
+ "infercnvpy": {
+  "name": "infercnvpy",
+  "version_checked": "0.6.1",
+  "source": "github.com/icbi-lab/infercnvpy",
+  "paper": ""
+ },
+ "cellpose": {
+  "name": "Cellpose",
+  "version_checked": "4.2.1.1",
+  "source": "github.com/MouseLand/cellpose",
+  "paper": "PMID:33318659"
+ },
+ "macs3": {
+  "name": "MACS3",
+  "version_checked": "3.0.5",
+  "source": "github.com/macs3-project/MACS",
+  "paper": "PMID:18798982"
+ },
+ "star": {
+  "name": "STAR",
+  "version_checked": "2.7.11",
+  "source": "github.com/alexdobin/STAR",
+  "paper": "PMID:23104886"
+ },
+ "nextflow": {
+  "name": "Nextflow",
+  "version_checked": "24.04.4",
+  "source": "nextflow.io",
+  "paper": "PMID:28398311"
+ },
+ "snakemake": {
+  "name": "Snakemake",
+  "version_checked": "9.27.0",
+  "source": "github.com/snakemake/snakemake",
+  "paper": "PMID:34035898"
+ },
+ "commot": {
+  "name": "COMMOT",
+  "version_checked": "0.0.3",
+  "source": "github.com/zcang/COMMOT",
+  "paper": "PMID:36690742"
+ },
+ "cell2location": {
+  "name": "cell2location",
+  "version_checked": "0.1.5",
+  "source": "github.com/BayraktarLab/cell2location",
+  "paper": "PMID:35027729"
+ },
+ "alevin-fry": {
+  "name": "alevin-fry",
+  "version_checked": "",
+  "source": "github.com/COMBINE-lab/alevin-fry",
+  "paper": "PMID:35277707"
+ },
+ "nf-core-scrnaseq": {
+  "name": "nf-core/scrnaseq",
+  "version_checked": "",
+  "source": "nf-co.re/scrnaseq",
+  "paper": "PMID:32055031"
+ },
+ "numbat": {
+  "name": "Numbat",
+  "version_checked": "",
+  "source": "github.com/kharchenkolab/numbat",
+  "paper": "PMID:36163550"
+ },
+ "nebula": {
+  "name": "NEBULA",
+  "version_checked": "",
+  "source": "github.com/lhe17/nebula",
+  "paper": "PMID:34040149"
+ },
+ "edger": {
+  "name": "edgeR",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/edgeR",
+  "paper": "PMID:19910308"
+ },
+ "deseq2": {
+  "name": "DESeq2",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/DESeq2",
+  "paper": "PMID:25516281"
+ },
+ "cellchat": {
+  "name": "CellChat",
+  "version_checked": "",
+  "source": "github.com/jinworks/CellChat",
+  "paper": "PMID:33597522"
+ },
+ "nichenet": {
+  "name": "NicheNet (nichenetr)",
+  "version_checked": "",
+  "source": "github.com/saeyslab/nichenetr",
+  "paper": "PMID:31819264"
+ },
+ "statsmodels": {
+  "name": "statsmodels",
+  "version_checked": "0.15.0",
+  "source": "github.com/statsmodels/statsmodels",
+  "paper": ""
+ },
+ "scipy": {
+  "name": "SciPy",
+  "version_checked": "1.16.3",
+  "source": "github.com/scipy/scipy",
+  "paper": "PMID:32015543"
+ },
+ "numpy": {
+  "name": "NumPy",
+  "version_checked": "2.5.4",
+  "source": "numpy.org",
+  "paper": "PMID:32939066"
+ },
+ "anndata": {
+  "name": "anndata",
+  "version_checked": "0.13.4",
+  "source": "github.com/scverse/anndata",
+  "paper": "DOI:10.21105/joss.04371"
+ },
+ "scikit-misc": {
+  "name": "scikit-misc",
+  "version_checked": "0.5.3",
+  "source": "github.com/has2k1/scikit-misc",
+  "paper": ""
+ },
+ "patsy": {
+  "name": "patsy",
+  "version_checked": "1.0.3",
+  "source": "github.com/pydata/patsy",
+  "paper": ""
+ },
+ "rpy2": {
+  "name": "rpy2",
+  "version_checked": "3.6.9",
+  "source": "github.com/rpy2/rpy2",
+  "paper": ""
+ },
+ "sccoda": {
+  "name": "scCODA",
+  "version_checked": "0.1.9",
+  "source": "github.com/theislab/scCODA",
+  "paper": "PMID:34824236"
+ },
+ "limma": {
+  "name": "limma",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/limma",
+  "paper": "PMID:25605792"
+ },
+ "milor": {
+  "name": "miloR",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/miloR",
+  "paper": "PMID:34594043"
+ },
+ "speckle": {
+  "name": "speckle",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/speckle",
+  "paper": "PMID:36005887"
+ },
+ "tradeseq": {
+  "name": "tradeSeq",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/tradeSeq",
+  "paper": "PMID:32139671"
+ },
+ "slingshot": {
+  "name": "slingshot",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/slingshot",
+  "paper": "PMID:29914354"
+ },
+ "ihw": {
+  "name": "IHW",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/IHW",
+  "paper": "PMID:27240256"
+ },
+ "ruvseq": {
+  "name": "RUVSeq",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/RUVSeq",
+  "paper": "PMID:25150836"
+ },
+ "sva": {
+  "name": "sva",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/sva",
+  "paper": "PMID:22257669"
+ },
+ "sccomp": {
+  "name": "sccomp",
+  "version_checked": "",
+  "source": "github.com/MangiolaLaboratory/sccomp",
+  "paper": "PMID:37549298"
+ },
+ "glmmtmb": {
+  "name": "glmmTMB",
+  "version_checked": "",
+  "source": "github.com/glmmTMB/glmmTMB",
+  "paper": "DOI:10.32614/RJ-2017-066"
+ },
+ "lme4": {
+  "name": "lme4",
+  "version_checked": "",
+  "source": "github.com/lme4/lme4",
+  "paper": "DOI:10.18637/jss.v067.i01"
+ },
+ "scrublet": {
+  "name": "Scrublet",
+  "version_checked": "0.2.3",
+  "source": "github.com/swolock/scrublet",
+  "paper": "PMID:30954476"
+ },
+ "cellbender": {
+  "name": "CellBender",
+  "version_checked": "",
+  "source": "github.com/broadinstitute/CellBender",
+  "paper": "PMID:37550580"
+ },
+ "soupx": {
+  "name": "SoupX",
+  "version_checked": "",
+  "source": "github.com/constantAmateur/SoupX",
+  "paper": "PMID:33367645"
+ },
+ "networkx": {
+  "name": "NetworkX",
+  "version_checked": "3.7",
+  "source": "github.com/networkx/networkx",
+  "paper": ""
+ },
+ "matplotlib": {
+  "name": "Matplotlib",
+  "version_checked": "3.11.2",
+  "source": "github.com/matplotlib/matplotlib",
+  "paper": "DOI:10.1109/MCSE.2007.55"
+ },
+ "pandas": {
+  "name": "pandas",
+  "version_checked": "2.3.3",
+  "source": "github.com/pandas-dev/pandas",
+  "paper": "DOI:10.25080/Majora-92bf1922-00a"
+ },
+ "seaborn": {
+  "name": "seaborn",
+  "version_checked": "0.13.2",
+  "source": "github.com/mwaskom/seaborn",
+  "paper": "DOI:10.21105/joss.03021"
+ },
+ "scikit-learn": {
+  "name": "scikit-learn",
+  "version_checked": "1.9.1",
+  "source": "github.com/scikit-learn/scikit-learn",
+  "paper": ""
+ },
+ "torch": {
+  "name": "PyTorch",
+  "version_checked": "2.14.1",
+  "source": "github.com/pytorch/pytorch",
+  "paper": ""
+ },
+ "wot": {
+  "name": "Waddington-OT (wot)",
+  "version_checked": "1.0.8.post2",
+  "source": "github.com/broadinstitute/wot",
+  "paper": "PMID:30712874"
+ },
+ "h5py": {
+  "name": "h5py",
+  "version_checked": "3.14.0",
+  "source": "github.com/h5py/h5py",
+  "paper": ""
+ },
+ "zarr": {
+  "name": "Zarr",
+  "version_checked": "3.4.1",
+  "source": "github.com/zarr-developers/zarr-python",
+  "paper": ""
+ },
+ "dask": {
+  "name": "Dask",
+  "version_checked": "2026.8.0",
+  "source": "github.com/dask/dask",
+  "paper": "DOI:10.25080/Majora-7b98e3ed-013"
+ },
+ "pyarrow": {
+  "name": "PyArrow",
+  "version_checked": "25.0.1",
+  "source": "github.com/apache/arrow",
+  "paper": ""
+ },
+ "cellxgene-census": {
+  "name": "cellxgene-census",
+  "version_checked": "",
+  "source": "github.com/chanzuckerberg/cellxgene-census",
+  "paper": ""
+ },
+ "cupy": {
+  "name": "CuPy",
+  "version_checked": "",
+  "source": "github.com/cupy/cupy",
+  "paper": ""
+ },
+ "rapids-singlecell": {
+  "name": "rapids-singlecell",
+  "version_checked": "",
+  "source": "github.com/scverse/rapids_singlecell",
+  "paper": ""
+ },
+ "rmm": {
+  "name": "RAPIDS RMM",
+  "version_checked": "",
+  "source": "github.com/rapidsai/rmm",
+  "paper": ""
+ },
+ "cudf": {
+  "name": "cuDF",
+  "version_checked": "",
+  "source": "github.com/rapidsai/cudf",
+  "paper": ""
+ },
+ "cugraph": {
+  "name": "cuGraph",
+  "version_checked": "",
+  "source": "github.com/rapidsai/cugraph",
+  "paper": ""
+ },
+ "cuvs": {
+  "name": "cuVS",
+  "version_checked": "",
+  "source": "github.com/rapidsai/cuvs",
+  "paper": "DOI:10.1109/ICDE60146.2024.00323"
+ },
+ "cuml": {
+  "name": "cuML",
+  "version_checked": "",
+  "source": "github.com/rapidsai/cuml",
+  "paper": ""
+ },
+ "psutil": {
+  "name": "psutil",
+  "version_checked": "7.2.2",
+  "source": "github.com/giampaolo/psutil",
+  "paper": ""
+ },
+ "fastapi": {
+  "name": "FastAPI",
+  "version_checked": "0.143.3",
+  "source": "github.com/fastapi/fastapi",
+  "paper": ""
+ },
+ "mlflow": {
+  "name": "MLflow",
+  "version_checked": "3.17.1",
+  "source": "github.com/mlflow/mlflow",
+  "paper": ""
+ },
+ "onnxruntime": {
+  "name": "ONNX Runtime",
+  "version_checked": "1.31.0",
+  "source": "github.com/microsoft/onnxruntime",
+  "paper": ""
+ },
+ "pydantic": {
+  "name": "Pydantic",
+  "version_checked": "2.12.5",
+  "source": "github.com/pydantic/pydantic",
+  "paper": ""
+ },
+ "docker": {
+  "name": "Docker",
+  "version_checked": "",
+  "source": "github.com/moby/moby",
+  "paper": ""
+ },
+ "apptainer": {
+  "name": "Apptainer (Singularity)",
+  "version_checked": "",
+  "source": "github.com/apptainer/apptainer",
+  "paper": "PMID:28494014"
+ },
+ "slurm": {
+  "name": "Slurm",
+  "version_checked": "",
+  "source": "slurm.schedmd.com",
+  "paper": ""
+ },
+ "samtools": {
+  "name": "SAMtools",
+  "version_checked": "",
+  "source": "github.com/samtools/samtools",
+  "paper": "PMID:33590861"
+ },
+ "fastqc": {
+  "name": "FastQC",
+  "version_checked": "",
+  "source": "github.com/s-andrews/FastQC",
+  "paper": ""
+ },
+ "multiqc": {
+  "name": "MultiQC",
+  "version_checked": "",
+  "source": "github.com/MultiQC/MultiQC",
+  "paper": "PMID:27312411"
+ },
+ "conda": {
+  "name": "conda",
+  "version_checked": "",
+  "source": "docs.conda.io",
+  "paper": ""
+ },
+ "mamba": {
+  "name": "Mamba",
+  "version_checked": "",
+  "source": "github.com/mamba-org/mamba",
+  "paper": ""
+ },
+ "pycistopic": {
+  "name": "pycisTopic",
+  "version_checked": "",
+  "source": "github.com/aertslab/pycisTopic",
+  "paper": ""
+ },
+ "htslib": {
+  "name": "HTSlib (tabix, bgzip)",
+  "version_checked": "",
+  "source": "github.com/samtools/htslib",
+  "paper": "PMID:33594436"
+ },
+ "chromap": {
+  "name": "Chromap",
+  "version_checked": "",
+  "source": "github.com/haowenz/chromap",
+  "paper": "PMID:34772935"
+ },
+ "pysam": {
+  "name": "pysam",
+  "version_checked": "0.24.1",
+  "source": "github.com/pysam-developers/pysam",
+  "paper": ""
+ },
+ "pychromvar": {
+  "name": "pychromVAR",
+  "version_checked": "",
+  "source": "github.com/pinellolab/pychromvar",
+  "paper": ""
+ },
+ "pyjaspar": {
+  "name": "pyJASPAR",
+  "version_checked": "",
+  "source": "github.com/asntech/pyjaspar",
+  "paper": ""
+ },
+ "scenicplus": {
+  "name": "SCENIC+",
+  "version_checked": "",
+  "source": "github.com/aertslab/scenicplus",
+  "paper": "PMID:37443338"
+ },
+ "harmonypy": {
+  "name": "harmonypy",
+  "version_checked": "2.1.0",
+  "source": "github.com/slowkow/harmonypy",
+  "paper": "PMID:31740819"
+ },
+ "geopandas": {
+  "name": "GeoPandas",
+  "version_checked": "1.2.0",
+  "source": "github.com/geopandas/geopandas",
+  "paper": ""
+ },
+ "shapely": {
+  "name": "Shapely",
+  "version_checked": "2.2.0",
+  "source": "github.com/shapely/shapely",
+  "paper": ""
+ },
+ "spatialdata": {
+  "name": "SpatialData",
+  "version_checked": "0.8.0",
+  "source": "github.com/scverse/spatialdata",
+  "paper": "PMID:38509327"
+ },
+ "tifffile": {
+  "name": "tifffile",
+  "version_checked": "2026.10.15",
+  "source": "github.com/cgohlke/tifffile",
+  "paper": ""
+ },
+ "ete3": {
+  "name": "ETE 3",
+  "version_checked": "",
+  "source": "github.com/etetoolkit/ete",
+  "paper": "PMID:26921390"
+ },
+ "mass": {
+  "name": "MASS (R)",
+  "version_checked": "",
+  "source": "cran.r-project.org/package=MASS",
+  "paper": ""
+ },
+ "car": {
+  "name": "car (R)",
+  "version_checked": "",
+  "source": "cran.r-project.org/package=car",
+  "paper": ""
+ },
+ "matrix": {
+  "name": "Matrix (R)",
+  "version_checked": "",
+  "source": "cran.r-project.org/package=Matrix",
+  "paper": ""
+ },
+ "singlecellexperiment": {
+  "name": "SingleCellExperiment",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/SingleCellExperiment",
+  "paper": "PMID:31792435"
+ },
+ "biocparallel": {
+  "name": "BiocParallel",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/BiocParallel",
+  "paper": ""
+ },
+ "ggplot2": {
+  "name": "ggplot2",
+  "version_checked": "",
+  "source": "ggplot2.tidyverse.org",
+  "paper": ""
+ },
+ "dplyr": {
+  "name": "dplyr",
+  "version_checked": "",
+  "source": "dplyr.tidyverse.org",
+  "paper": ""
+ },
+ "patchwork": {
+  "name": "patchwork",
+  "version_checked": "",
+  "source": "github.com/thomasp85/patchwork",
+  "paper": ""
+ },
+ "scater": {
+  "name": "scater",
+  "version_checked": "",
+  "source": "bioconductor.org/packages/scater",
+  "paper": "PMID:28088763"
+ },
+ "salmon": {
+  "name": "Salmon",
+  "version_checked": "",
+  "source": "github.com/COMBINE-lab/salmon",
+  "paper": "PMID:28263959"
+ },
+ "umi-tools": {
+  "name": "UMI-tools",
+  "version_checked": "",
+  "source": "github.com/CGATOxford/UMI-tools",
+  "paper": "PMID:28100584"
+ },
+ "pyroe": {
+  "name": "pyroe",
+  "version_checked": "",
+  "source": "github.com/COMBINE-lab/pyroe",
+  "paper": ""
+ },
+ "cellranger": {
+  "name": "Cell Ranger",
+  "version_checked": "",
+  "source": "10xgenomics.com/support/software/cell-ranger",
+  "paper": ""
+ },
+ "pydeseq2": {
+  "name": "PyDESeq2",
+  "version_checked": "",
+  "source": "github.com/owkin/PyDESeq2",
+  "paper": "PMID:37669147"
+ }
+}

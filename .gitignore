@@ -1,0 +1,16 @@
+# Generated artifacts that should not be versioned
+__pycache__/
+*.pyc
+.DS_Store
+# Local snapshot tarballs and ad-hoc backups (history lives in git)
+backups/
+# Runtime output of pipelines/03 (recreated on run)
+infercnv_out/
+# Tool scratch directories
+.playwright-mcp/
+# Local tool config
+.claude/
+dist/
+.envs/
+# HGP (history graph) tool state; local only
+.hgp/

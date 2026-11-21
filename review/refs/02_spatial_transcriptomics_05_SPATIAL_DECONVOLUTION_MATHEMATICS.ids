@@ -1,0 +1,15 @@
+[cited]
+PMID:33603203  # "Cable et al. 2022 (RCTD)", L57  [Cable DM 2022 Nat Biotechnol]
+PMID:35027729  # "Kleshchevnikov et al. 2022 (cell2location)", L110  [Kleshchevnikov V 2022 Nat Biotechnol]
+PMID:29017058  # "Bluemn 2017", L203  [Bluemn EG 2017 Cancer Cell]
+PMID:31361600  # "Labrecque 2019", L203  [Labrecque MP 2019 J Clin Invest]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:anndata
+SW:cell2location
+SW:matplotlib
+SW:numpy
+SW:scanpy

@@ -1,0 +1,12 @@
+[cited]
+PMID:28232471  # Ohlund 2017 J Exp Med
+PMID:31197017  # Elyada 2019 Cancer Discov
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy

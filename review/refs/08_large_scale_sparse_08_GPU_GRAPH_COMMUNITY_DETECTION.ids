@@ -1,0 +1,15 @@
+[cited]
+DOI:10.1109/ICDE60146.2024.00323  # Ootomo 2024 ICDE (CAGRA)
+PMID:30914743  # Traag 2019 Sci Rep
+PMID:17190818  # Fortunato & Barthelemy 2007 PNAS
+
+[evidence]
+
+
+[software]
+SW:cudf
+SW:cugraph
+SW:cupy
+SW:cuvs
+SW:numpy
+SW:scipy

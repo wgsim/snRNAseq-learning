@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="gradAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="35" text-anchor="middle" fill="#38bdf8" font-size="20" font-weight="700">전립선암 조직 단일 핵 분리(Nuclear Isolation) 및 정제 메커니즘</text>
+  <text x="500" y="55" text-anchor="middle" fill="#94a3b8" font-size="12">Cold Dounce Lysis (4°C) ➔ 세포질 선택적 용해 ➔ OptiPrep 밀도 구배 정제 ➔ 10x Chromium 캡슐화</text>
+
+  <!-- Step 1 -->
+  <g transform="translate(30, 80)">
+    <rect width="200" height="230" rx="10" fill="url(#gradCard)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="30" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="100" y="20" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 동결 조직 생검 분쇄</text>
+    
+    <!-- Graphic: Frozen Biopsy Core -->
+    <rect x="35" y="45" width="130" height="30" rx="6" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="100" y="65" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Flash-Frozen Biopsy (-80°C)</text>
+    
+    <text x="15" y="105" fill="#cbd5e1" font-size="11" font-weight="600">• 조직 파쇄:</text>
+    <text x="25" y="123" fill="#94a3b8" font-size="11">Dounce Tissue Grinder</text>
+    <text x="15" y="145" fill="#cbd5e1" font-size="11" font-weight="600">• 저온 조건 유지:</text>
+    <text x="25" y="163" fill="#94a3b8" font-size="11">4°C 유지 (얼음 배스 상)</text>
+    <text x="15" y="185" fill="#cbd5e1" font-size="11" font-weight="600">• 목적:</text>
+    <text x="25" y="203" fill="#94a3b8" font-size="11">전사 동결 &amp; 스트레스 차단</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <path d="M 240 195 L 265 195" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="265,190 275,195 265,200" fill="#38bdf8"/>
+
+  <!-- Step 2 -->
+  <g transform="translate(285, 80)">
+    <rect width="200" height="230" rx="10" fill="url(#gradCard)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="30" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="100" y="20" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">2. 계면활성제 화학 용해</text>
+    
+    <rect x="35" y="45" width="130" height="30" rx="6" fill="#4338ca" stroke="#818cf8" stroke-width="1"/>
+    <text x="100" y="65" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Lysis Buffer (NP-40 0.1%)</text>
+    
+    <text x="15" y="105" fill="#cbd5e1" font-size="11" font-weight="600">• 세포막(Plasma Memb.):</text>
+    <text x="25" y="123" fill="#f43f5e" font-size="11">지질 이중층 용해 (파괴)</text>
+    <text x="15" y="145" fill="#cbd5e1" font-size="11" font-weight="600">• 핵막(Nuclear Memb.):</text>
+    <text x="25" y="163" fill="#10b981" font-size="11">라미나 지지 (구조 보존)</text>
+    <text x="15" y="185" fill="#cbd5e1" font-size="11" font-weight="600">• RNase Inhibitor:</text>
+    <text x="25" y="203" fill="#94a3b8" font-size="11">0.4 U/µL (내인성 RNase 억제)</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <path d="M 495 195 L 520 195" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="520,190 530,195 520,200" fill="#38bdf8"/>
+
+  <!-- Step 3 -->
+  <g transform="translate(540, 80)">
+    <rect width="200" height="230" rx="10" fill="url(#gradCard)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="30" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="100" y="20" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">3. 밀도 구배 원심분리</text>
+    
+    <rect x="35" y="45" width="130" height="30" rx="6" fill="#065f46" stroke="#34d399" stroke-width="1"/>
+    <text x="100" y="65" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">OptiPrep™ (Iodixanol)</text>
+    
+    <text x="15" y="105" fill="#cbd5e1" font-size="11" font-weight="600">• 29%/35% 구배:</text>
+    <text x="25" y="123" fill="#94a3b8" font-size="11">침강 계수 기반 분리</text>
+    <text x="15" y="145" fill="#cbd5e1" font-size="11" font-weight="600">• 제거 대상:</text>
+    <text x="25" y="163" fill="#f43f5e" font-size="11">세포질 파편, 지질, 무기질</text>
+    <text x="15" y="185" fill="#cbd5e1" font-size="11" font-weight="600">• 회수 대상:</text>
+    <text x="25" y="203" fill="#10b981" font-size="11">계면 상 순수 온전한 핵 펠렛</text>
+  </g>
+
+  <!-- Arrow 3 -->
+  <path d="M 750 195 L 775 195" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="775,190 785,195 775,200" fill="#38bdf8"/>
+
+  <!-- Step 4 -->
+  <g transform="translate(795, 80)">
+    <rect width="175" height="230" rx="10" fill="url(#gradCard)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="175" height="30" rx="10" fill="#34d399" fill-opacity="0.2"/>
+    <text x="87" y="20" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">4. 단일 핵 캡슐화</text>
+    
+    <circle cx="87" cy="65" r="22" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="87" cy="65" r="10" fill="#38bdf8"/>
+    
+    <text x="12" y="115" fill="#cbd5e1" font-size="11" font-weight="600">• DAPI 염색 검증:</text>
+    <text x="20" y="133" fill="#38bdf8" font-size="11">형광 현미경 무결성 확인</text>
+    <text x="12" y="155" fill="#cbd5e1" font-size="11" font-weight="600">• 10x Chromium:</text>
+    <text x="20" y="173" fill="#94a3b8" font-size="11">Next GEM 유세포 액적</text>
+    <text x="12" y="195" fill="#cbd5e1" font-size="11" font-weight="600">• 포획 대상:</text>
+    <text x="20" y="213" fill="#10b981" font-size="11">Nucleus + Barcoded Bead</text>
+  </g>
+</svg>

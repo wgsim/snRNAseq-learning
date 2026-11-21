@@ -1,0 +1,15 @@
+[cited]
+PMID:35981096  # "Chan et al. 2022", L128  [Chan JM 2022 Science]
+PMID:14702632  # "Chen et al., Nat Med 2004", L199  [Chen CD 2004 Nat Med]
+PMID:29909985  # "Viswanathan et al., Cell 2018", L199  [Viswanathan SR 2018 Cell]
+
+[evidence]
+PMID:33098772  # Ma S 2020 Cell: Chromatin Potential Identified by Shared Single-Cell Profiling of RNA and Chromatin.  [근거: ledger L31]
+PMID:35061661  # Elorbany R 2022 PLoS Genet: Single-cell sequencing reveals lineage-specific dynamic genetic regulation of gene expression d  [근거: SCI-01-001; ledger L124]
+PMID:35617398  # Tang F 2022 Science: Chromatin profiles classify castration-resistant prostate cancers suggesting therapeutic target  [근거: SCI-01-001; ledger L125]
+
+[software]
+SW:muon
+SW:scanpy
+SW:snapatac2
+SW:pycistopic

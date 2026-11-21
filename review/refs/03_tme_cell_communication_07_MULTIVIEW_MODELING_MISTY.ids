@@ -1,0 +1,17 @@
+[cited]
+PMID:35422018  # Tanevski 2022 Genome Biol (MISTy)
+PMID:24277834  # Feig 2013 PNAS
+NCT:NCT04066491  # INTR@PID BTC 055 registry record (terminated after IDMC review); cited in text with Merck KGaA 2021, whose announcement itself has no PMID/DOI
+
+[evidence]
+PMID:21353695  # Fizazi 2011 Lancet (denosumab vs zoledronic acid)
+PMID:28059767  # Ku 2017 Science
+PMID:30593464  # Ren 2019 J Exp Med
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy
+SW:scikit-learn

@@ -1,0 +1,15 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:docker
+SW:apptainer
+SW:star
+SW:samtools
+SW:scanpy
+SW:scvi-tools
+SW:torch
+SW:pandas

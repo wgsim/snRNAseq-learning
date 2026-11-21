@@ -1,0 +1,5 @@
+macrostate,cell_count,role_type
+AR_Adeno_Macro,500,Initial / Root State
+Amphicrine_Macro,350,Plastic Intermediate
+DNPC_Macro,300,Terminal State 1
+t_NEPC_Macro,350,Terminal State 2

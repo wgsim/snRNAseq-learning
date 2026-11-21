@@ -1,0 +1,12 @@
+[cited]
+PMID:11964263  # "Thompson 2002", L245  [Thompson RE 2002 Biophys J]
+
+[evidence]
+PMID:25858977  # Chen KH 2015 Science: RNA imaging. Spatially resolved, highly multiplexed RNA profiling in single cells.  [근거: SCI-02-009; ledger L241]
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy

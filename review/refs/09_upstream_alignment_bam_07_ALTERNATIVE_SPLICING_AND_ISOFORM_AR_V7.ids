@@ -1,0 +1,14 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:19117982  # Hu R 2009 Cancer Res: Ligand-independent androgen receptor variants derived from splicing of cryptic exons signify ho  [근거: SCI-09-050]
+PMID:28091601  # Zheng GX 2017 Nat Commun: Massively parallel digital transcriptional profiling of single cells.  [근거: SCI-09-051]
+PMID:29682426  # Shan X 2018 PeerJ: Replication study: androgen receptor splice variants determine taxane sensitivity in prostate c  [근거: SCI-09-053; ledger L146, 379]
+PMID:30301829  # Tagawa ST 2019 Clin Cancer Res: Expression of AR-V7 and ARv(567es) in Circulating Tumor Cells Correlates with Outcomes to Taxan  [근거: SCI-09-053]
+PMID:39670468  # Snyder LB 2025 Mol Cancer Ther: Preclinical Evaluation of Bavdegalutamide (ARV-110), a Novel PROteolysis TArgeting Chimera Andr  [근거: SCI-09-052]
+
+[software]
+SW:numpy
+SW:pandas
+SW:pysam

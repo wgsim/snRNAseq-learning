@@ -1,0 +1,13 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:31740819  # Korsunsky I 2019 Nat Methods: Fast, sensitive and accurate integration of single-cell data with Harmony.  [근거: SCI-01-044; SCI-01-045]
+
+[software]
+SW:muon
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy
+SW:harmonypy

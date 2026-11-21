@@ -1,0 +1,14 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:snakemake
+SW:star
+SW:fastqc
+SW:multiqc
+SW:conda
+SW:scanpy
+SW:pandas

@@ -1,0 +1,14 @@
+[cited]
+PMID:33597522  # Jin 2021 Nat Commun (CellChat)
+PMID:21353695  # Fizazi 2011 Lancet (denosumab vs zoledronic acid)
+PMID:22093187  # Smith 2012 Lancet (denosumab, bone-metastasis-free survival)
+
+[evidence]
+PMID:32103204  # Efremova 2020 Nat Protoc (CellPhoneDB)
+PMID:33670921  # Klement 2021 (osteopontin blockade)
+
+[software]
+SW:networkx
+SW:numpy
+SW:pandas
+SW:scanpy

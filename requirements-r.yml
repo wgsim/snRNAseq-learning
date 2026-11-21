@@ -1,0 +1,47 @@
+# R environment for the chapter R code blocks (tracks 01 and 07). Created 2026-10-21 on osx-arm64.
+# Reproduce (project-local prefix, ignored by git via .envs/):
+#   conda create -p ./.envs/r-course --override-channels -c conda-forge -c bioconda <the dependencies below>
+#   then run the non-conda steps listed at the bottom with ./.envs/r-course/bin/Rscript
+#   (put ./.envs/r-course/bin on PATH so the conda compilers are found, and use R_MAKEVARS_USER pointing to a
+#    file with CXX11STD/CXX14STD/CXX17STD=-std=gnu++17).
+# Resolved versions: R 4.4.3, Bioconductor 3.20, SingleCellExperiment 1.28.0, DESeq2 1.46.0, limma 3.62.1,
+#   edgeR 4.4.0, scater 1.34.1, slingshot 2.14.0, tradeSeq 1.20.0, miloR 2.2.0, speckle 1.6.0, nebula 1.5.8,
+#   BiocParallel 1.40.0, Matrix 1.7.5, dplyr 1.2.1, ggplot2 4.0.3, patchwork 1.3.2, glmmTMB 1.1.15.2, car 3.1.5,
+#   MASS 7.3.66, Signac 1.16.0, SeuratObject 5.4.0, TMB 1.9.23.  IHW: NOT installed (see notes).
+name: r-course
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.4
+  - bioconductor-biocparallel
+  - bioconductor-deseq2
+  - bioconductor-edger
+  - bioconductor-limma
+  - bioconductor-scater
+  - bioconductor-singlecellexperiment
+  - bioconductor-speckle
+  - compilers
+  - cmake
+  - r-biocmanager
+  - r-remotes
+  - r-dplyr
+  - r-ggplot2
+  - r-matrix
+  - r-patchwork
+  - r-car
+  - r-glmmtmb
+  - r-lme4
+  - r-mass
+  - r-nloptr
+  - r-rcppparallel
+  - r-signac
+# Non-conda installs (run inside the env; none of these resolve on conda-forge/bioconda for R 4.4 osx-arm64):
+#   BiocManager::install(version = "3.20")
+#   BiocManager::install(c("slingshot", "tradeSeq", "miloR"))   # bioconda builds need Bioc packages that do not exist for osx-arm64
+#   install.packages("nebula")                                  # CRAN source build (needs cmake for RcppParallel/nloptr: from conda)
+#   install.packages("glmmTMB", type = "source")                # rebuild against the TMB version pulled in by nebula (silences TMB mismatch warning)
+# Not installable (documented failure):
+#   IHW 1.34.0 needs lpsymphony; building lpsymphony from source fails on osx-arm64 (its SYMPHONY configure passes MSVC-style
+#   flags "-TP /openmp" to clang++), and bioconda has lpsymphony only for R 4.5, which cannot be combined with the rest.
+#   Block 10 (IHW) was therefore verified against the IHW 1.34.0 source/docs only (see review/fix_log_eng.md).

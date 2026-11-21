@@ -1,0 +1,47 @@
+{
+  "pipeline": "transformer_embedding_and_perturbation_pipeline",
+  "model_architecture": {
+    "model": "SingleCellTransformerEncoder",
+    "vocab_size": 500,
+    "max_seq_len": 128,
+    "d_model": 64,
+    "n_heads": 4,
+    "d_k": 16
+  },
+  "perturbation_screen": {
+    "screened_cells": 300,
+    "target_lineage": "t_NEPC",
+    "conditions": [
+      "Control_mCRPC",
+      "Virtual_AR_KO",
+      "Virtual_EZH2_KO",
+      "Virtual_Dual_AR_EZH2"
+    ],
+    "suppression_percentage": {
+      "AR_KO": "-0.23%",
+      "EZH2_KO": "1.93%",
+      "Dual_AR_EZH2": "2.48%"
+    }
+  },
+  "metrics": {
+    "baseline_nepc_score": 3.9973,
+    "ar_ko": {
+      "plasticity_score": 4.0064,
+      "suppression_pct": -0.23,
+      "mean_delta_z_norm": 0.0948,
+      "mean_cosine_sim": -0.114
+    },
+    "ezh2_ko": {
+      "plasticity_score": 3.92,
+      "suppression_pct": 1.93,
+      "mean_delta_z_norm": 0.2806,
+      "mean_cosine_sim": 0.631
+    },
+    "dual_ar_ezh2": {
+      "plasticity_score": 3.8983,
+      "suppression_pct": 2.48,
+      "mean_delta_z_norm": 0.4427,
+      "mean_cosine_sim": 0.7042
+    }
+  }
+}

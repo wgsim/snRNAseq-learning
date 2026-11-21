@@ -1,0 +1,5 @@
+spatial_niche,prop_Tumor_AR_Pos,prop_CAF,prop_CD8_T,prop_Osteoblast,prop_Endothelial
+Niche_0 (CAF-dominant),0.11236876,0.7750246,0.011553425,0.004826174,0.096227035
+Niche_1 (Tumor_AR_Pos-dominant),0.948565,0.038221892,0.0,0.0,0.013213112
+Niche_2 (CD8_T-dominant),0.0002860412,0.03226045,0.9468533,0.0,0.020600189
+Niche_3 (Osteoblast-dominant),0.0,0.02018323,0.0,0.9270117,0.052805044

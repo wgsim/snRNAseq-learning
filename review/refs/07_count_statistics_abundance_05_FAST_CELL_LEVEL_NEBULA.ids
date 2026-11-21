@@ -1,0 +1,17 @@
+[cited]
+PMID:34040149  # "He et al. 2021 (NEBULA)", L80,L125  [He L 2021 Commun Biol]
+DOI:10.1111/j.2517-6161.1996.tb02105.x  # Lee & Nelder (1996), J R Stat Soc B, L149,L176
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:anndata
+SW:nebula
+SW:numpy
+SW:rpy2
+SW:scanpy
+SW:scipy
+SW:matrix
+SW:pandas
+SW:singlecellexperiment

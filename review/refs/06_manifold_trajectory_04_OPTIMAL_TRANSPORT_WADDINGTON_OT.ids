@@ -1,0 +1,12 @@
+[cited]
+PMID:30712874  # Schiebinger 2019 Cell
+ARXIV:1306.0895  # "Cuturi 2013" Sinkhorn distances (L59)
+
+[evidence]
+
+
+[software]
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:wot

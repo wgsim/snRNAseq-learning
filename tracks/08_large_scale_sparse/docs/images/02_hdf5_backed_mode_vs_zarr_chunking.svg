@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrRose02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrEmerald02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">디스크 기반 스토리지: HDF5 (.h5ad) vs Zarr Sharded Chunking &amp; 동시성 아키텍처</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">모놀리식 단일 파일 글로벌 락(HDF5 Lock) ➔ 디렉터리 기반 비동기 청크 샤딩 및 Blosc 병렬 압축 해제</text>
+
+  <!-- Panel 1: HDF5 Limitations -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12.5" font-weight="700">1. HDF5 (.h5ad Backed)의 병목</text>
+
+    <!-- Schematic: Single Monolithic File with Global Lock -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#e11d48" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Single file box -->
+      <rect x="10" y="8" width="100" height="50" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1.2"/>
+      <text x="60" y="26" text-anchor="middle" fill="#f43f5e" font-size="8" font-weight="700">dataset.h5ad</text>
+      <text x="60" y="42" text-anchor="middle" fill="#94a3b8" font-size="6.8">(Single File Lock)</text>
+
+      <!-- Lock icon / barrier -->
+      <rect x="130" y="16" width="36" height="34" rx="4" fill="#e11d48" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+      <text x="148" y="32" text-anchor="middle" fill="#f43f5e" font-size="12">🔒</text>
+      <text x="148" y="44" text-anchor="middle" fill="#f43f5e" font-size="6.5">GIL Lock</text>
+
+      <!-- Worker threads blocked -->
+      <line x1="175" y1="20" x2="235" y2="20" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <circle cx="238" cy="20" r="3" fill="#f43f5e"/>
+      <text x="215" y="14" fill="#94a3b8" font-size="6.5">Worker 1 (Wait)</text>
+      <line x1="175" y1="45" x2="235" y2="45" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <circle cx="238" cy="45" r="3" fill="#f43f5e"/>
+      <text x="215" y="40" fill="#94a3b8" font-size="6.5">Worker 2 (Wait)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• C 라이브러리 전역 락 (SWMR 한계):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">복수 워커 동시 접근 시 입출력 직렬화 강제 병목</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 클라우드 오브젝트 스토리지 부적합:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">S3/GCS에서 파일 일부 갱신 불가 (전체 재업로드)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• B-tree 메타데이터 탐색 지연:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">수십만 청크 접근 시 메타데이터 캐시 경합 발생</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="9.2" font-weight="600">위험: Dask / Ray 병렬 워커 확장 시 심각한 I/O 동결</text>
+  </g>
+
+  <!-- Panel 2: Zarr Sharded Chunking -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">2. Zarr 디렉터리 기반 비동기 청킹</text>
+
+    <!-- Schematic: Sharded Chunks Directory -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Directory Tree -->
+      <text x="5" y="14" fill="#38bdf8" font-size="7.5" font-weight="700">adata.zarr/X/</text>
+      <!-- Chunks grid -->
+      <rect x="95" y="6" width="35" height="22" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="112" y="20" text-anchor="middle" fill="#38bdf8" font-size="7">c/0/0</text>
+      <rect x="135" y="6" width="35" height="22" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="152" y="20" text-anchor="middle" fill="#38bdf8" font-size="7">c/0/1</text>
+      <rect x="95" y="34" width="35" height="22" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="112" y="48" text-anchor="middle" fill="#38bdf8" font-size="7">c/1/0</text>
+      <rect x="135" y="34" width="35" height="22" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="152" y="48" text-anchor="middle" fill="#38bdf8" font-size="7">c/1/1</text>
+
+      <!-- Parallel workers arrows -->
+      <path d="M 175 17 L 235 12" stroke="#34d399" stroke-width="1.4" fill="none" marker-end="url(#arrEmerald02)"/>
+      <text x="245" y="14" fill="#34d399" font-size="6.8">Worker A</text>
+      <path d="M 175 45 L 235 48" stroke="#38bdf8" stroke-width="1.4" fill="none" marker-end="url(#arrCyan02)"/>
+      <text x="245" y="50" fill="#38bdf8" font-size="6.8">Worker B</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• POSIX / S3 독립 파일 샤딩 (Zarr v3):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">각 청크가 별도 오브젝트로 저장되어 글로벌 락 제로</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 최적 청크 크기(Chunk Sizing): 16~64 MB</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">행(세포: 4,000) × 열(유전자: 2,000) 2차원 최적 타일링</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• Sharding Specification:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">작은 청크를 단일 파일 내 오프셋 샤드로 묶어 inode 보호</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">완전 비동기 병렬 읽기 지원 (Lock-Free I/O Architecture)</text>
+  </g>
+
+  <!-- Panel 3: Blosc Multithreaded Decompression -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. Blosc 압축 &amp; 초고속 메모리 대역폭</text>
+
+    <!-- Schematic: Blosc pipeline -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Disk chunk -->
+      <rect x="5" y="12" width="46" height="38" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="28" y="28" text-anchor="middle" fill="#fbbf24" font-size="6.5">NVMe Disk</text>
+      <text x="28" y="40" text-anchor="middle" fill="#94a3b8" font-size="5.8">3.5 GB/s</text>
+
+      <path d="M 53 31 L 78 31" stroke="#38bdf8" stroke-width="1.5" fill="none" marker-end="url(#arrCyan02)"/>
+
+      <!-- Blosc Core -->
+      <rect x="80" y="8" width="85" height="46" rx="4" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1.2"/>
+      <text x="122" y="24" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">Blosc + BitShuffle</text>
+      <text x="122" y="38" text-anchor="middle" fill="#cbd5e1" font-size="6.5">zstd / lz4 (8 Threads)</text>
+
+      <path d="M 167 31 L 192 31" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrEmerald02)"/>
+
+      <!-- L3 Cache / RAM -->
+      <rect x="194" y="12" width="55" height="38" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <text x="221" y="28" text-anchor="middle" fill="#34d399" font-size="6.5">L3 Cache/RAM</text>
+      <text x="221" y="40" text-anchor="middle" fill="#38bdf8" font-size="5.8">&gt; 12.0 GB/s</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비트 셔플 전처리 (BitShuffle):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">비슷한 지수/비트를 연속 배치하여 압축률 3.5x 극대화</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 멀티스레드 캐시 내 압축 해제:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">L1/L2 캐시 블록 단위로 분할하여 전송과 동시에 해제</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유효 메모리 대역폭 역전 현상:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">디스크 I/O 속도(3.5GB/s)가 RAM 대역폭 수준(&gt;12GB/s) 체감</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">대규모 아틀라스 분석(CellxGene, scverse)의 표준 스토리지</text>
+  </g>
+</svg>

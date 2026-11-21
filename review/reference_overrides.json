@@ -1,0 +1,16 @@
+{
+ "DOI:10.1007/s11263-007-0075-7": {
+  "year": 2008,
+  "source": "Crossref published-print = 2008-05 for the same record (vol 77, issue 1-3, pp 125-141); Semantic Scholar Graph API: year 2008, publicationDate 2008-05-01, volume 77, pages 125-141",
+  "reason": "Crossref 'issued' is the online date (2007-08-17). The reference is cited as the printed IJCV volume 77 (2008), which is also the year the chapter text uses."
+ },
+ "DOI:10.1109/CVPR.2018.00781": {
+  "author": [
+   {"given": "Alex", "family": "Kendall"},
+   {"given": "Yarin", "family": "Gal"},
+   {"given": "Roberto", "family": "Cipolla"}
+  ],
+  "source": "arXiv API id_list=1705.07115 (Kendall, Gal, Cipolla); CVF Open Access page of the CVPR 2018 paper (citation_author order Kendall, Gal, Cipolla)",
+  "reason": "The IEEE deposit in Crossref (and OpenAlex derived from it) lists the authors in reverse order (Cipolla, Gal, Kendall)."
+ }
+}

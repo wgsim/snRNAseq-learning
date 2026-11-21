@@ -1,0 +1,211 @@
+{
+ "_doc": "Fields of pipeline result files that legitimately change between runs or interpreters. Used by assertion 4 in scripts/course_markdown.py: a re-run of the pipelines must reproduce the committed results byte for byte, except for the fields declared here (compared after masking ONLY these fields). Declare only timing, timestamps, timing-derived throughput/speedup/RAM measurements and interpreter version - never a scientific or numeric result. Keys are repo-relative paths. json_keys use dotted paths ('*' = any key/index); csv_columns (optionally restricted to rows where row_key is in row_values); line_rules mask regex 'mask' inside lines matching regex 'line'.",
+ "files": {
+  "tracks/07_count_statistics_abundance/pipelines/results_pipeline_01/pipeline_01_metrics.json": {
+   "why": "wall-clock run time of the pipeline",
+   "json_keys": [
+    "execution_time_seconds"
+   ]
+  },
+  "tracks/07_count_statistics_abundance/pipelines/results_pipeline_02/pipeline_02_metrics.json": {
+   "why": "wall-clock run time of the pipeline",
+   "json_keys": [
+    "execution_time_seconds"
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_01/pipeline_01_metrics.json": {
+   "why": "timing benchmarks, timing-ratio speedups, throughput and total run time (all measured on the host machine); peak RAM (tracemalloc) is a measurement, strict_budget_pass is its verdict (< 20 MB)",
+   "json_keys": [
+    "benchmarks.row_slice_csr_sec",
+    "benchmarks.row_slice_csc_sec",
+    "benchmarks.row_slice_speedup_csr_vs_csc",
+    "benchmarks.col_slice_csc_sec",
+    "benchmarks.col_slice_csr_sec",
+    "benchmarks.col_slice_speedup_csc_vs_csr",
+    "benchmarks.spmv_runtime_sec",
+    "benchmarks.spmv_gflops",
+    "streaming.streaming_time_sec",
+    "incremental_svd.runtime_sec",
+    "execution_time_total_sec",
+    "streaming.peak_ram_mb",
+    "streaming.strict_budget_pass"
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_01/pipeline_01_summary.txt": {
+   "why": "same timing benchmark values as pipeline_01_metrics.json, rendered as text; Peak RAM line (value and budget verdict) is a measurement",
+   "line_rules": [
+    {
+     "line": "Row-slicing|Col-slicing|SpMV Throughput|Streaming Time|Total Pipeline Runtime",
+     "mask": "\\d[\\d,]*\\.\\d+"
+    },
+    {
+     "line": "Peak RAM",
+     "mask": "(?<=Peak RAM: )\\d[\\d,]*\\.\\d+|(?<=MB: )(?:PASSED|FAILED)"
+    }
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_01/sparse_memory_layout_benchmark.csv": {
+   "why": "timing/throughput benchmark rows only; memory sizes, ratios and FLOP reduction stay compared",
+   "csv_columns": [
+    "Value"
+   ],
+   "row_key": "Metric",
+   "row_values": [
+    "Row_Slice_CSR_Time",
+    "Row_Slice_CSC_Time",
+    "Row_Slice_CSR_Speedup",
+    "Col_Slice_CSC_Time",
+    "Col_Slice_CSR_Time",
+    "Col_Slice_CSC_Speedup",
+    "SpMV_Runtime",
+    "SpMV_Throughput"
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_02/pipeline_02_metrics.json": {
+   "why": "timing benchmarks, timing-ratio speedups, total run time and peak RAM measurement; recall and structure stay compared; sub_millisecond_pass and speedup_target_pass are verdicts on measured timings (latency < 1 ms, speedup within 10x-50x)",
+   "json_keys": [
+    "metadata_slicing.row_time_per_query_ms",
+    "metadata_slicing.columnar_time_per_query_ms",
+    "metadata_slicing.query_speedup",
+    "ann_search.brute_time_sec",
+    "ann_search.ann_time_sec",
+    "ann_search.ann_speedup",
+    "hardware_profiling.peak_ram_mb",
+    "execution_time_total_sec",
+    "metadata_slicing.sub_millisecond_pass",
+    "ann_search.speedup_target_pass"
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_02/pipeline_02_summary.txt": {
+   "why": "same timing/peak-RAM measurements as pipeline_02_metrics.json rendered as text, plus the verdict text derived from them (sub-millisecond, speedup target)",
+   "line_rules": [
+    {
+     "line": "Multi-attribute query latency",
+     "mask": "\\d[\\d,]*\\.\\d+|(?<=pass: )(?:True|False)"
+    },
+    {
+     "line": "Query retrieval speedup|Total Pipeline Execution Time",
+     "mask": "\\d[\\d,]*\\.\\d+"
+    },
+    {
+     "line": "ANN Speedup",
+     "mask": "\\d[\\d,]*\\.\\d+|(?<=50x: )(?:PASSED|FAILED)"
+    },
+    {
+     "line": "Hardware Peak RAM",
+     "mask": "(?<=Peak RAM: )\\d[\\d,]*\\.\\d+"
+    }
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_02/ann_vs_bruteforce_knn_benchmark.csv": {
+   "why": "timing and timing-ratio rows only; Mean_Recall and counts stay compared",
+   "csv_columns": [
+    "Value"
+   ],
+   "row_key": "Metric",
+   "row_values": [
+    "Brute_Force_Time",
+    "ANN_IVF_Time",
+    "ANN_Speedup"
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_02/columnar_vs_row_metadata_benchmark.csv": {
+   "why": "query latency and its speedup only; memory figures stay compared",
+   "csv_columns": [
+    "Value"
+   ],
+   "row_key": "Metric",
+   "row_values": [
+    "Row_Query_Latency",
+    "Columnar_Query_Latency",
+    "Slicing_Speedup"
+   ]
+  },
+  "tracks/09_upstream_alignment_bam/pipelines/results_pipeline_01/demux_and_error_correction_summary.json": {
+   "why": "wall-clock run time of UMI deduplication",
+   "json_keys": [
+    "umi_deduplication_benchmarks.execution_time_seconds"
+   ]
+  },
+  "tracks/09_upstream_alignment_bam/pipelines/results_pipeline_01/pipeline_01_summary_report.md": {
+   "why": "same dedup run time rendered as text",
+   "line_rules": [
+    {
+     "line": "Deduplication Execution Time",
+     "mask": "\\d[\\d,]*\\.\\d+"
+    }
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_01/timeline_metrics.json": {
+   "why": "cold/warm execution wall-clock durations",
+   "json_keys": [
+    "cold_execution.duration_seconds",
+    "warm_execution.duration_seconds"
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_01/trace_table.csv": {
+   "why": "per-task duration and wall-clock timestamp; task ids, status, hashes and resources stay compared",
+   "csv_columns": [
+    "duration_s",
+    "timestamp"
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_02/model_audit_manifest.json": {
+   "why": "generation timestamp and the interpreter patch version (committed copy was written under python 3.8.18, the build env is 3.8.16); weights hash and metrics stay compared; host OS string and processor are environment descriptors",
+   "json_keys": [
+    "timestamp_utc",
+    "runtime_environment.python_version",
+    "runtime_environment.os_platform",
+    "runtime_environment.processor"
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_02/serving_benchmark.csv": {
+   "why": "measured serving latencies and throughput, and the SLA verdict derived from p95 (< 50 ms; flips under CPU load); batch size, iterations and SLA target stay compared",
+   "csv_columns": [
+    "mean_latency_ms",
+    "std_latency_ms",
+    "p50_latency_ms",
+    "p95_latency_ms",
+    "p99_latency_ms",
+    "throughput_cells_sec",
+    "sla_compliant"
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_02/summary_report.md": {
+   "why": "generation timestamp; measured latency/throughput numbers and the SLA verdict text derived from p95; the screening time is computed from the measured throughput (10,000 / cells-per-second)",
+   "line_rules": [
+    {
+     "line": "Timestamp \\(UTC\\)",
+     "mask": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"
+    },
+    {
+     "line": "^\\| \\*\\*\\d+ cells\\*\\* \\|",
+     "mask": "\\d[\\d,]*\\.\\d+|✅ PASS|❌ FAIL"
+    },
+    {
+     "line": "Low-Latency Guarantees",
+     "mask": "\\d+\\.\\d+ ms|strictly compliant with|NOT within"
+    },
+    {
+     "line": "High Throughput",
+     "mask": "[\\d,]+ cells/second|~[\\d.]+ seconds"
+    }
+   ]
+  },
+  "tracks/08_large_scale_sparse/pipelines/results_pipeline_01/out_of_core_chunk_streaming_metrics.csv": {
+   "why": "per-chunk tracemalloc peak RAM measurement; chunk ids, cell and nnz counts stay compared",
+   "csv_columns": [
+    "Peak_RAM_MB"
+   ]
+  },
+  "tracks/10_production_pipelines_mlops/pipelines/results_pipeline_01/summary_report.md": {
+   "why": "walltime and speedup quoted in the cache-efficiency table are computed from the measured cold/warm durations",
+   "line_rules": [
+    {
+     "line": "Total Compute Walltime",
+     "mask": "~\\d+\\.\\d+s|>?\\d[\\d,]*x speedup"
+    }
+   ]
+  }
+ }
+}

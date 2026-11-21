@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "date": "2026-10-27 20:03:37",
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "gpu_mem_bytes": 101974081536,
+    "host": {
+      "cpus": 48,
+      "ram_gb": 189.9
+    },
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "scanpy": "1.12.4",
+      "anndata": "0.13.4",
+      "cupy": "14.0.1",
+      "cudf": "26.06.00",
+      "cuml": "26.06.00",
+      "cugraph": "26.06.00",
+      "cuvs": "26.06.00",
+      "rmm": "26.06.00",
+      "rapids_singlecell": "0.18.1"
+    },
+    "atlas_nnz": {
+      "25000": 46896357,
+      "100000": 187585314
+    }
+  },
+  "blocks": {
+    "B4_25k": {
+      "id": "B4_25k",
+      "location": "tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:184",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [
+        "DeprecationWarning: The NearestNeighbors or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.b",
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstim",
+        "DeprecationWarning: `ndarray.scatter_add` is deprecated. Please use `cupy.add.at` instead.",
+        "PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'",
+        "PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'",
+        "PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'",
+        "PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'"
+      ],
+      "elapsed_s": 8.53,
+      "peak_gpu_used_mib": 57981,
+      "peak_host_rss_mib": 4086,
+      "stdout_tail": [
+        "[RMM Init] Allocating GPU Memory Pool (60GB ~ 76GB)...",
+        "[RMM Init] GPU Memory Pool successfully bound to CuPy & RAPIDS.",
+        "[I/O] Reading H5AD from /content/atlas_25k.h5ad...",
+        "[I/O] Host read completed in 0.11s. Shape: (25000, 35000)",
+        "[PCIe] Promoting sparse count matrix to GPU VRAM (cupyx.scipy.sparse.csr_matrix)...",
+        "[PCIe] Transfer completed in 0.11s.",
+        "",
+        "=================================================================",
+        "   STARTING RAPIDS-SINGLECELL 1M CELLS GPU PIPELINE",
+        "=================================================================",
+        "[Stage 1] GPU QC Metrics calculation : 0.646s",
+        "filtered out 6076 genes that are detected in less than 10 cells",
+        "[Stage 2] GPU Filter Cells & Genes   : 1.035s (Remaining: 25,000 cells)",
+        "[Stage 3] GPU Highly Variable Genes  : 1.865s",
+        "[Stage 4] GPU Normalize & Log1p      : 0.056s",
+        "[Stage 5] GPU Matrix Scaling (HVG)   : 0.279s",
+        "[Stage 6] GPU PCA (50 components)    : 0.772s",
+        "[Stage 7] GPU kNN Graph (k=15, 1M)   : 0.604s",
+        "[Stage 8] cuML UMAP 2D Embedding     : 0.717s",
+        "=================================================================",
+        "[SUCCESS] Complete 1M Atlas GPU Pipeline Finished in: 5.97 seconds!",
+        "=================================================================",
+        "",
+        "HARNESS: cells after QC = 25000 | genes after filter = 3000"
+      ],
+      "stderr_tail": [
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:06 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'"
+      ],
+      "notes": ""
+    },
+    "B4_100k": {
+      "id": "B4_100k",
+      "location": "tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:184",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [
+        "DeprecationWarning: The NearestNeighbors or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.b",
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstim",
+        "DeprecationWarning: `ndarray.scatter_add` is deprecated. Please use `cupy.add.at` instead.",
+        "PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'",
+        "PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'",
+        "PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'",
+        "PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'"
+      ],
+      "elapsed_s": 4.22,
+      "peak_gpu_used_mib": 57985,
+      "peak_host_rss_mib": 4424,
+      "stdout_tail": [
+        "[RMM Init] Allocating GPU Memory Pool (60GB ~ 76GB)...",
+        "[RMM Init] GPU Memory Pool successfully bound to CuPy & RAPIDS.",
+        "[I/O] Reading H5AD from /content/atlas_100k.h5ad...",
+        "[I/O] Host read completed in 0.38s. Shape: (100000, 35000)",
+        "[PCIe] Promoting sparse count matrix to GPU VRAM (cupyx.scipy.sparse.csr_matrix)...",
+        "[PCIe] Transfer completed in 0.35s.",
+        "",
+        "=================================================================",
+        "   STARTING RAPIDS-SINGLECELL 1M CELLS GPU PIPELINE",
+        "=================================================================",
+        "[Stage 1] GPU QC Metrics calculation : 0.026s",
+        "filtered out 4034 genes that are detected in less than 10 cells",
+        "[Stage 2] GPU Filter Cells & Genes   : 0.143s (Remaining: 100,000 cells)",
+        "[Stage 3] GPU Highly Variable Genes  : 0.327s",
+        "[Stage 4] GPU Normalize & Log1p      : 0.004s",
+        "[Stage 5] GPU Matrix Scaling (HVG)   : 0.021s",
+        "[Stage 6] GPU PCA (50 components)    : 0.630s",
+        "[Stage 7] GPU kNN Graph (k=15, 1M)   : 0.190s",
+        "[Stage 8] cuML UMAP 2D Embedding     : 0.334s",
+        "=================================================================",
+        "[SUCCESS] Complete 1M Atlas GPU Pipeline Finished in: 1.68 seconds!",
+        "=================================================================",
+        "",
+        "HARNESS: cells after QC = 100000 | genes after filter = 3000"
+      ],
+      "stderr_tail": [
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'parseString' deprecated - use 'parse_string'",
+        "2026-10-27 20:03:21 | [WARNING] In /usr/local/lib/python3.13/dist-packages/matplotlib/mpl-data/stylelib/classic.mplstyle: 'resetCache' deprecated - use 'reset_cache'"
+      ],
+      "notes": ""
+    },
+    "B5_25k": {
+      "id": "B5_25k",
+      "location": "tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md:171",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [],
+      "elapsed_s": 6.19,
+      "peak_gpu_used_mib": 763,
+      "peak_host_rss_mib": 4086,
+      "stdout_tail": [
+        "",
+        "[CAGRA] Initializing Fixed Out-Degree Graph Index for 25,000 cells (dim=50)...",
+        "[CAGRA] Index Construction completed in 1.64s.",
+        "[CAGRA] kNN Search (k=15) for 1M cells completed in 2.06s.",
+        "[CAGRA] Total Graph Time: 3.70s.",
+        "[Graph Prep] Converting kNN tensors into cuGraph Edge List (Total Edges: 375,000)...",
+        "[Graph Prep] cuGraph initialized in 0.64s. Number of Vertices: 25,000",
+        "",
+        "[Leiden] Starting cuGraph Parallel Leiden (Resolution: 0.8, Max Iter: 50)...",
+        "=================================================================",
+        "[Leiden Success] Clustered 25,000 cells into 4 communities!",
+        "Final Graph Modularity (Q) : 0.48601",
+        "Total Leiden Runtime       : 0.467 seconds",
+        "=================================================================",
+        "",
+        "HARNESS: leiden returned 25000 rows"
+      ],
+      "stderr_tail": [],
+      "notes": ""
+    },
+    "B5_100k": {
+      "id": "B5_100k",
+      "location": "tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md:171",
+      "status": "FAIL",
+      "error": "CuvsException: CUDA error encountered at: file=/__w/cuvs/cuvs/cpp/src/detail/jit_lto/AlgorithmLauncher.cpp line=47: call='cudaLaunchKernelExC(&config, kernel, kernel_args)', Reason=cudaErrorInvalidValue:invalid argument\nObtained 32 stack frames\n#1 in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs.so(+0x916851) [0x7a8a21d14851]\n#2 in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs.so(+0x6f7852) [0x7a8a21af5852]\n#3 in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs.so: void cuvs::neighbors::detail::safely_launch_kernel_with_smem_size<void (unsigned long, float*, unsig",
+      "traceback": "in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs.so: void cuvs::neighbors::cagra::search<float, unsigned int, unsigned int>(raft::resources const&, cuvs::neighbors::cagra::search_params const&, cuvs::neighbors::cagra::index<float, unsigned int> const&, cuda::std::__4::mdspan<float const, cuda::std::__4::extents<long, 18446744073709551615ul, 18446744073709551615ul>, cuda::std::__4::layout_right, raft::host_device_accessor<cuda::std::__4::default_accessor<float const>, (raft::memory_type)2> >, cuda::std::__4::mdspan<unsigned int, cuda::std::__4::extents<long, 18446744073709551615ul, 18446744073709551615ul>, cuda::std::__4::layout_right, raft::host_device_accessor<cuda::std::__4::default_accessor<unsigned int>, (raft::memory_type)2> >, cuda::std::__4::mdspan<float, cuda::std::__4::extents<long, 18446744073709551615ul, 18446744073709551615ul>, cuda::std::__4::layout_right, raft::host_device_accessor<cuda::std::__4::default_accessor<float>, (raft::memory_type)2> >, cuvs::neighbors::filtering::base_filter const&) +0x3e5 [0x7a8a2277c365]\n#8 in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs_c.so(+0xaa7d1) [0x7a8a5f8c77d1]\n#9 in /usr/local/lib/python3.13/dist-packages/libcuvs/lib64/libcuvs_c.so: cuvsCagraSearch +0x3f [0x7a8a5f8c83ef]\n#10 in /usr/local/lib/python3.13/dist-packages/cuvs/neighbors/cagra/cagra.abi3.so(+0x24907) [0x7a8919a21907]\n#11 in /usr/bin/python3() [0x65ab93]\n#12 in /usr/bin/python3() [0x43fb21]\n#13 in /usr/bin/python3: PyObject_Call +0x2be [0x5ab0be]\n#14 in /usr/local/lib/python3.13/dist-packages/cuvs/common/resources.abi3.so(+0x85e0) [0x7a8919bc15e0]\n#15 in /usr/bin/python3: _PyObject_MakeTpCall +0x2a3 [0x56b593]\n#16 in /usr/bin/python3() [0x4473d7]\n#17 in /usr/bin/python3: PyEval_EvalCode +0x9a [0x64cf5a]\n#18 in /usr/bin/python3() [0x667495]\n#19 in /usr/bin/python3() [0x5884cb]\n#20 in /usr/bin/python3: PyObject_Vectorcall +0x33 [0x56d593]\n#21 in /usr/bin/python3() [0x43fffe]\n#22 in /usr/bin/python3: PyEval_EvalCode +0x9a [0x64cf5a]\n#23 in /usr/bin/python3() [0x689832]\n#24 in /usr/bin/python3() [0x686a9e]\n#25 in /usr/bin/python3() [0x6833fb]\n#26 in /usr/bin/python3() [0x6828c4]\n#27 in /usr/bin/python3() [0x6826b5]\n#28 in /usr/bin/python3: Py_RunMain +0x2fc [0x680e4c]\n#29 in /usr/bin/python3: Py_BytesMain +0x2d [0x63c1ad]\n#30 in /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca) [0x7a8b688ea1ca]\n#31 in /lib/x86_64-linux-gnu/libc.so.6: __libc_start_main +0x8b [0x7a8b688ea28b]\n#32 in /usr/bin/python3: _start +0x25 [0x63b645]\n\n",
+      "warnings": [],
+      "elapsed_s": 1.55,
+      "peak_gpu_used_mib": 129,
+      "peak_host_rss_mib": 4086,
+      "stdout_tail": [
+        "",
+        "[CAGRA] Initializing Fixed Out-Degree Graph Index for 100,000 cells (dim=50)...",
+        "[CAGRA] Index Construction completed in 0.35s."
+      ],
+      "stderr_tail": [],
+      "notes": ""
+    },
+    "B7_100k": {
+      "id": "B7_100k",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:205",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstim"
+      ],
+      "elapsed_s": 2.06,
+      "peak_gpu_used_mib": 3135,
+      "peak_host_rss_mib": 4086,
+      "stdout_tail": [
+        "",
+        "[MemoryGuard: START] >>> Stage: cuML PCA 50 PCs",
+        "  CPU RAM Baseline : 361.43 MB",
+        "  GPU VRAM Used    : 1.79 GB / 94.97 GB",
+        "[MemoryGuard: END] <<< Stage: cuML PCA 50 PCs (Duration: 1.75s)",
+        "  CPU RAM Delta    : +591.09 MB (Current: 952.53 MB)",
+        "  GPU VRAM Delta   : +0.07 GB (Current: 1.86 GB)",
+        "HARNESS: PCA output (100000, 50)"
+      ],
+      "stderr_tail": [],
+      "notes": ""
+    },
+    "B6": {
+      "id": "B6",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:105",
+      "status": "PASS",
+      "error": null,
+      "traceback": null,
+      "warnings": [],
+      "elapsed_s": 0.72,
+      "peak_gpu_used_mib": 2989,
+      "peak_host_rss_mib": 4086,
+      "stdout_tail": [
+        "HARNESS: 4 GiB allocation inside the managed pool OK",
+        "HARNESS PROBE: 90 GB managed allocation SUCCEEDED"
+      ],
+      "stderr_tail": [],
+      "notes": ""
+    }
+  }
+}

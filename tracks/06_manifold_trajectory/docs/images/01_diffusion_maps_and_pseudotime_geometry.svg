@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="diffGrad01" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">확률론적 확산 맵(Diffusion Maps) &amp; 확산 의시간(DPT) 기하학</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">그래프 라플라시안 ➔ 마르코프 전이 연산자 T ➔ 고유공간 스펙트럼 분해 ➔ 분기 매니폴드 측지선 거리</text>
+
+  <!-- Panel 1: Affinity Matrix & Markov Transition Operator -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 친화도 행렬 W &amp; 전이 연산자 T</text>
+
+    <!-- Schematic: kNN graph to Transition Matrix -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    
+    <!-- Graph Network Nodes -->
+    <g transform="translate(25, 48)">
+      <line x1="20" y1="20" x2="55" y2="12" stroke="#334155" stroke-width="1.2"/>
+      <line x1="20" y1="20" x2="35" y2="48" stroke="#334155" stroke-width="1.2"/>
+      <line x1="55" y1="12" x2="75" y2="38" stroke="#334155" stroke-width="1.2"/>
+      <line x1="35" y1="48" x2="75" y2="38" stroke="#334155" stroke-width="1.2"/>
+      <circle cx="20" cy="20" r="6" fill="#38bdf8"/>
+      <circle cx="55" cy="12" r="5" fill="#818cf8"/>
+      <circle cx="35" cy="48" r="5" fill="#38bdf8"/>
+      <circle cx="75" cy="38" r="6" fill="#0284c7"/>
+      <text x="45" y="60" text-anchor="middle" fill="#94a3b8" font-size="7.5">kNN Graph (W_ij)</text>
+    </g>
+
+    <line x1="115" y1="78" x2="135" y2="78" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan01)"/>
+
+    <!-- Normalized Transition Matrix -->
+    <g transform="translate(145, 50)">
+      <rect width="120" height="56" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="60" y="18" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">T = D^(-1) W</text>
+      <text x="60" y="32" text-anchor="middle" fill="#cbd5e1" font-size="7.5">D_ii = Σ_j W_ij</text>
+      <text x="60" y="46" text-anchor="middle" fill="#fbbf24" font-size="7.5">Σ_j T_ij = 1 (확률 보존)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 국소 적응형 가우시안 친화도 행렬:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">W_ij = exp( -||x_i - x_j||^2 / (2 σ_i σ_j) ) (밀도 적응)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 마르코프 무작위 보행 (Random Walk):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">T_ij: 세포 i에서 세포 j로 1단계 전이 확률</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 밀도 정규화 (α-Normalization):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">W^(α) = D^(-α) W D^(-α)로 샘플링 밀도 바이어스 제거</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">수학적 특징: 연속 다양체 상의 열 확산 방정식 이산화</text>
+  </g>
+
+  <!-- Panel 2: Diffusion Eigen-Coordinates -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad01)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 확산 고유공간(Diffusion Space)</text>
+
+    <!-- Schematic: Eigenvalue Decay & 2D Projection -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+
+    <!-- Eigenvalue spectrum curve -->
+    <g transform="translate(25, 48)">
+      <line x1="5" y1="52" x2="95" y2="52" stroke="#475569" stroke-width="1"/>
+      <line x1="5" y1="52" x2="5" y2="8" stroke="#475569" stroke-width="1"/>
+      <path d="M 5 10 Q 18 25 35 44 T 90 51" fill="none" stroke="#fbbf24" stroke-width="1.6"/>
+      <circle cx="5" cy="10" r="2.5" fill="#38bdf8"/>
+      <circle cx="20" cy="28" r="2.5" fill="#c084fc"/>
+      <circle cx="35" cy="44" r="2.5" fill="#34d399"/>
+      <text x="50" y="16" fill="#fbbf24" font-size="7.5">1=λ_0 &gt; λ_1 ≥ λ_2</text>
+      <text x="50" y="61" fill="#94a3b8" font-size="7">Spectral Gap</text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="128" y1="78" x2="148" y2="78" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrPurple01)"/>
+
+    <!-- 2D Diffusion Space -->
+    <g transform="translate(155, 47)">
+      <rect width="140" height="62" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <!-- Trajectory arc -->
+      <path d="M 15 48 Q 55 12 125 24" fill="none" stroke="url(#diffGrad01)" stroke-width="2.5"/>
+      <circle cx="15" cy="48" r="4" fill="#38bdf8"/>
+      <circle cx="68" cy="20" r="3.5" fill="#c084fc"/>
+      <circle cx="125" cy="24" r="4" fill="#34d399"/>
+      <text x="20" y="58" fill="#38bdf8" font-size="7" font-weight="700">Root (ψ_1)</text>
+      <text x="110" y="40" fill="#34d399" font-size="7" font-weight="700">Fate Branch</text>
+      <text x="70" y="12" text-anchor="middle" fill="#94a3b8" font-size="6.5">ψ_1 vs ψ_2 Manifold</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 스펙트럼 분해 (Spectral Decomposition):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">T ψ_k = λ_k ψ_k (k=1,...,d 차원 매핑)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 확산 거리 (Diffusion Distance):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">D_t^2(x, y) = Σ_k λ_k^(2t) (ψ_k(x) - ψ_k(y))^2</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 노이즈 필터링 메커니즘:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">시간 t 거듭제곱으로 단기 노이즈(작은 λ_k) 지수적 감쇠</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#c084fc" font-size="9.5" font-weight="600">스펙트럼 수렴: 리만 다양체의 본질적 저차원 측지선 보존</text>
+  </g>
+
+  <!-- Panel 3: DPT Geodesic Metric & Branching -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 확산 의시간(DPT) &amp; 분기 매니폴드</text>
+
+    <!-- Schematic: Branching Geodesics -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Branching lines -->
+      <path d="M 15 32 Q 55 32 85 32" stroke="#38bdf8" stroke-width="2.2" fill="none"/>
+      <path d="M 85 32 Q 130 18 165 14" stroke="#f43f5e" stroke-width="2.2" fill="none"/>
+      <path d="M 85 32 Q 130 45 165 50" stroke="#34d399" stroke-width="2.2" fill="none"/>
+
+      <!-- Root node -->
+      <circle cx="15" cy="32" r="5" fill="#38bdf8"/>
+      <text x="15" y="46" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">Root x_0</text>
+
+      <!-- Branch point -->
+      <circle cx="85" cy="32" r="4" fill="#fbbf24"/>
+      <text x="85" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.5">Bifurcation</text>
+
+      <!-- Terminals -->
+      <circle cx="165" cy="14" r="5" fill="#f43f5e"/>
+      <text x="200" y="16" fill="#f43f5e" font-size="7" font-weight="700">t-NEPC</text>
+
+      <circle cx="165" cy="50" r="5" fill="#34d399"/>
+      <text x="200" y="52" fill="#34d399" font-size="7" font-weight="700">DNPC</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 확산 의시간 공식 (Diffusion Pseudotime):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">dpt(x0,x) = ||M(e_x0 - e_x)||, M = Σ_t (T^t - φ0φ0ᵀ)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 누적 무작위 보행 (Accumulated Walk):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">모든 시간 t∈[1, ∞)에 걸친 연속 전이 확률 적분</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• mCRPC 계통 가소성 경로 정량화:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">AR+ 선암종 기원 ➔ t-NEPC 및 DNPC 2개 분기 운명 추적</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">임상적 가치: 약제 유발 신경내분비 역분화의 연속적 진행도 산출</text>
+  </g>
+</svg>

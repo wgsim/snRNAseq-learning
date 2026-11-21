@@ -1,0 +1,21 @@
+{
+  "n_cells_simulated": 1500,
+  "n_cell_types": 8,
+  "n_genes": 300,
+  "n_lr_pairs": 13,
+  "n_total_interactions_tested": 832,
+  "n_significant_interactions_fdr05": 39,
+  "top_sender_cell_type": "myCAF",
+  "top_sender_strength": 11.5168,
+  "top_receiver_cell_type": "Endothelial",
+  "top_receiver_strength": 7.3383,
+  "top_mediator_cell_type": "TAM_M2",
+  "top_influencer_cell_type": "Endothelial",
+  "top_consensus_lr_pairs": [
+    "Osteoblast -> Osteoclast (TNFSF11_TNFRSF11A): prob=0.96337, fdr=0.02131",
+    "TAM_M2 -> CD8_T (CD274_PDCD1): prob=0.94946, fdr=0.02131",
+    "myCAF -> CD8_T (CXCL12_CXCR4): prob=0.95771, fdr=0.02131",
+    "myCAF -> Osteoblast (TGFB1_(TGFBR1+TGFBR2)): prob=0.93925, fdr=0.02131",
+    "Luminal_AR_Pos -> TAM_M2 (CD47_SIRPA): prob=0.94189, fdr=0.02131"
+  ]
+}

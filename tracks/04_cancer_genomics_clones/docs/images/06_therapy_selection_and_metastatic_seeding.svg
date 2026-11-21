@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowRose06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">치료 선택압(Therapy Bottleneck) &amp; 전이 파종(Metastatic Seeding) 모형</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">ADT 치료 병목 ➔ TP53/RB1 이중 결손 t-NEPC 계통 가소성 ➔ 단일클론(간) vs 다클론(골) 전이 파종</text>
+
+  <!-- Panel 1: ADT Selection Bottleneck -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 호르몬 차단 요법(ADT) 병목 선택</text>
+
+    <!-- Schematic: Funnel / Bottleneck -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Left: Heterogeneous Primary Tumor -->
+      <g transform="translate(0, 5)">
+        <rect x="0" y="0" width="55" height="52" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <circle cx="15" cy="15" r="4" fill="#38bdf8"/>
+        <circle cx="35" cy="15" r="4" fill="#38bdf8"/>
+        <circle cx="20" cy="35" r="4" fill="#38bdf8"/>
+        <circle cx="45" cy="40" r="4" fill="#f43f5e"/>
+        <text x="27" y="28" text-anchor="middle" fill="#38bdf8" font-size="6.5">감수성 95%</text>
+      </g>
+
+      <!-- Bottleneck funnel -->
+      <path d="M 60,8 L 105,25 L 105,37 L 60,54 Z" fill="#334155" fill-opacity="0.5" stroke="#64748b" stroke-width="1"/>
+      <text x="82" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">ADT Bottleneck</text>
+
+      <!-- Center: MRD (Minimal Residual Disease) -->
+      <g transform="translate(112, 18)">
+        <rect x="0" y="0" width="25" height="26" rx="2" fill="#be123c" stroke="#f43f5e" stroke-width="1"/>
+        <circle cx="12" cy="13" r="4" fill="#f43f5e"/>
+        <text x="12" y="35" text-anchor="middle" fill="#f43f5e" font-size="6.5">MRD</text>
+      </g>
+
+      <!-- Arrow -->
+      <line x1="142" y1="31" x2="165" y2="31" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrowRose06)"/>
+
+      <!-- Right: Expanded Resistant Clones -->
+      <g transform="translate(175, 5)">
+        <rect x="0" y="0" width="70" height="52" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+        <circle cx="18" cy="15" r="4" fill="#f43f5e"/>
+        <circle cx="42" cy="15" r="4" fill="#f43f5e"/>
+        <circle cx="22" cy="35" r="4" fill="#f43f5e"/>
+        <circle cx="52" cy="35" r="4" fill="#fbbf24"/>
+        <text x="35" y="48" text-anchor="middle" fill="#f43f5e" font-size="6.5" font-weight="700">저항성 재발 (100%)</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 강력한 약리학적 선택압 (Darwinian Selection):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">안드로겐 고갈 시 호르몬 의존성 종양 세포 95% 이상 사멸</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 미세 잔존 질환(MRD) 생존 창 형성:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">사전 존재하는 극소수 비전형 클론이 치료 병목 통과</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 유전적 다양성 단순화 후 폭발:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">병목을 통과한 단일 저항성 서브클론의 적응적 재성장</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">치료 역설: 고강도 단일 치료는 가장 치명적인 변종을 선별</text>
+  </g>
+
+  <!-- Panel 2: t-NEPC Lineage Plasticity -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f43f5e" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="700">2. t-NEPC 계통 가소성 &amp; 역분화</text>
+
+    <!-- Schematic: Luminal AR+ to NEPC transdifferentiation -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#be123c" stroke-width="1"/>
+
+    <g transform="translate(25, 50)">
+      <!-- Luminal cell -->
+      <g transform="translate(0, 0)">
+        <circle cx="28" cy="24" r="18" fill="#0284c7" fill-opacity="0.7" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="28" y="22" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">Luminal</text>
+        <text x="28" y="32" text-anchor="middle" fill="#bae6fd" font-size="6.5">AR+/PSA+</text>
+      </g>
+
+      <!-- Double Loss Bridge -->
+      <g transform="translate(68, 6)">
+        <rect x="0" y="0" width="112" height="38" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+        <text x="56" y="14" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">TP53 &amp; RB1 동시 소실</text>
+        <text x="56" y="24" text-anchor="middle" fill="#fbbf24" font-size="7">EZH2 / SOX2 후성 리모델링</text>
+        <text x="56" y="33" text-anchor="middle" fill="#94a3b8" font-size="6.5">계통 분화 잠금 해제 (Plasticity)</text>
+      </g>
+
+      <!-- t-NEPC cell -->
+      <g transform="translate(195, 0)">
+        <circle cx="28" cy="24" r="18" fill="#be123c" fill-opacity="0.85" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="28" y="22" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">t-NEPC</text>
+        <text x="28" y="32" text-anchor="middle" fill="#fecdd3" font-size="6.5">SYP+/CHGA+</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• TP53 &amp; RB1 동시 소실(Double-Loss)의 격변:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">세포 분화 계통 잠금장치가 해제되어 다능성 상태 획득</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 신경내분비 형질 전환 (Neuroendocrine Shift):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">상피성 안드로겐 마커 소실 및 ASCL1/NEUROD1 발현</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 안드로겐 수용체(AR) 신호 독립성:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">AR이 결핍되어 기존 호르몬 치료제에 완전히 불응</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#be123c" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="600">임상 경고: mCRPC 환자의 15~20%에서 치명적 t-NEPC 변환</text>
+  </g>
+
+  <!-- Panel 3: Monoclonal vs Polyclonal Seeding -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">3. 단일클론 vs 다클론 전이 파종</text>
+
+    <!-- Schematic: Monoclonal to Liver vs Polyclonal to Bone -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Primary Tumor Source -->
+      <g transform="translate(0, 10)">
+        <rect x="0" y="0" width="45" height="42" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+        <circle cx="15" cy="15" r="4" fill="#f43f5e"/>
+        <circle cx="30" cy="15" r="4" fill="#fbbf24"/>
+        <circle cx="22" cy="30" r="4" fill="#38bdf8"/>
+        <text x="22" y="49" text-anchor="middle" fill="#94a3b8" font-size="6">Primary</text>
+      </g>
+
+      <!-- Route 1: Monoclonal Seeding to Liver -->
+      <g transform="translate(55, 6)">
+        <line x1="0" y1="12" x2="50" y2="12" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="2,2"/>
+        <rect x="55" y="0" width="130" height="24" rx="3" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+        <circle cx="68" cy="12" r="4" fill="#f43f5e"/>
+        <circle cx="80" cy="12" r="4" fill="#f43f5e"/>
+        <text x="135" y="11" text-anchor="middle" fill="#f43f5e" font-size="7" font-weight="700">간 전이: 단일클론 파종</text>
+        <text x="135" y="20" text-anchor="middle" fill="#94a3b8" font-size="6">단일 저항성 클론 단독 증식</text>
+      </g>
+
+      <!-- Route 2: Polyclonal Seeding to Bone -->
+      <g transform="translate(55, 34)">
+        <line x1="0" y1="12" x2="50" y2="12" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="55" y="0" width="130" height="26" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <circle cx="68" cy="13" r="4" fill="#f43f5e"/>
+        <circle cx="78" cy="13" r="4" fill="#fbbf24"/>
+        <circle cx="88" cy="13" r="4" fill="#38bdf8"/>
+        <text x="138" y="11" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">골 전이: 다클론 파종</text>
+        <text x="138" y="21" text-anchor="middle" fill="#94a3b8" font-size="6">다중 서브클론 집단 협력</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 단일클론 파종 (Monoclonal Seeding - 간/내장):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일 혈중 종양 세포(CTC)가 혈류를 거쳐 단독 정착</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 다클론 집단 파종 (Polyclonal Seeding - 골 전이):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">다중 서브클론 클러스터가 골수 미세환경에 공동 파종</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 전이소 간 전이 (Metastasis-to-Metastasis):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">골전이소에서 재파종된 클론이 3차 장기로 다방향 확산</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">치료 시사점: 다클론 골전이는 복합 병용 표적 치료 필수</text>
+  </g>
+</svg>

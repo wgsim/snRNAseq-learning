@@ -1,0 +1,12 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:21456068  # Barnabas N 2011 Prostate: Chromosome 8 markers of metastatic prostate cancer in African American men: gain of the MIR151   [근거: SCI-00-050]
+PMID:28059768  # Mu P 2017 Science: SOX2 promotes lineage plasticity and antiandrogen resistance in TP53- and RB1-deficient prostat  [근거: SCI-00-051; ledger L43]
+PMID:34068856  # Albawardi A 2021 Cancers (Basel): Copy Number Profiles of Prostate Cancer in Men of Middle Eastern Ancestry.  [근거: SCI-00-050]
+PMID:36163550  # Gao T 2023 Nat Biotechnol: Haplotype-aware analysis of somatic copy number variations from single-cell transcriptomes.  [근거: SCI-00-052; SCI-00-055; SCI-00-056; ledger L101]
+
+[software]
+SW:infercnvpy
+SW:scanpy

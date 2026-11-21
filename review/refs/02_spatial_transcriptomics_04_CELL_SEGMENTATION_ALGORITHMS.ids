@@ -1,0 +1,11 @@
+[cited]
+PMID:33318659  # "Stringer 2021 (Cellpose)", L48  [Stringer C 2021 Nat Methods]
+
+[evidence]
+PMID:34650268  # Petukhov V 2022 Nat Biotechnol: Cell segmentation in imaging-based spatial transcriptomics.  [근거: SCI-02-025; SCI-02-027]
+
+[software]
+SW:cellpose
+SW:matplotlib
+SW:numpy
+SW:tifffile

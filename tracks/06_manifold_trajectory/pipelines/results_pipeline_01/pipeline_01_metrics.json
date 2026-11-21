@@ -1,0 +1,31 @@
+{
+  "n_cells": 1500,
+  "n_genes": 50,
+  "lineage_summary": {
+    "AR_Adeno": {
+      "count": 500,
+      "mean_dpt": 0.2677,
+      "mean_latent_time": 0.2415,
+      "mean_coherence": 0.1048
+    },
+    "Amphicrine": {
+      "count": 350,
+      "mean_dpt": 0.9124,
+      "mean_latent_time": 0.8643,
+      "mean_coherence": 0.2635
+    },
+    "DNPC": {
+      "count": 300,
+      "mean_dpt": 0.7195,
+      "mean_latent_time": 0.6568,
+      "mean_coherence": 0.0808
+    },
+    "t_NEPC": {
+      "count": 350,
+      "mean_dpt": 0.916,
+      "mean_latent_time": 0.852,
+      "mean_coherence": 0.2078
+    }
+  },
+  "overall_mean_velocity_coherence": 0.161
+}

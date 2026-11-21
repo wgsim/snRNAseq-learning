@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">LIANA 합의 프레임워크 &amp; 순열 검정을 통한 신호 유의성 검증</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">5대 L-R 데이터베이스 통합, 로버스트 순위 집합(RRA), 및 세포 라벨 순열 검정(Permutation Test)</text>
+
+  <!-- Panel 1: DB Harmonization -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 이종 L-R 리소스 통합 (DB Resources)</text>
+
+    <!-- Schematic: 5 DBs flowing to LIANA -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- DB blocks -->
+    <rect x="25" y="50" width="60" height="18" rx="3" fill="#0284c7" fill-opacity="0.4"/>
+    <text x="55" y="63" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">CellPhoneDB</text>
+    <rect x="95" y="50" width="55" height="18" rx="3" fill="#059669" fill-opacity="0.4"/>
+    <text x="122" y="63" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">CellChat</text>
+    <rect x="160" y="50" width="55" height="18" rx="3" fill="#d97706" fill-opacity="0.4"/>
+    <text x="187" y="63" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">SignalR</text>
+    <rect x="225" y="50" width="50" height="18" rx="3" fill="#9333ea" fill-opacity="0.4"/>
+    <text x="250" y="63" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">Connectome</text>
+
+    <!-- Harmonized Union Box -->
+    <rect x="45" y="78" width="210" height="26" rx="4" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
+    <text x="150" y="95" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">LIANA OmniPath 표준화 통합 L-R DB</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 데이터베이스 불일치 해소:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">DB마다 다른 복합체 표기법 및 명명법 단일화</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 유전자 심볼 및 복합체 매핑:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">HGNC 공식 심볼 기준 다중 소단위체 자동 분해</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 DB 편향성(Bias) 극복:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">문헌 수집 편향 제거 및 상호작용 검증 확대</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">핵심: 신뢰성 높은 통합 L-R 카탈로그 확보</text>
+  </g>
+
+  <!-- Panel 2: Consensus Rank Aggregation -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#fbbf24" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">2. 합의 순위 집합 (Consensus Rank)</text>
+
+    <!-- Schematic: Robust Rank Aggregation (RRA) -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <!-- Rank matrix visual -->
+    <g transform="translate(25, 50)">
+      <rect x="0" y="0" width="85" height="16" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="5" y="12" fill="#cbd5e1" font-size="8">NATMI: #12</text>
+      <rect x="0" y="20" width="85" height="16" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="5" y="32" fill="#cbd5e1" font-size="8">CellChat: #3</text>
+      <rect x="0" y="40" width="85" height="16" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="5" y="52" fill="#cbd5e1" font-size="8">SingleCellR: #5</text>
+    </g>
+    <!-- Arrow -->
+    <path d="M125,79 L155,79" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowEmerald)"/>
+    <!-- Consensus box -->
+    <rect x="165" y="52" width="110" height="52" rx="5" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="220" y="70" text-anchor="middle" fill="#fbbf24" font-size="8.5" font-weight="700">Robust Rank (RRA)</text>
+    <text x="220" y="85" text-anchor="middle" fill="#cbd5e1" font-size="8">순서통계량 집합</text>
+    <text x="220" y="98" text-anchor="middle" fill="#34d399" font-size="8" font-weight="600">p_aggregate &lt; 0.001</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• Robust Rank Aggregation(RRA) 집계:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">순위의 일관성을 확률론적 순서통계량으로 평가</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 상위 1% 공통 상호작용 선별:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">단일 알고리즘의 편향된 이상치(Outlier) 순위 제거</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 재현성(Reproducibility) 극대화:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">다중 방법 합의로 방법 간 편차 완화 (개념)</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">원리: 방법론 간 합의(Consensus)를 통한 위양성 억제</text>
+  </g>
+
+  <!-- Panel 3: Permutation Testing -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#f43f5e" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="700">3. 세포 라벨 순열 검정 (Permutation)</text>
+
+    <!-- Schematic: Permutation Null curve -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#be123c" stroke-width="1"/>
+    <!-- Gaussian null curve -->
+    <path d="M35,102 Q85,102 110,62 Q125,48 135,48 Q145,48 160,62 Q185,102 235,102" fill="none" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Observed threshold line -->
+    <line x1="195" y1="46" x2="195" y2="105" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,2"/>
+    <text x="195" y="42" text-anchor="middle" fill="#f43f5e" font-size="8" font-weight="700">S_obs</text>
+    <!-- Shaded p-value tail -->
+    <path d="M195,78 Q210,102 235,102 L195,102 Z" fill="#f43f5e" fill-opacity="0.5"/>
+    <text x="245" y="80" fill="#f43f5e" font-size="8" font-weight="700">p &lt; 0.001</text>
+    <text x="70" y="65" fill="#94a3b8" font-size="8">영분포 (B=1000)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 무작위 셔플링 (B = 1,000회):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">세포 유형 라벨을 섞어 귀무 가설 영분포 구축</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 경험적 P-value 산출 공식:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">P_perm = (Σ 𝕀(S_null ≥ S_obs) + 1) / (B + 1)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• Benjamini-Hochberg FDR 보정:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">다중가설 검정 보정을 통해 위발견율(FDR &lt; 0.05) 제어</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#be123c" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="600">검증: 통계적 유의성이 검증된 신호 상호작용만 잔류</text>
+  </g>
+</svg>

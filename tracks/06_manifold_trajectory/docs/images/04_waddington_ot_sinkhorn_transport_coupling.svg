@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">와딩턴 최적 수송(Waddington-OT) &amp; 엔트로피 싱크혼(Sinkhorn) 결합</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">시점별 확률 측도 밀어내기(Push-forward) ➔ 칸토로비치 수송 계획 행렬 Γ* ➔ 싱크혼 반복 초고속 스케일링</text>
+
+  <!-- Panel 1: Multi-timepoint Measures & Growth Rates -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 다중 시점 측도 &amp; 증식/사멸 보정</text>
+
+    <!-- Schematic: t1 to t2 cloud mapping -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Cloud t1 -->
+      <circle cx="20" cy="22" r="3.5" fill="#38bdf8"/>
+      <circle cx="32" cy="14" r="4.5" fill="#38bdf8"/>
+      <circle cx="24" cy="36" r="3" fill="#38bdf8"/>
+      <text x="25" y="54" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">시점 t_1 (μ)</text>
+
+      <!-- Transport lines with cost C_ij -->
+      <path d="M 38 20 C 70 15, 110 18, 145 22" stroke="#64748b" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <path d="M 38 30 C 70 35, 110 32, 145 35" stroke="#38bdf8" stroke-width="1.5"/>
+
+      <!-- Cloud t2 -->
+      <g transform="translate(130, 0)">
+        <circle cx="25" cy="18" r="4" fill="#34d399"/>
+        <circle cx="38" cy="28" r="5" fill="#34d399"/>
+        <circle cx="20" cy="38" r="3.5" fill="#34d399"/>
+        <text x="30" y="54" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">시점 t_2 (ν)</text>
+      </g>
+
+      <text x="88" y="14" text-anchor="middle" fill="#fbbf24" font-size="6.5">비용 C_ij = ||x_i - y_j||^2</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비평형 세포 집단 동역학:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">시점 간 단순 매칭이 아닌 세포 분열(g_i) 및 사멸율 모델링</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전체 표현형 수송 비용 (Cost Matrix):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">C_ij = ||x_i - y_j||_2^2 (고차원 PCA 발현 공간 거리)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 와딩턴 지형(Landscape) 역학 재구성:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">파괴적 단일세포 측정의 시간적 단절을 수학적 수송으로 연결</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">핵심 원리: 최소 에너지 투입으로 전체 세포 집단 밀도 이동 설명</text>
+  </g>
+
+  <!-- Panel 2: Entropic Regularized Kantorovich Problem -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 엔트로피 정규화 칸토로비치 문제</text>
+
+    <!-- Schematic: Coupling Matrix Gamma & Formula -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="90" height="58" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="45" y="16" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">수송 계획 행렬 Γ*</text>
+      <!-- Matrix grid representation -->
+      <circle cx="25" cy="30" r="3" fill="#38bdf8" fill-opacity="0.8"/>
+      <circle cx="45" cy="30" r="1.5" fill="#64748b"/>
+      <circle cx="65" cy="30" r="4.5" fill="#34d399"/>
+      <circle cx="25" cy="46" r="2" fill="#64748b"/>
+      <circle cx="45" cy="46" r="5" fill="#f43f5e"/>
+      <circle cx="65" cy="46" r="2.5" fill="#fbbf24"/>
+    </g>
+
+    <g transform="translate(130, 48)">
+      <rect width="165" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="82" y="16" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">min_Γ &lt;C, Γ&gt; - ε H(Γ)</text>
+      <text x="82" y="30" text-anchor="middle" fill="#cbd5e1" font-size="6.8">s.t.  Γ 1 = μ,  Γ^T 1 = ν</text>
+      <text x="82" y="46" text-anchor="middle" fill="#34d399" font-size="6.8">H(Γ) = -Σ Γ_ij (log Γ_ij - 1)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 칸토로비치 완화 (Kantorovich Relaxation):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">1:1 단사 함수 한계를 극복하고 확률적 1:다 분기 허용</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 엔트로피 정규화의 수학적 효과:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">강한 볼록성(Strong convexity) 부여 ➔ 유일한 최적해 보장</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 깁스 커널 (Gibbs Kernel Form):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">최적해 구조: Γ_ij^* = u_i K_ij v_j,  K_ij = exp( -C_ij / ε )</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.5" font-weight="600">계산 혁신: O(N^3 log N) 선형 계획법을 O(N^2) 행렬 연산으로 단축</text>
+  </g>
+
+  <!-- Panel 3: Sinkhorn-Knopp Scaling Algorithm -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 싱크혼-크놉(Sinkhorn) 반복 알고리즘</text>
+
+    <!-- Schematic: Sinkhorn Iteration -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="115" height="26" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="57" y="17" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">u^(k+1) = μ ./ (K v^(k))</text>
+
+      <path d="M 125 61 C 145 54, 145 54, 155 61" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrCyan04)"/>
+      <path d="M 155 72 C 145 78, 145 78, 125 72" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrEmerald04)"/>
+
+      <g transform="translate(145, 0)">
+        <rect width="115" height="26" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="57" y="17" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">v^(k+1) = ν ./ (K^T u^(k+1))</text>
+      </g>
+      <text x="130" y="52" text-anchor="middle" fill="#94a3b8" font-size="6.8">교대 대각 스케일링 (Diagonal Scaling)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 교대 행렬-벡터 곱셈 (Matrix-Vector Ops):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">GPU 병렬 연산에 극도로 최적화된 대규모 수송 최적화</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 선조 및 후손 확률 쿼리 (Ancestor/Descendant):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">특정 t-NEPC 종말 세포의 기원 선조 클론을 t_1에서 역추적</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 엔잘루타마이드 치료 유도 계통 전이 검증:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">약물 노출 전 루미날 세포 중 어떤 서브클론이 저항성으로 가는지 규명</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">임상 적용: 치료 저항성 획득 클론의 조상 집단 및 유도 인자 사전 포착</text>
+  </g>
+</svg>

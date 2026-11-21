@@ -1,0 +1,10 @@
+[cited]
+PMID:29017058  # "Bluemn et al. 2017", L156  [Bluemn EG 2017 Cancer Cell]
+
+[evidence]
+PMID:34949812  # Luecken MD 2022 Nat Methods: Benchmarking atlas-level data integration in single-cell genomics.  [근거: SCI-00-058; SCI-00-062; ledger L31]
+PMID:35210612  # Miller TE 2022 Nat Biotechnol: Mitochondrial variant enrichment from high-throughput single-cell RNA sequencing resolves clona  [근거: SCI-00-065; ledger L122]
+PMID:35617398  # Tang F 2022 Science: Chromatin profiles classify castration-resistant prostate cancers suggesting therapeutic target  [근거: SCI-00-066]
+
+[software]
+SW:scvi-tools

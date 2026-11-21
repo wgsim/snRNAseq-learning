@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">RAPIDS GPU 전사체 파이프라인: PCIe Gen4/5 전송과 cuML GPU 가속 (예시 수치)</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">호스트 CPU RAM ➔ 고속 PCIe 버스 ➔ GPU HBM3 스트리밍 및 cuML PCA/k-NN/UMAP 병렬 연산</text>
+
+  <!-- Panel 1: Memory Hierarchy & PCIe Bus -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 이기종 메모리 계층 &amp; PCIe 대역폭</text>
+
+    <!-- Schematic: CPU RAM -> PCIe -> GPU HBM -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- CPU Host RAM -->
+      <rect x="0" y="8" width="60" height="46" rx="3" fill="#1e293b" stroke="#94a3b8" stroke-width="1"/>
+      <text x="30" y="24" text-anchor="middle" fill="#cbd5e1" font-size="7" font-weight="700">Host RAM</text>
+      <text x="30" y="36" text-anchor="middle" fill="#94a3b8" font-size="6">DDR5</text>
+      <text x="30" y="46" text-anchor="middle" fill="#38bdf8" font-size="5.8">~200 GB/s</text>
+
+      <!-- PCIe Gen5 Bridge -->
+      <path d="M 64 31 L 96 31" stroke="#fbbf24" stroke-width="2" fill="none" marker-end="url(#arrAmber05)"/>
+      <rect x="98" y="16" width="66" height="30" rx="3" fill="#d97706" fill-opacity="0.25" stroke="#fbbf24" stroke-width="1"/>
+      <text x="131" y="29" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">PCIe Gen5 x16</text>
+      <text x="131" y="40" text-anchor="middle" fill="#cbd5e1" font-size="6">64 GB/s (Uni)</text>
+
+      <path d="M 168 31 L 198 31" stroke="#34d399" stroke-width="2" fill="none" marker-end="url(#arrEmerald05)"/>
+
+      <!-- GPU HBM3 -->
+      <rect x="202" y="8" width="64" height="46" rx="3" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1.2"/>
+      <text x="234" y="24" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">GPU HBM3</text>
+      <text x="234" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">H100 80GB</text>
+      <text x="234" y="46" text-anchor="middle" fill="#34d399" font-size="5.8">3,350 GB/s</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 메모리 대역폭의 16배 도약:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Host DDR5(200GB/s) 대비 HBM3(3,350GB/s)의 압도적 속도</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• Pinned (Page-Locked) Memory:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">OS 페이징을 차단하고 GPU Direct DMA 전송 극대화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비동기 CUDA 스트림 오버랩:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">청크 N+1 복사와 청크 N의 연산을 완벽 동시 수행</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">데이터 전송 병목을 연산 시간 뒤로 완전히 은폐</text>
+  </g>
+
+  <!-- Panel 2: cuML Tensor Core Workflow -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. cuML &amp; GPU 파이프라인</text>
+
+    <!-- Schematic: cuML pipeline flow -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Stage 1: cuSparse / TruncatedSVD -->
+      <rect x="5" y="10" width="70" height="44" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="40" y="24" text-anchor="middle" fill="#38bdf8" font-size="6.8" font-weight="700">cuml.PCA</text>
+      <text x="40" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">TruncatedSVD</text>
+      <text x="40" y="47" text-anchor="middle" fill="#94a3b8" font-size="5.5">(GEMM / eigh)</text>
+
+      <path d="M 78 32 L 95 32" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrAmber05)"/>
+
+      <!-- Stage 2: NearestNeighbors -->
+      <rect x="98" y="10" width="75" height="44" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="135" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.8" font-weight="700">cuml.KNN</text>
+      <text x="135" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">Brute/IVF-PQ</text>
+      <text x="135" y="47" text-anchor="middle" fill="#94a3b8" font-size="5.5">(k=30 L2 Graph)</text>
+
+      <path d="M 176 32 L 193 32" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrEmerald05)"/>
+
+      <!-- Stage 3: cuML UMAP -->
+      <rect x="196" y="10" width="68" height="44" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <text x="230" y="24" text-anchor="middle" fill="#34d399" font-size="6.8" font-weight="700">cuml.UMAP</text>
+      <text x="230" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">Parallel SGD</text>
+      <text x="230" y="47" text-anchor="middle" fill="#94a3b8" font-size="5.5">(2D Manifold)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 밀집 행렬 곱셈 (GEMM) 기반 PCA:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">공분산 계산·고유분해를 GPU에서 병렬 처리</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 병렬 k-NN 그래프 생성:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">수천 개 CUDA 스레드가 세포 쌍별 거리 동시 계산</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• GPU 비동기 확률적 경사하강법 (UMAP SGD):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">원자적 잠금 없는 Hogwild 방식 가속으로 2D 투영</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">Scanpy와 유사한 API를 제공하는 GPU 가속 라이브러리</text>
+  </g>
+
+  <!-- Panel 3: Speedup Benchmark (1M Cells) -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 100만 세포 런타임 비교 (설명용 예시 수치)</text>
+
+    <!-- Schematic: Bar chart comparison -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Item 1: PCA -->
+      <text x="0" y="15" fill="#cbd5e1" font-size="6.8" font-weight="700">PCA (50 PC):</text>
+      <!-- CPU bar -->
+      <rect x="65" y="8" width="130" height="6" rx="1.5" fill="#f43f5e"/>
+      <text x="200" y="14" fill="#f43f5e" font-size="6">CPU 180s</text>
+      <!-- GPU bar -->
+      <rect x="65" y="16" width="3" height="6" rx="1" fill="#34d399"/>
+      <text x="75" y="22" fill="#34d399" font-size="6" font-weight="700">GPU 1.8s</text>
+
+      <!-- Item 2: k-NN (k=30) -->
+      <text x="0" y="37" fill="#cbd5e1" font-size="6.8" font-weight="700">k-NN Graph :</text>
+      <!-- CPU bar -->
+      <rect x="65" y="30" width="145" height="6" rx="1.5" fill="#f43f5e"/>
+      <text x="215" y="36" fill="#f43f5e" font-size="6">CPU 950s</text>
+      <!-- GPU bar -->
+      <rect x="65" y="38" width="4" height="6" rx="1" fill="#34d399"/>
+      <text x="75" y="44" fill="#34d399" font-size="6" font-weight="700">GPU 9.2s</text>
+
+      <!-- Item 3: UMAP -->
+      <text x="0" y="59" fill="#cbd5e1" font-size="6.8" font-weight="700">UMAP (2D)  :</text>
+      <!-- CPU bar -->
+      <rect x="65" y="52" width="160" height="6" rx="1.5" fill="#f43f5e"/>
+      <text x="230" y="58" fill="#f43f5e" font-size="6">CPU 1,400s</text>
+      <!-- GPU bar -->
+      <rect x="65" y="60" width="5" height="6" rx="1" fill="#34d399"/>
+      <text x="75" y="66" fill="#34d399" font-size="6" font-weight="700">GPU 14.5s</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 전체 분석 파이프라인 시간 단축:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">예시: CPU 수십 분 ➔ GPU 수십 초 (조건 의존)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 대화형 탐색 (Interactive Latency):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">파라미터 변경(e.g., k값, 해상도) 후 즉시 실시간 재시각화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 클라우드 비용 절감 가능성:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">소요 시간 단축에 따른 인스턴스 사용 시간 감소</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">100만 세포 분석 시간을 크게 단축하는 GPU 가속</text>
+  </g>
+</svg>

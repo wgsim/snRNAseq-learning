@@ -1,0 +1,48 @@
+{
+  "pipeline": "02_milo_and_coda_differential_abundance_pipeline",
+  "total_patients": 10,
+  "total_cells": 4000,
+  "total_neighborhoods": 400,
+  "milo_enriched_responders": 80,
+  "milo_enriched_nonresponders": 83,
+  "milo_invariant_neighborhoods": 237,
+  "execution_time_seconds": 0.19,
+  "coda_results": [
+    {
+      "phenotype": "Naive",
+      "role": "Reference_Baseline",
+      "effect_beta": 0.0,
+      "std_error": 0.0,
+      "t_stat": 0.0,
+      "p_value": 1.0,
+      "coda_status": "Invariant_Baseline"
+    },
+    {
+      "phenotype": "Memory",
+      "role": "Target_Phenotype",
+      "effect_beta": 0.0,
+      "std_error": 0.0,
+      "t_stat": 0.0,
+      "p_value": 1.0,
+      "coda_status": "Statistically_Invariant"
+    },
+    {
+      "phenotype": "Effector",
+      "role": "Target_Phenotype",
+      "effect_beta": 1.0986,
+      "std_error": 0.0,
+      "t_stat": 1.979083957548139e+16,
+      "p_value": 0.00010662469950206699,
+      "coda_status": "True_Expansion_Responders"
+    },
+    {
+      "phenotype": "Exhausted",
+      "role": "Target_Phenotype",
+      "effect_beta": -1.0986,
+      "std_error": 0.0,
+      "t_stat": -1.979083957548139e+16,
+      "p_value": 0.00010662469950206699,
+      "coda_status": "True_Expansion_NonResponders"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">snATAC-seq 데이터 구조: 5-컬럼 Fragment 파일 &amp; TSS 농축도(Enrichment) 검증</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">Tabix 인덱싱 고속 게놈 청킹 ➔ 전사시작점(TSS ±1kb) 8× 이상 피크 프로파일 vs 배경 잡음 QC</text>
+
+  <!-- Panel 1: Fragment File Format & Tabix -->
+  <g transform="translate(30, 70)">
+    <rect width="455" height="265" rx="10" fill="url(#gradCard2)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="455" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="227" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">A. 5-컬럼 단일 단편 파일 (fragments.tsv.gz) &amp; Tabix</text>
+
+    <!-- Code Block / Fragment Table -->
+    <rect x="15" y="44" width="425" height="85" rx="6" fill="#020617" stroke="#334155" stroke-width="1"/>
+    <text x="25" y="62" fill="#94a3b8" font-size="10" font-family="monospace">#chrom   chromStart  chromEnd    barcode             dup_count</text>
+    <text x="25" y="79" fill="#38bdf8" font-size="10.5" font-family="monospace">chrX     66901240    66901450    AAACAGCCAAGCT-1     3</text>
+    <text x="25" y="96" fill="#818cf8" font-size="10.5" font-family="monospace">chr8     127735100   127735310   AAACAGCCAAGCT-1     1</text>
+    <text x="25" y="113" fill="#34d399" font-size="10.5" font-family="monospace">chr10    87863200    87863410    TTTACTGAGCCTA-1     5</text>
+
+    <!-- Key Rules Bullets -->
+    <text x="15" y="150" fill="#cbd5e1" font-size="11" font-weight="600">• 0-based 반개방 좌표 &amp; Tn5 9-bp 절단점 보정:</text>
+    <text x="25" y="167" fill="#94a3b8" font-size="10.5">Tn5 중심 이동: +가닥은 +4bp, -가닥은 -5bp 정밀 시프트</text>
+
+    <text x="15" y="189" fill="#cbd5e1" font-size="11" font-weight="600">• barcode: snRNA-seq 16-bp 바코드와 100% 일치 매칭:</text>
+    <text x="25" y="206" fill="#94a3b8" font-size="10.5">단일 핵 식별자 일치로 전사체와 염색질 매트릭스 직접 결합</text>
+
+    <text x="15" y="228" fill="#cbd5e1" font-size="11" font-weight="600">• Tabix BGI 청킹 인덱스 (`tabix -p bed`):</text>
+    <text x="25" y="245" fill="#94a3b8" font-size="10.5">수십 GB 단편 파일에서 임의 유전체 윈도우를 O(log N) 탐색</text>
+
+    <!-- Bottom summary badge -->
+    <rect x="15" y="260" width="425" height="2" fill="#38bdf8" fill-opacity="0.3"/>
+  </g>
+
+  <!-- Panel 2: TSS Enrichment Profile & Nucleosome Banding -->
+  <g transform="translate(515, 70)">
+    <rect width="455" height="265" rx="10" fill="url(#gradCard2)" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="0" y="0" width="455" height="32" rx="10" fill="#10b981" fill-opacity="0.2"/>
+    <text x="227" y="22" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">B. 전사시작점(TSS) 농축도 및 뉴클레오솜 밴딩 QC</text>
+
+    <!-- Graph: TSS Profile Curve -->
+    <g transform="translate(25, 45)">
+      <rect width="210" height="90" rx="5" fill="#0f172a" stroke="#1e293b"/>
+      <!-- Axes -->
+      <line x1="20" y1="80" x2="195" y2="80" stroke="#475569" stroke-width="1"/>
+      <line x1="107" y1="15" x2="107" y2="80" stroke="#475569" stroke-dasharray="2,2"/>
+      <text x="107" y="88" text-anchor="middle" fill="#94a3b8" font-size="8.5">TSS</text>
+      <text x="35" y="88" text-anchor="middle" fill="#64748b" font-size="8">-2kb</text>
+      <text x="180" y="88" text-anchor="middle" fill="#64748b" font-size="8">+2kb</text>
+      <!-- TSS Sharp Peak -->
+      <path d="M 25 78 Q 80 77 95 60 Q 107 20 107 20 Q 107 20 119 60 Q 134 77 190 78" fill="none" stroke="#10b981" stroke-width="2.2"/>
+      <circle cx="107" cy="20" r="3.5" fill="#34d399"/>
+      <text x="115" y="24" fill="#34d399" font-size="9" font-weight="700">&gt; 8× Signal</text>
+      <line x1="20" y1="76" x2="195" y2="76" stroke="#f43f5e" stroke-dasharray="3,2"/>
+      <text x="150" y="73" fill="#f87171" font-size="7.5">1× Background</text>
+    </g>
+
+    <!-- Inset: Nucleosome Banding Info -->
+    <g transform="translate(250, 45)">
+      <rect width="190" height="90" rx="5" fill="#0f172a" stroke="#047857" stroke-width="1"/>
+      <text x="15" y="20" fill="#34d399" font-size="10.5" font-weight="700">뉴클레오솜 래더 주기성</text>
+      <text x="15" y="38" fill="#cbd5e1" font-size="9.5">• &lt; 100 bp : NFR (무핵소체 단편)</text>
+      <text x="15" y="55" fill="#cbd5e1" font-size="9.5">• ~200 bp : Mononucleosome</text>
+      <text x="15" y="72" fill="#cbd5e1" font-size="9.5">• ~400 bp : Dinucleosome</text>
+    </g>
+
+    <!-- Technical QC Standards -->
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• TSS 농축도 산출 공식:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">TSS 중심(±100bp) 평균 절단 수 / 외곽 플랭크(±1.5~2kb) 배경</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 엄격한 품질 필터 임계치 (QC Threshold):</text>
+    <text x="25" y="214" fill="#34d399" font-size="10.5">TSS Score &gt; 8.0 통과 (5.0 미만은 핵 용해 및 비특이 파편 탈락)</text>
+
+    <text x="15" y="236" fill="#cbd5e1" font-size="11" font-weight="600">• 최소 고유 단편 수 (Unique Fragments):</text>
+    <text x="25" y="253" fill="#94a3b8" font-size="10.5">핵당 최소 1,000 ~ 3,000개 이상의 유효 매핑 단편 요구</text>
+  </g>
+</svg>

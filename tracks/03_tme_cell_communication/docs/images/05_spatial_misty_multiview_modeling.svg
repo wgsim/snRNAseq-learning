@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">MISTy 멀티뷰 공간 분해 &amp; 맥락적 세포 신호 모델링</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">고유 발현(Intrinsic), 근접 접촉(Juxtaview), 원격 확산(Paraview)의 기계학습 기반 앙상블 기여도 분해</text>
+
+  <!-- Panel 1: Multiview Spatial Decomposition -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 3대 공간 맥락 분해 (Multiview)</text>
+
+    <!-- Schematic: Concentric Circles -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Circles -->
+    <circle cx="70" cy="79" r="30" fill="#0284c7" fill-opacity="0.1" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2"/>
+    <circle cx="70" cy="79" r="18" fill="#fbbf24" fill-opacity="0.2" stroke="#fbbf24" stroke-width="1.2"/>
+    <circle cx="70" cy="79" r="8" fill="#f43f5e" fill-opacity="0.8"/>
+    <!-- Legend -->
+    <g transform="translate(120, 52)">
+      <circle cx="5" cy="6" r="4" fill="#f43f5e"/>
+      <text x="15" y="9" fill="#cbd5e1" font-size="8.5">Intrinsic (0 µm): 세포 고유 GRN</text>
+      <circle cx="5" cy="22" r="4" fill="#fbbf24"/>
+      <text x="15" y="25" fill="#cbd5e1" font-size="8.5">Juxtaview (&lt;15 µm): 직접 접촉</text>
+      <circle cx="5" cy="38" r="4" fill="#38bdf8"/>
+      <text x="15" y="41" fill="#cbd5e1" font-size="8.5">Paraview (100~250 µm): 확산장</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 거리 계층적 뷰 생성:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일세포의 발현량을 물리적 반경에 따라 분리</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 지수 감쇠 커널 (Exponential Decay):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">w(d) = exp(-d / σ) 가중치를 적용한 주변부 농도 합산</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 세포 유형 밀도 vs 리간드 농도:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">이웃 세포의 구성비와 분비 물질의 공간적 중첩 포착</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">공간 분해: 세포 내부 요인과 외부 환경 자극의 분리</text>
+  </g>
+
+  <!-- Panel 2: Random Forest Ensemble -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. 멀티뷰 앙상블 학습 (Ensemble RF)</text>
+
+    <!-- Schematic: Stacked Views into Model -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 52)">
+      <rect x="0" y="0" width="60" height="16" fill="#f43f5e" fill-opacity="0.4"/>
+      <text x="30" y="11" text-anchor="middle" fill="#ffffff" font-size="7.5">X_intra</text>
+      <rect x="0" y="19" width="60" height="16" fill="#fbbf24" fill-opacity="0.4"/>
+      <text x="30" y="30" text-anchor="middle" fill="#ffffff" font-size="7.5">X_juxta</text>
+      <rect x="0" y="38" width="60" height="16" fill="#38bdf8" fill-opacity="0.4"/>
+      <text x="30" y="49" text-anchor="middle" fill="#ffffff" font-size="7.5">X_para</text>
+    </g>
+    <!-- Model Box -->
+    <rect x="105" y="52" width="95" height="54" rx="5" fill="#059669" fill-opacity="0.2" stroke="#34d399" stroke-width="1.2"/>
+    <text x="152" y="73" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">Random Forest</text>
+    <text x="152" y="88" text-anchor="middle" fill="#cbd5e1" font-size="7.5">Meta-regressor</text>
+    <text x="235" y="75" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">y_gene</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 2단계 스태킹(Stacking) 구조:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">각 공간 뷰별 모델 학습 후 메타 회귀기로 융합</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 비선형 특징 상호작용 포착:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">단순 선형 결합이 아닌 임계값 효과 및 포화 현상 반영</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 다변량 유전자 동시 예측:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">전체 전사체 패널에 대한 공간 기여도 병렬 계산</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">머신러닝: 해석 가능한 공간 유전자 조절 역학 규명</text>
+  </g>
+
+  <!-- Panel 3: Spatial Gain Attribution -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. 공간 이득 &amp; 기여도 귀속 (Spatial Gain)</text>
+
+    <!-- Schematic: R2 Gain Partition -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#9333ea" stroke-width="1"/>
+    <!-- Stacked Bar for R2 -->
+    <g transform="translate(30, 60)">
+      <rect x="0" y="0" width="100" height="18" fill="#f43f5e" fill-opacity="0.8"/>
+      <text x="50" y="13" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Intrinsic (예시)</text>
+      <rect x="100" y="0" width="50" height="18" fill="#fbbf24" fill-opacity="0.8"/>
+      <text x="125" y="13" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">Juxta</text>
+      <rect x="150" y="0" width="80" height="18" fill="#38bdf8" fill-opacity="0.8"/>
+      <text x="190" y="13" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Para</text>
+    </g>
+    <text x="150" y="98" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">Spatial Gain = R²(Full) - R²(Intrinsic) (예시 도식)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 이득(Spatial Gain) 지표:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">공간 정보를 포함했을 때 설명 분산(R²)의 유의미한 증가</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 기질 장벽 vs 면역 억제 규명:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">Paraview의 높은 기여로 myCAF 유래 원격 신호 검증</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 치료 타깃 선정 근거:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">주변 환경 의존성이 높은 종양 악성화 유전자 우선순위화</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#9333ea" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">결론: 공간적 맥락이 유전자 발현에 미치는 영향 완전 정량화</text>
+  </g>
+  <text x="500" y="353" text-anchor="middle" fill="#64748b" font-size="9">※ 개념도: 막대의 비율(%)은 설명용 예시이며 실측 결과가 아님</text>
+</svg>

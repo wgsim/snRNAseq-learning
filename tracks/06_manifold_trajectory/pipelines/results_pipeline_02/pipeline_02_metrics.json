@@ -1,0 +1,82 @@
+{
+  "n_cells": 1500,
+  "n_genes_screened": 400,
+  "macrostates": {
+    "AR_Adeno_Macro": 500,
+    "Amphicrine_Macro": 350,
+    "DNPC_Macro": 300,
+    "t_NEPC_Macro": 350
+  },
+  "top_nepc_drivers": [
+    {
+      "gene": "CHGA",
+      "correlation": 0.5906
+    },
+    {
+      "gene": "NCAM1",
+      "correlation": 0.5885
+    },
+    {
+      "gene": "FOXA2",
+      "correlation": 0.5883
+    },
+    {
+      "gene": "EZH2",
+      "correlation": 0.5882
+    },
+    {
+      "gene": "INSM1",
+      "correlation": 0.588
+    },
+    {
+      "gene": "SYP",
+      "correlation": 0.5863
+    },
+    {
+      "gene": "DLL3",
+      "correlation": 0.5858
+    },
+    {
+      "gene": "ASCL1",
+      "correlation": 0.5839
+    }
+  ],
+  "top_dnpc_drivers": [
+    {
+      "gene": "FGF2",
+      "correlation": 0.5488
+    },
+    {
+      "gene": "EGFR",
+      "correlation": 0.5486
+    },
+    {
+      "gene": "ETV4",
+      "correlation": 0.5461
+    },
+    {
+      "gene": "SOX9",
+      "correlation": 0.5456
+    },
+    {
+      "gene": "FGFR1",
+      "correlation": 0.5445
+    },
+    {
+      "gene": "TCF4",
+      "correlation": 0.5431
+    },
+    {
+      "gene": "BG_GENE_075",
+      "correlation": 0.0638
+    },
+    {
+      "gene": "BG_GENE_040",
+      "correlation": 0.0615
+    }
+  ],
+  "fate_divergence_point": {
+    "amphicrine_mean_nepc_fate": 0.4999,
+    "amphicrine_mean_dnpc_fate": 0.5001
+  }
+}

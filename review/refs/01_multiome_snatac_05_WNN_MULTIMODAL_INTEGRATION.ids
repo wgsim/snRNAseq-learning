@@ -1,0 +1,9 @@
+[cited]
+PMID:33098772  # "Ma et al. 2020", L113  [Ma S 2020 Cell]
+
+[evidence]
+PMID:34062119  # Hao Y 2021 Cell: Integrated analysis of multimodal single-cell data.  [근거: SCI-01-024; SCI-01-025; SCI-01-026]
+
+[software]
+SW:muon
+SW:scanpy

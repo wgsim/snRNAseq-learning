@@ -1,0 +1,17 @@
+[cited]
+PMID:959840  # "Nowell (1976)", L8,L40,L48,L53,L71,L278  [Nowell PC 1976 Science]
+PMID:25665006  # "Sottoriva 2015 (Big Bang)", L50,L53  [Sottoriva A 2015 Nat Genet]
+PMID:25830880  # "Gundem et al. 2015", L9,L85,L101,L290,L297,L303  [Gundem G 2015 Nature]
+PMID:26000489  # "Robinson 2015 (SU2C/PCF, Cell)", L87,L290  [Robinson D 2015 Cell]
+PMID:31061129  # "SU2C/PCF PNAS 2019 (Abida et al.)", L87  [Abida W 2019 Proc Natl Acad Sci U S A]
+PMID:26544944  # "TCGA-PRAD (Cell 2015)", L9,L86,L92  [Cancer Genome Atlas Research Network 2015 Cell]
+PMID:29909985  # "Viswanathan 2018", L87  [Viswanathan SR 2018 Cell]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:infercnvpy
+SW:numpy
+SW:scanpy
+SW:pandas

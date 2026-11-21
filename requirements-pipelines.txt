@@ -1,0 +1,42 @@
+# Pipeline execution environment (committed results/ were generated here)
+#
+# Recorded from the existing conda env "scRNAseq_anal" (Python 3.8.16); only versions that were
+# read from that environment on 2026-10-19 are listed (nothing is inferred).
+# Review finding ENG-032: results of the numpy/scipy/scikit-learn based pipelines depend on
+# library versions; with Python 3.12 / numpy 2.x several committed result files change.
+#
+# Verified in this environment (review of 2026-10-18/19):
+#   - tracks/01 (2 pipelines), tracks/02 (2), tracks/03 pipeline 01, tracks/05 pipeline 01,
+#     tracks/07 pipeline 01 reproduce the committed result files byte-for-byte
+#     (time fields excepted); root pipelines/04 reproduces results_pipeline_04.
+#   - root pipelines/02 and 03 run to completion (02 fails under Python 3.12 + scrublet 0.2.3 + annoy 1.17.3).
+# Tracks 03-10 pipelines use only the Python standard library.
+#
+# Portability: the reproduction check of builder assertion 4 is exact for this env on the reference platform.
+# On another BLAS/libm/CPU, model weight hashes or losses may differ; if only those differ it is an environment
+# difference, not a content error: use --skip-pipelines, or regenerate with --update-results.
+#
+# Book/HTML/DOCX build environment is separate: see requirements-build.txt (mistune==2.0.5).
+#
+# Note: the pipelines read the SCRNA_ENV_SITE_PACKAGES environment variable (optional) to append an
+# extra site-packages directory; run them with this environment's interpreter instead.
+numpy==1.23.5
+pandas==1.5.3
+scipy==1.10.0
+scikit-learn==1.2.1
+scanpy==1.9.2
+anndata==0.8.0
+matplotlib==3.7.0
+umap-learn==0.5.3
+scrublet==0.2.3
+infercnvpy==0.4.2
+seaborn==0.12.2
+statsmodels==0.13.5
+pynndescent==0.5.8
+numba==0.56.4
+h5py==3.8.0
+leidenalg==0.9.1
+louvain==0.8.0
+annoy==1.17.1
+tqdm==4.64.1
+mudata==0.2.1

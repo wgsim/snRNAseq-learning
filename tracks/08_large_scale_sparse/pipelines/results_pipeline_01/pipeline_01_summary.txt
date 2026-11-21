@@ -1,0 +1,26 @@
+================================================================================
+Track 08 Pipeline 01: Sparse Memory Layout & Out-of-Core Incremental SVD Summary
+================================================================================
+
+1. Dataset Scale & Sparsity:
+   - Cells: 50,000
+   - Genes: 1,000
+   - Non-zero count: 2,477,341 (95.0% sparsity)
+   - Dense footprint: 190.7 MB -> CSR: 19.1 MB (10.0x compression)
+
+2. Cache-Line Slicing Latency Disparity:
+   - Row-slicing (2,000 cells): CSR 0.16 ms vs CSC 105.04 ms (673.6x CSR speedup)
+   - Col-slicing (50 genes): CSC 0.00 ms vs CSR 156.33 ms (32785.2x CSC speedup)
+   - CSR SpMV Throughput: 0.02 GFLOPS (216.53 ms runtime)
+
+3. Out-of-Core Chunk Streaming Performance:
+   - Partitioning: 10 simulated Zarr chunk files
+   - Peak RAM: 4.97 MB (Strict budget < 20.0 MB: PASSED)
+   - 2-Pass Streaming Time: 3.14s
+
+4. Incremental Low-Rank SVD Subspace Recovery:
+   - Number of components: 4
+   - Mean Cosine Similarity against In-Memory Full SVD: R = 0.9955 (Threshold R > 0.95: PASSED)
+   - Top PC Cosine Similarity: R = 0.9952
+
+Total Pipeline Runtime: 29.73 seconds.

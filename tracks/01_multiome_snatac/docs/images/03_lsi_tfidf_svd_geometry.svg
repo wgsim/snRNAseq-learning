@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">snATAC-seq 차원 축소: 잠재 의미 지수화(LSI = TF-IDF ➔ TruncatedSVD)</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">초고희소성(Sparsity &gt;98%) 이진화 피크 행렬 ➔ 정보 가중 TF-IDF ➔ SVD 잠재 다양체 및 Component 1 심도 편향 진단</text>
+
+  <!-- Panel 1: Binary Peak Matrix -->
+  <g transform="translate(30, 70)">
+    <rect width="290" height="265" rx="10" fill="url(#gradCard3)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="290" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="145" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 이진 피크 행렬 (Binarization)</text>
+
+    <!-- Schematic: Binary Matrix -->
+    <rect x="15" y="44" width="260" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <text x="25" y="64" fill="#38bdf8" font-size="10.5" font-family="monospace">Peak Matrix: A_ij ∈ {0, 1}</text>
+    <text x="25" y="82" fill="#94a3b8" font-size="9.5">1 = Open Chromatin, 0 = Inaccessible</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• 2배체(Diploid) 생물학적 한계:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">핵당 대립유전자는 최대 2카피 (카운트 왜곡 제거)</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 초고희소성 (Sparsity &gt; 98%):</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">10만 개 피크 중 대부분의 세포에서 0값 기록</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• PCR 중복 바이어스 배제:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">이진화로 PCR 오버앰플리피케이션 잡음 차단</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="260" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="145" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">50,000 ~ 150,000 Peaks × Nuclei</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 325 200 L 345 200" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="345,195 355,200 345,205" fill="#38bdf8"/>
+
+  <!-- Panel 2: TF-IDF Normalization -->
+  <g transform="translate(360, 70)">
+    <rect width="320" height="265" rx="10" fill="url(#gradCard3)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="160" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. TF-IDF 빈도-역문서 가중치</text>
+
+    <!-- Formulas -->
+    <rect x="15" y="44" width="290" height="60" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <text x="25" y="62" fill="#818cf8" font-size="10" font-family="monospace">TF_ij = A_ij / Σ_k A_ik (세포 점유율)</text>
+    <text x="25" y="78" fill="#34d399" font-size="10" font-family="monospace">IDF_j = log(1 + N_cells / Σ_i A_ij)</text>
+    <text x="25" y="94" fill="#fbbf24" font-size="10" font-family="monospace">TF-IDF_ij = TF_ij × IDF_j</text>
+
+    <!-- Bullets -->
+    <text x="15" y="124" fill="#cbd5e1" font-size="11" font-weight="600">• 자연어 처리(NLP) 알고리즘 응용:</text>
+    <text x="25" y="142" fill="#94a3b8" font-size="10.5">문서(세포) 내 희귀 단어(피크)의 정보 가치 증폭</text>
+
+    <text x="15" y="164" fill="#cbd5e1" font-size="11" font-weight="600">• 유비쿼터스 하우스키핑 피크 감쇠:</text>
+    <text x="25" y="182" fill="#94a3b8" font-size="10.5">모든 세포에서 열린 보편 피크는 IDF 패널티</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 희귀 암 아형 인핸서 정보 극대화:</text>
+    <text x="25" y="222" fill="#94a3b8" font-size="10.5">특정 전립선암 클론만의 조절 피크 가중치 상승</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="290" height="22" rx="4" fill="#4338ca" fill-opacity="0.3"/>
+    <text x="160" y="250" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">✓ 정보 엔트로피 기반 정규화 완료</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 685 200 L 705 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="705,195 715,200 705,205" fill="#818cf8"/>
+
+  <!-- Panel 3: TruncatedSVD & LSI Component 1 Warning -->
+  <g transform="translate(720, 70)">
+    <rect width="250" height="265" rx="10" fill="url(#gradCard3)" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="0" y="0" width="250" height="32" rx="10" fill="#ef4444" fill-opacity="0.2"/>
+    <text x="125" y="22" text-anchor="middle" fill="#f87171" font-size="13" font-weight="700">3. TruncatedSVD &amp; LSI-1 경고</text>
+
+    <!-- Warning Box -->
+    <rect x="12" y="44" width="226" height="60" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+    <text x="20" y="62" fill="#fca5a5" font-size="10" font-weight="700">⚠️ LSI Component 1 시퀀싱 심도 편향</text>
+    <text x="20" y="78" fill="#f87171" font-size="9.5" font-family="monospace">r(LSI_1, Total_Peaks) &gt; 0.90</text>
+    <text x="20" y="93" fill="#cbd5e1" font-size="9">기술적 UMI 수와 직결된 가짜 축!</text>
+
+    <!-- Bullets -->
+    <text x="12" y="124" fill="#cbd5e1" font-size="11" font-weight="600">• LSI Component 1 진단 필수:</text>
+    <text x="20" y="142" fill="#fca5a5" font-size="10">피크 총수와의 피어슨 상관계수 r 측정</text>
+
+    <text x="12" y="164" fill="#cbd5e1" font-size="11" font-weight="600">• 표준 전처리 솔루션:</text>
+    <text x="20" y="182" fill="#34d399" font-size="10">r &gt; 0.90 시 Component 1 과감히 배제 (Drop)</text>
+    <text x="20" y="197" fill="#34d399" font-size="10">또는 회귀 모델(Linear Regression)로 보정</text>
+
+    <text x="12" y="219" fill="#cbd5e1" font-size="11" font-weight="600">• 2~30번 컴포넌트 활용:</text>
+    <text x="20" y="237" fill="#94a3b8" font-size="10">진정한 생물학적 후성유전 다양체 확보</text>
+  </g>
+</svg>

@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">TileDB-SOMA 아키텍처: 희소 텐서 공간 인덱싱과 Apache Arrow 제로-카피 메모리</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">SOMA 계층 컬렉션 ➔ 타일 기반 2D 희소 배열(타일·프래그먼트) ➔ Arrow IPC Zero-Copy 상호운용성</text>
+
+  <!-- Panel 1: SOMA Collection Hierarchy -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">1. SOMA 계층 구조 (Experiment Hierarchy)</text>
+
+    <!-- Schematic: SOMA tree -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- SOMAExperiment -->
+      <rect x="70" y="4" width="120" height="18" rx="3" fill="#a855f7" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+      <text x="130" y="16" text-anchor="middle" fill="#c084fc" font-size="7.5" font-weight="700">SOMAExperiment</text>
+
+      <!-- Lines branching -->
+      <path d="M 90 22 L 40 38" stroke="#94a3b8" stroke-width="1"/>
+      <path d="M 130 22 L 130 38" stroke="#94a3b8" stroke-width="1"/>
+      <path d="M 170 22 L 210 38" stroke="#94a3b8" stroke-width="1"/>
+
+      <!-- Children nodes -->
+      <rect x="10" y="38" width="60" height="22" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="40" y="49" text-anchor="middle" fill="#38bdf8" font-size="6.5" font-weight="700">obs</text>
+      <text x="40" y="57" text-anchor="middle" fill="#94a3b8" font-size="5.5">(DataFrame)</text>
+
+      <rect x="85" y="38" width="90" height="22" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="130" y="49" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">ms['RNA']</text>
+      <text x="130" y="57" text-anchor="middle" fill="#94a3b8" font-size="5.5">(SOMAMeasurement)</text>
+
+      <rect x="185" y="38" width="65" height="22" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="217" y="49" text-anchor="middle" fill="#34d399" font-size="6.5" font-weight="700">X['raw']</text>
+      <text x="217" y="57" text-anchor="middle" fill="#94a3b8" font-size="5.5">(SparseNDArray)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• Single-cell Operations for Memory-friendly Apps:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">CZI 바이오허브 &amp; TileDB 연합 개방형 단일세포 표준 규격</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 완벽한 다중 오믹스 (Multi-Modal):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">단일 실험 내 RNA, ATAC, Spatial 등 복수 계측 동시 관리</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 독립적인 스키마 진화 (Evolvable):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">obs 메타데이터 추가 시 100GB 거대 카운트 행렬 재기록 불요</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#a855f7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="9.2" font-weight="600">글로벌 1억 세포 휴먼 셀 아틀라스(HCA) 핵심 인프라</text>
+  </g>
+
+  <!-- Panel 2: Tile-Based Sparse Array -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">2. 타일 기반 2D 희소 배열</text>
+
+    <!-- Schematic: Tiles overlapping a query box -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Grid 4x4 background -->
+      <line x1="20" y1="10" x2="100" y2="10" stroke="#334155" stroke-width="0.8"/>
+      <line x1="20" y1="26" x2="100" y2="26" stroke="#334155" stroke-width="0.8"/>
+      <line x1="20" y1="42" x2="100" y2="42" stroke="#334155" stroke-width="0.8"/>
+      <line x1="20" y1="58" x2="100" y2="58" stroke="#334155" stroke-width="0.8"/>
+      <line x1="20" y1="10" x2="20" y2="58" stroke="#334155" stroke-width="0.8"/>
+      <line x1="46" y1="10" x2="46" y2="58" stroke="#334155" stroke-width="0.8"/>
+      <line x1="73" y1="10" x2="73" y2="58" stroke="#334155" stroke-width="0.8"/>
+      <line x1="100" y1="10" x2="100" y2="58" stroke="#334155" stroke-width="0.8"/>
+
+      <!-- Tiles overlapping the query range (highlighted) -->
+      <rect x="46" y="26" width="27" height="16" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="1.2"/>
+      <rect x="73" y="26" width="27" height="16" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="1.2"/>
+      <circle cx="33" cy="18" r="2.5" fill="#fbbf24"/>
+
+      <!-- Explanatory arrows to 1D disk -->
+      <path d="M 115 34 L 145 34" stroke="#fbbf24" stroke-width="1.4" fill="none" marker-end="url(#arrCyan03)"/>
+      <rect x="150" y="16" width="105" height="36" rx="3" fill="#1e293b" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="202" y="30" text-anchor="middle" fill="#38bdf8" font-size="6.8" font-weight="700">겹치는 타일만 읽기</text>
+      <text x="202" y="44" text-anchor="middle" fill="#94a3b8" font-size="6">비어 있지 않은 셀만 저장</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 타일 기반 희소 배열:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">2D 세포×유전자 좌표를 고정 크기 타일(기본 2048×2048)로 분할 저장</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 2D 범위 쿼리(Sub-slicing) 최적화:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">특정 환자군 × 유전자 서브셋 슬라이싱 시 겹치는 타일만 읽음</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 희소 타일 압축:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">차원·속성별 압축 필터(ZSTD, 델타 계열)로 저장 용량 절감</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">행·열 슬라이싱 성능은 타일 크기와 데이터 정렬에 의존</text>
+  </g>
+
+  <!-- Panel 3: Apache Arrow Zero-Copy -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. Apache Arrow 제로-카피(Zero-Copy)</text>
+
+    <!-- Schematic: Zero-copy pointer bridge -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- TileDB C++ core -->
+      <rect x="5" y="12" width="65" height="40" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="37" y="28" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">TileDB Core</text>
+      <text x="37" y="42" text-anchor="middle" fill="#94a3b8" font-size="6">(C++ Engine)</text>
+
+      <!-- Zero-copy arrow bridge -->
+      <path d="M 72 32 L 105 32" stroke="#34d399" stroke-width="1.8" fill="none" marker-end="url(#arrEmerald03)"/>
+      <text x="88" y="26" text-anchor="middle" fill="#34d399" font-size="6" font-weight="700">0-Copy</text>
+
+      <!-- Shared memory buffer -->
+      <rect x="108" y="8" width="70" height="48" rx="4" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1.2"/>
+      <text x="143" y="24" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">Arrow IPC</text>
+      <text x="143" y="38" text-anchor="middle" fill="#cbd5e1" font-size="6">Shared Memory</text>
+      <text x="143" y="49" text-anchor="middle" fill="#94a3b8" font-size="5.5">RecordBatch</text>
+
+      <!-- Python / R bindings -->
+      <path d="M 180 32 L 205 32" stroke="#34d399" stroke-width="1.8" fill="none" marker-end="url(#arrEmerald03)"/>
+      <rect x="208" y="12" width="50" height="40" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="233" y="28" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">Python / R</text>
+      <text x="233" y="42" text-anchor="middle" fill="#94a3b8" font-size="6">PyArrow/SciPy</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 메모리 직렬화 오버헤드 0%:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">C++ 엔진 버퍼를 파이썬 런타임이 메모리 복사 없이 포인터 참조</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 가비지 컬렉터(GC) 압박 원천 제거:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">수천만 개 파이썬 객체 생성 방지로 메모리 누수 및 일시정지 차단</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 언어 간 무결성 상호운용:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">Python(AnnData) ↔ R(SingleCellExperiment) 완벽 동기화</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">필요한 타일만 읽어 서브셋 쿼리 저지연(수치는 환경 의존)</text>
+  </g>
+</svg>

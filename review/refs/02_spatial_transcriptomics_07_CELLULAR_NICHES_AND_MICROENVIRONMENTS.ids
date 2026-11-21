@@ -1,0 +1,18 @@
+[cited]
+PMID:32763154  # "Schürch et al. 2020", L97,L121  [Schürch CM 2020 Cell]
+PMID:30078711  # "Goltsev et al. 2018", L97  [Goltsev Y 2018 Cell]
+PMID:12941866  # "Yin 2003", L159  [Yin JJ 2003 Proc Natl Acad Sci U S A]
+PMID:21353695  # "Fizazi 2011", L314  [Fizazi K 2011 Lancet]
+
+[evidence]
+PMID:25425475  # Smith MR 2015 Ann Oncol: Denosumab for the prevention of skeletal complications in metastatic castration-resistant prost  [근거: SCI-02-050]
+PMID:29440427  # Hashimoto K 2018 Proc Natl Acad Sci U S A: Cancer-secreted hsa-miR-940 induces an osteoblastic phenotype in the bone metastatic microenvir  [근거: SCI-02-047]
+PMID:34719426  # Kfoury Y 2021 Cancer Cell: Human prostate cancer bone metastases have an actionable immunosuppressive microenvironment.  [근거: SCI-02-047]
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:squidpy
+SW:scikit-learn

@@ -1,0 +1,12 @@
+[cited]
+PMID:29539636  # "Cusanovich 2018 [Nature 2018 가정; 본문에 저널 미표기]", L116  [Cusanovich DA 2018 Nature]
+PMID:30361341  # "Corces et al. 2018", L77  [Corces MR 2018 Science]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:macs3
+SW:numpy
+SW:scanpy
+SW:scipy

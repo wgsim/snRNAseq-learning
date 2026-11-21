@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "date": "2026-10-27 19:17:02",
+    "python": "3.13.16",
+    "gpu": "Tesla T4",
+    "gpu_mem_gb": 14.6,
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "scvi": "1.5.1",
+      "cell2location": "IMPORT FAILED: ImportError: cannot import name 'deep_getattr' from 'pyro.infer.autoguide.utils' (/usr/local/lib/python3.13/dist-packages/pyro/infer/autoguide/utils.py)",
+      "scanpy": "1.12.4",
+      "anndata": "0.13.4",
+      "transformers": "5.20.2",
+      "cupy": "14.0.1",
+      "cudf": "26.06.00",
+      "cuml": "26.06.00",
+      "cugraph": "26.06.00",
+      "cuvs": "26.06.00",
+      "rmm": "26.06.00",
+      "rapids_singlecell": "0.18.1"
+    },
+    "nvidia_smi_head": "580.82.07, Tesla T4"
+  },
+  "blocks": {
+    "B1": {
+      "id": "B1",
+      "location": "tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md:182",
+      "status": "PASS",
+      "phase": "block",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 1.81,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).",
+        "FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('anndata')` instead.",
+        "FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead"
+      ]
+    },
+    "B2": {
+      "id": "B2",
+      "location": "tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:139",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 0.76,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).",
+        "FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.",
+        "FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead."
+      ]
+    },
+    "B3": {
+      "id": "B3",
+      "location": "tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:222",
+      "status": "FAIL",
+      "phase": "block",
+      "error": "ImportError: cannot import name 'deep_getattr' from 'pyro.infer.autoguide.utils' (/usr/local/lib/python3.13/dist-packages/pyro/infer/autoguide/utils.py)",
+      "traceback": "Traceback (most recent call last):\n  File \"/tmp/ipykernel_1999/637360964.py\", line 23, in run_block\n    exec(compile(s, f\"<{bid} {location}>\", \"exec\"), ns)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<B3 tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:222>\", line 3, in <module>\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/__init__.py\", line 9, in <module>\n    from . import models\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/models/__init__.py\", line 1, in <module>\n    from ._cell2location_model import Cell2location\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/models/_cell2location_model.py\", line 30, in <module>\n    from cell2location.models.base._pyro_base_loc_module import Cell2locationBaseModule\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/models/base/_pyro_base_loc_module.py\", line 6, in <module>\n    from ._pyro_mixin import AutoGuideMixinModule, init_to_value\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/models/base/_pyro_mixin.py\", line 24, in <module>\n    from ...distributions.AutoAmortisedNormalMessenger import (\n        AutoAmortisedHierarchicalNormalMessenger,\n    )\n  File \"/usr/local/lib/python3.13/dist-packages/cell2location/distributions/AutoAmortisedNormalMessenger.py\", line 10, in <module>\n    from pyro.infer.autoguide.utils import (\n    ...<3 lines>...\n    )\nImportError: cannot import name 'deep_getattr' from 'pyro.infer.autoguide.utils' (/usr/local/lib/python3.13/dist-packages/pyro/infer/autoguide/utils.py)\n",
+      "elapsed_s": 0.07,
+      "notes": "",
+      "replacements": [
+        [
+          "max_epochs=250",
+          "max_epochs=20"
+        ],
+        [
+          "max_epochs=30000",
+          "max_epochs=300"
+        ]
+      ],
+      "warnings": []
+    },
+    "B4": {
+      "id": "B4",
+      "location": "tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:184",
+      "status": "FAIL",
+      "phase": "post",
+      "error": "AttributeError: module 'rmm.mr' has no attribute 'parse_size'",
+      "traceback": "Traceback (most recent call last):\n  File \"/tmp/ipykernel_1999/637360964.py\", line 26, in run_block\n    post(ns)\n    ~~~~^^^^\n  File \"/tmp/ipykernel_1999/1459511734.py\", line 127, in _post_B4\n    ns[\"init_gpu_memory_pool\"](initial_pool_size=\"1GB\", max_pool_size=\"4GB\")   # HARNESS: smaller pool\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<B4 tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:184>\", line 27, in init_gpu_memory_pool\nAttributeError: module 'rmm.mr' has no attribute 'parse_size'\n",
+      "elapsed_s": 1.53,
+      "notes": "",
+      "replacements": [],
+      "warnings": []
+    },
+    "B5": {
+      "id": "B5",
+      "location": "tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md:171",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 16.51,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC)."
+      ]
+    },
+    "B7": {
+      "id": "B7",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:205",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 4.45,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstimator` and/or other appropriate mixins su",
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC)."
+      ]
+    },
+    "B6": {
+      "id": "B6",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:105",
+      "status": "FAIL",
+      "phase": "block",
+      "error": "AttributeError: module 'rmm.mr' has no attribute 'parse_size'",
+      "traceback": "Traceback (most recent call last):\n  File \"/tmp/ipykernel_1999/637360964.py\", line 23, in run_block\n    exec(compile(s, f\"<{bid} {location}>\", \"exec\"), ns)\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<B6 tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:105>\", line 7, in <module>\nAttributeError: module 'rmm.mr' has no attribute 'parse_size'\n",
+      "elapsed_s": 0.0,
+      "notes": "",
+      "replacements": [
+        [
+          "rmm.mr.parse_size(\"64GB\")",
+          "rmm.mr.parse_size(\"2GB\")"
+        ]
+      ],
+      "warnings": []
+    }
+  }
+}

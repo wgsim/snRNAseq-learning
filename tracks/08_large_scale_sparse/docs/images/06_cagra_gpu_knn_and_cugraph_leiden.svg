@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">NVIDIA CAGRA 초고속 근사 k-NN 그래프 탐색 &amp; cuGraph 원자적 병렬 라이덴 군집화</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">GPU 압축 근사 그래프(CAGRA) ➔ 워프 레벨 병렬 탐색 ➔ cuGraph 원자적 커뮤니티 병합 &amp; 100만 세포 분할</text>
+
+  <!-- Panel 1: NVIDIA CAGRA Graph Traversal -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. NVIDIA CAGRA 근사 탐색 구조</text>
+
+    <!-- Schematic: CAGRA Small-degree graph -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Query node -->
+      <circle cx="25" cy="32" r="7" fill="#fbbf24"/>
+      <text x="25" y="35" text-anchor="middle" fill="#0f172a" font-size="6.5" font-weight="700">Q</text>
+
+      <!-- Edges to first hop -->
+      <line x1="32" y1="32" x2="80" y2="16" stroke="#38bdf8" stroke-width="1.2"/>
+      <line x1="32" y1="32" x2="80" y2="48" stroke="#38bdf8" stroke-width="1.2"/>
+
+      <!-- Hop 1 nodes -->
+      <circle cx="85" cy="16" r="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+      <circle cx="85" cy="48" r="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+
+      <!-- Edges to hop 2 -->
+      <line x1="91" y1="16" x2="140" y2="10" stroke="#34d399" stroke-width="1"/>
+      <line x1="91" y1="16" x2="140" y2="28" stroke="#34d399" stroke-width="1"/>
+      <line x1="91" y1="48" x2="140" y2="44" stroke="#34d399" stroke-width="1"/>
+      <line x1="91" y1="48" x2="140" y2="58" stroke="#34d399" stroke-width="1"/>
+
+      <!-- Hop 2 nodes -->
+      <circle cx="145" cy="10" r="4.5" fill="#34d399"/>
+      <circle cx="145" cy="28" r="4.5" fill="#34d399"/>
+      <circle cx="145" cy="44" r="4.5" fill="#34d399"/>
+      <circle cx="145" cy="58" r="4.5" fill="#34d399"/>
+
+      <!-- Label block -->
+      <rect x="165" y="14" width="95" height="38" rx="3" fill="#1e293b" stroke="#0284c7" stroke-width="0.8"/>
+      <text x="212" y="27" text-anchor="middle" fill="#38bdf8" font-size="6.5" font-weight="700">Small-Degree Graph</text>
+      <text x="212" y="38" text-anchor="middle" fill="#cbd5e1" font-size="6">Fixed Out-Degree (d=32)</text>
+      <text x="212" y="47" text-anchor="middle" fill="#34d399" font-size="5.5">Rank-based pruning</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• CAGRA 고정 차수 그래프 k-NN:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">GPU 하드웨어 구조에 맞춤 설계된 최첨단 벡터 색인</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 고정 차수(Degree) 제약 설계:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">모든 노드가 동일한 수의 이웃을 가져 GPU 워프 발산 감소</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• CPU HNSW 대비 속도 혁신:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">대형 배치 처리량 HNSW 대비 33~77배 (Ootomo et al. 2024)</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">초대규모 세포 데이터베이스 실시간 벡터 검색 엔진</text>
+  </g>
+
+  <!-- Panel 2: Warp-Level Memory Coalescing -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 워프 레벨 메모리 병합 (Coalesced)</text>
+
+    <!-- Schematic: 32 threads warp evaluating distances -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Warp rectangle -->
+      <rect x="5" y="8" width="115" height="48" rx="3" fill="#a855f7" fill-opacity="0.25" stroke="#c084fc" stroke-width="1"/>
+      <text x="62" y="22" text-anchor="middle" fill="#c084fc" font-size="7" font-weight="700">CUDA Warp (32 Threads)</text>
+      <!-- Small thread indicators -->
+      <g transform="translate(15, 28)">
+        <rect x="0" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <rect x="11" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <rect x="22" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <rect x="33" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <text x="50" y="9" fill="#94a3b8" font-size="6">...</text>
+        <rect x="62" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <rect x="73" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+        <rect x="84" y="0" width="8" height="12" rx="1" fill="#38bdf8"/>
+      </g>
+
+      <path d="M 125 32 L 155 32" stroke="#34d399" stroke-width="1.8" fill="none" marker-end="url(#arrEmerald03)"/>
+
+      <!-- Shared memory priority queue -->
+      <rect x="160" y="8" width="105" height="48" rx="3" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+      <text x="212" y="24" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">Shared Memory Queue</text>
+      <text x="212" y="38" text-anchor="middle" fill="#cbd5e1" font-size="6">Top-k Candidate Heap</text>
+      <text x="212" y="48" text-anchor="middle" fill="#38bdf8" font-size="5.5">Zero Global Memory Stall</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단일 쿼리 ➔ 워프(32 Threads) 합동 할당:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">후보 노드의 32차원 특성을 동시 병합 로드(Coalesced Access)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 공유 메모리(Shared Memory) 우선순위 큐:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">칩 내부 초고속 SRAM에서 k개 최단 거리 힙 정렬</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 글로벌 메모리 지연 은폐 (Latency Hiding):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">DRAM 접근 대기 시간 동안 다른 워프가 연산 파이프라인 점유</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#a855f7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#c084fc" font-size="9.2" font-weight="600">하드웨어 아키텍처 수준의 극한 메모리 대역폭 활용</text>
+  </g>
+
+  <!-- Panel 3: cuGraph Parallel Leiden -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. cuGraph 원자적 병렬 라이덴(Leiden)</text>
+
+    <!-- Schematic: Atomic aggregation & refinement -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Unclustered cells -->
+      <g transform="translate(10, 8)">
+        <circle cx="10" cy="12" r="4.5" fill="#38bdf8"/>
+        <circle cx="22" cy="18" r="4.5" fill="#38bdf8"/>
+        <circle cx="15" cy="30" r="4.5" fill="#38bdf8"/>
+        <circle cx="32" cy="36" r="4.5" fill="#fbbf24"/>
+        <circle cx="42" cy="22" r="4.5" fill="#fbbf24"/>
+        <text x="24" y="46" text-anchor="middle" fill="#94a3b8" font-size="5.5">1M Cells</text>
+      </g>
+
+      <path d="M 65 32 L 95 32" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrAmber06)"/>
+
+      <!-- Atomic Modularity Kernel -->
+      <rect x="98" y="10" width="80" height="44" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="138" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.8" font-weight="700">Atomic Kernel</text>
+      <text x="138" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">atomicCAS / Add</text>
+      <text x="138" y="47" text-anchor="middle" fill="#38bdf8" font-size="5.5">Modularity Move</text>
+
+      <path d="M 183 32 L 205 32" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrEmerald06)"/>
+
+      <!-- Partitioned communities -->
+      <rect x="208" y="8" width="60" height="48" rx="3" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1.2"/>
+      <text x="238" y="24" text-anchor="middle" fill="#34d399" font-size="6.8" font-weight="700">Clusters</text>
+      <text x="238" y="36" text-anchor="middle" fill="#cbd5e1" font-size="6">Connected</text>
+      <text x="238" y="48" text-anchor="middle" fill="#fbbf24" font-size="5.8">Converge</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 원자적 커뮤니티 이동 (Atomic CAS):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">동시 다발 노드 이동 시 충돌 없는 모듈래리티 이득 계산</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 라이덴 리파인먼트 (Refinement) 보장:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">루뱅(Louvain)에서 생길 수 있는 연결성 단절 커뮤니티 방지</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 100만 세포 GPU 군집화 가속:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">CPU 대비 크게 단축 (소요 시간은 하드웨어·그래프에 의존)</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">γ-연결성을 보장하는 병렬 파티셔닝</text>
+  </g>
+</svg>

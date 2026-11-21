@@ -1,0 +1,14 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:nextflow
+SW:docker
+SW:apptainer
+SW:slurm
+SW:star
+SW:nf-core-scrnaseq
+SW:scanpy

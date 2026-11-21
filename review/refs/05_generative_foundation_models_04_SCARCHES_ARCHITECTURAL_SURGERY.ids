@@ -1,0 +1,12 @@
+[cited]
+PMID:34462589  # Lotfollahi 2022 Nat Biotechnol (scArches)
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:scanpy
+SW:scvi-tools
+SW:torch

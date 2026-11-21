@@ -1,0 +1,7 @@
+treatment_regimen,flux_leg1_tumor_to_osteoblast,flux_leg2_osteoblast_to_osteoclast,flux_leg3_osteoclast_to_tumor,flux_leg4_mycaf_to_cd8t,vicious_cycle_osteolysis_score,immunosuppression_index,composite_pathology_score,vicious_cycle_percent_inhibition
+Untreated_Baseline,0.09017,0.46006,0.07596,0.08466,0.146607,8.466,0.270724,0.0
+Denosumab_anti_RANKL,0.09017,0.023003,0.022788,0.08466,0.036156,8.466,0.066766,75.34
+Galunisertib_anti_TGFb,0.045085,0.368048,0.007596,0.016932,0.050139,1.6932,0.058628,78.34
+Pembrolizumab_anti_PD1,0.081153,0.46006,0.07596,0.04233,0.141547,4.233,0.201464,25.58
+Combination_Denosumab_Galunisertib,0.036068,0.023003,0.003798,0.012699,0.014661,1.2699,0.016522,93.9
+Tri_Therapy_Denosumab_Galunisertib_antiPD1,0.018034,0.009201,0.001519,0.004233,0.006317,0.4233,0.006584,97.57

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrRose06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">전립선암 단일세포 스플라이스 변이 및 염색체 융합: AR-V7 및 TMPRSS2-ERG</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">AR 잠재 엑손 3b(CE3b) 접합부 ➔ 엔잘루타마이드 저항성 서브클론 PSI(Ψ) ➔ 21q22 간질 결실 융합 유전자</text>
+
+  <!-- Panel 1: AR-FL vs AR-V7 Splicing -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. AR 유전자좌: AR-FL vs AR-V7 변이체</text>
+
+    <!-- Exon Junction Diagram -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Exon 3 -->
+    <rect x="25" y="65" width="40" height="20" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="45" y="78" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Exon 3</text>
+
+    <!-- Cryptic Exon 3b (AR-V7) -->
+    <rect x="100" y="80" width="45" height="18" rx="3" fill="#be123c" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="122" y="92" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">CE3b (V7)</text>
+
+    <!-- Exon 4 (Canonical AR-FL) -->
+    <rect x="195" y="65" width="40" height="20" rx="3" fill="#059669" stroke="#34d399" stroke-width="1"/>
+    <text x="215" y="78" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Exon 4</text>
+
+    <!-- Exons 5-8 LBD -->
+    <rect x="245" y="65" width="32" height="20" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+    <text x="261" y="78" text-anchor="middle" fill="#94a3b8" font-size="7">Ex 5-8</text>
+
+    <!-- Splicing lines -->
+    <!-- AR-V7 Inclusion Junction -->
+    <path d="M65,70 Q82,88 100,88" fill="none" stroke="#f43f5e" stroke-width="1.8"/>
+    <text x="75" y="96" fill="#f43f5e" font-size="7" font-weight="700">2.3 kb (V7)</text>
+
+    <!-- AR-FL Exclusion/Canonical Junction -->
+    <path d="M65,65 Q130,42 195,65" fill="none" stroke="#34d399" stroke-width="1.8"/>
+    <text x="130" y="52" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">11.9 kb (AR-FL 정규 접합)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 잠재 엑손 3b(Cryptic Exon 3b) 조기 종결:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">인트론 3 내부 CE3b가 삽입되며 조기 정지 코돈(PTC) 발생</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 리간드 결합 도메인(LBD) 완전 결손:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">안드로겐 없이도 핵으로 이행해 하위 신호를 상시 활성화</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 엔잘루타마이드(Enzalutamide) 불응성 기전:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">호르몬 치료제 표적인 LBD 부재로 치료 저항성 획득</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.25"/>
+    <text x="150" y="259" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="600">전립선암 표적 치료 불응의 결정적 바이오마커</text>
+  </g>
+
+  <!-- Panel 2: Single-Cell PSI Quantification -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. 단일세포 PSI (Percent Spliced-In, Ψ) 정량화</text>
+
+    <!-- PSI Formula & Subclone Distribution -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Formula -->
+    <rect x="25" y="50" width="260" height="22" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="155" y="65" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">Ψ = I_CE3b / (I_CE3b + E_Ex4) [Inclusion Ratio]</text>
+
+    <!-- Bimodal PSI curves -->
+    <g transform="translate(25, 78)">
+      <!-- Subclone Sensitive -->
+      <rect x="10" y="8" width="105" height="18" rx="2" fill="#065f46" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+      <text x="62" y="20" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">민감성 클론 (Ψ ≈ 0.02)</text>
+
+      <!-- Subclone Resistant -->
+      <rect x="135" y="8" width="115" height="18" rx="2" fill="#9f1239" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+      <text x="192" y="20" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">저항성 서브클론 (Ψ ≈ 0.65)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일세포 스플라이스 정션 리드 마이닝:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">CIGAR 'N' 연산자의 게놈 좌표를 추출하여 I와 E 판정</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 종양 이질성(Tumor Heterogeneity) 해명:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">벌크 분석에서 희석되던 소수 저항성 세포군을 명확히 식별</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 최소 접합부 리드 수(Coverage ≥ 3) 필터:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">드롭아웃에 의한 PSI 과대 추정 방지 및 통계적 보정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">세포별 아이소폼 분율의 이봉형(Bimodal) 클론 분리</text>
+  </g>
+
+  <!-- Panel 3: TMPRSS2-ERG Breakpoint -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">3. TMPRSS2-ERG 21q22 간질 결실 융합</text>
+
+    <!-- Fusion Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- TMPRSS2 Exon 1 -->
+    <rect x="25" y="52" width="85" height="18" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="67" y="64" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">TMPRSS2 (Ex 1)</text>
+
+    <!-- Deleted Interstitial region -->
+    <line x1="110" y1="61" x2="165" y2="61" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="137" y="56" text-anchor="middle" fill="#f43f5e" font-size="6.5">~3 Mb 결실</text>
+
+    <!-- ERG Exon 4 -->
+    <rect x="165" y="52" width="85" height="18" rx="2" fill="#7e22ce" stroke="#c084fc" stroke-width="1"/>
+    <text x="207" y="64" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">ERG (Ex 4)</text>
+
+    <!-- Split Read Bar -->
+    <rect x="45" y="80" width="180" height="16" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <rect x="45" y="80" width="85" height="16" rx="2" fill="#0284c7" fill-opacity="0.5"/>
+    <text x="87" y="91" text-anchor="middle" fill="#38bdf8" font-size="7">50M (TMPRSS2)</text>
+    <rect x="130" y="80" width="95" height="16" rx="2" fill="#7e22ce" fill-opacity="0.5"/>
+    <text x="177" y="91" text-anchor="middle" fill="#c084fc" font-size="7">50S (ERG Chimeric)</text>
+
+    <text x="155" y="116" text-anchor="middle" fill="#fbbf24" font-size="7.5">Breakpoint: chr21:41,465,100 ^ chr21:39,755,200</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 안드로겐 반응 프로모터에 의한 발암 구동:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">TMPRSS2 전사 조절을 받아 ERG 전사인자가 과발현</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Chimeric Split Read &amp; Discordant Pairs:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">CIGAR 50M50S 키메라 연산자를 통해 융합 절단점 검출</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• AR-V7 발현 서브클론과의 공존성 검증:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">동일 세포 바코드(CB) 내에서 융합 유전자와 변이체 동시 검출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">단일세포 분해능으로 암 유전자 재배열과 스플라이싱 통합</text>
+  </g>
+</svg>

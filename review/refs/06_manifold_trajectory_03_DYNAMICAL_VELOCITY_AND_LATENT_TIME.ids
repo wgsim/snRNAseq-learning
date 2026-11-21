@@ -1,0 +1,11 @@
+[cited]
+PMID:30089906  # La Manno 2018 Nature
+PMID:32747759  # Bergen 2020 Nat Biotechnol
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:scanpy
+SW:scvelo

@@ -1,0 +1,5 @@
+batch_size,iterations,mean_latency_ms,std_latency_ms,p50_latency_ms,p95_latency_ms,p99_latency_ms,throughput_cells_sec,sla_target_ms,sla_compliant
+1,50,0.11,0.007,0.108,0.115,0.155,9107.3,50.0,True
+16,50,1.764,0.055,1.746,1.901,1.94,9072.4,50.0,True
+64,50,7.018,0.159,6.986,7.292,7.367,9120.0,50.0,True
+256,50,28.147,0.151,28.152,28.397,28.491,9095.1,50.0,True

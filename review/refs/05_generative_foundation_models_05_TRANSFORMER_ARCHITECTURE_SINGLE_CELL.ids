@@ -1,0 +1,12 @@
+[cited]
+PMID:37258680  # Theodoris 2023 Nature
+PMID:38409223  # Cui 2024 Nat Methods (scGPT)
+DOI:10.18653/v1/N19-1357  # Jain & Wallace 2019 NAACL
+PMID:31361600  # Labrecque 2019 J Clin Invest
+
+[evidence]
+PMID:40251685  # Kedzierska 2025 Genome Biol
+
+[software]
+SW:numpy
+SW:torch

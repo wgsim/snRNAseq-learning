@@ -1,0 +1,5 @@
+QC_Stage,Retained_Nuclei,Retention_Rate,Filtered_Out
+1. Initial Cohort,1000,100.0%,0
+"2. snRNA Passed (Mito < 2.5%, Genes >= 500)",949,94.9%,51
+"3. snATAC Passed (TSS >= 5.0, NFR/Mono >= 1.0, Peaks >= 1000)",909,90.9%,91
+4. Joint Multiome Retained (Both Modalities),864,86.4%,136

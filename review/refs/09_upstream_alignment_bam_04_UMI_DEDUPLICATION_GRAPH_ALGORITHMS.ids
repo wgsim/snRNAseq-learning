@@ -1,0 +1,9 @@
+[cited]
+PMID:28100584  # "Smith, Heger & Sudbery 2017", L9,L72,L78,L86,L124,L128,L155  [Smith T 2017 Genome Res]
+PMID:24363023  # "Islam 2014", L83  [Islam S 2014 Nat Methods]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+# (코드 블록에서 import/호출하는 도구 없음)

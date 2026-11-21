@@ -1,0 +1,19 @@
+[cited]
+DOI:10.1201/9781315370279  # Wood (2017) [GAM 교재 2판 가정; 본문에 서지 미명시], L147
+PMID:29017058  # "Bluemn 2017", L153  [Bluemn EG 2017 Cancer Cell]
+PMID:31361600  # "Labrecque 2019", L153  [Labrecque MP 2019 J Clin Invest]
+
+[evidence]
+PMID:32139671  # Van den Berge K 2020 Nat Commun: Trajectory-based differential expression analysis for single-cell sequencing data.  [근거: SCI-07-041; ledger L205-260]
+
+[software]
+SW:numpy
+SW:patsy
+SW:scipy
+SW:slingshot
+SW:statsmodels
+SW:tradeseq
+SW:biocparallel
+SW:ggplot2
+SW:pandas
+SW:singlecellexperiment

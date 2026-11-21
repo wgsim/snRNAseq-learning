@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrPurple03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="17" font-weight="700">scANVI 준지도 라벨 전이 &amp; scArches 동적 수술적 아틀라스 매핑</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">희소 라벨 활용 혼합 모델 분류 + 참조 가중치 동결 및 쿼리 어댑터 수술을 통한 파괴적 망각 없는 지속적 통합</text>
+
+  <!-- Panel 1: scANVI Semi-Supervised Model -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. scANVI 준지도 라벨 전이 엔진</text>
+
+    <!-- Schematic: Dual Latent (z + y) -->
+    <rect x="14" y="42" width="267" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    
+    <g transform="translate(22, 50)">
+      <!-- Labeled data (30%) -->
+      <rect x="0" y="0" width="70" height="24" rx="3" fill="#0369a1" fill-opacity="0.5" stroke="#38bdf8" stroke-width="1"/>
+      <text x="35" y="12" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">30% 라벨 세포</text>
+      <text x="35" y="21" text-anchor="middle" fill="#cbd5e1" font-size="6.5">y 관측 (지도 학습)</text>
+
+      <!-- Unlabeled data (70%) -->
+      <rect x="0" y="32" width="70" height="24" rx="3" fill="#334155" stroke="#64748b" stroke-width="1"/>
+      <text x="35" y="44" text-anchor="middle" fill="#cbd5e1" font-size="8" font-weight="700">70% 미지 세포</text>
+      <text x="35" y="53" text-anchor="middle" fill="#94a3b8" font-size="6.5">y 잠재 (한계화 연산)</text>
+
+      <!-- Arrows -->
+      <line x1="72" y1="12" x2="102" y2="24" stroke="#38bdf8" stroke-width="1.2" marker-end="url(#arrCyan03)"/>
+      <line x1="72" y1="44" x2="102" y2="34" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arrCyan03)"/>
+
+      <!-- Classifier MLP q_psi(y|z) -->
+      <rect x="104" y="16" width="65" height="30" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+      <text x="136" y="29" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">q_ψ(y|z)</text>
+      <text x="136" y="40" text-anchor="middle" fill="#94a3b8" font-size="6.5">분류 네트워크</text>
+
+      <!-- Arrow to output -->
+      <line x1="171" y1="31" x2="188" y2="31" stroke="#c084fc" stroke-width="1.2" marker-end="url(#arrPurple03)"/>
+
+      <!-- Transferred labels -->
+      <rect x="190" y="15" width="58" height="32" rx="3" fill="#065f46" fill-opacity="0.5" stroke="#34d399" stroke-width="1"/>
+      <text x="219" y="27" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">예측 라벨 ŷ</text>
+      <text x="219" y="39" text-anchor="middle" fill="#cbd5e1" font-size="6.5">확률 사후분포</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이중 잠재 구조: 연속 상태 z + 이산 라벨 y</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">p(z|y) ~ N(μ_y, Σ_y) 가우시안 혼합 모델(GMM) 사전분포</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 준지도 통합 목적함수 (Semi-Supervised ELBO):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">ℒ = ℒ_unlabeled(x) + α · ℒ_labeled(x,y) + β · ℒ_classifier(y,z)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포 유형 기반 가이던스:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">배치 효과를 강력히 제거하면서 생물학적 경계를 엄격히 보존</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">성능: 일부 라벨로 나머지 라벨 전이 (정확도는 데이터 의존)</text>
+  </g>
+
+  <!-- Panel 2: scArches Architectural Surgery -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. scArches 아키텍처 수술 (Surgery)</text>
+
+    <!-- Schematic: Frozen weights + surgical adapter -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+    
+    <g transform="translate(25, 48)">
+      <!-- Frozen Reference Network -->
+      <rect x="0" y="0" width="130" height="36" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+      <rect x="3" y="3" width="124" height="12" rx="2" fill="#0284c7" fill-opacity="0.3"/>
+      <text x="65" y="12" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">참조 아틀라스 가중치 W_ref</text>
+      <text x="65" y="28" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">🔒 동결 (FROZEN - 고정)</text>
+
+      <!-- Surgical Query Adapter -->
+      <rect x="0" y="42" width="130" height="22" rx="4" fill="#065f46" fill-opacity="0.4" stroke="#34d399" stroke-width="1.5"/>
+      <text x="65" y="56" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">✨ 쿼리 어댑터 가중치 W_query (수술)</text>
+
+      <!-- Arrow -->
+      <line x1="135" y1="28" x2="162" y2="28" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrPurple03)"/>
+
+      <!-- Output Latent Mapping -->
+      <rect x="165" y="6" width="95" height="52" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+      <text x="212" y="22" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">통합 잠재 공간 z</text>
+      <text x="212" y="34" text-anchor="middle" fill="#cbd5e1" font-size="6.5">Zero-Init 어댑터</text>
+      <text x="212" y="46" text-anchor="middle" fill="#34d399" font-size="6.5">망각 최소화</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 아키텍처 수술 원리 (Architectural Surgery):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">신규 쿼리 배치가 들어오면 인코더 첫 층에 전용 노드/가중치만 접목</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 제로 초기화(Zero-Initialization) 기법:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">초기 W_query = 0 설정 ➔ 첫 스텝에서 참조 모델 출력과 100% 동일</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 파괴적 망각(Catastrophic Forgetting) 배제:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">수십만 세포 기준 아틀라스를 재학습하지 않고 신규 환자 즉시 투영</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#c084fc" font-size="9.5" font-weight="600">장점: 프라이버시 보호(참조 원시 데이터 공유 불필요) &amp; 초경량 학습</text>
+  </g>
+
+  <!-- Panel 3: Unified Atlas Integration & Novel Clone Discovery -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 통합 아틀라스 &amp; 신규 클론 발견</text>
+
+    <!-- Schematic: UMAP with Reference Atlas + Query Biopsies -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    
+    <g transform="translate(25, 46)">
+      <!-- Main Reference cluster (Grey dots) -->
+      <circle cx="45" cy="35" r="2.5" fill="#64748b"/>
+      <circle cx="52" cy="40" r="2.5" fill="#64748b"/>
+      <circle cx="38" cy="44" r="2.5" fill="#64748b"/>
+      <circle cx="46" cy="48" r="2.5" fill="#64748b"/>
+      <!-- Query 1 (Cyan dots) mapped seamlessly -->
+      <circle cx="48" cy="38" r="3" fill="#38bdf8"/>
+      <circle cx="42" cy="42" r="3" fill="#38bdf8"/>
+      <text x="45" y="60" text-anchor="middle" fill="#38bdf8" font-size="6.5" font-weight="700">Luminal AR+ 매핑</text>
+
+      <!-- Immune cluster -->
+      <circle cx="115" cy="20" r="2.5" fill="#64748b"/>
+      <circle cx="122" cy="25" r="2.5" fill="#64748b"/>
+      <circle cx="118" cy="22" r="3" fill="#38bdf8"/>
+      <text x="118" y="36" text-anchor="middle" fill="#38bdf8" font-size="6.5" font-weight="700">TAM/면역 세포</text>
+
+      <!-- Out-of-Distribution Novel Cluster (Rose dots, separated) -->
+      <circle cx="205" cy="38" r="3.5" fill="#f43f5e"/>
+      <circle cx="214" cy="42" r="3.5" fill="#f43f5e"/>
+      <circle cx="200" cy="46" r="3.5" fill="#f43f5e"/>
+      <circle cx="210" cy="50" r="3.5" fill="#f43f5e"/>
+      <rect x="175" y="10" width="75" height="18" rx="3" fill="#f43f5e" fill-opacity="0.25" stroke="#f43f5e" stroke-width="1"/>
+      <text x="212" y="22" text-anchor="middle" fill="#f43f5e" font-size="6.5" font-weight="700">신규 t-NEPC 클론 발견!</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 기준 아틀라스 투영 (mCRPC Reference):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">골전이/원발암 10만 세포 기준 좌표계에 간전이 환자 생검 정합</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• OOD(분포 외) 신규 세포군 자동 탐지:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">기준 아틀라스에 없던 희귀 저분화/이중음성 클론을 독립 군집화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 임상 라벨 정밀 전달:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">수작업 주석 대비 세포 주석 시간을 크게 단축</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">결과: 기준 좌표계 일관성 유지 + 신규 치료 저항 서브클론 탐색</text>
+  </g>
+</svg>

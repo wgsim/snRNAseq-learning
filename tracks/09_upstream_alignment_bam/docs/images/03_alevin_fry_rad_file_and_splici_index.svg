@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrPurple03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Alevin-fry 유사 정렬 아키텍처: Splici 색인 및 RAD 바이너리 스트림 정량화</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">k-mer Quasi-mapping ➔ Splici(전사체+인트론) 참조 유전체 ➔ RAD 바이너리 청크 및 USA 카운트 행렬</text>
+
+  <!-- Panel 1: Splici Index Structure -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. Splici (Spliced + Intron) 인덱스 구조</text>
+
+    <!-- Schematic: Splici Components -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Spliced cDNA -->
+    <rect x="25" y="50" width="250" height="18" rx="3" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <text x="150" y="62" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">Spliced Transcripts (성숙 mRNA 엑손 연합체)</text>
+
+    <!-- Intron with Flank -->
+    <rect x="25" y="74" width="35" height="18" rx="2" fill="#d97706" fill-opacity="0.3" stroke="#fbbf24" stroke-width="1"/>
+    <text x="42" y="86" text-anchor="middle" fill="#fbbf24" font-size="7">Flank</text>
+
+    <rect x="63" y="74" width="174" height="18" rx="2" fill="#7e22ce" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+    <text x="150" y="86" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">Intronic Sequence (미성숙 pre-mRNA)</text>
+
+    <rect x="240" y="74" width="35" height="18" rx="2" fill="#d97706" fill-opacity="0.3" stroke="#fbbf24" stroke-width="1"/>
+    <text x="257" y="86" text-anchor="middle" fill="#fbbf24" font-size="7">Flank</text>
+
+    <text x="150" y="106" text-anchor="middle" fill="#94a3b8" font-size="7.5">Flanking Length = Read_Length - 1 (경계 리드 포착)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일핵(snRNA-seq) 최적화 참조 설계:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">핵 내부 미성숙 pre-mRNA 인트론 신호를 정확히 포섭</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• RNA Velocity 동역학 데이터 기반 마련:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">스플라이싱 전(Unspliced) vs 후(Spliced) 비율 추적</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 의사 유전자(Pseudogene) 오정렬 차단:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">게놈 전체 인트론 패딩으로 미스매핑 비율 대폭 감소</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">성숙 전사체와 인트론을 동등한 참조체로 색인화</text>
+  </g>
+
+  <!-- Panel 2: Quasi-mapping & Equivalence Classes -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">2. k-mer 유사 매핑 및 동등성 클래스 (EqClass)</text>
+
+    <!-- Quasi Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- k-mers -->
+    <rect x="25" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="47" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k1 (31bp)</text>
+    <rect x="75" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="97" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k2 (31bp)</text>
+    <rect x="125" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="147" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k3 (31bp)</text>
+
+    <!-- Target transcripts EqClass -->
+    <g transform="translate(25, 78)">
+      <rect width="250" height="22" rx="3" fill="#581c87" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+      <text x="125" y="15" text-anchor="middle" fill="#e9d5ff" font-size="8">Equivalence Class #412: {TX1_Spliced, TX1_Intron}</text>
+    </g>
+    <text x="155" y="118" text-anchor="middle" fill="#94a3b8" font-size="7.5">CIGAR 계산 생략 ➔ 전사체 집합 매핑 (15배 고속화)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• CIGAR 정렬 없는 초고속 유사 매핑:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">정밀 염기 정렬 대신 k-mer 일치 전사체 라벨 집합 추출</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 다중 매핑 전사체(Multimapping) 처리:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">임의 배정 대신 동등성 클래스 단위로 모호성 유지</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 극단적인 I/O 및 CPU 부하 절감:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">기가바이트 단위 대용량 BAM 생성 없이 스트리밍</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">정렬 병목을 해소하는 경량 k-mer 해시 정량화</text>
+  </g>
+
+  <!-- Panel 3: RAD File & USA Matrix -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. RAD 스트림 및 USA (U-S-A) 카운트 행렬</text>
+
+    <!-- RAD Format Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#38bdf8" font-size="7.5" font-weight="700">RAD Record: [CB: 64b] [UMI: 32b] [EqClass: 32b]</text>
+      <!-- Binary Chunk Stream -->
+      <rect x="0" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="40" y="29" text-anchor="middle" fill="#38bdf8" font-size="7">Chunk 1 (CB-A)</text>
+      <rect x="85" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="125" y="29" text-anchor="middle" fill="#38bdf8" font-size="7">Chunk 2 (CB-A)</text>
+      <rect x="170" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="210" y="29" text-anchor="middle" fill="#34d399" font-size="7">Chunk 3 (CB-B)</text>
+
+      <!-- USA Matrix Breakdown -->
+      <line x1="0" y1="42" x2="250" y2="42" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="55" fill="#34d399" font-size="8" font-weight="700">U (Unspliced):</text>
+      <text x="80" y="55" fill="#cbd5e1" font-size="8">인트론 단독 매핑 (신생 전사체)</text>
+      <text x="0" y="68" fill="#38bdf8" font-size="8" font-weight="700">S (Spliced):</text>
+      <text x="80" y="68" fill="#cbd5e1" font-size="8">엑손 접합부 매핑 (성숙 mRNA)</text>
+      <text x="0" y="80" fill="#fbbf24" font-size="8" font-weight="700">A (Ambiguous):</text>
+      <text x="80" y="80" fill="#cbd5e1" font-size="8">엑손 내부 매핑 (U/S 공유)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• RAD (Reduced Alignment Data) 바이너리 압축:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">BAM 대비 90% 작은 파일 크기로 디스크 I/O 극소화</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 세포 바코드별 청크 스트리밍 정렬:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">Alevin-fry 엔진이 병렬 코어에서 메모리 누수 없이 집계</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• USA 3차원 카운트 행렬 동시 도출:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">스플라이싱 역동성 분석과 표준 유전자 발현 정량 동시 완성</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">BAM 불필요 ➔ 초고속 메모리 절감 차세대 업스트림 표준</text>
+  </g>
+</svg>

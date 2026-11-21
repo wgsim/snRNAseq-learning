@@ -1,0 +1,17 @@
+[cited]
+DOI:10.1007/978-94-009-4109-0  # Aitchison, 1986, L28
+PMID:15054023  # "Newton et al. 2004", L181  [Newton MA 2004 Biostatistics]
+PMID:34824236  # "Büttner et al. 2021 (scCODA)", L118,L197  [Büttner M 2021 Nat Commun]
+PMID:36005887  # "Phipson et al. 2022 (propeller)", L197  [Phipson B 2022 Bioinformatics]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:limma
+SW:numpy
+SW:scanpy
+SW:sccoda
+SW:speckle
+SW:pandas
+SW:singlecellexperiment

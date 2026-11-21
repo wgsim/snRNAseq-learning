@@ -1,0 +1,2 @@
+initial_spots,in_tissue_spots,qc_passed_spots,filtered_off_tissue,filtered_low_counts,filtered_high_mt,median_total_counts,median_genes,median_pct_mt
+2500,1474,1474,1026,0,0,8951.0,495.0,2.851956367492676

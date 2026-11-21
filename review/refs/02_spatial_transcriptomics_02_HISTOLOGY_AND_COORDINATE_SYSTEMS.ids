@@ -1,0 +1,13 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:anndata
+SW:numpy
+SW:pandas
+SW:geopandas
+SW:shapely
+SW:spatialdata

@@ -1,0 +1,6 @@
+Pipeline_Stage,CPU_Implementation,GPU_Implementation,CPU_Time_s,GPU_Time_s,Speedup_Fold
+1. Host-Device Transfer,System RAM Pageable,PCIe Gen5 DMA (64 GB/s),0.085,0.0035,24.3
+2. PCA / TruncatedSVD (50 PC),Scikit-Learn (64 Threads),cuML Tensor Core GEMM,42.500,0.3800,111.8
+3. k-NN Graph (k=30),HNSW / PyNNDescent,NVIDIA CAGRA (Warp Coalesced),28.200,0.9500,29.7
+4. Leiden Clustering,Leidenalg (C++ Engine),cuGraph Atomic Modularity,21.400,0.5200,41.2
+5. UMAP 2D Projection,UMAP-Learn (Parallel SGD),cuML UMAP (GPU SGD),35.800,0.4500,79.6

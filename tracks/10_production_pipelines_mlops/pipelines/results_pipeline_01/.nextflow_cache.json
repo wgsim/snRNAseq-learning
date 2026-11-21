@@ -1,0 +1,321 @@
+{
+  "d07f0d232da4603cf9f5669f463ef0a9": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "FastQC",
+      "output_file": "fastqc_Sample_01_PRAD_Primary.out",
+      "cells_retained": null,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "4dd3a253b80c7dbcfbd8b17c62d84812": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "FastQC",
+      "output_file": "fastqc_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": null,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "100a964dae5a540d6edad6f1d5886096": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "FastQC",
+      "output_file": "fastqc_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": null,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "c1f4f5ad89e9cc0aa51040406bc45071": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "FastQC",
+      "output_file": "fastqc_Sample_04_NEPC_Progression.out",
+      "cells_retained": null,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "0db00d7cd592cf24d4784cdc09cb2c0c": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "Demux",
+      "output_file": "demux_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "0ac73d43da28ed58f85b9bb281db0b77": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "Demux",
+      "output_file": "demux_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "9a1f647644e2b71e238299634d565352": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "Demux",
+      "output_file": "demux_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "f92a2cbf7be91573f79359d23d002ec9": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "Demux",
+      "output_file": "demux_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "27acb7f8b7019902a8487574637b5025": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "Spliced_Align",
+      "output_file": "spliced_align_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "9486031416804c741b775a26092741a7": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "Spliced_Align",
+      "output_file": "spliced_align_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "a71a5481a50639f778eeb4a681f544bd": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "Spliced_Align",
+      "output_file": "spliced_align_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "598770541c874005eef644916af97957": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "UMI_Dedup",
+      "output_file": "umi_dedup_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "de06d83e944847eac6feab838caeff26": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "UMI_Dedup",
+      "output_file": "umi_dedup_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "4b37a47a1acefd148edcc3f4e107b778": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "UMI_Dedup",
+      "output_file": "umi_dedup_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "7a862e0e44deab7d327810205b9a7558": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "Spliced_Align",
+      "output_file": "spliced_align_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 32,
+    "attempt": 2
+  },
+  "ec4b1a81940baf8df7c292d20bc6b8d6": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "Cell_Filter",
+      "output_file": "cell_filter_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "23e9568c71d4b713981159880e291ecb": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "Cell_Filter",
+      "output_file": "cell_filter_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "6877588e9f4881329449e4148412cc7e": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "Cell_Filter",
+      "output_file": "cell_filter_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "69fcdeb72b3d7acb10e4c366746676f9": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "UMI_Dedup",
+      "output_file": "umi_dedup_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "e46c0beb29076086a87380b8bdb8cf74": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "Normalization",
+      "output_file": "normalization_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "e142bbb4c8d89e1469a3e857ffef860d": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "Normalization",
+      "output_file": "normalization_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "f91a6b2f7dda7d42a3a92e0ecd1afacf": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "Normalization",
+      "output_file": "normalization_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "80c44971766aeaf5157dba2c1ed497e4": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "Cell_Filter",
+      "output_file": "cell_filter_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "f9d97e1824b2a8487a4f8f0fa920e8a4": {
+    "outputs": {
+      "sample_id": "Sample_01_PRAD_Primary",
+      "process": "Clustering",
+      "output_file": "clustering_Sample_01_PRAD_Primary.out",
+      "cells_retained": 3233,
+      "memory_used_gb": 14.2
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "92db96d7fd19298dd9384b5ffb8a620e": {
+    "outputs": {
+      "sample_id": "Sample_02_PRAD_Adjacent",
+      "process": "Clustering",
+      "output_file": "clustering_Sample_02_PRAD_Adjacent.out",
+      "cells_retained": 2140,
+      "memory_used_gb": 11.8
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "b026c052b670d157279508d3e45e8eb9": {
+    "outputs": {
+      "sample_id": "Sample_04_NEPC_Progression",
+      "process": "Clustering",
+      "output_file": "clustering_Sample_04_NEPC_Progression.out",
+      "cells_retained": 3746,
+      "memory_used_gb": 15.6
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "49de5fc96989c41dce666ee9073a9d7d": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "Normalization",
+      "output_file": "normalization_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "ddd74c1a953658426863a66b7ed0730f": {
+    "outputs": {
+      "sample_id": "Sample_03_CRPC_Metastasis",
+      "process": "Clustering",
+      "output_file": "clustering_Sample_03_CRPC_Metastasis.out",
+      "cells_retained": 6320,
+      "memory_used_gb": 28.4
+    },
+    "memory_gb": 16,
+    "attempt": 1
+  },
+  "49146785ee5905ccbbd14d37ed29b4a2": {
+    "outputs": {
+      "sample_id": "COHORT_SUMMARY",
+      "process": "Report",
+      "output_file": "report_COHORT_SUMMARY.out",
+      "cells_retained": 15440,
+      "memory_used_gb": 6.0
+    },
+    "memory_gb": 8,
+    "attempt": 1
+  }
+}

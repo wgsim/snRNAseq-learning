@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 01: Multiome & Single-Cell Epigenomics Foundations</title>
+<style>
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px 48px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 2rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.1rem; line-height: 1.65; color: #cbd5e1; margin-bottom: 12px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card h3 { font-size: 1.25rem; color: #fff; margin-bottom: 10px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.95rem; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.9rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.95em; }
+  
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 60px 40px;">
+      <span class="tag" style="font-size: 1rem; padding: 6px 16px;">Track 01 Masterclass • Part 1</span>
+      <div style="margin-top: 15px;"><span class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/00_MULTIOME_ROADMAP.md &amp; 01</span></div>
+      <h1 style="font-size: 2.8rem; color: var(--accent); margin: 20px 0 16px; font-weight: 800;">전립선암 10x Multiome 및 단일세포 후성유전학 기초</h1>
+      <h3 style="font-size: 1.4rem; color: #94a3b8; font-weight: 400; margin-bottom: 30px;">생물물리학적 기저, Tn5 태그멘테이션 화학, 업스트림 정렬 및 snATAC 특화 QC/LSI</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+        <p style="margin-bottom: 6px;">🎯 <strong>타깃 질환</strong>: 전립선 선암 (Primary PCa) &amp; 거세저항성 전이암 (mCRPC)</p>
+        <p style="margin-bottom: 6px;">🧬 <strong>핵심 모달리티</strong>: 10x Chromium Multiome (Paired snRNA + snATAC in the Same Nucleus)</p>
+        <p style="margin-bottom: 0;">🔬 <strong>학습 중점</strong>: 전사 인과성(Epigenetic Causality), Fragment 파일, TSS/Ladder QC, LSI 차원 축소</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Why Multiome alongside snRNA-seq? -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/00_MULTIOME_ROADMAP.md § 1. 전립선암 연구에서 왜 10x Multiome인가?</div>
+      <div class="slide-header">
+        <h2>1. 전사체를 넘어선 단일 핵 다중오믹스의 필요성</h2>
+        <span class="tag">Biological Rationale</span>
+      </div>
+      <p>단일 핵 전사체(snRNA)는 세포가 <strong>"현재 실행 중인 결과"</strong>만 보여줄 뿐, <strong>"왜 발현되었으며 앞으로 어떤 계통으로 전이할 잠재력을 지녔는지"</strong>를 설명하지 못합니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. Primed vs Repressed 판별</h3>
+          <p>mRNA가 검출되지 않는(Count = 0) 휴면 상태에서, 해당 유전자가 완전히 닫힌 침묵(Repressed) 상태인지, 즉각 반응 가능한 <strong>후성유전적 준비(Primed) 상태</strong>인지 명확히 구분합니다.</p>
+        </div>
+        <div class="card warning">
+          <h3>2. ADT 치료 압력과 인핸서 각인</h3>
+          <p>안드로겐 차단 요법(ADT)으로 <i>AR</i> mRNA 발현이 소실되더라도, 상류 650 kb 슈퍼인핸서 염색질 개방성이 보존되어 있으면 약제 저항성 재발의 잠재력이 유지됩니다.</p>
+        </div>
+        <div class="card highlight">
+          <h3>3. In-silico 매칭 오류 배제</h3>
+          <p>scRNA와 scATAC을 따로 시퀀싱해 알고리즘으로 합칠 때 생기는 <strong>가짜 세포 쌍 매칭(False-positive pairing)</strong>을 근본 차단하고, 동일 물리적 단일 핵에서 두 오믹스를 1:1로 포획합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Tn5 Transposase Chemistry & In-Nuclei Tagmentation -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/01_EPIGENOMICS_AND_TN5_CHEMISTRY.md § 2, 3</div>
+      <div class="slide-header">
+        <h2>2. 초활성 Tn5 트랜스포세이스 화학 및 핵 내 일괄 태그멘테이션</h2>
+        <span class="tag">Biophysical Mechanism</span>
+      </div>
+      <p>초활성(Hyperactive) Tn5 효소는 열린 염색질(Linker DNA &amp; NDR)에 선택적으로 침투하여 <strong>9-bp 엇갈림 절단과 동시에 시퀀싱 어댑터를 결찰</strong>합니다.</p>
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>Tn5 9-bp Staggered Cut &amp; Shift 보정</h3>
+          <ul>
+            <li>효소 호모다이머가 두 DNA 가닥을 정확히 <strong>9 bp 간격</strong>으로 비대칭 절단</li>
+            <li>절단 중심점 복원을 위해 <strong>양성 가닥(+)은 +4 bp, 음성 가닥(-)은 -5 bp 시프트</strong> 필수</li>
+            <li>뉴클레오솜으로 포장된 이질염색질은 크기 장애(Steric hindrance)로 절단 차단</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>Bulk In-Nuclei Tagmentation의 생화학</h3>
+          <ul>
+            <li>온화한 <strong>Digitonin(0.01%)</strong> 처리로 핵막 지질층에 미세 통로 개방</li>
+            <li>외부 Tn5 효소는 핵 내부로 자유 확산 침투하여 염색질을 절단</li>
+            <li>잘린 게놈 DNA는 핵 골격(Nuclear lamina)에 결합되어 핵 밖으로 유출되지 않음</li>
+          </ul>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="gradTn5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">10x Multiome: Tn5 트랜스포사제 태그멘테이션 및 단일 핵 동시 포획 메커니즘</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">Tn5 Homodimer Cut-and-Paste Transposition (9-bp Staggered Cut) ➔ 온전한 핵막 내 확산 ➔ Dual-barcoded Gel Bead 캡슐화</text>
+
+  <!-- Panel 1: Intact Nuclear Isolation -->
+  <g transform="translate(30, 70)">
+    <rect width="295" height="265" rx="10" fill="url(#gradCard1)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="147" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 초저온 핵 추출 &amp; 온전한 핵막 보존</text>
+
+    <!-- Schematic: Nuclear envelope with pore -->
+    <rect x="15" y="44" width="265" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="50" cy="70" r="18" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="50" y="74" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">Nucleus</text>
+    <path d="M 75 70 L 115 70" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,2"/>
+    <text x="125" y="65" fill="#34d399" font-size="10" font-weight="700">Lamin B 핵막 보존 (0.1% Lysis)</text>
+    <text x="125" y="80" fill="#94a3b8" font-size="9.5">핵공 복합체(NPC) 통한 효소 침투</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• 세포질 선택적 용해 (Cold Lysis):</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">세포막만 파괴하여 미토콘드리아 RNA 배제</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 진정염색질(Euchromatin) 접근성:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">느슨하게 열린 조절 부위만 효소 접촉 허용</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 이질염색질(Heterochromatin) 차단:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">고밀도 응축 영역의 비특이적 절단 방지</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="265" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="147" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">✓ 순수 단일 핵 무결성 100% 유지</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 330 200 L 350 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="350,195 360,200 350,205" fill="#818cf8"/>
+
+  <!-- Panel 2: Tn5 Transposition Mechanics -->
+  <g transform="translate(365, 70)">
+    <rect width="300" height="265" rx="10" fill="url(#gradCard1)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="150" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. Tn5 태그멘테이션 (9-bp Staggered Cut)</text>
+
+    <!-- Schematic: Tn5 Transposase Homodimer with Adapters -->
+    <rect x="15" y="44" width="270" height="52" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <ellipse cx="60" cy="70" rx="20" ry="14" fill="url(#gradTn5)" opacity="0.85"/>
+    <text x="60" y="74" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Tn5-Dimer</text>
+    <line x1="85" y1="64" x2="135" y2="64" stroke="#f43f5e" stroke-width="2"/>
+    <line x1="94" y1="76" x2="144" y2="76" stroke="#38bdf8" stroke-width="2"/>
+    <text x="155" y="66" fill="#f43f5e" font-size="9.5" font-weight="700">Read 1N</text>
+    <text x="155" y="80" fill="#38bdf8" font-size="9.5" font-weight="700">Read 2N (9-bp gap)</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• Cut-and-Paste Transposition:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">염색질 절단과 동시에 19-bp ME 어댑터 결찰</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 9-bp 지그재그 돌출 말단 (Staggered Cut):</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">양 가닥에서 9-bp 편차 절단 (분석 시 +4/-5bp 보정)</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 뉴클레오솜 간격 태깅 (Banding):</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">히스톤 옥타머 회피 ➔ 147-bp 주기적 단편 생성</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="270" height="22" rx="4" fill="#4338ca" fill-opacity="0.3"/>
+    <text x="150" y="250" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">✓ 전유전체 오픈 크로마틴 즉각적 어댑터 태깅</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 670 200 L 690 200" stroke="#34d399" stroke-width="2.5"/>
+  <polygon points="690,195 700,200 690,205" fill="#34d399"/>
+
+  <!-- Panel 3: Dual-Barcoded Gel Bead Encapsulation -->
+  <g transform="translate(705, 70)">
+    <rect width="265" height="265" rx="10" fill="url(#gradCard1)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="265" height="32" rx="10" fill="#34d399" fill-opacity="0.2"/>
+    <text x="132" y="22" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">3. 10x Next GEM 이중 바코딩</text>
+
+    <!-- Schematic: Gel bead with dual oligos -->
+    <rect x="15" y="44" width="235" height="52" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <circle cx="45" cy="70" r="16" fill="#10b981" fill-opacity="0.3" stroke="#34d399" stroke-width="1.5"/>
+    <text x="45" y="74" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">GelBead</text>
+    <text x="75" y="63" fill="#38bdf8" font-size="9.5" font-weight="600">Oligo A: Poly(dT) ➔ snRNA</text>
+    <text x="75" y="80" fill="#c084fc" font-size="9.5" font-weight="600">Oligo B: Spacer ➔ snATAC</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• 동일 핵(Same Cell) 1:1 결합:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">단일 유세포 액적 내 하나의 핵만 격리</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 공통 16-bp 10x 바코드 공유:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">RNA UMI와 ATAC 단편이 동일 식별자 획득</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 전사체와 후성유전체의 완벽 동기화:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">컴퓨팅 예측이 아닌 '실제 물리적 동시 계측'</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="235" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="132" y="250" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">✓ 진정한 멀티오믹스 단일 핵 융합</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 4: Upstream Processing & Fragment File Architecture -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/02_UPSTREAM_AND_FRAGMENTS.md § 1, 3</div>
+      <div class="slide-header">
+        <h2>3. 업스트림 정렬 및 Fragment 파일 아키텍처</h2>
+        <span class="tag">Data Architecture</span>
+      </div>
+      <p>단일 핵에서 생성된 GEX(snRNA)와 ATAC 라이브러리는 각각 독립 시퀀싱된 후, 변환 화이트리스트 테이블을 통해 단일 세포 ID로 통합됩니다.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>듀얼 라이브러리 구조 &amp; 정렬 엔진</h3>
+          <ul>
+            <li><strong>GEX</strong>: R1(28bp CB+UMI) + R2(cDNA) | <strong>ATAC</strong>: R1(50bp) + R2(16bp CB) + R3(50bp)</li>
+            <li><strong>Barcode Translation</strong>: 10x <code>737K-arc-v1.txt</code> 매핑으로 GEX/ATAC 바코드 1:1 통합</li>
+            <li><strong>엔진</strong>: 표준 <code>cellranger-arc</code> vs 접두사 트리 기반 10배 초고속 <code>Chromap</code></li>
+          </ul>
+        </div>
+        <div class="card accent">
+          <h3>Fragment 파일 (<code>fragments.tsv.gz</code>): 절대 표준</h3>
+          <ul>
+            <li>용량 100 GB에 달하는 BAM 대신, 중복을 제거한 <strong>순수 고유 단편 좌표(2~5 GB)</strong>만 보존</li>
+            <li><strong>5개 필수 컬럼</strong>: <code>chrom</code>, <code>chromStart(+4bp)</code>, <code>chromEnd(-5bp)</code>, <code>barcode</code>, <code>duplicate_count</code></li>
+            <li><strong>Tabix (<code>.tbi</code>)</strong> B-tree 인덱싱으로 특정 인핸서 영역을 <i>O</i>(1) 시간 내 즉각 질의</li>
+          </ul>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">snATAC-seq 데이터 구조: 5-컬럼 Fragment 파일 &amp; TSS 농축도(Enrichment) 검증</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">Tabix 인덱싱 고속 게놈 청킹 ➔ 전사시작점(TSS ±1kb) 8× 이상 피크 프로파일 vs 배경 잡음 QC</text>
+
+  <!-- Panel 1: Fragment File Format & Tabix -->
+  <g transform="translate(30, 70)">
+    <rect width="455" height="265" rx="10" fill="url(#gradCard2)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="455" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="227" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">A. 5-컬럼 단일 단편 파일 (fragments.tsv.gz) &amp; Tabix</text>
+
+    <!-- Code Block / Fragment Table -->
+    <rect x="15" y="44" width="425" height="85" rx="6" fill="#020617" stroke="#334155" stroke-width="1"/>
+    <text x="25" y="62" fill="#94a3b8" font-size="10" font-family="monospace">#chrom   chromStart  chromEnd    barcode             dup_count</text>
+    <text x="25" y="79" fill="#38bdf8" font-size="10.5" font-family="monospace">chrX     66901240    66901450    AAACAGCCAAGCT-1     3</text>
+    <text x="25" y="96" fill="#818cf8" font-size="10.5" font-family="monospace">chr8     127735100   127735310   AAACAGCCAAGCT-1     1</text>
+    <text x="25" y="113" fill="#34d399" font-size="10.5" font-family="monospace">chr10    87863200    87863410    TTTACTGAGCCTA-1     5</text>
+
+    <!-- Key Rules Bullets -->
+    <text x="15" y="150" fill="#cbd5e1" font-size="11" font-weight="600">• 0-based 반개방 좌표 &amp; Tn5 9-bp 절단점 보정:</text>
+    <text x="25" y="167" fill="#94a3b8" font-size="10.5">Tn5 중심 이동: +가닥은 +4bp, -가닥은 -5bp 정밀 시프트</text>
+
+    <text x="15" y="189" fill="#cbd5e1" font-size="11" font-weight="600">• barcode: snRNA-seq 16-bp 바코드와 100% 일치 매칭:</text>
+    <text x="25" y="206" fill="#94a3b8" font-size="10.5">단일 핵 식별자 일치로 전사체와 염색질 매트릭스 직접 결합</text>
+
+    <text x="15" y="228" fill="#cbd5e1" font-size="11" font-weight="600">• Tabix BGI 청킹 인덱스 (`tabix -p bed`):</text>
+    <text x="25" y="245" fill="#94a3b8" font-size="10.5">수십 GB 단편 파일에서 임의 유전체 윈도우를 O(log N) 탐색</text>
+
+    <!-- Bottom summary badge -->
+    <rect x="15" y="260" width="425" height="2" fill="#38bdf8" fill-opacity="0.3"/>
+  </g>
+
+  <!-- Panel 2: TSS Enrichment Profile & Nucleosome Banding -->
+  <g transform="translate(515, 70)">
+    <rect width="455" height="265" rx="10" fill="url(#gradCard2)" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="0" y="0" width="455" height="32" rx="10" fill="#10b981" fill-opacity="0.2"/>
+    <text x="227" y="22" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">B. 전사시작점(TSS) 농축도 및 뉴클레오솜 밴딩 QC</text>
+
+    <!-- Graph: TSS Profile Curve -->
+    <g transform="translate(25, 45)">
+      <rect width="210" height="90" rx="5" fill="#0f172a" stroke="#1e293b"/>
+      <!-- Axes -->
+      <line x1="20" y1="80" x2="195" y2="80" stroke="#475569" stroke-width="1"/>
+      <line x1="107" y1="15" x2="107" y2="80" stroke="#475569" stroke-dasharray="2,2"/>
+      <text x="107" y="88" text-anchor="middle" fill="#94a3b8" font-size="8.5">TSS</text>
+      <text x="35" y="88" text-anchor="middle" fill="#64748b" font-size="8">-2kb</text>
+      <text x="180" y="88" text-anchor="middle" fill="#64748b" font-size="8">+2kb</text>
+      <!-- TSS Sharp Peak -->
+      <path d="M 25 78 Q 80 77 95 60 Q 107 20 107 20 Q 107 20 119 60 Q 134 77 190 78" fill="none" stroke="#10b981" stroke-width="2.2"/>
+      <circle cx="107" cy="20" r="3.5" fill="#34d399"/>
+      <text x="115" y="24" fill="#34d399" font-size="9" font-weight="700">&gt; 8× Signal</text>
+      <line x1="20" y1="76" x2="195" y2="76" stroke="#f43f5e" stroke-dasharray="3,2"/>
+      <text x="150" y="73" fill="#f87171" font-size="7.5">1× Background</text>
+    </g>
+
+    <!-- Inset: Nucleosome Banding Info -->
+    <g transform="translate(250, 45)">
+      <rect width="190" height="90" rx="5" fill="#0f172a" stroke="#047857" stroke-width="1"/>
+      <text x="15" y="20" fill="#34d399" font-size="10.5" font-weight="700">뉴클레오솜 래더 주기성</text>
+      <text x="15" y="38" fill="#cbd5e1" font-size="9.5">• &lt; 100 bp : NFR (무핵소체 단편)</text>
+      <text x="15" y="55" fill="#cbd5e1" font-size="9.5">• ~200 bp : Mononucleosome</text>
+      <text x="15" y="72" fill="#cbd5e1" font-size="9.5">• ~400 bp : Dinucleosome</text>
+    </g>
+
+    <!-- Technical QC Standards -->
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• TSS 농축도 산출 공식:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">TSS 중심(±100bp) 평균 절단 수 / 외곽 플랭크(±1.5~2kb) 배경</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 엄격한 품질 필터 임계치 (QC Threshold):</text>
+    <text x="25" y="214" fill="#34d399" font-size="10.5">TSS Score &gt; 8.0 통과 (5.0 미만은 핵 용해 및 비특이 파편 탈락)</text>
+
+    <text x="15" y="236" fill="#cbd5e1" font-size="11" font-weight="600">• 최소 고유 단편 수 (Unique Fragments):</text>
+    <text x="25" y="253" fill="#94a3b8" font-size="10.5">핵당 최소 1,000 ~ 3,000개 이상의 유효 매핑 단편 요구</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 5: Non-Negotiable snATAC QC -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/03_SNATAC_QC_METRICS.md § 1, 2, 3</div>
+      <div class="slide-header">
+        <h2>4. snATAC 2대 절대 품질 관리(QC) 지표</h2>
+        <span class="tag">Quality Control</span>
+      </div>
+      <p>snATAC-seq에서는 단순히 "단편 수(Total fragments)"가 많다고 좋은 세포가 아닙니다. 터져 나온 나체 DNA 파편(Ghost debris)을 완벽히 걸러내야 합니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. TSS Enrichment Score</h3>
+          <p>전사시작점 중심부(±50 bp)의 절단 농축도를 외곽(±2,000 bp) 배경 잡음으로 나눈 <strong>신호 대 잡음비(S/N)</strong>.</p>
+          <p>• <strong>High Quality</strong>: ≥ 8.0 ~ 10.0<br>• <strong>Acceptable</strong>: ≥ 6.0<br>• <strong>Fail</strong>: &lt; 4.0 (폐기)</p>
+        </div>
+        <div class="card success">
+          <h3>2. 147-bp 뉴클레오솜 래더</h3>
+          <p>단편 길이 히스토그램에서 <strong>히스톤 8량체 보호 주기성</strong>을 검증:</p>
+          <p>• <strong>NFR</strong> (&lt; 100 bp): 전사인자 결합 부위<br>• <strong>Mono</strong> (~200 bp): 뉴클레오솜 1개<br>• <strong>Di</strong> (~400 bp): 뉴클레오솜 2개</p>
+        </div>
+        <div class="card highlight">
+          <h3>3. 미토콘드리아 DNA 제거</h3>
+          <p>mtDNA는 히스톤 보호막이 없는 <strong>100% 열린 나체 DNA</strong>이므로 세포질 유출 시 과절단되어 시퀀싱의 30~60%를 잠식합니다. <code>chrM</code> 단편은 분석 전 전량 필터링합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Pseudobulk MACS3 Peak Calling & Binary Matrix -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/04_PEAK_CALLING_AND_LSI.md § 1, 2, 3</div>
+      <div class="slide-header">
+        <h2>5. 슈도벌크 MACS3 피크 콜링과 이진화(Binarization) 원리</h2>
+        <span class="tag">Peak Calling &amp; Matrix</span>
+      </div>
+      <p>인간 세포는 2배체(Diploid)이므로 단일 세포 1개 좌위에서 신호는 (0, 1, 2)뿐입니다. 98% 이상의 결측률로 인해 개별 세포 단위 피크 콜링은 불가능합니다.</p>
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>슈도벌크(Pseudobulk) 풀링 &amp; MACS3</h3>
+          <ul>
+            <li>동일 세포 유형의 단일 핵 수백~수천 개 Fragment를 하나로 병합</li>
+            <li>수백만 개 리드로 통계적 검정력을 복원하여 <code>macs3 callpeak -f BEDPE -g hs --nomodel</code> 실행</li>
+            <li>각 클러스터 Summit을 기준으로 <strong>500 bp 고정 너비 비중복 컨센서스 피크 세트</strong> 확립 (15~25만 피크)</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>카운트 행렬의 이진화 (0 vs 1) 필수성</h3>
+          <ul>
+            <li>단일 핵에서 동일 피크에 단편이 1개 떨어진 것과 3개 떨어진 것은 <strong>생물학적 농도 차이가 아닌 단순 PCR 복제 잡음</strong>입니다.</li>
+            <li>염색질은 본질적으로 열림(1) 또는 닫힘(0)의 물리적 상태이므로, <code>X &gt; 0</code>인 값을 <strong>1로 이진화</strong>하여 기술적 증폭 노이즈를 완벽히 소거합니다.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Why LSI instead of PCA? -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/04_PEAK_CALLING_AND_LSI.md § 4, 5</div>
+      <div class="slide-header">
+        <h2>6. 왜 PCA 대신 LSI인가? TF-IDF와 SVD 기하학</h2>
+        <span class="tag">Dimensionality Reduction</span>
+      </div>
+      <p>98% 이상의 희소성을 갖는 이진 피크 행렬에 일반 PCA를 적용하면 거리가 왜곡됩니다. 자연어 처리(NLP)의 <strong>잠재 의미 인덱싱(LSI: TF-IDF + SVD)</strong>을 사용합니다.</p>
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>TF-IDF 변환의 이중 보정</h3>
+          <ul>
+            <li><strong>TF (Term Frequency)</strong>: 세포별 총 단편 수로 나누어 <strong>시퀀싱 깊이 편차 보정</strong></li>
+            <li><strong>IDF (Inverse Document Frequency)</strong>: 모든 세포에서 열리는 하우스키핑 프로모터 가중치는 억제하고, <strong>희귀 암 클론 특이적 인핸서 가중치는 극대화</strong></li>
+            <li><strong>Truncated SVD</strong>: 상위 30~50차원의 직교 잠재 다양체로 압축</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>LSI Component 1 깊이 상관성 점검 (필수)</h3>
+          <ul>
+            <li>LSI 1은 종종 기술적 총 단편 수(Sequencing Depth)와 <strong>극단적 상관관계(<i>r</i> &gt; 0.85)</strong>를 보임</li>
+            <li>LSI 1을 제거하지 않고 UMAP을 그리면 <strong>세포들이 단편 수 순서대로 긴 지렁이 모양 원호(Arc)로 일렬 왜곡</strong></li>
+            <li>상관계수 점검 후 <strong>Component 2~30만 선별 투입</strong>하여 생물학적 다양체 복원</li>
+          </ul>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">snATAC-seq 차원 축소: 잠재 의미 지수화(LSI = TF-IDF ➔ TruncatedSVD)</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">초고희소성(Sparsity &gt;98%) 이진화 피크 행렬 ➔ 정보 가중 TF-IDF ➔ SVD 잠재 다양체 및 Component 1 심도 편향 진단</text>
+
+  <!-- Panel 1: Binary Peak Matrix -->
+  <g transform="translate(30, 70)">
+    <rect width="290" height="265" rx="10" fill="url(#gradCard3)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="290" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="145" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 이진 피크 행렬 (Binarization)</text>
+
+    <!-- Schematic: Binary Matrix -->
+    <rect x="15" y="44" width="260" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <text x="25" y="64" fill="#38bdf8" font-size="10.5" font-family="monospace">Peak Matrix: A_ij ∈ {0, 1}</text>
+    <text x="25" y="82" fill="#94a3b8" font-size="9.5">1 = Open Chromatin, 0 = Inaccessible</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• 2배체(Diploid) 생물학적 한계:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">핵당 대립유전자는 최대 2카피 (카운트 왜곡 제거)</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 초고희소성 (Sparsity &gt; 98%):</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">10만 개 피크 중 대부분의 세포에서 0값 기록</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• PCR 중복 바이어스 배제:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">이진화로 PCR 오버앰플리피케이션 잡음 차단</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="260" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="145" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">50,000 ~ 150,000 Peaks × Nuclei</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 325 200 L 345 200" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="345,195 355,200 345,205" fill="#38bdf8"/>
+
+  <!-- Panel 2: TF-IDF Normalization -->
+  <g transform="translate(360, 70)">
+    <rect width="320" height="265" rx="10" fill="url(#gradCard3)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="160" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. TF-IDF 빈도-역문서 가중치</text>
+
+    <!-- Formulas -->
+    <rect x="15" y="44" width="290" height="60" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <text x="25" y="62" fill="#818cf8" font-size="10" font-family="monospace">TF_ij = A_ij / Σ_k A_ik (세포 점유율)</text>
+    <text x="25" y="78" fill="#34d399" font-size="10" font-family="monospace">IDF_j = log(1 + N_cells / Σ_i A_ij)</text>
+    <text x="25" y="94" fill="#fbbf24" font-size="10" font-family="monospace">TF-IDF_ij = TF_ij × IDF_j</text>
+
+    <!-- Bullets -->
+    <text x="15" y="124" fill="#cbd5e1" font-size="11" font-weight="600">• 자연어 처리(NLP) 알고리즘 응용:</text>
+    <text x="25" y="142" fill="#94a3b8" font-size="10.5">문서(세포) 내 희귀 단어(피크)의 정보 가치 증폭</text>
+
+    <text x="15" y="164" fill="#cbd5e1" font-size="11" font-weight="600">• 유비쿼터스 하우스키핑 피크 감쇠:</text>
+    <text x="25" y="182" fill="#94a3b8" font-size="10.5">모든 세포에서 열린 보편 피크는 IDF 패널티</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 희귀 암 아형 인핸서 정보 극대화:</text>
+    <text x="25" y="222" fill="#94a3b8" font-size="10.5">특정 전립선암 클론만의 조절 피크 가중치 상승</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="290" height="22" rx="4" fill="#4338ca" fill-opacity="0.3"/>
+    <text x="160" y="250" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">✓ 정보 엔트로피 기반 정규화 완료</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 685 200 L 705 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="705,195 715,200 705,205" fill="#818cf8"/>
+
+  <!-- Panel 3: TruncatedSVD & LSI Component 1 Warning -->
+  <g transform="translate(720, 70)">
+    <rect width="250" height="265" rx="10" fill="url(#gradCard3)" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="0" y="0" width="250" height="32" rx="10" fill="#ef4444" fill-opacity="0.2"/>
+    <text x="125" y="22" text-anchor="middle" fill="#f87171" font-size="13" font-weight="700">3. TruncatedSVD &amp; LSI-1 경고</text>
+
+    <!-- Warning Box -->
+    <rect x="12" y="44" width="226" height="60" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+    <text x="20" y="62" fill="#fca5a5" font-size="10" font-weight="700">⚠️ LSI Component 1 시퀀싱 심도 편향</text>
+    <text x="20" y="78" fill="#f87171" font-size="9.5" font-family="monospace">r(LSI_1, Total_Peaks) &gt; 0.90</text>
+    <text x="20" y="93" fill="#cbd5e1" font-size="9">기술적 UMI 수와 직결된 가짜 축!</text>
+
+    <!-- Bullets -->
+    <text x="12" y="124" fill="#cbd5e1" font-size="11" font-weight="600">• LSI Component 1 진단 필수:</text>
+    <text x="20" y="142" fill="#fca5a5" font-size="10">피크 총수와의 피어슨 상관계수 r 측정</text>
+
+    <text x="12" y="164" fill="#cbd5e1" font-size="11" font-weight="600">• 표준 전처리 솔루션:</text>
+    <text x="20" y="182" fill="#34d399" font-size="10">r &gt; 0.90 시 Component 1 과감히 배제 (Drop)</text>
+    <text x="20" y="197" fill="#34d399" font-size="10">또는 회귀 모델(Linear Regression)로 보정</text>
+
+    <text x="12" y="219" fill="#cbd5e1" font-size="11" font-weight="600">• 2~30번 컴포넌트 활용:</text>
+    <text x="20" y="237" fill="#94a3b8" font-size="10">진정한 생물학적 후성유전 다양체 확보</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 8: Part 1 Summary & Transition -->
+  <div class="slide">
+    <div class="slide-content" style="text-align: center;">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/00 ~ 04 총괄 마일스톤 및 05 연결</div>
+      <div class="slide-header" style="justify-content: center;">
+        <h2>Part 1 학습 요약 및 Part 2 예고</h2>
+      </div>
+      <div style="text-align: left; max-width: 850px; margin: 0 auto;">
+        <div class="card accent" style="margin-bottom: 20px;">
+          <h3>Part 1 핵심 달성 마일스톤</h3>
+          <p>✔ 후성유전체 원리와 Tn5 9-bp 엇갈림 절단 및 핵 내 일괄 태그멘테이션 화학 이해</p>
+          <p>✔ 듀얼 시퀀싱 리드 레이아웃 및 5-컬럼 Tabix 인덱싱 Fragment 파일 마스터</p>
+          <p>✔ TSS Enrichment Score (&ge; 6.0) 및 147 bp 뉴클레오솜 사다리 기반 고순도 단일 핵 선별</p>
+          <p>✔ 슈도벌크 MACS3 피크 콜링, 500 bp 이진 컨센서스 행렬 구축 및 LSI Component 1 깊이 편향 보정</p>
+        </div>
+        <div class="card highlight">
+          <h3>Part 2 예고: WNN 멀티모달 융합, 원격 인핸서 및 전사조절망 (eGRN)</h3>
+          <p>MuData 컨테이너 ──► WNN 양방향 가중치 통합 ──► 3D 염색질 루핑 &amp; <i>AR</i> 650-kb 슈퍼인핸서 링크 ──► TF 풋프린팅 ──► SCENIC+ Triplet 확장 전사조절망 복원</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">◀ 이전 (Prev)</button>
+  <div id="counter">Slide 1 / 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} / ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

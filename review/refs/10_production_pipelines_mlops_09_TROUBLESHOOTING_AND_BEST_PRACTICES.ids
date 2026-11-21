@@ -1,0 +1,13 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:nextflow
+SW:docker
+SW:onnxruntime
+SW:fastapi
+SW:scanpy
+SW:scvi-tools

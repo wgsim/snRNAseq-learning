@@ -1,0 +1,54 @@
+{
+  "pipeline": "01_infercnv_and_copykat_aneuploidy_pipeline",
+  "cohort": {
+    "n_total_cells": 1200,
+    "n_normal_diploid": 600,
+    "n_aneuploid_tumor": 600,
+    "n_subclone_A": 350,
+    "n_subclone_B": 250,
+    "n_genes": 1000,
+    "n_chromosomes": 23
+  },
+  "infercnv_smoothing": {
+    "moving_average_window": 101,
+    "reference_baseline_cells": 600,
+    "bounds": [
+      -3.0,
+      3.0
+    ]
+  },
+  "hmm_parameters": {
+    "n_states": 6,
+    "state_labels": [
+      "0x_CompleteLoss",
+      "1x_Loss",
+      "2x_Neutral",
+      "3x_Gain",
+      "4x_DoubleGain",
+      "5x_HighAmp"
+    ],
+    "state_means": [
+      -1.5,
+      -0.6,
+      0.0,
+      0.4,
+      0.8,
+      1.3
+    ],
+    "self_transition_probability": 0.985
+  },
+  "copykat_gmm_evaluation": {
+    "TP": 259,
+    "TN": 509,
+    "FP": 91,
+    "FN": 341,
+    "accuracy": 0.64,
+    "sensitivity": 0.4317,
+    "specificity": 0.8483,
+    "precision": 0.74,
+    "f1_score": 0.5453,
+    "auroc": 0.7056,
+    "diploid_mean_variance": 0.05985,
+    "aneuploid_mean_variance": 0.0938
+  }
+}

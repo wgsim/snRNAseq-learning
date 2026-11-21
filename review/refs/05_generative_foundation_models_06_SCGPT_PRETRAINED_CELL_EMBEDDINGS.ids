@@ -1,0 +1,12 @@
+[cited]
+PMID:38409223  # Cui 2024 Nat Methods (scGPT)
+PMID:40251685  # Kedzierska 2025 Genome Biol
+DOI:10.1109/CVPR.2018.00781  # Kendall, Gal, Cipolla 2018 CVPR (Crossref lists authors as Cipolla R, Gal Y, Kendall A)
+
+[evidence]
+
+
+[software]
+SW:numpy
+SW:scanpy
+SW:torch

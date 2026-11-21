@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrPurple05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="17" font-weight="700">scGPT 다중 작업 자기지도 사전학습 &amp; 하류 과제 미세조정(Fine-Tuning)</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">마스킹된 발현값 예측(GEP) + 셀 임베딩 기반 값 예측(GEPC) ➔ 대규모 파운데이션 백본 ➔ 세포 주석·배치 보정·유전자 조절망</text>
+
+  <!-- Panel 1: Pre-training Objectives -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 자기지도 사전학습 (Pre-training)</text>
+
+    <!-- Schematic: MGM and GEP -->
+    <rect x="14" y="42" width="267" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    
+    <g transform="translate(22, 48)">
+      <!-- Input with Mask -->
+      <g transform="translate(0, 4)">
+        <rect x="0" y="0" width="38" height="24" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <text x="19" y="15" text-anchor="middle" fill="#38bdf8" font-size="7.5">AR</text>
+
+        <!-- Masked Token -->
+        <rect x="42" y="0" width="48" height="24" rx="2" fill="#f43f5e" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="66" y="15" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">[MASK]</text>
+
+        <rect x="94" y="0" width="38" height="24" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <text x="113" y="15" text-anchor="middle" fill="#38bdf8" font-size="7.5">FOXA1</text>
+      </g>
+
+      <!-- Target Prediction -->
+      <g transform="translate(142, 0)">
+        <rect x="0" y="0" width="105" height="32" rx="3" fill="#0369a1" fill-opacity="0.4" stroke="#38bdf8" stroke-width="1"/>
+        <text x="52" y="13" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">GEP 손실:</text>
+        <text x="52" y="25" text-anchor="middle" fill="#34d399" font-size="7">Target = KLK3 발현값</text>
+      </g>
+
+      <!-- GEP Continuous regression -->
+      <g transform="translate(0, 36)">
+        <rect x="0" y="0" width="248" height="20" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+        <text x="124" y="14" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">GEPC 손실: 셀 임베딩 기반 값 회귀 (MSE)</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 마스킹된 발현값 예측 (GEP):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">유전자 토큰은 주어지고 가려진 발현값을 문맥으로 예측</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 셀 임베딩 기반 값 예측 (GEPC):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">세포 임베딩이 발현 크기 정보를 담도록 유도</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 다중 작업 결합 목적함수:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">ℒ_pretrain = ℒ_GEP + λ ℒ_GEPC (+ ECS 등)</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">데이터: 수천만 정상 인간 세포 (공개 체크포인트)</text>
+  </g>
+
+  <!-- Panel 2: Pre-trained Foundation Backbone -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad05)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 대규모 트랜스포머 백본 구조</text>
+
+    <!-- Schematic: Stack of Transformer Blocks -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+    
+    <g transform="translate(25, 48)">
+      <!-- Layer 1 -->
+      <rect x="0" y="38" width="265" height="18" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+      <text x="132" y="50" text-anchor="middle" fill="#94a3b8" font-size="7">Layer 1: 어휘 임베딩 및 기초 조절 결합</text>
+
+      <!-- Middle dots -->
+      <text x="132" y="32" text-anchor="middle" fill="#c084fc" font-size="9">· · · (12 인코더 레이어) · · ·</text>
+
+      <!-- Layer 12 -->
+      <rect x="0" y="2" width="265" height="18" rx="3" fill="#581c87" fill-opacity="0.5" stroke="#c084fc" stroke-width="1.2"/>
+      <text x="132" y="14" text-anchor="middle" fill="#c084fc" font-size="7.5" font-weight="700">Layer 12: 고차원 세포 운명 및 전사 상태 공간 (d=512)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 생물학적 유전체 문법 (Biological Syntax) 체득:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">조직 간 불변 전사 규칙 및 세포 주기, 대사 경로 규칙 내재화</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 모델 파라미터 스케일링:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">BERT/GPT형 트랜스포머 구조를 단일세포에 전이</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• Zero-Shot 일반화 능력:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">제로샷 활용은 가능하나 신뢰성은 벤치마크로 검증 필요</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#c084fc" font-size="9.5" font-weight="600">아키텍처: FlashAttention 탑재 12계층 트랜스포머 인코더</text>
+  </g>
+
+  <!-- Panel 3: Downstream Adaptation & Transfer Tasks -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 하류 과제 전이 &amp; 미세조정(PEFT)</text>
+
+    <!-- Schematic: Task branching -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    
+    <g transform="translate(25, 48)">
+      <!-- Task 1: Annotation -->
+      <rect x="0" y="0" width="80" height="26" rx="3" fill="#047857" fill-opacity="0.4" stroke="#34d399" stroke-width="1"/>
+      <text x="40" y="11" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">과제 1: 세포 주석</text>
+      <text x="40" y="21" text-anchor="middle" fill="#cbd5e1" font-size="6">Linear Head</text>
+
+      <!-- Task 2: Integration -->
+      <rect x="90" y="0" width="80" height="26" rx="3" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="1"/>
+      <text x="130" y="11" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">과제 2: 배치 통합</text>
+      <text x="130" y="21" text-anchor="middle" fill="#cbd5e1" font-size="6">Batch Token 교정</text>
+
+      <!-- Task 3: In Silico Perturbation -->
+      <rect x="180" y="0" width="85" height="26" rx="3" fill="#d97706" fill-opacity="0.4" stroke="#fbbf24" stroke-width="1"/>
+      <text x="222" y="11" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">과제 3: 가상 섭동</text>
+      <text x="222" y="21" text-anchor="middle" fill="#cbd5e1" font-size="6">디지털 녹아웃 예측</text>
+
+      <!-- LoRA / Adapter badge -->
+      <rect x="35" y="34" width="195" height="20" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+      <text x="132" y="47" text-anchor="middle" fill="#c084fc" font-size="7.5" font-weight="700">⚡ LoRA 어댑터 미세조정: 어댑터 파라미터만 갱신</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 파라미터 효율적 미세조정 (PEFT / LoRA):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">기반 백본을 동결하고 저순위 어댑터만 조정하여 단일 GPU로 완수</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 소량 표본 전이 학습 (Few-Shot Transfer):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">라벨 세포가 100개 미만인 희귀 암 서브클론도 정밀 분류</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전자 조절망(GRN) 동적 추출:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">파인튜닝 전후 어텐션 맵 차이를 분석해 약물 작용 표적 동정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">효율성: 풀 미세조정 대비 학습 파라미터·메모리 절감</text>
+  </g>
+</svg>

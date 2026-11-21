@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">Cell2location: 계층적 베이지안 포아송 공간 디컨볼루션 모델</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">snRNA-seq 참조 서명 + Visium 스팟 카운트 ➔ 포아송 관측 모델 ➔ 세포형별 절대 풍부도(Absolute Cell Abundance) 사후 추론</text>
+
+  <!-- Panel 1: Reference Signatures & Spatial Input -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 입력: 참조 시그니처 &amp; 공간 카운트</text>
+
+    <!-- Schematic: Matrix reference g_ef and spot counts d_se -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- snRNA Matrix -->
+    <rect x="25" y="52" width="45" height="54" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <text x="47" y="74" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">snRNA</text>
+    <text x="47" y="86" text-anchor="middle" fill="#cbd5e1" font-size="8">g_ef (GxF)</text>
+    <!-- Plus symbol -->
+    <text x="80" y="82" fill="#cbd5e1" font-size="14" font-weight="700">+</text>
+    <!-- Spatial Spot Matrix -->
+    <rect x="95" y="52" width="45" height="54" fill="#16a34a" fill-opacity="0.3" stroke="#4ade80" stroke-width="1"/>
+    <text x="117" y="74" text-anchor="middle" fill="#4ade80" font-size="8.5" font-weight="700">Visium</text>
+    <text x="117" y="86" text-anchor="middle" fill="#cbd5e1" font-size="8">d_se (SxE)</text>
+    <text x="155" y="66" fill="#38bdf8" font-size="10" font-weight="700">Track 00 전립선 참조</text>
+    <text x="155" y="80" fill="#cbd5e1" font-size="9">8대 세포형 (AR+, t-NEPC,</text>
+    <text x="155" y="93" fill="#cbd5e1" font-size="9">DNPC, CAF, CD8 T, 골아세포)</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• snRNA-seq 음이항(NB) 회귀:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">세포형 f별 유전자 e의 기저 발현 프로파일 g_ef</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 다세포 스팟 혼합 모델링:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">단일 스팟에 중첩된 5~15개 세포의 선형 합성</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 배치 효과 및 민감도 차이 보정:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">단일 핵 분리 vs 조직 포획 기술 간 스케일 차</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">입력: 유전자 발현 시그니처 행렬</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 330 200 L 345 200" stroke="#38bdf8" stroke-width="2"/>
+  <polygon points="345,196 350,200 345,204" fill="#38bdf8"/>
+
+  <!-- Panel 2: Hierarchical Bayesian Poisson Model -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f59e0b" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="700">2. 계층적 베이지안 생성 모델 (NB)</text>
+
+    <!-- Schematic: Generative formula box -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <text x="150" y="62" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">Y_sg ~ NB(μ_sg, α_g)</text>
+    <text x="150" y="80" text-anchor="middle" fill="#4ade80" font-size="9.5" font-family="monospace">μ_sg = (m_g Σ_k w_sk g_kg + s_eg) · y_s</text>
+    <text x="150" y="98" text-anchor="middle" fill="#94a3b8" font-size="8.5">w_sk: 세포수 | s_eg: 가산 배경 | y_s: 스팟 검출 민감도</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 음이항(NB) 카운트 우도(Likelihood):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">비정규화 원시 카운트 데이터 직접 모델링</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 비특이적 신호 분리 (가산 배경 s_eg):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">세포 외 유리 mRNA 및 비특이적 결합 오염 격리</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 변분 추론 (Variational Inference):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">ELBO 최대화를 통해 사후 분포 파라미터 최적화</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">핵심: 절대 세포 수 w_sk 추정 (사전 의존)</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 655 200 L 670 200" stroke="#f59e0b" stroke-width="2"/>
+  <polygon points="670,196 675,200 670,204" fill="#f59e0b"/>
+
+  <!-- Panel 3: Spatial Abundance Map & q05 Filtering -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#4ade80" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#4ade80" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">3. 절대 세포 풍부도 지도 (Abundance)</text>
+
+    <!-- Schematic: Spatial grid heatmaps -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#16a34a" stroke-width="1"/>
+    <!-- Heatmap 1: AR+ Cancer Core -->
+    <rect x="30" y="52" width="45" height="45" rx="4" fill="#be123c" fill-opacity="0.7"/>
+    <text x="52" y="77" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">AR+ Core</text>
+    <!-- Heatmap 2: CAF rim -->
+    <rect x="85" y="52" width="45" height="45" rx="4" fill="#d97706" fill-opacity="0.7"/>
+    <text x="107" y="77" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">CAF Rim</text>
+    <!-- Heatmap 3: TLS T cells -->
+    <rect x="140" y="52" width="45" height="45" rx="4" fill="#0284c7" fill-opacity="0.7"/>
+    <text x="162" y="77" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">CD8+ TLS</text>
+    <text x="215" y="68" fill="#4ade80" font-size="9.5" font-weight="700">q05 분위수</text>
+    <text x="215" y="82" fill="#cbd5e1" font-size="8.5">보수적 추정</text>
+    <text x="215" y="94" fill="#94a3b8" font-size="8">위양성 95% 억제</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 5% 사후 분위수(q05) 기준 채택:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">신뢰도 95% 이상으로 존재하는 세포 수만 시각화</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 전립선암 아형 공간 배타성 규명:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">AR+ 선암 코어 vs t-NEPC/DNPC 침윤 변연부</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 골전이 골아세포 틈새(Niche) 정량화:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">파골세포/골아세포와의 물리적 상호작용 검증</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#16a34a" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">결과: 스팟별 고신뢰도 단일세포 아형 밀도 지도</text>
+  </g>
+</svg>

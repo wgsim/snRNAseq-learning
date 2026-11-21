@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "model_name": "SingleCell_Prostate_Cancer_Subtype_Classifier",
+  "description": "Deep Neural Network for 5-Class Prostate Cancer Single-Cell Phenotyping (AR+ Adeno vs t-NEPC)",
+  "timestamp_utc": "2026-10-21T23:28:56Z",
+  "regulatory_context": {
+    "standard": "Illustrative example supporting selected 21 CFR Part 11-style controls (NOT a compliance certification)",
+    "audit_trail_integrity": "SHA-256 checksums for change detection (no electronic signature, access control, or validated audit trail)",
+    "signoff_role": "Placeholder (no electronic signature implemented)",
+    "checksum_change_detection": true
+  },
+  "artifacts": {
+    "model_weights_file": "model_weights.json",
+    "weights_sha256": "f986f12b99459d3b311b2b45c04d326e5855cf44299906df076c7ddf96642464",
+    "training_dataset_sha256": "c33509a67126934b58deffe4e67798b482c2dc9efde499da2b014a113ce10944",
+    "architecture": {
+      "input_features": 100,
+      "hidden_layers": [
+        24
+      ],
+      "output_classes": 5,
+      "activation": "ReLU",
+      "output_activation": "Softmax",
+      "loss_function": "Categorical Cross-Entropy"
+    }
+  },
+  "hyperparameters": {
+    "learning_rate": 0.06,
+    "epochs": 15,
+    "batch_size": 32,
+    "optimizer": "Mini-batch SGD",
+    "random_seed": 42
+  },
+  "runtime_environment": {
+    "python_version": "3.8.16",
+    "os_platform": "macOS-27.0.1-arm64-arm-64bit",
+    "processor": "arm",
+    "framework": "Pure Python Standard Library (Zero External Dependencies)"
+  },
+  "performance_evaluation": {
+    "accuracy": 0.995,
+    "macro_f1": 0.9946,
+    "per_class": {
+      "AR+_Adeno": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 30
+      },
+      "t-NEPC": {
+        "precision": 1.0,
+        "recall": 0.9722,
+        "f1_score": 0.9859,
+        "support": 36
+      },
+      "Luminal_Epi": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 45
+      },
+      "Basal_Epi": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 51
+      },
+      "TME_Stroma": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1_score": 0.987,
+        "support": 38
+      }
+    },
+    "confusion_matrix": [
+      [
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        35,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        45,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        51,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        38
+      ]
+    ]
+  }
+}

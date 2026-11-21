@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="visiumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="hdGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="xeniumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">공간 전사체 기술별 해상도 &amp; 캡처 아키텍처 비교</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">NGS 시퀀싱 기반 다세포 스팟(Visium) vs 초고해상도 비닝(Visium HD) vs 단일 분자 광학 이미징(Xenium In Situ)</text>
+
+  <!-- Panel 1: 10x Visium Standard -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 10x Visium (55 µm Spot)</text>
+
+    <!-- Schematic: 55um circular spot with mixed cells -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Outer glass boundary -->
+    <circle cx="65" cy="79" r="28" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,2"/>
+    <text x="65" y="60" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">55 µm Spot</text>
+    <!-- Multi-cells inside spot -->
+    <circle cx="55" cy="75" r="7" fill="#f43f5e" fill-opacity="0.75"/>
+    <circle cx="72" cy="72" r="6" fill="#c084fc" fill-opacity="0.75"/>
+    <circle cx="60" cy="89" r="6.5" fill="#4ade80" fill-opacity="0.75"/>
+    <circle cx="77" cy="87" r="5.5" fill="#f59e0b" fill-opacity="0.75"/>
+    <text x="110" y="66" fill="#f43f5e" font-size="10" font-weight="700">다세포 혼합체 (Mixture)</text>
+    <text x="110" y="80" fill="#cbd5e1" font-size="9.5">스팟당 5~15개 이종 세포 포함</text>
+    <text x="110" y="94" fill="#94a3b8" font-size="9">Poly-dT 포획 프로브 (전장 전사체)</text>
+
+    <!-- Technical Specs -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 스팟 직경 및 간격(Pitch):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">Ø 55 µm, 중심 간 거리 100 µm (공백 존재)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 캡처 방식 &amp; 스루풋:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">6.5 x 6.5 mm 영역 내 약 5,000개 스팟</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 계산적 필수 단계:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">Cell2location 등 참조 기반 디컨볼루션 필수</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">장점: 무편향 전장 유전체 (Whole Transcriptome)</text>
+  </g>
+
+  <!-- Panel 2: 10x Visium HD -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#4ade80" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#4ade80" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">2. Visium HD (2 µm Bins)</text>
+
+    <!-- Schematic: Continuous gapless 2um raster -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#16a34a" stroke-width="1"/>
+    <!-- 2um grid raster -->
+    <g transform="translate(35, 52)">
+      <rect x="0" y="0" width="54" height="54" fill="#0f172a" stroke="#4ade80" stroke-width="1.2"/>
+      <line x1="18" y1="0" x2="18" y2="54" stroke="#4ade80" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <line x1="36" y1="0" x2="36" y2="54" stroke="#4ade80" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <line x1="0" y1="18" x2="54" y2="18" stroke="#4ade80" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <line x1="0" y1="36" x2="54" y2="36" stroke="#4ade80" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <!-- Cell overlay on 2um grid -->
+      <circle cx="27" cy="27" r="16" fill="#4ade80" fill-opacity="0.25" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="27" y="30" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">Single Cell</text>
+    </g>
+    <text x="110" y="66" fill="#4ade80" font-size="10" font-weight="700">연속 격자 (Continuous Grid)</text>
+    <text x="110" y="80" fill="#cbd5e1" font-size="9.5">빈 공간 없는 2 µm x 2 µm 마이크로 타일</text>
+    <text x="110" y="94" fill="#94a3b8" font-size="9">8 µm / 16 µm 동적 비닝 및 단일 세포 정렬</text>
+
+    <!-- Technical Specs -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 해상도 및 비닝 체계:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">기본 2 µm 격자 ➔ 8 µm (단일 세포급) 집계</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 정보 손실 최소화:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">스팟 간 공백(Gap) 제거 ➔ 미세 침윤 경계 보존</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 전사체 포획 효율:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">FFPE 조직 호환 및 1,800만+ 개 2 µm 피처</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#16a34a" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">장점: 전장 전사체 + 준단일세포(Sub-cellular) 경계</text>
+  </g>
+
+  <!-- Panel 3: 10x Xenium In Situ -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. Xenium In Situ (&lt;0.1 µm)</text>
+
+    <!-- Schematic: Subcellular puncta with cell boundary -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#9333ea" stroke-width="1"/>
+    <!-- Cell membrane and nucleus -->
+    <path d="M 30 75 Q 40 52 65 55 Q 90 60 85 88 Q 65 105 40 95 Z" fill="#9333ea" fill-opacity="0.15" stroke="#c084fc" stroke-width="1.2"/>
+    <ellipse cx="58" cy="76" rx="12" ry="9" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="1"/>
+    <!-- Individual RNA puncta -->
+    <circle cx="56" cy="74" r="1.8" fill="#f43f5e"/>
+    <circle cx="62" cy="78" r="1.8" fill="#f43f5e"/>
+    <circle cx="45" cy="68" r="1.8" fill="#4ade80"/>
+    <circle cx="72" cy="65" r="1.8" fill="#4ade80"/>
+    <circle cx="75" cy="85" r="1.8" fill="#f59e0b"/>
+    <circle cx="42" cy="88" r="1.8" fill="#f59e0b"/>
+    <text x="110" y="66" fill="#c084fc" font-size="10" font-weight="700">단일 분자 광학 디코딩</text>
+    <text x="110" y="80" fill="#cbd5e1" font-size="9.5">개별 mRNA 분자 (x, y, z) 정밀 좌표</text>
+    <text x="110" y="94" fill="#94a3b8" font-size="9">Padlock 프로브 + 회전환 증폭(RCA)</text>
+
+    <!-- Technical Specs -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 광학 회절 한계 해상도:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">&lt; 0.1 µm 수준의 세포내 국소화 (Subcellular)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 타깃 유전자 패널:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">300 ~ 5,000+ 개 큐레이션 타깃 (고감도 검출)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 세포 경계 분할(Segmentation):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">DAPI/Cellpose/Baysor 기반 단일 세포 할당</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#9333ea" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">장점: 100% 진정한 단일 세포 + 세포내 구획화</text>
+  </g>
+</svg>

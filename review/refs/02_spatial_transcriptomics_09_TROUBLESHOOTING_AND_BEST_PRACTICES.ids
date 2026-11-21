@@ -1,0 +1,11 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:36203011  # He S 2022 Nat Biotechnol: High-plex imaging of RNA and proteins at subcellular resolution in fixed tissue by spatial mole  [근거: SCI-02-061; ledger L39]
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy

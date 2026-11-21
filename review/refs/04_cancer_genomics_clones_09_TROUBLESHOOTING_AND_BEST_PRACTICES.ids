@@ -1,0 +1,10 @@
+[cited]
+PMID:3447015  # "Saitou-Nei", L121  [Saitou N 1987 Mol Biol Evol]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:pandas
+SW:scikit-learn

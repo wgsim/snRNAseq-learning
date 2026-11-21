@@ -1,0 +1,13 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:anndata
+SW:cellxgene-census
+SW:numpy
+SW:pyarrow
+SW:scipy
+SW:tiledbsoma

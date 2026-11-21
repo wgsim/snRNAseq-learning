@@ -1,0 +1,48 @@
+{
+  "pipeline": "02_xenium_subcellular_niche_and_signaling_pipeline",
+  "total_cells_analyzed": 1485,
+  "cell_types": {
+    "Tumor_AR_Pos": 670,
+    "CAF": 445,
+    "CD8_T": 178,
+    "Osteoblast": 119,
+    "Endothelial": 73
+  },
+  "niches": {
+    "Niche_1 (Tumor_AR_Pos-dominant)": 643,
+    "Niche_0 (CAF-dominant)": 531,
+    "Niche_2 (CD8_T-dominant)": 184,
+    "Niche_3 (Osteoblast-dominant)": 127
+  },
+  "top_signaling_axes": [
+    {
+      "biological_axis": "CAF_to_Tumor_EMT",
+      "sender_type": "CAF",
+      "receiver_type": "Tumor_AR_Pos",
+      "flux_percentage": 55.66708343047403
+    },
+    {
+      "biological_axis": "CAF_to_Tumor_EMT",
+      "sender_type": "Tumor_AR_Pos",
+      "receiver_type": "Tumor_AR_Pos",
+      "flux_percentage": 29.667960464351307
+    },
+    {
+      "biological_axis": "CAF_to_Tumor_EMT",
+      "sender_type": "CAF",
+      "receiver_type": "CAF",
+      "flux_percentage": 11.598342484171912
+    },
+    {
+      "biological_axis": "CAF_to_Tumor_EMT",
+      "sender_type": "Tumor_AR_Pos",
+      "receiver_type": "CAF",
+      "flux_percentage": 0.9644927900675596
+    }
+  ],
+  "limitations": [
+    "Niche labels are data-driven (cluster id + dominant cell type); no biological niche names are assigned.",
+    "Synthetic cohort has 5 cell types only (no osteoclasts, B cells or DCs); it does not reproduce the 4 niches in the docs.",
+    "RANKL (TNFSF11->TNFRSF11A) axis top flux is Tumor->Tumor (79.4%) with no osteoclast type; it is not evidence of osteoclast activation."
+  ]
+}

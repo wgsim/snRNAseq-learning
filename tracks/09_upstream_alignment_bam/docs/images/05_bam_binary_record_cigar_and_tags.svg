@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">BAM 바이너리 정렬 레코드 구조: CIGAR 연산자 및 단일세포 전용 태그</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">BGZF 블록 압축 ➔ CIGAR 정렬 기하학(M, N, I, D, S) ➔ 단일세포 식별 태그(CB, UB, GN, RE)</text>
+
+  <!-- Panel 1: BAM Binary Architecture -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. BAM 바이너리 레코드 메모리 구조</text>
+
+    <!-- Binary Field Layout -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(22, 48)">
+      <rect x="0" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="27" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">refID (4B)</text>
+
+      <rect x="60" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="87" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">POS (4B)</text>
+
+      <rect x="120" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="147" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">MAPQ (1B)</text>
+
+      <rect x="180" y="0" width="75" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="217" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">FLAG (2B)</text>
+
+      <rect x="0" y="24" width="80" height="18" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="40" y="36" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">CIGAR (4B × k)</text>
+
+      <rect x="85" y="24" width="80" height="18" rx="2" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="125" y="36" text-anchor="middle" fill="#cbd5e1" font-size="7">SEQ (4-bit pac)</text>
+
+      <rect x="170" y="24" width="85" height="18" rx="2" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="212" y="36" text-anchor="middle" fill="#cbd5e1" font-size="7">QUAL (Phred)</text>
+
+      <rect x="0" y="48" width="255" height="20" rx="2" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+      <text x="127" y="62" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">Optional Tags (CB, UB, GN, RE ... 가변 길이)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• BGZF (Blocked GNU Zip Format) 압축:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">64 KB 독립 압축 블록으로 BAI 인덱스 기반 O(1) 랜덤 점프</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 바이너리 정렬 압축 효율:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">SAM 텍스트 대비 용량 75% 절감 및 역직렬화 가속</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 0-based 게놈 좌표계 변환:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">SAM(1-based)에서 BAM 바이너리 저장 시 0-based로 인덱싱</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">인덱싱된 대용량 단일세포 전사체 표준 바이너리 포맷</text>
+  </g>
+
+  <!-- Panel 2: CIGAR String Operators -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">2. CIGAR 연산자 해부 (M, N, I, D, S)</text>
+
+    <!-- CIGAR Schema -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#34d399" font-size="8" font-weight="700">M (Alignment Match):</text>
+      <text x="105" y="12" fill="#cbd5e1" font-size="7.5">염기 일치 또는 단일 미스매치 (소비: Read/Ref)</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="8" font-weight="700">N (Skipped Region):</text>
+      <text x="105" y="28" fill="#fbbf24" font-size="7.5" font-weight="700">스플라이스 인트론 건너뜀 (소비: Ref only)</text>
+
+      <text x="0" y="44" fill="#38bdf8" font-size="8" font-weight="700">I / D (InDel):</text>
+      <text x="105" y="44" fill="#cbd5e1" font-size="7.5">삽입(소비: Read) / 결실(소비: Ref)</text>
+
+      <text x="0" y="60" fill="#f43f5e" font-size="8" font-weight="700">S (Soft Clipping):</text>
+      <text x="105" y="60" fill="#cbd5e1" font-size="7.5">불일치 말단 서열 (소비: Read only)</text>
+
+      <!-- Example CIGAR -->
+      <line x1="0" y1="67" x2="250" y2="67" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="78" fill="#a7f3d0" font-size="7.5" font-weight="700">예시: 45M 12400N 55M ➔ 12.4kb 인트론을 건너뛴 스플라이싱</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• RNA-seq 스플라이싱의 핵심 연산자 N:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">게놈 상 수십만 bp 인트론을 건너뛰는 전사체 정렬 표현</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Soft Clip(S)을 통한 융합 절단점 검출:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">유전자 융합(Fusion) 경계에서 비정상 정렬 분할점 식별</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 정렬 길이 계산 산술 규칙:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">End_POS = Start_POS + sum(M, D, N, = , X)</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">정렬 갭과 엑손-엑손 스플라이싱 기하학을 정밀 압축 기술</text>
+  </g>
+
+  <!-- Panel 3: Single-Cell Specific Tags -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. 단일세포 전용 옵션 태그 (CB, UB, GN, RE)</text>
+
+    <!-- Tags Detail Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#34d399" font-size="8" font-weight="700">CB:Z:</text>
+      <text x="45" y="12" fill="#cbd5e1" font-size="7.5">오류 교정된 세포 바코드 (Corrected Cell Barcode)</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="8" font-weight="700">UB:Z:</text>
+      <text x="45" y="28" fill="#cbd5e1" font-size="7.5">오류 교정된 분자 식별자 (Corrected UMI)</text>
+
+      <text x="0" y="44" fill="#38bdf8" font-size="8" font-weight="700">GN:Z:</text>
+      <text x="45" y="44" fill="#cbd5e1" font-size="7.5">HUGO 공식 유전자 심볼 (Gene Symbol e.g. AR, ERG)</text>
+
+      <text x="0" y="60" fill="#c084fc" font-size="8" font-weight="700">RE:A:</text>
+      <text x="45" y="60" fill="#cbd5e1" font-size="7.5">영역 유형 (E: Exonic, I: Intronic, N: Intergenic)</text>
+
+      <!-- Raw vs Corrected -->
+      <line x1="0" y1="67" x2="250" y2="67" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="78" fill="#94a3b8" font-size="7.5">원시(Raw) 태그: CR:Z (Raw CB), UR:Z (Raw UMI)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 리드에 다차원 메타데이터 바인딩:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">정렬 위치 + 세포 소속 + 분자 원점 + 유전자 주석 결합</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 세포별/유전자별 실시간 스트리밍 그룹화:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">BAM 전체를 스캔하며 CB/UB 기반 인메모리 행렬 축적</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 스플라이스 아이소폼 및 유전변이 마이닝:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">특정 세포 서브클론의 스플라이스 접합부 1-리드 단위 추출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">세포 수준의 발현 및 유전체 변이 추적을 가능케 하는 핵심 태그</text>
+  </g>
+</svg>

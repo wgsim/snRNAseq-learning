@@ -1,0 +1,11 @@
+[cited]
+PMID:27571553  # Haghverdi 2016 Nat Methods
+DOI:10.1016/j.acha.2006.04.006  # Coifman & Lafon 2006
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:scanpy

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" width="1000" height="340" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">inferCNV 원리: 전립선 상피세포 염색체 이수성(Aneuploidy) 판별</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">정상 2배체 기질/면역 세포(Reference) vs 악성 선암 클론(Malignant) 염색체 복제수 변이</text>
+
+  <!-- Chromosome Coordinates Axis -->
+  <g transform="translate(60, 75)">
+    <rect x="0" y="0" width="880" height="25" rx="4" fill="#1e293b"/>
+    <text x="40" y="17" fill="#94a3b8" font-size="11">Chr 1</text>
+    <text x="130" y="17" fill="#94a3b8" font-size="11">Chr 3</text>
+    <text x="250" y="17" fill="#94a3b8" font-size="11">Chr 8</text>
+    <text x="360" y="17" fill="#94a3b8" font-size="11">Chr 10</text>
+    <text x="470" y="17" fill="#94a3b8" font-size="11">Chr 13</text>
+    <text x="590" y="17" fill="#94a3b8" font-size="11">Chr 17</text>
+    <text x="720" y="17" fill="#94a3b8" font-size="11">Chr 21</text>
+    <text x="820" y="17" fill="#94a3b8" font-size="11">Chr X</text>
+  </g>
+
+  <!-- Diploid Reference Track -->
+  <g transform="translate(60, 115)">
+    <text x="0" y="25" fill="#38bdf8" font-size="12" font-weight="700">2배체 정상 대조군</text>
+    <text x="0" y="42" fill="#94a3b8" font-size="10">(T세포, 혈관내피세포)</text>
+    <rect x="150" y="10" width="730" height="35" rx="4" fill="#0f172a" stroke="#334155"/>
+    <line x1="150" y1="27" x2="880" y2="27" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,2"/>
+    <text x="515" y="32" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600">중립 복제수 상태 (Relative Ratio = 1.0, 정상 2배체)</text>
+  </g>
+
+  <!-- Malignant Prostate Clone Track -->
+  <g transform="translate(60, 185)">
+    <text x="0" y="25" fill="#f43f5e" font-size="12" font-weight="700">악성 선암 클론</text>
+    <text x="0" y="42" fill="#94a3b8" font-size="10">(Malignant Luminal)</text>
+    <rect x="150" y="10" width="730" height="75" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1"/>
+    
+    <!-- Neutral baseline -->
+    <line x1="150" y1="47" x2="880" y2="47" stroke="#475569" stroke-width="1"/>
+    
+    <!-- 8p Deletion -->
+    <rect x="330" y="47" width="40" height="25" fill="#38bdf8" fill-opacity="0.8"/>
+    <text x="350" y="85" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">8p Del</text>
+    
+    <!-- 8q Amplification (MYC) -->
+    <rect x="375" y="18" width="45" height="29" fill="#f43f5e" fill-opacity="0.8"/>
+    <text x="397" y="14" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="700">8q Gain(MYC)</text>
+    
+    <!-- 10q Deletion (PTEN) -->
+    <rect x="440" y="47" width="50" height="25" fill="#38bdf8" fill-opacity="0.8"/>
+    <text x="465" y="85" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">10q Del(PTEN)</text>
+    
+    <!-- 13q Deletion (RB1) -->
+    <rect x="520" y="47" width="45" height="25" fill="#38bdf8" fill-opacity="0.8"/>
+    <text x="542" y="85" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">13q Del(RB1)</text>
+
+    <!-- 17p Deletion (TP53) -->
+    <rect x="620" y="47" width="35" height="25" fill="#38bdf8" fill-opacity="0.8"/>
+    <text x="637" y="85" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700">17p Del(TP53)</text>
+    
+    <!-- Xq Amplification (AR in mCRPC) -->
+    <rect x="830" y="18" width="40" height="29" fill="#f43f5e" fill-opacity="0.8"/>
+    <text x="850" y="14" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="700">AR Amp</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(250, 300)">
+    <rect x="0" y="0" width="18" height="12" fill="#f43f5e"/>
+    <text x="25" y="10" fill="#cbd5e1" font-size="11">염색체 영역 증폭 (Gain / Amplification)</text>
+    <rect x="270" y="0" width="18" height="12" fill="#38bdf8"/>
+    <text x="295" y="10" fill="#cbd5e1" font-size="11">염색체 영역 결손 (Loss / Deletion)</text>
+  </g>
+</svg>

@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">inferCNV: 유전체 좌표 기반 평활화 &amp; 6-상태 HMM 분절화 워크플로우</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">염색체 위치 정렬 ➔ 2배체 기저선 차감 ➔ 100-유전자 이동평균 ➔ 6-상태 은닉 마르코프 모델(HMM) 비터비 분절</text>
+
+  <!-- Panel 1: Ordering & Baseline Subtraction -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 좌표 정렬 &amp; 정상 기저선 차감</text>
+
+    <!-- Schematic: Chromosome Tracks & Subtraction -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    
+    <!-- Chromosome blocks -->
+    <g transform="translate(25, 52)">
+      <rect x="0" y="0" width="40" height="18" rx="2" fill="#334155"/>
+      <text x="20" y="12" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 1</text>
+      <rect x="44" y="0" width="36" height="18" rx="2" fill="#1e293b"/>
+      <text x="62" y="12" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 2</text>
+      <text x="90" y="12" fill="#64748b" font-size="10">···</text>
+      <rect x="105" y="0" width="32" height="18" rx="2" fill="#334155"/>
+      <text x="121" y="12" text-anchor="middle" fill="#94a3b8" font-size="8">Chr 8</text>
+      <text x="146" y="12" fill="#64748b" font-size="10">···</text>
+      <rect x="160" y="0" width="28" height="18" rx="2" fill="#334155"/>
+      <text x="174" y="12" text-anchor="middle" fill="#94a3b8" font-size="8">Chr X</text>
+    </g>
+
+    <!-- Formula Subtraction Box -->
+    <g transform="translate(25, 78)">
+      <rect x="0" y="0" width="250" height="30" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="125" y="19" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-family="monospace">log2(E_tumor + 1) - log2(E_normal_ref + 1)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 유전체 물리적 좌표 정렬:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">GENCODE 주석 기준 전사 시작점(TSS) 순 정렬</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 참조 2배체 기저선 (Normal Ref):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">T/B 림프구, 내피세포, 정상 기질 세포 풀링 기준선</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 유전자별 평균 발현 표준화:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">시퀀싱 깊이(Depth) 및 라이브러리 크기 인자 보정</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">출력: 정상 대조군 대비 상대적 log2 발현 배율 행렬</text>
+  </g>
+
+  <!-- Panel 2: Moving Average Smoothing -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. 100-유전자 이동평균 평활화</text>
+
+    <!-- Schematic: Raw Noisy vs Smoothed Signal -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Baseline zero -->
+      <line x1="0" y1="32" x2="250" y2="32" stroke="#475569" stroke-width="1" stroke-dasharray="2,2"/>
+      
+      <!-- Raw noisy signal (grey) -->
+      <polyline points="5,32 15,10 25,48 35,5 45,40 55,18 65,52 75,22 85,38 95,12 105,45 115,20 125,10 135,15 145,12 155,50 165,55 175,48 185,58 195,50 205,32 215,30 225,34 235,32"
+        fill="none" stroke="#64748b" stroke-width="1" stroke-opacity="0.6"/>
+
+      <!-- 100-gene moving window highlight box -->
+      <rect x="100" y="5" width="60" height="52" fill="#34d399" fill-opacity="0.15" stroke="#34d399" stroke-width="1" stroke-dasharray="2,2"/>
+      <text x="130" y="62" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">100-gene Window</text>
+
+      <!-- Smoothed signal (cyan line) -->
+      <polyline points="5,32 50,30 90,20 120,15 145,15 160,52 195,52 215,32 245,32"
+        fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 단일세포 전사체 드롭아웃 극복:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">개별 유전자의 고빈도 영점(Zero-count) 노이즈 여과</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 유전체 연관 신호대잡음비(SNR) 극대화:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">인접 유전자 집합의 복제수 공유 물리학 반영</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 동적 염색체 경계 처리 (Centromere Clamping):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">염색체 완(Arm) 간 신호 오염 방지 경계 절단</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">윈도우 규격: 표준 101 유전자 (Default span: 100 genes)</text>
+  </g>
+
+  <!-- Panel 3: 6-State HMM & Viterbi -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. 6-상태 HMM &amp; 비터비 분절화</text>
+
+    <!-- Schematic: 6 discrete states -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+
+    <!-- State Badges -->
+    <g transform="translate(25, 50)">
+      <!-- State 1: 0x Loss -->
+      <rect x="0" y="0" width="36" height="24" rx="3" fill="#be123c"/>
+      <text x="18" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">0x Del</text>
+      <text x="18" y="21" text-anchor="middle" fill="#fecdd3" font-size="6.5">-1.5</text>
+
+      <!-- State 2: 1x Loss -->
+      <rect x="42" y="0" width="36" height="24" rx="3" fill="#f43f5e"/>
+      <text x="60" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">1x Loss</text>
+      <text x="60" y="21" text-anchor="middle" fill="#fecdd3" font-size="6.5">-0.6</text>
+
+      <!-- State 3: 2x Neutral -->
+      <rect x="84" y="0" width="36" height="24" rx="3" fill="#475569"/>
+      <text x="102" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">2x Neut</text>
+      <text x="102" y="21" text-anchor="middle" fill="#cbd5e1" font-size="6.5">0.0</text>
+
+      <!-- State 4: 3x Gain -->
+      <rect x="126" y="0" width="36" height="24" rx="3" fill="#0284c7"/>
+      <text x="144" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">3x Gain</text>
+      <text x="144" y="21" text-anchor="middle" fill="#bae6fd" font-size="6.5">+0.4</text>
+
+      <!-- State 5: 4x Gain -->
+      <rect x="168" y="0" width="36" height="24" rx="3" fill="#3b82f6"/>
+      <text x="186" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">4x Gain</text>
+      <text x="186" y="21" text-anchor="middle" fill="#bfdbfe" font-size="6.5">+0.8</text>
+
+      <!-- State 6: 5x Amp -->
+      <rect x="210" y="0" width="40" height="24" rx="3" fill="#d97706"/>
+      <text x="230" y="11" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">5x+ Amp</text>
+      <text x="230" y="21" text-anchor="middle" fill="#fef3c7" font-size="6.5">+1.3</text>
+
+      <!-- Viterbi Decoding Track -->
+      <g transform="translate(0, 32)">
+        <text x="0" y="18" fill="#94a3b8" font-size="8">Viterbi 경로:</text>
+        <rect x="52" y="8" width="50" height="12" fill="#475569" rx="2"/>
+        <text x="77" y="17" text-anchor="middle" fill="#fff" font-size="7">2x Neutral</text>
+
+        <rect x="104" y="8" width="60" height="12" fill="#f43f5e" rx="2"/>
+        <text x="134" y="17" text-anchor="middle" fill="#fff" font-size="7">1x Loss (10q)</text>
+
+        <rect x="166" y="8" width="84" height="12" fill="#0284c7" rx="2"/>
+        <text x="208" y="17" text-anchor="middle" fill="#fff" font-size="7">3x Gain (8q MYC)</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 6단계 유전체 복제수 이산화 (Discretization):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">0x(호모결손)부터 5x+(초고도 증폭)까지 모델링</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 전이 확률 행렬 (Self-Transition ~0.98):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">인접 유전자 간 동일 복제 상태 유지 관성 부여</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 비터비(Viterbi) 동적 계획법 최적화:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">전체 전사체에서 최대 사후 우도 경로를 역추적 탐색</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#7e22ce" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">최종 결과: 단일세포별 정밀 CNA 블록 분절화 지도 완성</text>
+  </g>
+</svg>

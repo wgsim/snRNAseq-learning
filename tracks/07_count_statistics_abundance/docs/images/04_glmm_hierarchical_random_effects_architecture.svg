@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrPurple04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">2단계 계층적 일반화 선형 혼합 모델(GLMM) &amp; NEBULA 가속 기하학</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">세포 수준 고정 효과(Covariates) + 공여자 수준 무작위 효과(Random Effects) + 블록-대각 정보 행렬 가속</text>
+
+  <!-- Panel 1: Hierarchical Formulation -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 계층적 2단계 수식 아키텍처</text>
+
+    <!-- Schematic: Formula block -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <rect x="5" y="5" width="240" height="26" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="125" y="22" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">log(μ_ic) = log(S_c) + X_c^T β + u_i</text>
+
+      <text x="35" y="45" fill="#34d399" font-size="7">Y_ic ~ NB(μ_ic, ϕ)</text>
+      <text x="145" y="45" fill="#fbbf24" font-size="7">u_i ~ N(0, σ²_donor)</text>
+      <text x="125" y="58" text-anchor="middle" fill="#94a3b8" font-size="6.5">i: Donor ID, c: Single Cell ID, S_c: Sequencing Depth</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포 수준 고정 효과 (Fixed Effects β):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">약물 반응군(Responder), 세포주기 점수, 미토콘드리아 %</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 공여자 무작위 절편 (Random Intercept u_i):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자 간 기저 전사체 편차 및 유전적 배경 차이 흡수</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 오프셋(Offset)을 통한 깊이 보정:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">세포별 총 유전자 발현량 log(S_c)를 계수 1로 고정하여 정규화</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포 수준 연속 공변량 보정과 환자 통계 엄밀성의 결합</text>
+  </g>
+
+  <!-- Panel 2: Cell-within-Donor Nested Hierarchy Tree -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 공여자-세포 내포 계층 트리</text>
+
+    <!-- Schematic: Tree of Donors to Cells -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Root Cohort -->
+      <circle cx="140" cy="8" r="6" fill="#38bdf8"/>
+      <text x="140" y="7" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">C</text>
+
+      <!-- Branches to Donors -->
+      <line x1="140" y1="14" x2="60" y2="28" stroke="#475569" stroke-width="1"/>
+      <line x1="140" y1="14" x2="140" y2="28" stroke="#475569" stroke-width="1"/>
+      <line x1="140" y1="14" x2="220" y2="28" stroke="#475569" stroke-width="1"/>
+
+      <rect x="35" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="60" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor 1 (u_1)</text>
+
+      <rect x="115" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="140" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor 2 (u_2)</text>
+
+      <rect x="195" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="220" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor M (u_M)</text>
+
+      <!-- Branches to Single Cells -->
+      <line x1="60" y1="40" x2="45" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="60" y1="40" x2="75" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="45" cy="54" r="3" fill="#34d399"/>
+      <circle cx="75" cy="54" r="3" fill="#34d399"/>
+
+      <line x1="140" y1="40" x2="125" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="140" y1="40" x2="155" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="125" cy="54" r="3" fill="#34d399"/>
+      <circle cx="155" cy="54" r="3" fill="#34d399"/>
+
+      <line x1="220" y1="40" x2="205" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="220" y1="40" x2="235" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="205" cy="54" r="3" fill="#34d399"/>
+      <circle cx="235" cy="54" r="3" fill="#34d399"/>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 분산 분해 원리 (Variance Partitioning):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">σ²_total = σ²_donor (환자간) + σ²_cell (세포간) + 샷노이즈</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 동일 환자 세포의 잠재 상관성 흡수:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">무작위 효과 u_i를 통해 환자 내 세포 간 유사도 완벽 분리</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 의사벌크가 평균화로 잃는 정보 보존:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">개별 세포의 상태(미세 이질성, 아형 비율)를 직접 활용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">환자 간 이질성이 높은 면역 세포 및 종양 클론 분석의 최적해</text>
+  </g>
+
+  <!-- Panel 3: NEBULA Block-Diagonal Speedup -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">3. NEBULA 블록 대각 정보 행렬 가속</text>
+
+    <!-- Schematic: Dense vs Block-Diagonal Hessian -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Dense Hessian (standard glmm) -->
+      <rect x="15" y="8" width="46" height="46" rx="2" fill="#1e293b" stroke="#f43f5e" stroke-width="1.2"/>
+      <path d="M 18 12 L 58 50 M 18 50 L 58 12" stroke="#f43f5e" stroke-width="0.8"/>
+      <text x="38" y="62" text-anchor="middle" fill="#f43f5e" font-size="6">Dense O(N³)</text>
+
+      <!-- Versus Arrow -->
+      <line x1="75" y1="31" x2="105" y2="31" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrPurple04)"/>
+      <text x="90" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.5">NEBULA</text>
+
+      <!-- Block-Diagonal Matrix -->
+      <rect x="120" y="8" width="55" height="46" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+      <rect x="123" y="11" width="13" height="11" fill="#34d399"/>
+      <rect x="140" y="25" width="13" height="11" fill="#34d399"/>
+      <rect x="158" y="40" width="13" height="11" fill="#34d399"/>
+      <text x="147" y="62" text-anchor="middle" fill="#34d399" font-size="6">Block-Diag O(N)</text>
+
+      <text x="215" y="28" fill="#34d399" font-size="8" font-weight="700">100x ~ 1000x</text>
+      <text x="215" y="40" fill="#cbd5e1" font-size="6.8">Speedup!</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 전통적 GLMM 역행렬 계산 병목:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">N_cells × N_cells 조밀 헤시안 역행렬 계산으로 수 시간 소요</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• NEBULA 블록 대각 구조 분해:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자별 그룹화를 통해 피셔 정보 행렬 I(β,u)를 대각 블록화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 셔먼-모리슨-우드베리(SMW) 공식:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">선형 시간 O(M·m²) 닫힌 형태 역행렬로 유전자당 밀리초 달성</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#c084fc" font-size="9.2" font-weight="600">수십만 세포 코호트에서 전유전체(20,000개) 실시간 적합 가능</text>
+  </g>
+</svg>

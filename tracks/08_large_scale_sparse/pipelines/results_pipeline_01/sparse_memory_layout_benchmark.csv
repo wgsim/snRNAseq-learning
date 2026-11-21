@@ -1,0 +1,15 @@
+Metric,Value,Unit,Interpretation
+COO_Memory,28.35,MB,3 x NNZ x 4B triplet overhead
+CSR_Memory,19.09,MB,Compressed row pointer layout
+CSC_Memory,18.90,MB,Compressed column pointer layout
+Dense_Memory,190.73,MB,"Full 50,000 x 1,000 float32 matrix"
+Compression_Ratio,9.99,fold,Dense to CSR memory footprint saving
+Row_Slice_CSR_Time,0.156,ms,"2,000 cells O(1) pointer slice"
+Row_Slice_CSC_Time,105.037,ms,"2,000 cells full column scan"
+Row_Slice_CSR_Speedup,673.6,fold,CSR row slicing acceleration factor
+Col_Slice_CSC_Time,0.005,ms,50 genes O(1) pointer slice
+Col_Slice_CSR_Time,156.332,ms,50 genes full row scan
+Col_Slice_CSC_Speedup,32785.2,fold,CSC column slicing acceleration factor
+SpMV_Runtime,216.526,ms,50k x 1k sparse matrix-vector product
+SpMV_Throughput,0.023,GFLOPS,Effective sparse computational throughput
+FLOP_Reduction,20.2,fold,Arithmetic FLOPs avoided vs dense

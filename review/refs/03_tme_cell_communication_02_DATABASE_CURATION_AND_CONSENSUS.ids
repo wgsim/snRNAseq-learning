@@ -1,0 +1,13 @@
+[cited]
+PMID:35680885  # Dimitrov 2022 Nat Commun
+PMID:22247279  # Kolde 2012 Bioinformatics (RRA)
+PMID:32196115  # Cabello-Aguilar 2020 NAR (SingleCellSignalR/LRdb)
+
+[evidence]
+
+
+[software]
+SW:liana
+SW:matplotlib
+SW:pandas
+SW:scanpy

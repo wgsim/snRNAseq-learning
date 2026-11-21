@@ -1,0 +1,16 @@
+[cited]
+PMID:34594043  # "Dann et al. 2022 (Milo)", L62  [Dann E 2022 Nat Biotechnol]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:milor
+SW:numpy
+SW:scanpy
+SW:dplyr
+SW:matplotlib
+SW:pandas
+SW:patchwork
+SW:scater
+SW:singlecellexperiment

@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="curveGrad01" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">포아송(Poisson) vs 음이항(Negative Binomial) 과대산포와 전사 파열 기하학</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">평균-분산 불일치(Var &gt; Mean) ➔ 전사 파열(Transcriptional Bursting) ➔ 감마-포아송 계층 모델(Var = μ + α·μ²)</text>
+
+  <!-- Panel 1: Poisson Model & Limitations -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 포아송 모델의 한계 (Poisson Model)</text>
+
+    <!-- Schematic: Poisson PMF Curve -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Axes -->
+      <line x1="15" y1="58" x2="245" y2="58" stroke="#475569" stroke-width="1"/>
+      <line x1="15" y1="58" x2="15" y2="8" stroke="#475569" stroke-width="1"/>
+      <!-- Narrow Poisson PMF bell -->
+      <path d="M 25 58 Q 65 57 85 40 Q 115 5 130 5 Q 145 5 170 42 Q 195 58 235 58" fill="none" stroke="#38bdf8" stroke-width="2"/>
+      <line x1="130" y1="58" x2="130" y2="8" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2"/>
+      <circle cx="130" cy="5" r="3.5" fill="#38bdf8"/>
+      <text x="135" y="16" fill="#38bdf8" font-size="7.5" font-weight="700">μ = 10 (Mean)</text>
+      <text x="200" y="25" fill="#94a3b8" font-size="7">Var = μ = 10</text>
+      <text x="200" y="37" fill="#fbbf24" font-size="7">Fano Factor = 1</text>
+      <text x="50" y="66" fill="#64748b" font-size="6.5">Count (Y)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 기술적 샷 노이즈(Shot Noise)의 가정:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">P(Y=k) = (λ^k · e^(-λ)) / k! (무작위 분자 포획)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 등분산성 제약 (Equidispersion):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">E[Y] = Var(Y) = λ (분산이 평균과 동일해야 함)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 실제 단일세포 전사체의 실패:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">생물학적 이질성으로 인해 분산이 평균의 수십 배 상회</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">위험: 포아송 가정 시 p-값 허위 축소 및 위양성 폭발</text>
+  </g>
+
+  <!-- Panel 2: Negative Binomial & Transcriptional Bursting -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 음이항 분포와 전사 파열 동역학</text>
+
+    <!-- Schematic: Bursting & Overdispersed Curve -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Promoter state diagram -->
+      <rect x="5" y="5" width="48" height="22" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="29" y="19" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">OFF</text>
+      <path d="M 53 10 Q 68 5 83 10" stroke="#fbbf24" stroke-width="1.2" fill="none" marker-end="url(#arrAmber01)"/>
+      <text x="68" y="5" text-anchor="middle" fill="#fbbf24" font-size="6.5">k_on</text>
+      <path d="M 83 22 Q 68 27 53 22" stroke="#94a3b8" stroke-width="1.2" fill="none" marker-end="url(#arrCyan01)"/>
+      <text x="68" y="32" text-anchor="middle" fill="#94a3b8" font-size="6.5">k_off</text>
+      <rect x="83" y="5" width="48" height="22" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <text x="107" y="19" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">ON</text>
+
+      <!-- Broad curve comparison -->
+      <line x1="150" y1="58" x2="265" y2="58" stroke="#475569" stroke-width="1"/>
+      <!-- Poisson curve (dashed) -->
+      <path d="M 160 58 Q 190 20 205 10 Q 220 20 240 58" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <!-- Negative Binomial (broad with heavy tail and zero peak) -->
+      <path d="M 152 20 Q 165 42 185 45 Q 215 48 260 58" fill="none" stroke="#fbbf24" stroke-width="2"/>
+      <text x="180" y="12" fill="#38bdf8" font-size="6.5">Poisson</text>
+      <text x="215" y="38" fill="#fbbf24" font-size="6.8" font-weight="700">NB (Overdispersed)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 감마-포아송 혼합 (Gamma-Poisson):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Y ~ NB(μ, α) ⟺ Y|λ ~ Poisson(λ), λ ~ Gamma(θ, μ/θ)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이차항 과대산포 공식 (Variance Equation):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">Var(Y) = μ + α·μ² = μ + μ² / θ (α: 산포, θ: 형상 모수)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 전사 파열 기전 (Transcriptional Bursting):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">프로모터 ON/OFF 전이로 인한 폭발적 mRNA 방출 모형화</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">단일세포 카운트 데이터링의 표준 통계 분포 (edgeR/sctransform)</text>
+  </g>
+
+  <!-- Panel 3: Empirical Mean-Variance Geometry -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 단일세포 평균-분산 기하학</text>
+
+    <!-- Schematic: Log(Mean) vs Log(Var) Scatter -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Axes -->
+      <line x1="20" y1="58" x2="255" y2="58" stroke="#475569" stroke-width="1"/>
+      <line x1="20" y1="58" x2="20" y2="8" stroke="#475569" stroke-width="1"/>
+      <text x="20" y="5" fill="#64748b" font-size="6.5">log(Var)</text>
+      <text x="240" y="66" fill="#64748b" font-size="6.5">log(Mean)</text>
+
+      <!-- Poisson Line y=x -->
+      <line x1="25" y1="53" x2="160" y2="15" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3"/>
+      <text x="95" y="42" fill="#38bdf8" font-size="6.5">Var = Mean (Shot Noise)</text>
+
+      <!-- NB Quadratic Trend Line -->
+      <path d="M 25 53 Q 120 40 230 10" fill="none" stroke="#34d399" stroke-width="2"/>
+      <text x="165" y="16" fill="#34d399" font-size="6.8" font-weight="700">Var = μ + α·μ²</text>
+
+      <!-- Data Dots -->
+      <circle cx="50" cy="46" r="2" fill="#94a3b8"/>
+      <circle cx="80" cy="38" r="2" fill="#94a3b8"/>
+      <circle cx="110" cy="32" r="2" fill="#94a3b8"/>
+      <circle cx="140" cy="24" r="2" fill="#94a3b8"/>
+      <circle cx="180" cy="16" r="2.5" fill="#fbbf24"/>
+      <!-- HVG outlier dots -->
+      <circle cx="195" cy="8" r="3" fill="#f43f5e"/>
+      <circle cx="215" cy="6" r="3" fill="#f43f5e"/>
+      <text x="215" y="19" fill="#f43f5e" font-size="6.5" font-weight="700">HVGs (AR, SYP)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 생물학적 변동 계수 (BCV):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">BCV = sqrt(α) = sqrt(Var - μ) / μ (순수 생물학적 편차)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 2계층 분산 지배 원리:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">저발현: 기술적 샷 노이즈 지배 / 고발현: 생물학적 변동 지배</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 고변동성 유전자(HVG) 선별:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">음이항 추세선을 유의하게 상회하는 유전자만 생물학적 가치</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">결론: 과대산포 모델링 없이는 차등발현 검정의 유의성 왜곡</text>
+  </g>
+</svg>

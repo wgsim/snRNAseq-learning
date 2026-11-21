@@ -1,0 +1,191 @@
+id,owner,dim,location,confidence,status,note
+ENG-001,eng,F,tracks/07_count_statistics_abundance/docs/06_TRAJECTORY_DIFFERENTIAL_EXPRESSION.md:46,Confirmed,fixed,"07 ch06 링크를 ../../06_manifold_trajectory/…html 로 수정(docs/ 기준, 파일 존재 확인). 통합 Book/HTML은 트랙 루트에 있어 ../06_… 이어야 하므로 build_statistics_master.py read_doc_files()에서 ""](../../0""→""](../0"" 변환 추가. scratch 빌드에서 HTML/Book 모두 ../06_manifold… 확인."
+ENG-002,eng,F,"README.md:230; docs/01:150, 02:161, 03:155, 04:152, 05:129, 06:166, 07:108; tracks/01_multiome_snatac/docs/01:122, 02:15",Confirmed,fixed,"file:/// 절대경로 16건 → 상대경로(README는 docs/…, 챕터는 같은 폴더 0N_*.md). 링크 대상 28개 .md 모두 실재 확인. 빌드 스크립트(루트·트랙01) read_doc_files()에서 0N_*.md 를 docs/0N_*.md 로 바꿔 기존 #chapter 재작성 로직에 연결. scratch 빌드: HTML에 file:/// 0건, 챕터 링크는 #chapter-0N, Book.md는 docs/0N_*.md."
+ENG-003,eng,B,"tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md:62,105,163,261,291,344,361",Confirmed,fixed,"Track 10 ch03의 Snakefile 블록 8개(rule/ruleorder 포함)의 코드펜스 태그 python→snakemake (파싱 불가 블록만 변경, 펜스 짝 유지)."
+ENG-015,eng,B,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:280,Plausible,already-fixed,S2 SCI-08-012에서 rsc.tl.pca→rsc.pp.pca 수정 완료(rsc stable 문서 확인). 남은 구버전 언급은 주석뿐.
+ENG-016,eng,B,tracks/02_spatial_transcriptomics/docs/08_SPATIAL_LIGAND_RECEPTOR_SIGNALING.md:237,Confirmed (0.0.3 기준),already-fixed,현재 08장 plot_cell_communication 호출에 title= 인자가 없음(제목은 axes[i].set_title로 설정). 추가 변경 불필요.
+ENG-023,eng,F,tracks/04_cancer_genomics_clones/docs/06_SOMATIC_MUTATIONS_AND_FUSIONS.md:74-77; tracks/09_upstream_alignment_bam/docs/0,Confirmed,fixed,04 ch06의 4행과 09 ch05의 1행: ***X* (…)** → **_X_ (…)** (mistune 2.0.5에서 <strong><em> 로 렌더링됨을 실행 확인). scratch 빌드 HTML에 리터럴 *** 0건.
+ENG-025,eng,D,scripts/build_master_documents.py:28; tracks/*/scripts/build_*_master.py (WORKSPACE 상수); scripts/verify_switcher_links.p,Confirmed,fixed,절대경로 상수 15개(WORKSPACE/WORKSPACE_ROOT/TRACK_DIR)를 __file__ 기준 상대 계산으로 교체. 전체 프로젝트 복사본(scratch)에서 루트+트랙 01~10 빌드 11/11 통과(복사본 안에만 출력 생성).
+ENG-026,eng,D,"tracks/02~10/scripts/build_*_master.py (verify_build_artifacts, 예: build_statistics_master.py:2146-2151)",Confirmed,fixed,"트랙 02·03·04 빌드에 --skip-pipelines(또는 --verify-fast, VERIFY_FAST=1) 추가: 파이프라인을 실행하지 않고 결과 폴더 존재만 확인. 05·06·07의 기존 --verify-fast에 --skip-pipelines 별칭 추가, 08~10은 기본이 이미 비실행(--re-run-pipelines). 기본 동작은 변경 없음. 8개 assertion의 구조적 한계는 미해결."
+ENG-027,eng,D,프로젝트 루트 전반,Confirmed,deferred,"사용자 결정 필요(삭제/이동 금지 규칙): __pycache__ 25개 디렉터리(backups 제외), .DS_Store 1개(./.DS_Store), 루트 generate_diagrams.py vs scripts/generate_diagrams.py(내용 상이), 빈 ./infercnv_out/, backups/(ghost_scripts, legacy_decks, master_courses_pre_switcher, 타르볼 4개). 소스 트리 오염 방지용 .gitignore(__pycache__/, *.pyc, .DS_Store)만 신규 추가함."
+ENG-034,eng,C,tracks/08_large_scale_sparse/pipelines/results_pipeline_01/pipeline_01_summary.txt:12-13; results_pipeline_02/* ; tracks,Confirmed,softened,벤치마크 변동성 경고를 Track 08(01·02)·Track 10(01·02) 결과 폴더의 SIMULATION_NOTICE.md에 추가. 반복 측정·중앙값·분모 하한 적용은 커밋된 결과를 바꾸므로 코드 미변경(결과 불변 원칙).
+ENG-035,eng,C,tracks/09_upstream_alignment_bam/pipelines/results_pipeline_01/pipeline_01_summary_report.md:30-38,Plausible,fixed,"Track 09 파이프라인 01 보고서에 ""Error vs Ground Truth"" 열 추가, ""Optimal"" 판정 삭제(세 방법 모두 truth 대비 −9.2~−9.5% 과소, Adjacency가 가장 가까움을 동적으로 서술). scRNAseq_anal(py3.8.16)로 scratch 재실행: 수치 동일, 실행시간만 변동 → 보고서 텍스트만 반영하고 시간값은 기존(0.1698s) 유지."
+ENG-037,eng,C,tracks/05_generative_foundation_models/pipelines/02_transformer_embedding_and_perturbation_pipeline.py (전체),"Confirmed (단독 133.5s), Plausible (부하 원인)",softened,실행 시간(단독 ~133s) 경고와 빌드 분리 방법(--skip-pipelines/--verify-fast)을 Track 05 results_pipeline_02/SIMULATION_NOTICE.md에 기록. 모델 축소 옵션은 결과를 바꿀 수 있어 미적용.
+ENG-042,eng,F,11개 *_Master_Course.docx,Confirmed,softened,"DOCX 한계 명시: 11개 빌드 스크립트의 표지에 ""이 DOCX에는 SVG 이미지가 포함되지 않으며 HTML/docs/images 참조"" 문구 추가(scratch 빌드의 DOCX 2개에서 확인). PNG 변환 후 w:drawing 삽입은 미구현."
+ENG-043,eng,F,11개 *_Master_Course.docx (LaTeX→유니코드 변환),Confirmed,fixed,"DOCX 수식 변환기(11개 스크립트)의 분수 분자/분모와 첨자 {…}를 복합식이면 괄호로 묶도록 수정(_uni_group). 예: (λ_j^2 / (1 - λ_j^2)), ∑_(j=1)^(N_2). 단위 실행 및 scratch DOCX에서 모호 패턴 ""/ 1 - "" 0건. OMML 변환은 미구현."
+ENG-044,eng,F,tracks/02~10 vs 루트·트랙 01 (JS 구현부),Confirmed,deferred,"트랙 간 UI/JS 구현 통일은 11개 빌드 스크립트(각 약 2,000줄)의 공통 템플릿화가 필요한 대규모 리팩터라 사용자 승인 필요. 대상: 02~10의 #themeToggle/#expandQuizzesBtn+#collapseQuizzesBtn vs 루트·01의 #themeToggleBtn/#toggleQuizBtn, 검색 UI(드롭다운 vs 인라인)."
+ENG-045,eng,F,scripts/build_master_documents.py:1519 (루트 HTML:3753),Plausible,fixed,"검색 스니펫을 innerHTML에 넣기 전 &,<,> 이스케이프(루트·트랙01 스크립트). scratch 빌드 HTML에 반영 확인(동적 재현은 미수행). 트랙 02~10은 인라인 하이라이트 방식이라 해당 코드 없음."
+ENG-046,eng,F,docs/08_TROUBLESHOOTING_AND_BEST_PRACTICES.md:15-21,Confirmed,fixed,"루트 docs/08 ASCII 다이어그램의 $N = 수천$, $p = 10^{-120}$ 에서 $ 제거. scratch HTML에 원문 LaTeX 0건. 같은 유형(코드펜스 안 $…$)이 Track 03 ch03(L40,43,104)·ch04(L16,131,132,134)에 남아 있음 → Track 03 S3에서 처리."
+ENG-047,eng,F,snRNAseq_Prostate_Master_Course.html (375px),Confirmed,fixed,"루트 빌드 CSS에 @media (max-width:640px) 추가: 사이드바 max-height 38vh+스크롤, .print-btn 숨김. HTML 반영 확인(375px 시각 확인은 재빌드 후 필요). 트랙 02~10 템플릿의 인쇄 버튼/TOC는 별도 확인 필요."
+SCI-03-003,eng,E,docs/00_...:75-95,Confirmed,open,
+SCI-03-004,eng,B,docs/00_...:104-118; 06_...:184,Confirmed,open,
+SCI-03-005,eng,A,docs/00_...:51,Plausible,open,
+SCI-03-006,eng,B,docs/01_...:169; 186-210,Confirmed,open,
+SCI-03-007,eng,A,docs/01_...:29-39; 222-240,Plausible,open,
+SCI-03-008,eng,A,"docs/01_...:131,286-288; 04_...:275-280",Confirmed (논리·논문 서술),open,
+SCI-03-012,eng,A,"docs/02_...:28,35-38,41",Confirmed,open,
+SCI-03-014,eng,A,"docs/03_...:113-123,229-231,263-273; images/02_...svg",Confirmed,open,
+SCI-03-015,eng,A,"docs/03_...:51-59,288-291; 00_...:161-162",Confirmed,open,
+SCI-03-016,eng,A,docs/03_...:310-322,Confirmed,open,
+SCI-03-019,eng,A,docs/04_...:17,Confirmed,open,
+SCI-03-020,eng,A,"docs/04_...:123-133,308-324",Plausible,open,
+SCI-03-022,eng,A,"docs/05_...:136-158,242-246,283-288","Confirmed (지표 버전), Plausible (DEG 정의 지적)",open,
+SCI-03-025,eng,A,"docs/05_...:54-56,200-202; 09_...:109-110,124",Plausible,open,
+SCI-03-027,eng,A,"docs/06_...:78-103,159",Confirmed,open,
+SCI-03-028,eng,B,docs/06_...:193-201,Plausible (squidpy 이진 가중은 문서 열람으로 부분 확인),open,
+SCI-03-029,eng,A,"docs/06_...:30-34,44-50",Plausible,open,
+SCI-03-030,eng,A,docs/06_...:321-342,Plausible,open,
+SCI-03-031,eng,A,"docs/06_...:248; 08_...:3,15,41,184; 09_...",Confirmed,open,
+SCI-03-033,eng,B,"docs/07_...:94-109,244-286; images/05_...svg",Confirmed,open,
+SCI-03-034,eng,B,"docs/07_...:214-242,229-242",Confirmed,open,
+SCI-03-037,eng,A,"docs/08_...:7-9,58-64,261-275",Plausible,open,
+SCI-03-038,eng,B,docs/08_...:181-252,Confirmed (논리),open,
+SCI-03-040,eng,A,docs/09_...:9,Confirmed,open,
+SCI-03-041,eng,A,"docs/09_...:241-256,275-278,122-125",Plausible,open,
+SCI-03-042,eng,D,"pipelines/results_pipeline_01/pipeline_summary_metrics.json; pipelines/01_...py:621-629,491-503",Confirmed,open,
+SCI-03-043,eng,D,"scripts/generate_tme_diagrams.py:260,547-555,679,681; images/02,04,05_*.svg",Confirmed,open,
+SCI-05-005,eng,A,"docs/00_FOUNDATION_MODELS_ROADMAP.md:126-127,134-136,144","Confirmed (1~3), Plausible (4)",fixed,"00장 표: TCGA-PRAD 333례, SU2C Cell 2015 150례/PNAS 2019 429례(PubMed 초록으로 확인), Tabula Sapiens ""24개 조직·다수 동일 기증자"", Replogle ""발현 유전자 전체 CRISPRi, >250만 세포""(9,867 수치 삭제, RPE1은 필수 유전자 위주로 알려짐 표기). 드라이버 %는 초록의 40~60% 범위로 대체."
+SCI-05-006,eng,E,docs/00_FOUNDATION_MODELS_ROADMAP.md:274-319; 09_...:270,Confirmed,fixed,"00장 ""5개 챕터"" → 10개(00~09), 도식은 00~04만 그린다는 문장 + 표에 05~09 행 추가(새 절 없음). 실습 도구 열은 각 챕터 코드가 실제 쓰는 라이브러리 기준."
+SCI-05-007,eng,B,"docs/00_FOUNDATION_MODELS_ROADMAP.md:10,171-176",Confirmed,fixed,"00장: scvi-tools 최신(1.5.1)이 Python>=3.12 요구라 3.10/3.11은 구버전 설치, transformers는 Geneformer용(scGPT 패키지 의존성에 없음), 환경 검증 스크립트 라벨 보정."
+SCI-05-010,eng,A,"docs/01_...:165-167,352-356",Plausible,softened,"01장: ""PCR 편향 완전 제거"" → 크게 감소, ""ERCC 10x 실험·완벽 일치"" → 음성 대조 데이터 기준 대체로 일치(구체 서술은 원문 미확인 명시, Cao 2021 비판 언급)."
+SCI-05-011,eng,B,"docs/01_...:244-245,410-414",Confirmed,fixed,"01장 NB 코드를 log1p 형태로 교체하고 설명과 일치시킴. scratch 실측: float32 θ≥1e4에서는 lgamma 차 상쇄 오차가 지배(1e4에서 ~1e-3, 1e6에서 ~0.5; scvi-tools float32도 동일 영역 오차)임을 주석·해설에 명시, clamp는 코드(하한 eps)와 해설을 일치."
+SCI-05-012,eng,A,docs/00_...:364-367; 01_...:386-389; 02_...:37-65,Confirmed,fixed,"00·01·02장: scVI 설명에 ""원 논문 모델 vs scvi-tools 기본(use_observed_lib_size=True: l을 관측 총합으로 고정)"" 주석 추가."
+SCI-05-013,eng,A,"docs/02_...:164-165,383; images/02_elbo_mathematical_optimization.svg",Confirmed,fixed,"02장 KL 워밍업: 통상 20~40 → scvi-tools 기본 n_epochs_kl_warmup=400(예시 코드는 30), ""원천 차단"" → 완화. SVG02 문구와 생성 스크립트도 수정(SVG 재생성 결과와 byte 일치)."
+SCI-05-016,eng,A,docs/02_...:420-430,Plausible,fixed,"02장 Q3: Wilcoxon ""임의 타이 브레이킹"" → 평균 순위 처리, 환자 단위 의사반복 문제와 pseudobulk 필요성 추가(""엄격히 통제"" 문구는 S2에서 이미 제거됨)."
+SCI-05-017,eng,B,docs/02_...:255-275,Confirmed,fixed,"02장 compute_elbo에 library_prior가 텐서여야 함과 만드는 예(주석) 추가. scratch 실행: 텐서 입력 역전파 정상, float 입력 TypeError 재현."
+SCI-05-019,eng,A,"docs/03_...:47-62,84-93; images/03_scanvi_and_scarches_atlas_mapping.svg",Confirmed,fixed,"03장: 본문 분류기를 단순화 모형으로 명시하고 scvi-tools 구현은 q(y|z1)·두 잠재층·균일 y prior임을 주석(SVG03 q(y|z)와 일치), α 기본값을 classification_ratio=50으로 정정."
+SCI-05-020,eng,A,docs/03_...:317-323,Confirmed,softened,"03장 Top-M 절단 주변화: ""정밀도 완벽 보존·95% 절감"" 삭제, 재정규화 절단은 편향 근사이며 scvi-tools 미구현인 제안임을 명시."
+SCI-05-021,eng,A,docs/03_...:338-347,Plausible,softened,"03장: 엔트로피 기반 OOD를 ""후보 지표""로 완화(소프트맥스 과신, 배치·더블릿·ambient로도 고엔트로피), ""결정적 바이오마커"" 삭제."
+SCI-05-022,eng,A,"docs/03_...:10,177","Confirmed (모순), Plausible (비율 출처)",softened,"03장·00장: ""위양성 없이 고정밀"" 삭제(PR·혼동행렬 검증 안내), 비율을 출처 미확인 예시로 표기, 00장 도식 0.5%→1%로 장 내 통일, 코드 출력 문구를 ""예측 후보 수""로 정정."
+SCI-05-026,eng,A,"docs/04_...:10,129,161,147-149,320-323","Confirmed (논문 범위), Plausible (규정)",softened,"04장: GDPR/HIPAA ""완벽 보호·엄격 금지"" → 조건부 제한·별도 법적 검토, 여러 기관 어댑터 병합 프로토콜은 논문에 없는 가설로 표기, 50MB/500KB/0.1% 수치 삭제 또는 예시화."
+SCI-05-027,eng,A,"docs/04_...:120-123,289-292; images/03_...svg",Plausible,softened,"04장: U_query를 ""전역 절편""에서 배치별 자유 벡터(비선형 통과)로 정정, ""자연스럽게 분리""를 ""분리될 수 있음(보장 아님, 불확실성 점검 병행)""으로 완화."
+SCI-05-028,eng,A,"docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md:85; 07_...:3,11",Confirmed,fixed,"07장 Theodosiou → Theodoris(2곳), 05장은 이미 올바름."
+SCI-05-030,eng,A,"docs/05_...:107-128,122; 06_...:36; images/04_single_cell_transformer_tokenization.svg",Confirmed,fixed,"05장 §3.2: rank 임베딩 식은 교육용 설계이며 Geneformer는 절대 위치 임베딩, scGPT는 위치 없이 유전자+값 임베딩임을 주석. SVG04 ""scGPT/scBERT 표준=순위"" 문구 수정(생성 스크립트 동시 수정, byte 일치)."
+SCI-05-031,eng,A,docs/05_...:99; 06_...:41; images/04_...svg,Confirmed,fixed,"05장 B=30~50 → scGPT 튜토리얼 n_bins=51(06장과 통일), SVG04 Bin 1~32/32단계/30,000 어휘 → B=51·어휘 수 삭제."
+SCI-05-035,eng,A,"docs/06_...:21,228,238; 09_...:65; images/05_...svg",Confirmed,fixed,"06장 Pre-LN 서술을 post-norm 기본(scGPT)으로 정정하고 교육용 코드는 Pre-LN임을 주석, 동결 프로토콜을 12층 기준(1~8/9~12)으로 통일, 09장 동일 문구 보정, SVG05의 12~24층·33M~100M·LoRA 0.5%·95% 절감·F1>0.96·""최고 수준 벤치마크"" 삭제(생성 스크립트 동시 수정)."
+SCI-05-037,eng,B,"docs/06_...:181-189,177-178",Confirmed,fixed,"06장 Dataset: 선형 구간화 → 세포 내 순위 분위 구간화(1~n_bins-1), 빈 세포는 CLS 토큰 유지로 NaN 방지. scratch 실행: bin 범위 0~50, 빈 세포 포함 배치에서 NaN 없음."
+SCI-05-038,eng,A,"docs/06_...:55,327-352",Plausible,fixed,"06장 Q2: 파레토 최적화가 아니라 Kendall 2018 불확실성 가중임을 명시하고 회귀 1/(2σ²)·분류 약 1/σ² 계수 차이를 주석(목적 문구의 ""파레토""는 S2에서 이미 제거됨)."
+SCI-05-039,eng,A,"docs/06_...:9,378-383; 09_...:70",Plausible,fixed,"06장: ""PCA, UMAP, scVI는 처음부터 학습"" → 서술 수정(scVI는 04장처럼 재사용 가능). DANN ""완전 소거"" 문구는 이미 완화되어 있어 확인만."
+SCI-05-043,eng,A,"docs/07_...:3,41-50,18-22; 05_...:78",Confirmed,fixed,"07장: 6층/256/4헤드/2048/25,424는 V1(10M) 기준임을 명시하고 V2(104M·316M)·암 튜닝 변형, Genecorpus-30M의 악성 세포·세포주 제외와 t-NEPC 적용 시 OOD 한계 추가(HF 모델카드 근거). 05장 어휘 수에 V1 표기."
+SCI-05-047,eng,A,docs/08_...:316-320,Plausible (비등방성),softened,"08장: 16σ 산술은 유지하되 등방 가우시안 영분포가 치환 검정의 영분포와 다르고 비등방이라 p를 과대 유의하게 만들 수 있음을 명시, ""확증"" → ""시사""."
+SCI-05-049,eng,A,"docs/08_...:38-49,158-162,270-285","Confirmed (Geneformer), Plausible (scGPT)",fixed,"08장: scGPT 방식을 ""일반 구현 예시""로 바꾸고 공식 섭동 예측은 미세조정 기반임을 명시, Geneformer ISP의 delete/overexpress와 mean-pool 임베딩·코사인 이동 평가 서술 추가."
+SCI-05-050,eng,A,"docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:83-98,199-248,238-240",Confirmed,fixed,"09장 scIB: ""4대 지표"" → 14개(생물 9+배치 5) 중 대표 지표만 쓴 교육용 간이 점수로 정정, 코드에 실제 NMI(KMeans 기반) 계산 추가, 난수 임베딩도 약 0.6(scratch 실측)을 받는다는 경고 추가."
+SCI-05-051,eng,A,"docs/09_...:47-50,301-316",Confirmed,fixed,"09장 FlashAttention: 2~4배는 v1 논문 수치, FA-2는 v1 대비 약 2배 추가로 구분, ""80% 이상 점유"" 삭제."
+SCI-05-052,eng,A,"docs/09_...:16,34-37,177-185,351-369",Plausible,softened,"09장: AMP 설명을 ""가중치 16-bit 50%""에서 활성화 중심·마스터 FP32로 정정, GradScaler는 FP16용 주석, GEP는 구간화 값 회귀라 ZINB 교체는 비호환임을 명시하고 처방을 마스크/Huber로 변경, ""MSE 수백~수천""을 예시로 완화."
+SCI-06-005,eng,A,docs/06:58,Confirmed,open,
+SCI-06-006,eng,A,docs/05:49,Confirmed,open,
+SCI-06-008,eng,B,docs/01:259 (본문 L49-60),Confirmed,open,
+SCI-06-009,eng,B,docs/01:274,Confirmed,open,
+SCI-06-014,eng,A,docs/09:35-36 (docs/09:191),Plausible,open,
+SCI-06-016,eng,A,docs/04:139-143,Plausible,open,
+SCI-06-023,eng,B,docs/07:226-230 (L212는 ENG-008 참조),Plausible (미실행),open,
+SCI-06-024,eng,A,docs/07:178-181,Plausible,open,
+SCI-06-027,eng,A,"docs/08:62,223-225 (L208-221)",Plausible,open,
+SCI-06-028,eng,A,docs/08:46-47,Confirmed (수학),open,
+SCI-06-029,eng,A,"docs/08:99-110,245-251",Plausible,open,
+SCI-06-030,eng,A,docs/08:125; docs/09:45,Confirmed,open,
+SCI-06-031,eng,A,"docs/08:106-107,126",Plausible,open,
+SCI-06-032,eng,A,docs/08:133-137,Plausible,open,
+SCI-06-035,eng,A,docs/08:264,Plausible,open,
+SCI-06-036,eng,B,docs/09:138-140,Confirmed,open,
+SCI-06-037,eng,A,docs/09:71-83,Confirmed,open,
+SCI-06-041,eng,A,"docs/09:122,193,259",Confirmed (불일치),open,
+SCI-06-042,eng,A,docs/09:110-112,Confirmed,open,
+SCI-06-043,eng,A,docs/09:122-126 (L126은 ENG-022 참조),Plausible,open,
+SCI-06-044,eng,E,"docs/07 (§5, L14-174); docs/08 (§4); docs/09 (§1.3)",Confirmed (인용 없음),open,
+SCI-06-045,eng,A,docs/06:196-197 (L185),Confirmed (불일치),open,
+SCI-06-046,eng,A,docs/09:273-280,Plausible,open,
+SCI-06-047,eng,A,docs/05:146,Plausible,open,
+SCI-06-054,eng,A,"SVG03, SVG05 (텍스트)","Confirmed (max_iter, 불일치); Plausible (자동 결정)",open,
+SCI-08-023,eng,A,".../01_SPARSE_MATRIX_MEMORY_CSR_CSC.md:9,161-182,327-329","Confirmed (측정), Plausible (구현 서술)",fixed,"01장 목표·§3.2·Q 답변: 캐시라인/TLB 서사 삭제, ""행=indptr O(1), 열=전체 indices 선형 스캔 O(nnz)""로 재서술, scipy 실측 시간 반영(직접 측정)."
+SCI-08-024,eng,A,".../05_...:136,144-148,320-327",Confirmed,fixed,"05장 QC 코드: 합/제곱합 공식 → 배치별 (n, mean, M2) + Chan 병합으로 교체, 본문 서술 일치. scratch에서 합성 데이터로 교과서식·numpy var와 일치 및 실행 확인."
+SCI-08-025,eng,A,.../06_...:123-124,Confirmed,fixed,06장 시간복잡도를 N/m 배치 × O(G(k+m)²) ≈ O(N·G·m)(m≫k)로 정정.
+SCI-08-026,eng,A,".../06_...:229,420-437",Confirmed,fixed,"06장 ""즉각 도달/박멸"" 삭제, Halko 상한을 상한으로 명시하고 계산한 값(q=0 ≈5.86, q=2 ≈0.227 ≈1.6σ51, σ51=0.140)으로 Q1·Q2 결론 재서술."
+SCI-08-027,eng,A,".../07_...:130,134",Plausible,softened,"07장 워프 셔플 ""1클럭/5클럭"" 모순 서술을 개념 설명(레지스터 간 직접 교환, 지연은 하드웨어 의존)으로 완화. GPU 미보유로 미측정."
+SCI-08-028,eng,A,".../07_...:7,26-38",Plausible,fixed,"07장 하드웨어 수치 정정: A100 108 SM/6,912 코어, H100 SXM 132 SM/16,896 코어, EPYC 7763 DDR4-3200 8채널 ≈205 GB/s(소켓당 이론값). ASCII 스택도 수정."
+SCI-08-029,eng,A,.../07_...:173,Plausible,softened,"07장 Hogwild 문단: ""수렴성 엄밀 보존"" 삭제, 희소 충돌 가정 의존 및 kNN 그래프에 적용되는 근거는 개념 예시로 완화."
+SCI-08-030,eng,B,.../08_...:181-233,Plausible,fixed,"08장 CAGRA 코드를 cuVS(cuvs.neighbors.cagra) API로 이전, device_ndarray→cp.asarray, 제곱 유클리드 거리, 자기 이웃 제거 처리. 시그니처는 cuVS 소스로 확인했으나 GPU 부재로 미실행(자기이웃 마스크 논리만 scratch 검증)."
+SCI-08-031,eng,A,".../08_...:28-39,298-307",Plausible,softened,"08장 브루트포스(""수 일/2TB 크래시"")·HNSW 시간을 블록 GEMM 기반 정확 kNN 설명으로 수정하고 시간값은 규모 예시로 완화."
+SCI-08-032,eng,A,".../08_...:124-150,393-395",Plausible,softened,"08장 정점 색칠: cuGraph의 실제 사용 근거 미확인이므로 병렬 커뮤니티 탐지의 일반 기법으로 표기, 커널 주석 완화."
+SCI-08-033,eng,A,".../04_...:84,111",Plausible,softened,"04장 ""딕셔너리 인코딩 메모리 80% 절감"" 출처 없는 수치를 일반적 경향으로 완화(Seek 90%는 SCI-08-001에서 이미 삭제)."
+SCI-08-034,eng,A,".../00_...:107; 04:10,125","Confirmed (LTS 수치), Plausible (나머지)",fixed,"00·04장 Census: LTS 2023-12-15 직접 쿼리 값으로 교체(총 68,683,222세포, 고유 40,356,133, 651 데이터셋, 인간 var 60,664), ""크기는 릴리스별 상이"" 명시."
+SCI-08-035,eng,A,.../00_...:106,Plausible,fixed,"00장 전립선 아틀라스를 Henry et al., Cell Rep 2018;25:3530-3542(~98,000세포; PubMed PMID 30566875 확인)로 교체, 나머지 열은 ""(미확인 예시)""."
+SCI-08-036,eng,A,.../02_...:93,Confirmed,fixed,"02장 ""backed 100ms 미만"" → obs 크기 의존, 1M obs 약 1.4초(직접 측정) 서술."
+SCI-08-037,eng,B,".../02_...:94,65-68",Confirmed,fixed,"02장 SparseDataset → anndata.abc.CSRDataset/CSCDataset, 속성 ""JSON 형식"" → HDF5 문자열/배열 속성(JSON 문서 아님)."
+SCI-08-038,eng,A,".../03_...:116-117,128-129,321-322",Plausible,softened,"03장 비트 셔플 ""압도적/0바이트"", Blosc ""GIL 무관 코어 100% 가동""을 데이터 의존·미측정 서술로 완화(압축률 2~5배 문구 삭제)."
+SCI-08-039,eng,A,.../09_...:144 (실패양식 6),Confirmed,fixed,"09장 실패양식 6을 ""청크별 통계 불일치""(QC 임계값·HVG 통계를 청크별로 따로 계산)로 재정의; 라이브러리 크기 정규화는 세포 단위라 청크 무관함을 명시."
+SCI-08-040,eng,A,.../00_...:75,Plausible,softened,"00장 ""크로마틴 응축에 의한 완전 억제"" → 낮은 발현량·샘플링 한계가 주원인으로 완화."
+SCI-08-041,eng,A,".../07_...:53-62,147",Plausible,fixed,"07장 스택 다이어그램·본문: .obs는 pandas 유지, X만 CuPy, PCA는 rsc.pp.pca로 정정."
+SCI-08-042,eng,B,.../04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md:197-233,"Confirmed (현상), Plausible (원인)",already-fixed,P-1에서 import tiledbsoma.io 추가 및 버전 주석 완료(anndata 0.12.19로 끝까지 실행). 이번에 주석에 0.13.4 TypeError(quote_from_bytes) 현상과 0.12.x 고정 사용을 구체화.
+SCI-10-004,eng,A,.../00_...:85-89,Plausible,softened,"00장: ""36,601 (GENCODE v44)"" → ""예) 36,601 (10x GRCh38-2020-A 기준 값)""으로 귀속 정정. 10x 문서는 미조회(기억 기반)라 예시로 표기."
+SCI-10-005,eng,A,".../00_...:64-65,61-62; 02(미해당)",Plausible,fixed,"00장: 비트 단위 동일 → 이상적 목표(멀티스레드·부동소수점에서는 컨테이너 고정만으로 보장 안 됨), 멱등성 f(f(X))=f(X) → 같은 입력 재실행 시 같은 상태로 재정의."
+SCI-10-007,eng,A,".../00_...:248-250; 03:138,323",Plausible,fixed,"00장 publishDir를 원자적 발행이 아닌 copy/link 발행으로 정정, 예시 출력을 Nextflow ""cached: N""/Snakemake ""Nothing to be done"" 형식으로 교체."
+SCI-10-008,eng,B,.../00_...:300; 04:171-174,Plausible,fixed,"00·04장: Fusion ""Rust 기반"" 서술 3곳 삭제(출처 없음), ""디스크 프로비저닝 0""은 S2에서 이미 완화됨."
+SCI-10-011,eng,A,".../01_...:7,62-66,88",Plausible,fixed,"01장: 네임스페이스 ""6대""→주요 6종(총 8종 명시), OOM 부등식을 ""페이지 캐시를 먼저 회수, 회수 불가 시 OOM""으로 정정(09장과 일치), copy-up 서술 정정, ""4배"" 수치 삭제."
+SCI-10-012,eng,A,".../01_...:105-114,138; 04",Plausible,fixed,"01장: CVE-2019-5736(runc 탈출)과 docker 그룹=루트 등가 문장 분리, rootless Docker/Podman 한 줄 추가, nvidia-container-toolkit ""데몬""→""런타임 설정""."
+SCI-10-017,eng,A,.../03_...:333-366 (Q3),Plausible,fixed,"03장 Q3: temp()를 생성 규칙 output에만 지정(소비 규칙 input은 일반 경로), protected는 쓰기 권한만 제거하므로 상위 디렉터리 권한이 있으면 삭제 가능함을 명시, 40TB는 가상 수치 표기."
+SCI-10-018,eng,A,".../03_...:7-10,136-141",Confirmed,fixed,"03장: Snakemake v8+ 실행기 플러그인 절(§4.1) 추가, 비교표 정정. Snakemake 9.27.0에서 --help로 내장 executor가 local/dryrun/touch뿐임을 확인."
+SCI-10-024,eng,A,.../04_...:329-345 (Q3),Plausible,fixed,"04장 Q3: AR 좌표(GRCh37)를 GRCh38로 통일하고 AR·TMPRSS2·PTEN 3개 영역 제시. Ensembl REST로 GRCh38 좌표 확인(AR chrX:67543353-67730619, TMPRSS2 chr21:41464296-41531116, PTEN chr10:87862638-87971930)."
+SCI-10-025,eng,A,".../04_...:9,149,322; 08:7,59,212,326; 00","Confirmed (구간·90% 상한), Plausible (현실성 평가)",softened,"04·08장: 할인율 70~90/60~80/72/75/80을 ""최대 90%(AWS 공개 상한), 예시 75%""로 통일, ""경매"" 표현 정정, Q1의 8% 중단 확률은 Spot Advisor 월간 구간(<5~>20%) 대비 높은 스트레스 시나리오로 주석. 코드 상수 0.72→0.75."
+SCI-10-026,eng,B,.../04_...:303-304; 09:80-83,Plausible,fixed,"04장 Q2: 회수 2분 전 중단 통지(IMDS/EventBridge) 후 종료 순서로 정정, SIGTERM/SIGKILL 전달 가정 삭제."
+SCI-10-029,eng,A,".../05_...:92-94,82-86,105",Plausible,softened,"05장: 얼라이너 표 수치를 ""출처 없는 예시값""으로 표기, SA 12.4GB 식은 단일 가닥 단순 추정이며 STAR 매뉴얼 경험칙 게놈×10배 RAM(≈30GB; 본 문서에서 재확인 안 함) 명시, ""4~8배""를 문제 1의 2.7배와 맞춤."
+SCI-10-030,eng,A,".../05_...:113-127,335-355","Confirmed (모순), Plausible (수치)",softened,"05장: mt 서술이 전체 세포 scRNA-seq 시나리오임을 명시하고 snRNA-seq에서는 mt가 낮아 오염 지표로 해석(루트 3장 일치), 70~80% 폐기·12%/24%는 가상 수치로 표기."
+SCI-10-032,eng,E,".../06_...:7-10,18,80-111",Confirmed,fixed,"06장 §2.3 신설: 자체 JSON 매니페스트를 W3C PROV(Entity/Activity/Agent)와 대응시키고 RO-Crate/nf-prov(BCO·Workflow Run RO-Crate 지원, nf-prov README 확인) 안내, 매니페스트가 PROV 문서가 아님을 명시."
+SCI-10-033,eng,B,".../06_...:174,187,255-341",Confirmed,fixed,"06장: actions/checkout·setup-java·upload-artifact v3→v4, utcnow/utcfromtimestamp→datetime.now(timezone.utc)/fromtimestamp(tz=utc). 01장 워크플로에 태그 푸시에는 paths 필터가 적용되지 않는다는 주석 추가. CI는 실행하지 않음(코드 compile만)."
+SCI-10-034,eng,A,".../06_...:109,358; 08:374; 09",Confirmed,fixed,"""눈태 효과""→""눈사태 효과""(06장 3곳, 08장 1곳, 09장 해당 시)."
+SCI-10-035,eng,B,".../07_MLOPS_MODEL_SERVING_SINGLE_CELL.md:100-123 (§2.2, 학습목표 2)","Confirmed (stage deprecated·코드 미등록), Plausible (ELBO 부호)",fixed,"07장: stage(Staging/Production) 승격 서술을 alias 방식으로 교체, 코드에 레지스트리 등록(create_registered_model/create_model_version/set_registered_model_alias) 추가, elbo_train 라벨을 neg_elbo로 정정. MLflow 3.17.1에서 등록·alias 동작을 실행 확인(runs:/…/model 경로는 3.x에서 로그된 모델이 필요해 create_model_version 사용)."
+SCI-10-036,eng,B,".../07_...:127-158,372-392 (§3.1, Q1)",Plausible,softened,"07장: FusedGemmNormRelu 연산자·250→45ms·5배를 ""개념 설명/설명용 가정""으로 정정(ORT 문서화된 Gemm/Activation 융합 언급), CPU 서빙과 GPU HBM 시나리오 구분, torch.onnx.export 부재 명시."
+SCI-10-040,eng,B,".../08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md:128-148,160,167,174",Confirmed,fixed,"08장: check_max 제거 → process.resourceLimits(04장과 통일), 메모리 증설식을 2^(k-1)로 설정과 일치(maxRetries=3 → 최대 4회 시도), 권장 메모리 계수 1.3→1.25로 §3.1과 통일."
+SCI-10-041,eng,B,".../08_...:209-212,299-301",Plausible,softened,"08장: 단가 상수는 EC2 c6i가 아니라 Fargate 단가로 알려진 값(미조회)이며 예시라고 명시, 스팟 할인 상수 0.75(가정), cost_analyzer가 쓰는 열이 기본 trace 필드에 있다는 보장이 없어 trace.fields 명시 안내(기본 필드 목록은 문서에서 확인 못 함)."
+SCI-10-042,eng,A,".../08_...:8-10,63-77,363-384",Confirmed,already-fixed,"S2 SCI-10-014에서 해시 구성(세션·태스크명·컨테이너/환경·입력·스크립트 등), MD5 삭제, cache를 process 디렉티브(process.cache)로 정정 완료. 현재 08장에서 확인."
+SCI-10-043,eng,A,".../08_...:10,322-357 (Q1)","Confirmed (불일치), Confirmed (산술)",fixed,"08장: $75→$15 목표를 총비용 가정의 예시로 표기하고 Q1(컴퓨팅만, $1.5→$0.48)과 전제가 다름을 명시. Q1 산술(500×3h×$0.504=$756 등)은 재계산 일치."
+SCI-10-044,eng,A,.../08_...:390-428 (Q3),Plausible,softened,"08장 Q3: 18~20시간 구간 누락 → 단일 임계(18h)로 라우팅 정의, executor 전환은 run 단위이며 awsbatch는 S3 workDir 필요, PHI 클라우드 전송 거버넌스·BAA 선행 필요를 명시."
+SCI-10-048,eng,A,".../09_...:103-109,291-309,9,163-170","Confirmed (오류 문구), Plausible (나머지)",fixed,"09장: 오류 문구를 ""Unable to acquire lock on session…""으로 정정, 일괄 kill -9 → PID 확인 후 종료·잠금 정리로 변경, Q3 시나리오 수치를 접두사당 3,500 PUT/s 초과가 성립하도록 수정(순간 약 10,000건→지터로 약 1,000/s), 학습목표 O(1)→O(N·S_h5ad)."
+SCI-10-049,eng,B,".../02_...:99-105,283-303,369-402",Confirmed,fixed,"02장: branch 조건 순서 수정(corrupted 먼저, paired_end는 나머지), Q1을 영구 대기가 아닌 1개 태스크만 실행하고 정상 종료로 정정, 재시도 4회(32→64→128→256GB) 명시, Q3를 join(중복 키 미지원) 대신 combine(by:0)로 수정. nextflow 미설치로 문서(공식 docs) 기준이며 실행 확인은 못 함."
+SCI-02-003,eng,A,tracks/02_spatial_transcriptomics/docs/00_SPATIAL_ROADMAP.md:100,Plausible,fixed,00장 `Viper` → VPT(Vizgen Post-processing Tool). GitHub Vizgen/vizgen-postprocessing 저장소로 명칭 확인.
+SCI-02-005,eng,A,tracks/02_spatial_transcriptomics/docs/00_SPATIAL_ROADMAP.md:79,Plausible,fixed,"00·01장: Visium HD ""비드/폴로니 어레이"" 삭제 → 패턴된 2 µm 바코드 정사각형(프로브 결찰 기반 포획). 10x 문서 원문은 미조회(서술 완화)."
+SCI-02-006,eng,A,tracks/02_spatial_transcriptomics/docs/00_SPATIAL_ROADMAP.md:77,Plausible,fixed,"00·01장 스팟당 세포 수를 ""1~수십 개, 밀도 의존(10x 안내 1~10, 밀집 종양 20~30)""으로 통일."
+SCI-02-007,eng,A,"tracks/02_spatial_transcriptomics/docs/00_SPATIAL_ROADMAP.md:37, 244, 281",Plausible,softened,"00장: HIF1A mRNA를 저산소 지표로 쓰는 서술 → HIF 표적(CA9·VEGFA·SLC2A1 등), cribriform 중심부 저산소는 기전 가설로 표기(L37,244,281,295)."
+SCI-02-010,eng,A,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:21,Plausible,fixed,01장 올리고 구조 도해에 poly-dT(v1)와 프로브 포획(FFPE/CytAssist·HD) 구분 표기.
+SCI-02-011,eng,E,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:46 vs 31,Confirmed,fixed,"01장 8 µm 빈을 ""단일 세포 규모 근사, 한 세포와 정확 대응 아님""으로 완화(8×8=64 µm² vs 세포 단면 80~180 µm²)."
+SCI-02-012,eng,B,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:152,Plausible,softened,01장 Plexity×Efficiency∝1/Crowding 식 삭제 → 정성적 경험칙 인용문으로 교체.
+SCI-02-013,eng,A,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:131-135,Confirmed,softened,"01장 확산: D 범위는 ""가정""으로 명시, √(4Dt)=11 µm~270 µm(25배 폭)을 본문에 계산해 넣고 20~30 µm는 예시값이며 Tissue Optimization으로 결정한다고 정정."
+SCI-02-014,eng,B,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:141,Confirmed,fixed,"01장 표 FF 열 RNA 단편화 ""높음""→""낮음""."
+SCI-02-015,eng,A,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:262,Plausible,fixed,"01장 FFPE ""D≈0"" → 신선 동결보다 크게 감소하나 0은 아님."
+SCI-02-016,eng,B,tracks/02_spatial_transcriptomics/docs/01_SPATIAL_TECHNOLOGIES_AND_PHYSICS.md:176-200,Confirmed,fixed,01장 analyze_spot_geometry에 scalefactors의 spot_diameter_fullres로 px→µm 변환 추가. 합성 AnnData로 실행해 µm 출력 확인.
+SCI-02-017,eng,B,tracks/02_spatial_transcriptomics/docs/02_HISTOLOGY_AND_COORDINATE_SYSTEMS.md:294,Confirmed,fixed,"02장 Points ""O(1)"" → O(N) 저장, 청크 지연 평가로 메모리 절감임을 명시."
+SCI-02-018,eng,B,tracks/02_spatial_transcriptomics/docs/02_HISTOLOGY_AND_COORDINATE_SYSTEMS.md:298,Confirmed,fixed,"02장 Points bounding box 질의는 축별 비교 마스크, R-Tree는 Shapes 쿼리로 구분(구현은 버전 의존 주석). finding의 SpatialData 소스 근거 사용."
+SCI-02-019,eng,B,tracks/02_spatial_transcriptomics/docs/02_HISTOLOGY_AND_COORDINATE_SYSTEMS.md:139-143,Confirmed,fixed,"02장 변환 목록에 MapAxis·Translation 추가. SpatialData 소스(transformations.py)에서 클래스 목록(Identity, MapAxis, Translation, Scale, Affine, Sequence) 확인."
+SCI-02-022,eng,B,tracks/02_spatial_transcriptomics/docs/03_SPATIAL_QC_AND_PREPROCESSING.md:223-225,Confirmed,fixed,03장 문제 3 플랫폼을 Visium(55 µm 스팟)으로 변경(Visium HD 2 µm 빈은 면적 1/594).
+SCI-02-023,eng,B,tracks/02_spatial_transcriptomics/docs/03_SPATIAL_QC_AND_PREPROCESSING.md:243,Confirmed,fixed,"03장 ""2λd 완전 배제"" → e^-2≈13.5% 잔여, 3λd≈5% 기준으로 마진 정당화 필요."
+SCI-02-024,eng,A,tracks/02_spatial_transcriptomics/docs/03_SPATIAL_QC_AND_PREPROCESSING.md:244,Plausible,fixed,"03장 SoupX/DecontX ""공간 적응형"" 삭제 → 비공간 도구임을 명시, 공간 특화 SpotClean 안내."
+SCI-02-027,eng,A,"tracks/02_spatial_transcriptomics/docs/04_CELL_SEGMENTATION_ALGORITHMS.md:130, 282-283",Plausible,softened,"04장 할당율 30~50%/75~90%·35%→80~85%·95% 제거를 ""출처 없는 예시값/기대""로 표기, Petukhov 2022 참조 안내. SVG03 ""90%+"" 삭제."
+SCI-02-028,eng,A,tracks/02_spatial_transcriptomics/docs/04_CELL_SEGMENTATION_ALGORITHMS.md:260-276,Plausible,softened,"04장 hybrid 신호 원인에 2D 절편 z축 중첩 추가, 개선 효과는 데이터 의존 기대로 완화. KLK3 세포질 외곽 편재 단정은 가정으로 표기."
+SCI-02-029,eng,E,"tracks/02_spatial_transcriptomics/docs/04_CELL_SEGMENTATION_ALGORITHMS.md:259, 280",Plausible,fixed,"04장 380-plex → 377-plex(00장과 일치), Baysor는 분자 좌표·유전자 조성 입력(핵/마스크는 선택적 사전정보)으로 정정. SVG03 문구 동일 수정."
+SCI-02-034,eng,A,tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:190-196,Plausible,softened,05장 q05는 보수적 하한일 뿐 공선성 거짓양성을 차단하지 못하며 절대 수는 N_cells_per_location 사전분포 의존임을 명시.
+SCI-02-035,eng,A,"tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:208, 210",Plausible,fixed,"05장 표: DNPC 마커 → FGFR1·MAPK 경로(후보·가설, Track 00 정정과 일치), myCAF에서 MYH11 제외 주석."
+SCI-02-036,eng,E,tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:57,Confirmed,fixed,05장 Cable et al. 2022(online 2021)로 정정.
+SCI-02-038,eng,B,"tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:148, 165-169, 310",Confirmed,fixed,"06장 SPARK-X: SVD/커널 분해 서술 → 좌표 투영 공분산 T=tr(E_CΣ_C)/n, 혼합 카이제곱, cubic→linear (Zhu 2021 요지)."
+SCI-02-039,eng,B,"tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:97, 122",Confirmed,fixed,06장 §4 제목과 본문: Geary's C는 전역 통계이며 국소 지표는 Local Moran/LISA·Local Geary임을 명시.
+SCI-02-040,eng,B,"tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:102-115, 117-119",Confirmed,fixed,"06장 Moran 산점도 도해 라벨 교정(좌상단 LH, 우하단 HL; 본문 목록·SVG05와 일치)."
+SCI-02-041,eng,E,tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:178; SVG05; 320-321,Confirmed,already-fixed,"S2에서 06장 본문 수치는 파이프라인 값(KLK3 0.565)·""가상 예시""로 정정, SVG05는 이미 ""(예시)"" 표기. 이번에 Q3 수치에 ""예시, 가중치 의존"" 주석 추가."
+SCI-02-042,eng,A,"tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:180, 183-185",Plausible,softened,"06장: HIF1A mRNA → HIF 표적 유전자, 수십 µm 섬/단일 스팟 띠는 Visium(55 µm/100 µm)으로 해상 불가하므로 세포 해상도 플랫폼 사례로 한정."
+SCI-02-043,eng,A,tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:320-333,Plausible,softened,"06장 Q3: MMP9 세포원 단정 완화(디콘볼루션으로 확인 필요), DEG 탈락은 가능성으로 표기."
+SCI-02-044,eng,B,"tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:224-230, 240-246",Confirmed,fixed,06장 코드: n_perms 지정 시 pval_sim/pval_sim_fdr_bh 출력으로 교체. squidpy로 열 이름 실제 확인(합성 격자 데이터).
+SCI-02-045,eng,B,tracks/02_spatial_transcriptomics/docs/06_SPATIALLY_VARIABLE_GENES.md:213-218,Confirmed,fixed,"06장 코드: Visium은 coord_type=""grid""(n_neighs=6) 사용, HVG 선제 제한의 위험을 주석으로 경고. squidpy 실행 확인."
+SCI-02-048,eng,A,"tracks/02_spatial_transcriptomics/docs/07_CELLULAR_NICHES_AND_MICROENVIRONMENTS.md:95, 119",Confirmed,fixed,"07장 니치 윈도우 귀속을 Schürch 2020(최근접 10개 이웃, k-means)로 정정하고 Goltsev 2018은 Delaunay·log-odds 분석으로 구분, k=10을 예시로 명시. 원문 확인은 finding의 PMC 인용 근거."
+SCI-02-049,eng,E,"tracks/02_spatial_transcriptomics/docs/07_CELLULAR_NICHES_AND_MICROENVIRONMENTS.md:62, 183, 218; SVG06",Confirmed,fixed,"07장 코드(radius 30, k 20)·본문 범위 설명을 SVG06·파이프라인 02(r=30)와 일치시키고 예시값으로 표기."
+SCI-02-050,eng,A,"tracks/02_spatial_transcriptomics/docs/07_CELLULAR_NICHES_AND_MICROENVIRONMENTS.md:130-131, 300-313",Plausible,softened,"07장: 4대 니치 ""공통적으로 규명"" → 가설적 설명틀, 데노수맙은 SRE 지연 효과로 승인(생존 이득 미입증), Galunisertib 개발 현황 확인 필요로 표기."
+SCI-02-055,eng,B,"tracks/02_spatial_transcriptomics/docs/08_SPATIAL_LIGAND_RECEPTOR_SIGNALING.md:102-121, 289-292",Confirmed,fixed,"08장 COMMOT 정식화를 ""단일 L-R 단순화 설명""으로 명시하고 실제 목적함수 요지 추가(KL 패널티 cot_rho, cot_eps_*, cot_weights 4종, cost_type euc 기본, dis_thr 희소화). COMMOT 소스에서 확인."
+SCI-02-056,eng,B,"tracks/02_spatial_transcriptomics/docs/08_SPATIAL_LIGAND_RECEPTOR_SIGNALING.md:60-68, 163",Plausible,softened,"08장 원거리 파라크라인 200~250 µm를 ""분비형 가정 최대 거리, 맥락 의존""으로 완화."
+SCI-02-057,eng,A,"tracks/02_spatial_transcriptomics/docs/08_SPATIAL_LIGAND_RECEPTOR_SIGNALING.md:302-319 (Q3), 124-132",Plausible,softened,"08장 Q3/도해: 벡터장은 송신→수신 방향 요약이며 T 세포 이동 궤적 아님, CXCR4·TGFBR2는 비면역 세포도 발현하므로 가설로 표기, 파이프라인 02 TGFB1 수신 상위는 Tumor/CAF 명시, Bintrafusp alfa 개발 상태 확인 필요."
+SCI-02-058,eng,A,tracks/02_spatial_transcriptomics/docs/08_SPATIAL_LIGAND_RECEPTOR_SIGNALING.md:165-166 vs 07장,Plausible,softened,"08장 도해/목록의 ""용골성/골경화성"" 단정을 ""골 흡수 요소 가설/골형성 자극 가설""로 정정해 07장(혼합형, 골형성 우세)과 일치."
+SCI-02-059,eng,B,"tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:110, 116, 122, 353",Confirmed,fixed,"09장 병합 임계 r 값을 ""예시 기준 r≳0.9""로 통일하고 VIF=1/(1−r²) 환산(0.90→5.3, 0.95→10.3, 0.98→25, 0.99→50) 추가."
+SCI-02-060,eng,B,tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:124,Confirmed,fixed,"09장 ""L2 능형 정규화"" 삭제 → cell2location은 감마 사전분포 VI임을 명시, 참조 병합·사전분포 하이퍼파라미터 조정 안내."
+SCI-02-061,eng,A,tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:39,Confirmed,fixed,09장 결찰 프로브 서술에서 CosMx 제외(ISH 프로브+광절단 리포터 방식).
+SCI-02-062,eng,E,"tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:95, 134, 335; 01장 L135; 03장 L117",Confirmed,softened,"09장 확산 거리 정의를 통일: ""50 µm=인접 1개 스팟 거리"" 오류 정정(Visium 중심 간격 100 µm), 장별 거리(01장 20~30, 03장 15, 09장 50~200 µm)를 시나리오별 예시 가정으로 명시."
+SCI-02-063,eng,B,tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:100-102,Plausible,softened,"09장 라플라시안 샤프닝 ≠ Richardson-Lucy 구분, 스팟 피치>PSF에서 불량조건 한계와 SpotClean 대안 명시, 시간 적정 6~24분을 예시로 표기."
+SCI-02-064,eng,A,"tracks/02_spatial_transcriptomics/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:45-47, 97, 133",Plausible,softened,"09장 노이즈 비율·off-tissue UMI·%mt 임계값을 ""예시 기준(출처 없음)""으로 표기, %mt 기전은 가설/FFPE v1 MT 프로브 부재 주석."
+SCI-02-065,eng,E,tracks/02_spatial_transcriptomics/docs/images/04_cell2location_deconvolution_model.svg:-,Confirmed,fixed,"SVG04 및 생성 스크립트: Poisson/l_s·β_e → NB, μ=(m_gΣ w g + s_eg)·y_s (05장 및 cell2location 모델과 일치). 변경 7행, 나머지 SVG 불변."
+SCI-02-067,eng,B,"tracks/02_spatial_transcriptomics/pipelines/01_spatial_qc_and_deconvolution_pipeline.py:15, 396-397",Confirmed,softened,"파이프라인 01: docstring ""순열 검정"" → ""1차 근사 분산의 해석적 Z 검정"", Var(I) 과소(Z≈1.4배 부풀림)를 코드 주석·results NOTICE에 명시. 결과 불변 원칙에 따라 수식은 변경하지 않음(재실행 없음)."
+SCI-02-068,eng,E,tracks/02_spatial_transcriptomics/pipelines/results_pipeline_02/niche_composition_summary.csv:-,Confirmed,softened,파이프라인 02: 니치 이름이 K-means 중심 최대 성분으로 부여된 순환 라벨링이며 합성 5종 세포 유형이라 07·08장 4대 니치/파골세포 서술을 재현하지 않음을 코드 주석·results NOTICE에 명시(결과 불변).

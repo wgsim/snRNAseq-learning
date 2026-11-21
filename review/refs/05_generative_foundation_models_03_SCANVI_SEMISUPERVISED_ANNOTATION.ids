@@ -1,0 +1,13 @@
+[cited]
+PMID:33491336  # Xu 2021 Mol Syst Biol (scANVI)
+ARXIV:1406.5298  # "Kingma et al., NeurIPS, 2014" M2 semi-supervised VAE (L45)
+
+[evidence]
+PMID:34462589  # Lotfollahi 2022 Nat Biotechnol (scArches)
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scvi-tools

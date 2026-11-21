@@ -1,0 +1,14 @@
+[cited]
+PMID:3447015  # "Saitou와 Nei (1987)", L61,L238  [Saitou N 1987 Mol Biol Evol]
+PMID:24743184  # "Schwarz et al. (MEDICC)", L108  [Schwarz RF 2014 PLoS Comput Biol]
+PMID:36376909  # "Kaufmann et al. 2022 (MEDICC2)", L108  [Kaufmann TL 2022 Genome Biol]
+PMID:26544944  # "TCGA 원발", L171  [Cancer Genome Atlas Research Network 2015 Cell]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:scipy
+SW:ete3
+SW:pandas

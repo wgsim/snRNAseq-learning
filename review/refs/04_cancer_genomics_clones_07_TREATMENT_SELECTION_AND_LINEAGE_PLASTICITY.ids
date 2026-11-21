@@ -1,0 +1,15 @@
+[cited]
+PMID:29017058  # "Bluemn 2017", L3,L95,L105,L115  [Bluemn EG 2017 Cancer Cell]
+PMID:31361600  # "Labrecque 2019", L3,L95  [Labrecque MP 2019 J Clin Invest]
+PMID:35617398  # "Tang 2022", L95,L115  [Tang F 2022 Science]
+PMID:28059767  # "Ku et al. 2017", L57,L89,L134  [Ku SY 2017 Science]
+PMID:28059768  # "Mu et al. 2017", L57,L89,L134  [Mu P 2017 Science]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:scanpy
+SW:matplotlib
+SW:pandas

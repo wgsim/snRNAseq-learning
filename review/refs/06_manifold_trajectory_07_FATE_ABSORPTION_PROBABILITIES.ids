@@ -1,0 +1,13 @@
+[cited]
+PMID:28059767  # Ku 2017 Science
+PMID:31361600  # Labrecque 2019 J Clin Invest
+PMID:29017058  # Bluemn 2017 Cancer Cell
+PMID:26855148  # Beltran 2016 Nat Med
+
+[evidence]
+
+
+[software]
+SW:cellrank
+SW:numpy
+SW:scanpy

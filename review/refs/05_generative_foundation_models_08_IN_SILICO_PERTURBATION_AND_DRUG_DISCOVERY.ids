@@ -1,0 +1,10 @@
+[cited]
+PMID:40759747  # Ahlmann-Eltze 2025 Nat Methods
+
+[evidence]
+PMID:40251685  # Kedzierska 2025 Genome Biol
+
+[software]
+SW:numpy
+SW:pandas
+SW:torch

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">전립선 snRNA-seq 다운스트림 분석: 정규화 ➔ 매니폴드 투영 ➔ Leiden 군집화</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">Pearson Residuals / Log1p ➔ 35 PCs &amp; kNN Graph ➔ UMAP 위상 다양체 ➔ Leiden 노드 정제(연결 보장)</text>
+
+  <!-- Panel 1: Variance Stabilization & HVG -->
+  <g transform="translate(30, 70)">
+    <rect width="295" height="265" rx="10" fill="url(#gradCard7)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="147" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 분산 안정화 정규화 &amp; 2,500 HVG</text>
+
+    <!-- Formula Box -->
+    <rect x="15" y="45" width="265" height="42" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <text x="25" y="62" fill="#38bdf8" font-size="10.5" font-family="monospace">Log1p: log(Count/Total * 10⁴ + 1)</text>
+    <text x="25" y="78" fill="#34d399" font-size="10" font-family="monospace">Pearson Residuals: (y - μ) / √(μ + μ²/θ)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="107" fill="#cbd5e1" font-size="11" font-weight="600">• 시퀀싱 심도(Sequencing Depth) 편향 제거:</text>
+    <text x="25" y="125" fill="#94a3b8" font-size="10.5">핵별 총 UMI 변동에 의한 기술적 왜곡 보정</text>
+
+    <text x="15" y="147" fill="#cbd5e1" font-size="11" font-weight="600">• 고변이 유전자(2,500 HVG) 선별:</text>
+    <text x="25" y="165" fill="#94a3b8" font-size="10.5">평균-분산 적합(seurat_v3) 기반 전립선 핵심</text>
+    <text x="25" y="181" fill="#38bdf8" font-size="10.5">마커(AR, KLK3, AMACR, SYP) 보존</text>
+
+    <text x="15" y="203" fill="#cbd5e1" font-size="11" font-weight="600">• 희소 행렬(Sparse Matrix) 최적화:</text>
+    <text x="25" y="221" fill="#94a3b8" font-size="10.5">90%+ Zero 인플레이션 유지, 메모리 경량화</text>
+
+    <!-- Badge -->
+    <rect x="15" y="235" width="265" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="147" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">✓ 과분산(Overdispersion) 보정 완료</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 330 200 L 350 200" stroke="#38bdf8" stroke-width="2.5"/>
+  <polygon points="350,195 360,200 350,205" fill="#38bdf8"/>
+
+  <!-- Panel 2: PCA to UMAP Manifold Geometry -->
+  <g transform="translate(365, 70)">
+    <rect width="295" height="265" rx="10" fill="url(#gradCard7)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="147" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. PCA ➔ kNN ➔ UMAP 다양체 기하학</text>
+
+    <!-- Visual schematic: Scree / kNN / UMAP -->
+    <rect x="15" y="45" width="265" height="42" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <text x="25" y="62" fill="#818cf8" font-size="11" font-weight="600">35 직교 PC ➔ kNN(k=15) ➔ 2D UMAP</text>
+    <text x="25" y="78" fill="#94a3b8" font-size="10">Elbow Point: 전역 분산 85%+ 포착 다양체 구축</text>
+
+    <!-- Bullets -->
+    <text x="15" y="107" fill="#cbd5e1" font-size="11" font-weight="600">• 직교 주성분 분석(PCA, 35 PCs):</text>
+    <text x="25" y="125" fill="#94a3b8" font-size="10.5">고차원 유전자 공간의 기술적 노이즈 압축</text>
+
+    <text x="15" y="147" fill="#cbd5e1" font-size="11" font-weight="600">• 국소 연결 그래프(kNN Graph, k=15):</text>
+    <text x="25" y="165" fill="#94a3b8" font-size="10.5">코사인/유클리드 거리 기반 단일 핵 이웃 결속</text>
+
+    <!-- Crucial Warning Box -->
+    <rect x="15" y="180" width="265" height="75" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1.2"/>
+    <text x="25" y="198" fill="#f87171" font-size="10.5" font-weight="700">⚠️ UMAP 위상 해석 치명적 주의점:</text>
+    <text x="25" y="216" fill="#fca5a5" font-size="10">• 2D UMAP 간격 ≠ 고차원 유클리드 거리</text>
+    <text x="25" y="232" fill="#fca5a5" font-size="10">• 클러스터 간 절대 거리는 유사도가 아님</text>
+    <text x="25" y="248" fill="#cbd5e1" font-size="9.5">국소 연속성(Local Neighborhood)만 신뢰할 것!</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 665 200 L 685 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="685,195 695,200 685,205" fill="#818cf8"/>
+
+  <!-- Panel 3: Louvain Flaw vs Leiden Node Refinement -->
+  <g transform="translate(700, 70)">
+    <rect width="270" height="265" rx="10" fill="url(#gradCard7)" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="32" rx="10" fill="#10b981" fill-opacity="0.2"/>
+    <text x="135" y="22" text-anchor="middle" fill="#10b981" font-size="13" font-weight="700">3. Louvain 결함 vs Leiden 정제</text>
+
+    <!-- Contrast Diagram -->
+    <rect x="12" y="42" width="118" height="60" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+    <text x="71" y="58" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">Louvain 알고리즘</text>
+    <circle cx="35" cy="80" r="10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444"/>
+    <circle cx="105" cy="80" r="10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444"/>
+    <line x1="45" y1="80" x2="95" y2="80" stroke="#ef4444" stroke-dasharray="3,3" stroke-width="1.5"/>
+    <text x="71" y="96" text-anchor="middle" fill="#ef4444" font-size="8.5">단절된 브릿지 결함</text>
+
+    <rect x="138" y="42" width="120" height="60" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="198" y="58" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">Leiden (Node Refine)</text>
+    <circle cx="165" cy="80" r="10" fill="#10b981" fill-opacity="0.3" stroke="#10b981"/>
+    <circle cx="230" cy="80" r="10" fill="#10b981" fill-opacity="0.3" stroke="#10b981"/>
+    <line x1="175" y1="80" x2="220" y2="80" stroke="#10b981" stroke-width="2"/>
+    <text x="198" y="96" text-anchor="middle" fill="#34d399" font-size="8.5">연결성 수학적 보장</text>
+
+    <!-- Bullets -->
+    <text x="12" y="122" fill="#cbd5e1" font-size="11" font-weight="600">• Louvain의 치명적 결함:</text>
+    <text x="20" y="139" fill="#fca5a5" font-size="10.5">모듈성 최적화 중 내부가 끊어진(Disconnected)</text>
+    <text x="20" y="154" fill="#fca5a5" font-size="10.5">비연결 하위 커뮤니티가 동일 클러스터로 병합</text>
+
+    <text x="12" y="176" fill="#cbd5e1" font-size="11" font-weight="600">• Leiden 3단계 노드 정제 혁신:</text>
+    <text x="20" y="193" fill="#34d399" font-size="10.5">1) Local Move ➔ 2) Node Refine ➔</text>
+    <text x="20" y="208" fill="#34d399" font-size="10.5">3) Graph Aggregate 로 연결성 100% 보장</text>
+
+    <!-- Resolution recommendation -->
+    <rect x="12" y="222" width="246" height="35" rx="5" fill="#064e3b" fill-opacity="0.4" stroke="#10b981" stroke-width="1"/>
+    <text x="135" y="237" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">전립선암 최적 해상도: resolution=0.8</text>
+    <text x="135" y="250" text-anchor="middle" fill="#a7f3d0" font-size="9">악성 Luminal 아형 vs TME 기질세포 정밀 분리</text>
+  </g>
+</svg>

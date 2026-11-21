@@ -1,0 +1,11 @@
+[cited]
+DOI:10.1080/00031305.1983.10483115  # Chan, Golub, LeVeque 1983
+
+[evidence]
+
+
+[software]
+SW:cuml
+SW:cupy
+SW:psutil
+SW:rmm

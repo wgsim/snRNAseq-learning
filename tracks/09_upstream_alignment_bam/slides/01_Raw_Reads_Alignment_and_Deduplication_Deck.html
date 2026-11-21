@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 09: Raw Reads Alignment &amp; UMI Deduplication Deck</title>
+<style>
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --purple: #c084fc;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-content::-webkit-scrollbar { width: 6px; height: 6px; }
+  .slide-content::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+  .slide-content::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 3px; }
+  .slide-content::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
+
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 1.85rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.02rem; line-height: 1.62; color: #cbd5e1; margin-bottom: 10px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card.purple { border-left: 4px solid var(--purple); }
+  .card h3 { font-size: 1.18rem; color: #fff; margin-bottom: 8px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.92rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.88rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.92em; }
+  
+  /* Semantic Math Formatting */
+  .math-block { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 16px; margin: 10px 0; text-align: center; font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; font-size: 1.08rem; color: #38bdf8; }
+  .math-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-size: 0.95em; line-height: 1.2; }
+  .math-frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+  .math-frac .den { padding-top: 2px; }
+
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.92rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 285px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 46px 36px;">
+      <span class="tag" style="font-size: 0.95rem; padding: 6px 16px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase;">Track 09 Masterclass &bull; Part 1</span>
+      <div style="margin-top: 14px;"><span class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/00_ALIGNMENT_AND_BAM_ROADMAP.md &amp; 01</span></div>
+      <h1 style="font-size: 2.35rem; color: var(--accent); margin: 18px 0 14px; font-weight: 800; letter-spacing: -0.5px;">원시 시퀀싱 리드 해부학, 고속 스플라이스 정렬 &amp; UMI 중복제거</h1>
+      <h3 style="font-size: 1.15rem; color: #94a3b8; font-weight: 400; margin-bottom: 24px;">Illumina NovaSeq 광학 형광 신호(BCL)부터 단일세포 발현 카운트 행렬까지: 1-Hamming 바코드 오류 보정, STARsolo 접미사 배열, Alevin-fry RAD 스트림, N<sub>parent</sub> &ge; 2N<sub>child</sub> - 1 UMI 방향성 그래프</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 1060px;">
+        <p style="margin-bottom: 6px;">&#127919; <strong>산업 표준 벤치마크 코호트</strong>: 10x Chromium 3' v3 PBMC (~10,000 세포, 50,000 reads/cell 표준 면역 데이터) &bull; Human Primary &amp; mCRPC 전이성 거세저항성 전립선암 골전이 조직 snRNA-seq 코호트 (높은 전구 전사체 인트론 비율 &gt;40%)</p>
+        <p style="margin-bottom: 6px;">&#129516; <strong>핵심 계산생물학 아키텍처</strong>: 1-Hamming 반경 볼 탐색(|B<sub>1</sub>|=49) &amp; Phred 사후 확률 &bull; 접미사 배열(Suffix Array) <i>O(m + log n)</i> 시드 탐색 &amp; 동적 계획법 스티칭 &bull; 전사체 동등성 클래스(EC) 준정렬(Quasi-mapping) &amp; RAD 이진 스트리밍 &bull; Splici(Spliced+Intron) 인덱스 &bull; 방향성 인접 그래프(Directional Adjacency Graph)</p>
+        <p style="margin-bottom: 0;">&#128300; <strong>학습 중점</strong>: PCR 비선형 증폭에 의한 28%~40% 발현량 팽창 위양성 억제 수리 모델 규명, Cell Ranger 대비 STARsolo 11.7배 및 Alevin-fry 21.6배 가속 메커니즘, 4GB RAM 제약 환경과 32GB RAM 대규모 HPC 환경 최적화 전략</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: FASTQ Anatomy & 1-Hamming Barcode Error Correction -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/01_FASTQ_ANATOMY_AND_BARCODE_WHITELISTS.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>1. FASTQ 분자 카세트 해부학과 1-해밍 거리(1-Hamming) 바코드 오류 보정</h2>
+        <span class="tag">FASTQ Anatomy &amp; 1-Hamming Ball</span>
+      </div>
+      <p>단일세포 전사체 시퀀싱은 비대칭 Read 1(CB+UMI)과 Read 2(cDNA Insert) 구조를 갖습니다. 16bp 바코드 상태 공간(4.29&times;10<sup>9</sup>)에서 6.79M(6,794,880개) v3 화이트리스트의 극단적 희소성(0.158%)을 기반으로 1bp 치환 오류를 수학적으로 보정합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (FASTQ 리드 구조, 1-Hamming 볼 반경 및 EmptyDrops 모델)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">FASTQ 리드 구조 분석, 1-Hamming 바코드 오류 교정 및 EmptyDrops 세포 식별</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">10x R1/R2 이중 가닥 구조 ➔ 737K 화이트리스트 1-Hamming 해시 복원 ➔ Dirichlet-Multinomial 배경 액적 분리</text>
+
+  <!-- Panel 1: FASTQ Read Architecture -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 10x Genomics v3 R1/R2 리드 아키텍처</text>
+
+    <!-- Schematic: Read 1 -->
+    <rect x="15" y="42" width="270" height="42" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="22" y="55" fill="#94a3b8" font-size="8.5" font-weight="700">Read 1 (28 bp Short Read):</text>
+    <!-- Barcode 16bp -->
+    <rect x="22" y="60" width="130" height="18" rx="3" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+    <text x="87" y="73" text-anchor="middle" fill="#34d399" font-size="9" font-weight="700">Cell Barcode (16 bp)</text>
+    <!-- UMI 12bp -->
+    <rect x="156" y="60" width="120" height="18" rx="3" fill="#d97706" fill-opacity="0.25" stroke="#fbbf24" stroke-width="1"/>
+    <text x="216" y="73" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">UMI (12 bp)</text>
+
+    <!-- Schematic: Read 2 -->
+    <rect x="15" y="92" width="270" height="42" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="22" y="105" fill="#94a3b8" font-size="8.5" font-weight="700">Read 2 (91+ bp Paired cDNA):</text>
+    <rect x="22" y="110" width="254" height="18" rx="3" fill="#0284c7" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1"/>
+    <text x="149" y="123" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">cDNA Transcript Insert (전사항체 서열)</text>
+
+    <!-- Bullet description -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 바코드 다양성: 4^16 = 4.29 × 10^9 조합 공간</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">737,280개 검증된 젤비즈 비드 화이트리스트 매핑</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 고유 분자 식별자: 4^12 = 1.67 × 10^7 UMI 공간</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">PCR 중복 증폭 산물과 단일 전사체 1:1 절대 계수</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• Phred 품질 점수 (Q30 &gt; 99.9% 신뢰도):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">Illumina NovaSeq 광학적 염기 판독 오류 감지</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">Dual-index 비대칭 리드 구조 ➔ 세포 및 분자 태깅</text>
+  </g>
+
+  <!-- Panel 2: 1-Hamming Error Correction -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">2. 1-Hamming 바코드 오류 교정 해시 그래프</text>
+
+    <!-- Graph Schema -->
+    <rect x="15" y="42" width="280" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Whitelist Node -->
+    <circle cx="65" cy="88" r="22" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="85" text-anchor="middle" fill="#a7f3d0" font-size="8" font-weight="700">Whitelist</text>
+    <text x="65" y="97" text-anchor="middle" fill="#34d399" font-size="7.5">ACGT...A</text>
+
+    <!-- 1bp mutant 1 -->
+    <circle cx="165" cy="62" r="15" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="165" y="65" text-anchor="middle" fill="#fbbf24" font-size="7.5">TCGT (1bp)</text>
+
+    <!-- 1bp mutant 2 -->
+    <circle cx="165" cy="114" r="15" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="165" y="117" text-anchor="middle" fill="#fbbf24" font-size="7.5">AGGT (1bp)</text>
+
+    <!-- Corrected Arrow -->
+    <path d="M148,65 L90,82" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrEmerald01)"/>
+    <path d="M148,111 L90,94" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Unresolvable collision node -->
+    <circle cx="255" cy="88" r="15" fill="#1e293b" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="255" y="85" text-anchor="middle" fill="#f43f5e" font-size="7">Ambiguous</text>
+    <text x="255" y="96" text-anchor="middle" fill="#f43f5e" font-size="7">Dist=1 to 2 WL</text>
+    <path d="M238,88 L185,88" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+    <text x="215" y="82" text-anchor="middle" fill="#f43f5e" font-size="7">충돌 폐기</text>
+
+    <!-- Details -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 1-Hamming 근접 이웃: 3 × 16 = 48개 변이 공간</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">사전 인덱싱 해시 테이블로 O(1) 복구 탐색</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 복구율 &gt; 96.5% 달성:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">PCR 1bp 점 돌연변이 및 염기 판독 오류 완벽 복구</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 다중 화이트리스트 충돌(Collision) 방어:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">두 개 이상 정품 바코드와 동등 거리 시 안전 폐기</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">손실 리드의 8~12%를 복원하여 세포 검출 감도 극대화</text>
+  </g>
+
+  <!-- Panel 3: EmptyDrops & Cell Calling -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">3. EmptyDrops &amp; Knee-point 세포 여과</text>
+
+    <!-- Chart: Barcode Rank vs UMI Count -->
+    <rect x="15" y="42" width="280" height="92" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Axes -->
+    <line x1="40" y1="120" x2="275" y2="120" stroke="#64748b" stroke-width="1"/>
+    <line x1="40" y1="120" x2="40" y2="52" stroke="#64748b" stroke-width="1"/>
+    <text x="270" y="130" text-anchor="end" fill="#64748b" font-size="7">Log Barcode Rank</text>
+    <text x="35" y="52" text-anchor="end" fill="#64748b" font-size="7">Log UMI</text>
+
+    <!-- Knee Curve -->
+    <path d="M42,56 C70,58 100,60 130,70 C150,80 165,100 185,114 C210,117 250,118 270,119" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    
+    <!-- Knee & Inflection Points -->
+    <circle cx="130" cy="70" r="3.5" fill="#34d399"/>
+    <text x="135" y="67" fill="#34d399" font-size="7.5" font-weight="700">Knee pt (진짜 세포)</text>
+    
+    <circle cx="185" cy="114" r="3.5" fill="#f43f5e"/>
+    <text x="190" y="110" fill="#f43f5e" font-size="7.5" font-weight="700">Inflection (배경)</text>
+
+    <!-- Ambient Threshold Line -->
+    <line x1="40" y1="114" x2="275" y2="114" stroke="#f43f5e" stroke-width="1" stroke-dasharray="2,2"/>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 단순 임계값(Knee-point)의 한계 극복:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">소형 세포(T세포 등)의 UMI 과소 계수 탈락 방지</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• Dirichlet-Multinomial 배경 RNA 프로파일링:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">세포 없는 Ambient RNA 액적의 전사체 분포 모델링</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• Benjamini-Hochberg FDR &lt; 0.01 검정:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">유의미한 전사체 편향 액적만을 진성 세포로 판별</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">파편화된 Ambient RNA 오염을 배제하고 희귀 세포 구제</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. R1/R2 비대칭 리드 &amp; Phred Q-점수</h3>
+          <ul>
+            <li><strong>Read 1 (28bp)</strong>: 16bp Cell Barcode + 12bp UMI (v3 규격, 상태 공간 4<sup>12</sup> &approx; 1.67&times;10<sup>7</sup>)</li>
+            <li><strong>Read 2 (90~150bp)</strong>: 전사체 cDNA 서열 (엑손, 스플라이스 접합부, 인트론)</li>
+            <li><strong>Phred 품질 공식</strong>: <i>Q</i> = -10 log<sub>10</sub>(<i>P</i><sub>error</sub>) &rarr; Q30 = 99.9% 신뢰도</li>
+            <li><strong>신호 감쇄 메커니즘</strong>: 가닥 간 비동기화(Phasing/Pre-phasing)로 3' 말단 Q-점수 단조 감소</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 1-해밍 볼(|B<sub>1</sub>|=49) &amp; 베이지안 보정</h3>
+          <ul>
+            <li><strong>1-Hamming Ball 크기</strong>: |B<sub>1</sub>(s)| = 1 + 3<i>L</i> = 1 + 3&times;16 = <strong>49개</strong></li>
+            <li><strong>완전 일치 (<i>d</i><sub>H</sub>=0)</strong>: 화이트리스트 원본 보존</li>
+            <li><strong>단일 이웃 (<i>d</i><sub>H</sub>=1)</strong>: 48개 변이체 중 단 하나의 화이트리스트 존재 시 Q-점수 가중 복원</li>
+            <li><strong>경합 충돌(Collision)</strong>: 복수 후보 경합 시 사전 빈도 <i>C(w)</i>와 품질 기반 베이지안 사후 확률 &ge; 0.999 검정</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. 생일 역설(Birthday Paradox) &amp; EmptyDrops</h3>
+          <ul>
+            <li><strong>바코드 충돌 확률 공식</strong>: <i>P</i><sub>collision</sub> &approx; 1 - exp(-<i>N</i><sup>2</sup> / 2<i>M</i>) (<i>N</i>=10k, <i>M</i>=6.79M &rarr; P &approx; 99.94%, 기대 충돌 &asymp; 7.4쌍)</li>
+            <li><strong>Knee-point 필터의 한계</strong>: 고발현 세포와 배경 잡음(Ambient RNA) 경계 분리 실패</li>
+            <li><strong>EmptyDrops 검정</strong>: 디리클레-다항분포(Dirichlet-Multinomial) 음성 대조군 모델로 저발현 소형 세포 구제</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        베이지안 바코드 사후 확률: &nbsp;
+        <i>P</i>(<i>w</i><sub>i</sub> &mid; <i>s</i><sub>obs</sub>, <i>Q</i>) = 
+        <span class="math-frac"><span class="num"><i>P</i>(<i>s</i><sub>obs</sub> &mid; <i>w</i><sub>i</sub>, <i>Q</i>) &middot; <i>P</i>(<i>w</i><sub>i</sub>)</span><span class="den">&sum;<sub>j</sub> <i>P</i>(<i>s</i><sub>obs</sub> &mid; <i>w</i><sub>j</sub>, <i>Q</i>) &middot; <i>P</i>(<i>w</i><sub>j</sub>)</span></span>
+        &nbsp;&nbsp;&mid;&nbsp;&nbsp;
+        1-해밍 볼 크기: &nbsp; |B<sub>1</sub>(<i>s</i>)| = 1 + 3<i>L</i> = <strong>49</strong> &nbsp; (<i>L</i> = 16 bp)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Suffix Array & STARsolo Spliced Alignment -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/02_STARSOLO_SUFFIX_ARRAY_ALIGNMENT.md &sect; 1 - &sect; 3</div>
+      <div class="slide-header">
+        <h2>2. 접미사 배열(Suffix Array)과 STARsolo 최장 일치 접두사(MMP) 스플라이스 정렬</h2>
+        <span class="tag">Suffix Array &amp; Spliced Alignment</span>
+      </div>
+      <p>수만 염기쌍의 거대 인트론을 가로지르는 RNA-seq 리드를 매핑하기 위해 STAR는 32GB RAM을 사용하여 인간 게놈 접미사 배열을 메모리에 로드하고, 순차적 MMP 시드 분할과 동적 계획법 스티칭을 수행합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (STARsolo 접미사 배열, MMP 시드 스티칭 및 단일 바이너리 스트리밍)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">STARsolo 스플라이싱 정렬: 접미사 배열(Suffix Array) BWT 색인 및 MMP 시드 확장</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">O(L log N) 접미사 배열 탐색 ➔ 최대 매핑 접두사(MMP) 분할 ➔ 정밀 동적 계획법(DP) 스플라이스 인트론 스코어링</text>
+
+  <!-- Panel 1: Suffix Array Indexing -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. Suffix Array (SA) &amp; BWT 유전체 색인</text>
+
+    <!-- Schematic: Suffix Array Table -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#64748b" font-size="7.5" font-weight="700">Idx</text>
+      <text x="25" y="12" fill="#64748b" font-size="7.5" font-weight="700">SA[i]</text>
+      <text x="65" y="12" fill="#64748b" font-size="7.5" font-weight="700">Suffix String (사전순 정렬)</text>
+
+      <line x1="0" y1="16" x2="250" y2="16" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="28" fill="#94a3b8" font-size="7.5">0</text>
+      <text x="25" y="28" fill="#38bdf8" font-size="7.5">14,208</text>
+      <text x="65" y="28" fill="#cbd5e1" font-size="7.5">AAGCTTGACGT...</text>
+
+      <text x="0" y="42" fill="#94a3b8" font-size="7.5">1</text>
+      <text x="25" y="42" fill="#38bdf8" font-size="7.5">892,104</text>
+      <text x="65" y="42" fill="#34d399" font-size="7.5">ACGTTAGCTA... (MMP Match)</text>
+
+      <text x="0" y="56" fill="#94a3b8" font-size="7.5">2</text>
+      <text x="25" y="42" fill="#38bdf8" font-size="7.5">3,110,4</text>
+      <text x="65" y="56" fill="#cbd5e1" font-size="7.5">AGCTAGGTCC...</text>
+
+      <text x="0" y="70" fill="#94a3b8" font-size="7.5">...</text>
+      <text x="25" y="70" fill="#64748b" font-size="7.5">3.2 × 10^9</text>
+      <text x="65" y="70" fill="#64748b" font-size="7.5">TTTTTT...$ (GRCh38 인간 유전체)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 메모리 상주 접미사 배열 (~32 GB RAM):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">BWT 압축 없이 전체 SA를 RAM에 적재해 즉각 탐색</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 이진 탐색 속도 O(L log N):</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">100 bp cDNA 리드를 수 마이크로초 내에 전역 조회</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 접미사 길이 k-mer 프리픽스 캐싱:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">첫 14bp의 SA 범위를 O(1) 직접 참조 테이블로 가속</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">전역 색인 기반 무제한 갭 스플라이스 시드 발굴</text>
+  </g>
+
+  <!-- Panel 2: Maximal Mappable Prefix (MMP) -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">2. Maximal Mappable Prefix (MMP) 시드 분할</text>
+
+    <!-- MMP Split Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Full Read -->
+    <rect x="25" y="52" width="260" height="18" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+    <text x="155" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">100 bp Spliced RNA Read</text>
+
+    <!-- MMP 1 (Exon A) -->
+    <rect x="25" y="78" width="95" height="18" rx="3" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1.2"/>
+    <text x="72" y="90" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">MMP 1 (38bp)</text>
+    <!-- Intron Gap -->
+    <line x1="120" y1="87" x2="180" y2="87" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="150" y="82" text-anchor="middle" fill="#fbbf24" font-size="7.5">Intron 12 kb</text>
+    <!-- MMP 2 (Exon B) -->
+    <rect x="180" y="78" width="105" height="18" rx="3" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="232" y="90" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">MMP 2 (62bp)</text>
+
+    <!-- Split Arrow -->
+    <path d="M120,68 L120,76" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrCyan02)"/>
+    <text x="120" y="112" text-anchor="middle" fill="#f43f5e" font-size="7">불일치 지점에서 분할</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 순차적 접두사 연장(Prefix Extension):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">유전체와 완벽 일치하는 최장 부분 서열을 연속 탐색</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 엑손-엑손 접합부(Junction) 자동 검출:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">스플라이스 사이트에서 미스매치 시 즉각 차기 시드 생성</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 초장거리 키메라/구조 변이 포착:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">수십 kb 인트론뿐 아니라 염색체 간 융합 시드 동시 포섭</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">주석(Annotation) 없는 신규 스플라이싱 접합부 발굴</text>
+  </g>
+
+  <!-- Panel 3: Spliced DP Scoring -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">3. 동적 계획법(DP) 스플라이스 스코어링</text>
+
+    <!-- Motifs & Scoring Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="14" fill="#fbbf24" font-size="8.5" font-weight="700">정규 모티프:</text>
+      <text x="70" y="14" fill="#34d399" font-size="8.5" font-weight="700">GT (Donor) ... AG (Acceptor) [+20점]</text>
+      
+      <text x="0" y="32" fill="#fbbf24" font-size="8.5" font-weight="700">비정규 모티프:</text>
+      <text x="70" y="32" fill="#cbd5e1" font-size="8.5">GC...AG [+15점] / AT...AC [+10점]</text>
+
+      <text x="0" y="50" fill="#fbbf24" font-size="8.5" font-weight="700">인트론 페널티:</text>
+      <text x="70" y="50" fill="#f43f5e" font-size="8.5">Score -= log(L_intron) × Penalty</text>
+
+      <text x="0" y="68" fill="#fbbf24" font-size="8.5" font-weight="700">STARsolo 출력:</text>
+      <text x="70" y="68" fill="#38bdf8" font-size="8.5" font-weight="700">Gene / GeneFull / SJ.out.tab 매트릭스</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• Needleman-Wunsch 변형 정밀 정렬:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">시드 간 공백을 정규 스플라이스 시그널로 보정 연결</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• --soloType CB_UMI_Simple 네이티브 통합:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">BAM 중간 파일 없이 단일세포 카운트 매트릭스 직출력</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• CellRanger 대비 10배 정렬 속도:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">1억 리드 정렬 및 CB/UMI 카운팅을 20분 내 완료</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">미세 엑손 및 대형 인트론 고정밀 스플라이싱 정량화</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 접미사 배열 vs BWT/FM-Index 비교</h3>
+          <ul>
+            <li><strong>탐색 시간 복잡도</strong>: 접미사 배열 + LCP 결합 시 <strong><i>O(m + log n)</i></strong> 초고속 룩업</li>
+            <li><strong>메모리 vs 속도 트레이드오프</strong>:
+              <ul>
+                <li><strong>STAR (SA)</strong>: 30~32GB RAM 소모 &bull; 나노초 메모리 역참조로 스플라이스 갭 즉각 탐색</li>
+                <li><strong>BWA/Bowtie2 (FM-Index)</strong>: 4~5GB RAM &bull; 인트론 갭 탐색 시 백트래킹(Backtracking) 폭증</li>
+              </ul>
+            </li>
+            <li><strong>설계 철학</strong>: 메모리 용량을 희생하여 CPU 계산 지연시간을 0으로 단축</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. MMP 시드 탐색 &amp; 동적 계획법 스티칭</h3>
+          <ul>
+            <li><strong>1단계 (MMP 시드 분할)</strong>: 리드 시작부터 최장 일치 접두사 MMP<sub>1</sub>(45bp) 탐색 &rarr; 스플라이스 접합부에서 탐색 중단 &rarr; 잔여 서열에서 MMP<sub>2</sub>(55bp) 탐색</li>
+            <li><strong>2단계 (시드 스티칭)</strong>: 유전체 좌표계 앵커 클러스터링 후 Smith-Waterman 동적 계획법 경로 최적화</li>
+            <li><strong>스플라이소솜 모티프 페널티 (<i>P</i><sub>splice</sub>)</strong>:
+              <ul>
+                <li>정규 <code>GT/AG</code> (~98.9%): <strong>0</strong> (페널티 없음)</li>
+                <li>준정규 <code>GC/AG</code> (~0.9%): <strong>+1 ~ +2</strong></li>
+                <li>비정규 U12 <code>AT/AC</code>: <strong>+3 ~ +4</strong> &bull; 임의 서열: <strong>+15 ~ +20</strong></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. STARsolo 단일 바이너리 스트리밍</h3>
+          <ul>
+            <li><strong>Cell Ranger 디스크 병목</strong>: 레거시 STAR 호출 &rarr; 수십 GB SAM/BAM 디스크 기록 &rarr; 파이썬 파싱 (극심한 I/O 지연)</li>
+            <li><strong>STARsolo 올인원 C++ 엔진</strong>: FASTQ 스트림 수신 &rarr; 인라인 바코드 보정 &rarr; SA 정렬 &rarr; GTF 비트마스크 &rarr; UMI 중복제거</li>
+            <li><strong>공유 메모리 가속</strong>: <code>--genomeLoad LoadAndKeep</code> 옵션으로 32GB 인덱스를 POSIX shm에 상주시켜 다중 샘플 실행 시 <strong>11.7배 가속</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        전역 정렬 스코어 최적화: &nbsp;
+        <i>S</i>(&Ascr;) = &sum;<sub>Matches</sub> <i>W</i><sub>match</sub> - &sum;<sub>Mismatches</sub> <i>P</i><sub>mis</sub> - &sum;<sub>Indels</sub> (<i>P</i><sub>gap_open</sub> + <i>L</i><sub>k</sub> &middot; <i>P</i><sub>gap_ext</sub>) - &sum;<sub>Junctions</sub> <i>P</i><sub>splice</sub>(<i>s</i>)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Alevin-fry Quasi-mapping & Splici Index -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/03_ALEVIN_FRY_PSEUDOALIGNMENT_AND_RAD.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>3. Alevin-fry 선택적 의사정렬, RAD 이진 스트림 &amp; Splici 인덱스 초경량화</h2>
+        <span class="tag">Quasi-mapping &amp; Splici Index</span>
+      </div>
+      <p>Smith-Waterman 전역 염기 정렬의 과잉 연산을 제거하고 전사체 동등성 클래스(EC)와 2단계 매핑-정량 디커플링으로 4GB RAM에서 초고속 처리하는 차세대 아키텍처입니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Alevin-fry 2단계 디커플링, RAD 바이너리 구조 및 Splici L-1 오버행)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrPurple03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Alevin-fry 유사 정렬 아키텍처: Splici 색인 및 RAD 바이너리 스트림 정량화</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">k-mer Quasi-mapping ➔ Splici(전사체+인트론) 참조 유전체 ➔ RAD 바이너리 청크 및 USA 카운트 행렬</text>
+
+  <!-- Panel 1: Splici Index Structure -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. Splici (Spliced + Intron) 인덱스 구조</text>
+
+    <!-- Schematic: Splici Components -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Spliced cDNA -->
+    <rect x="25" y="50" width="250" height="18" rx="3" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <text x="150" y="62" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">Spliced Transcripts (성숙 mRNA 엑손 연합체)</text>
+
+    <!-- Intron with Flank -->
+    <rect x="25" y="74" width="35" height="18" rx="2" fill="#d97706" fill-opacity="0.3" stroke="#fbbf24" stroke-width="1"/>
+    <text x="42" y="86" text-anchor="middle" fill="#fbbf24" font-size="7">Flank</text>
+
+    <rect x="63" y="74" width="174" height="18" rx="2" fill="#7e22ce" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+    <text x="150" y="86" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">Intronic Sequence (미성숙 pre-mRNA)</text>
+
+    <rect x="240" y="74" width="35" height="18" rx="2" fill="#d97706" fill-opacity="0.3" stroke="#fbbf24" stroke-width="1"/>
+    <text x="257" y="86" text-anchor="middle" fill="#fbbf24" font-size="7">Flank</text>
+
+    <text x="150" y="106" text-anchor="middle" fill="#94a3b8" font-size="7.5">Flanking Length = Read_Length - 1 (경계 리드 포착)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일핵(snRNA-seq) 최적화 참조 설계:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">핵 내부 미성숙 pre-mRNA 인트론 신호를 정확히 포섭</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• RNA Velocity 동역학 데이터 기반 마련:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">스플라이싱 전(Unspliced) vs 후(Spliced) 비율 추적</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 의사 유전자(Pseudogene) 오정렬 차단:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">게놈 전체 인트론 패딩으로 미스매핑 비율 대폭 감소</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">성숙 전사체와 인트론을 동등한 참조체로 색인화</text>
+  </g>
+
+  <!-- Panel 2: Quasi-mapping & Equivalence Classes -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">2. k-mer 유사 매핑 및 동등성 클래스 (EqClass)</text>
+
+    <!-- Quasi Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- k-mers -->
+    <rect x="25" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="47" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k1 (31bp)</text>
+    <rect x="75" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="97" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k2 (31bp)</text>
+    <rect x="125" y="52" width="45" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="147" y="63" text-anchor="middle" fill="#38bdf8" font-size="7">k3 (31bp)</text>
+
+    <!-- Target transcripts EqClass -->
+    <g transform="translate(25, 78)">
+      <rect width="250" height="22" rx="3" fill="#581c87" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+      <text x="125" y="15" text-anchor="middle" fill="#e9d5ff" font-size="8">Equivalence Class #412: {TX1_Spliced, TX1_Intron}</text>
+    </g>
+    <text x="155" y="118" text-anchor="middle" fill="#94a3b8" font-size="7.5">CIGAR 계산 생략 ➔ 전사체 집합 매핑 (15배 고속화)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• CIGAR 정렬 없는 초고속 유사 매핑:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">정밀 염기 정렬 대신 k-mer 일치 전사체 라벨 집합 추출</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 다중 매핑 전사체(Multimapping) 처리:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">임의 배정 대신 동등성 클래스 단위로 모호성 유지</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 극단적인 I/O 및 CPU 부하 절감:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">기가바이트 단위 대용량 BAM 생성 없이 스트리밍</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">정렬 병목을 해소하는 경량 k-mer 해시 정량화</text>
+  </g>
+
+  <!-- Panel 3: RAD File & USA Matrix -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. RAD 스트림 및 USA (U-S-A) 카운트 행렬</text>
+
+    <!-- RAD Format Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#38bdf8" font-size="7.5" font-weight="700">RAD Record: [CB: 64b] [UMI: 32b] [EqClass: 32b]</text>
+      <!-- Binary Chunk Stream -->
+      <rect x="0" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="40" y="29" text-anchor="middle" fill="#38bdf8" font-size="7">Chunk 1 (CB-A)</text>
+      <rect x="85" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="125" y="29" text-anchor="middle" fill="#38bdf8" font-size="7">Chunk 2 (CB-A)</text>
+      <rect x="170" y="18" width="80" height="16" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="210" y="29" text-anchor="middle" fill="#34d399" font-size="7">Chunk 3 (CB-B)</text>
+
+      <!-- USA Matrix Breakdown -->
+      <line x1="0" y1="42" x2="250" y2="42" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="55" fill="#34d399" font-size="8" font-weight="700">U (Unspliced):</text>
+      <text x="80" y="55" fill="#cbd5e1" font-size="8">인트론 단독 매핑 (신생 전사체)</text>
+      <text x="0" y="68" fill="#38bdf8" font-size="8" font-weight="700">S (Spliced):</text>
+      <text x="80" y="68" fill="#cbd5e1" font-size="8">엑손 접합부 매핑 (성숙 mRNA)</text>
+      <text x="0" y="80" fill="#fbbf24" font-size="8" font-weight="700">A (Ambiguous):</text>
+      <text x="80" y="80" fill="#cbd5e1" font-size="8">엑손 내부 매핑 (U/S 공유)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• RAD (Reduced Alignment Data) 바이너리 압축:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">BAM 대비 90% 작은 파일 크기로 디스크 I/O 극소화</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 세포 바코드별 청크 스트리밍 정렬:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">Alevin-fry 엔진이 병렬 코어에서 메모리 누수 없이 집계</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• USA 3차원 카운트 행렬 동시 도출:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">스플라이싱 역동성 분석과 표준 유전자 발현 정량 동시 완성</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">BAM 불필요 ➔ 초고속 메모리 절감 차세대 업스트림 표준</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 전역 염기 정렬 vs 선택적 준정렬</h3>
+          <ul>
+            <li><strong>전역 정렬의 90% 연산 낭비</strong>: CIGAR 스트링(100M, 45M12000N55M) 계산은 단순 전사체 분자 카운팅에 불필요</li>
+            <li><strong>전사체 동등성 클래스 (EC)</strong>:
+              <br><code>r<sub>i</sub> &rarr; EC(r<sub>i</sub>) = &lbrace;t &in; T &mid; r<sub>i</sub> aligns to t&rbrace;</code>
+              <br>수억 개 리드를 수십만 개 고유 EC로 압축</li>
+            <li><strong>완전 디커플링 아키텍처</strong>: Phase 1 Salmon/Piscem (초고속 매핑) &rarr; RAD 스트림 &rarr; Phase 2 alevin-fry Rust (정량 엔진)</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. RAD (Reduced Alignment Data) 포맷</h3>
+          <ul>
+            <li><strong>2비트 염기 압축</strong>: A=00, C=01, G=10, T=11 인코딩
+              <ul>
+                <li>16bp Cell Barcode: 단 <strong>4바이트(uint32)</strong></li>
+                <li>12bp UMI: 단 <strong>3바이트(uint24)</strong> 정수형</li>
+              </ul>
+            </li>
+            <li><strong>청크 기반 이진 스트림</strong>: 가변 크기 메모리 버퍼 직렬화</li>
+            <li><strong>디스크 절감</strong>: SAM/BAM 대비 <strong>90~95% 용량 절감</strong> (15GB &rarr; 1.0GB)</li>
+            <li><strong>파이프라인 3단계</strong>: <code>generate-permit-list</code> &rarr; <code>collate</code> &rarr; <code>quant</code></li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. Splici 인덱스 (Spliced + Flanking Intron)</h3>
+          <ul>
+            <li><strong>snRNA-seq &amp; RNA Velocity 필수</strong>: 성숙(Spliced)과 미성숙 전구 전사체(Unspliced) 분리 정량</li>
+            <li><strong><i>L</i>-1 플랭킹 오버행 필연성</strong>: 리드 길이 <i>L</i>=100bp일 때 엑손-인트론 접합부 리드가 인트론 타겟으로 정확히 매핑되도록 인트론 양 말단에 <i>L</i>-1 (99bp) 엑손 서열 결합</li>
+            <li><strong>USA 카운트 행렬</strong>: Spliced(S), Unspliced(U), Ambiguous(A) 3차원 분리 카운팅 완결</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        Splici 참조 전사체 길이: &nbsp;
+        Length(Flanking Intron) = Length(Intron Body) + 2 &times; (<i>L</i> - 1) &nbsp;&nbsp;&mid;&nbsp;&nbsp;
+        USA 분리 정량: &nbsp; <strong>X</strong> &in; &Ropf;<sup><i>N</i> &times; 3<i>G</i></sup> &nbsp; (<i>S, U, A</i>)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: PCR Amplification Bias & UMI Math -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/04_UMI_DEDUPLICATION_GRAPH_ALGORITHMS.md &sect; 1 - &sect; 2</div>
+      <div class="slide-header">
+        <h2>4. 단일세포 PCR 증폭 편향의 수리적 함정과 UMI(고유 분자 식별자)의 본질</h2>
+        <span class="tag">PCR Bias &amp; UMI Mechanics</span>
+      </div>
+      <p>단일 세포당 10~30pg에 불과한 극미량 mRNA 증폭 시 발생하는 지수 복제 왜곡과, 중합효소 점 돌연변이 및 시퀀싱 오류로 인한 나이브 카운트의 28%~40% 발현량 팽창 위양성 메커니즘을 정립합니다.</p>
+      
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. PCR 증폭의 비선형성과 정량 왜곡</h3>
+          <ul>
+            <li><strong>지수 증폭 수식</strong>: <i>N</i><sub>i</sub>(<i>C</i>) = (1 + <i>E</i><sub>i</sub>)<sup><i>C</i></sup> (<i>E</i><sub>i</sub>: 증폭 효율, <i>C</i>: 사이클 수)</li>
+            <li><strong>효율 차이에 따른 파국</strong>:
+              <ul>
+                <li>전사체 A (<i>E</i><sub>A</sub> = 0.95): <i>C</i>=14 사이클 후 (1.95)<sup>14</sup> &approx; <strong>11,440배</strong></li>
+                <li>전사체 B (<i>E</i><sub>B</sub> = 0.70): <i>C</i>=14 사이클 후 (1.70)<sup>14</sup> &approx; <strong>1,700배</strong></li>
+              </ul>
+            </li>
+            <li><strong>결과</strong>: 초기 1:1 분자비가 시퀀싱 후 <strong>6.7배 왜곡</strong>! 리드 수(Read Count)는 발현량의 지표가 될 수 없음</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. UMI 분자 태깅 메커니즘 (4<sup>12</sup> &approx; 1.68&times;10<sup>7</sup>)</h3>
+          <ul>
+            <li><strong>1:1 분자 식별자</strong>: 역전사 시 각 mRNA 분자 3' 말단에 12bp 무작위 올리고 결합</li>
+            <li><strong>상태 공간의 광활함</strong>: |&Uscr;| = 4<sup>12</sup> = 16,777,216개
+              <br>&rarr; 단일 유전자의 전사체 분자 수(수십~수천 개) 대비 공간이 10<sup>4</sup>배 넓어 UMI 충돌 확률 극소</li>
+            <li><strong>절대 계수 복원</strong>: PCR 복제 산물이 수천 개로 불어나도, 동일 좌위 고유 UMI 수(Unique UMI Count)만 세어 초기 전사체 수 <i>M</i>을 1:1 복원</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. 나이브 카운팅의 28%~40% 발현량 팽창</h3>
+          <ul>
+            <li><strong>효소 복제 오류율</strong>: &mu; &approx; 10<sup>-5</sup> ~ 10<sup>-4</sup> /bp/cycle</li>
+            <li><strong>가상 UMI (Pseudo-UMI) 파생</strong>:
+              <ul>
+                <li>참 분자 UMI (GACTAGCACTAG): 850 reads</li>
+                <li>PCR 4사이클 돌연변이 (GACTAGCAC<strong>C</strong>AG): 42 reads (인공물!)</li>
+              </ul>
+            </li>
+            <li><strong>나이브 집계 (<code>len(set(umis))</code>)의 실패</strong>:
+              <br>고발현 유전자(<i>KLK3</i>, 액틴)에서 파생된 의사 UMI들을 독립 분자로 오판하여 <strong>28%~40% 과대계수(Count Inflation)</strong> 발생!</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        PCR 복제 편향 및 나이브 인플레이션: &nbsp;
+        <i>N</i><sub>naive</sub> = <i>N</i><sub>true</sub> + &sum;<sub>k</sub> <i>N</i><sub>pseudo</sub><sup>(<i>k</i>)</sup> 
+        &nbsp;&implies;&nbsp;
+        <span style="color:var(--highlight); font-weight:700;">Over-counting Inflation &approx; +28% ~ +40%</span> &nbsp;
+        (세포형 마커 DEG 분석 시 심각한 위양성 유발!)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Directional Adjacency Graph Deduplication -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/04_UMI_DEDUPLICATION_GRAPH_ALGORITHMS.md &sect; 3 - &sect; 5</div>
+      <div class="slide-header">
+        <h2>5. 방향성 인접 그래프(Directional Adjacency) 중복제거 네트워크와 수리 모델</h2>
+        <span class="tag">Directional Graph &amp; N ≥ 2N-1</span>
+      </div>
+      <p>단순 클러스터링의 과소계수(Under-counting) 부작용을 극복하고, PCR 분기 과정(Branching Process) 모델에서 유도된 <i>N</i><sub>parent</sub> &ge; 2<i>N</i><sub>child</sub> - 1 부등식으로 참 양성 분자를 온전히 보존하는 그래프 알고리즘입니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (방향성 인접 그래프, 브리지 보존 수리 및 4대 중복제거 알고리즘 비교)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrRose04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">UMI 중복 제거(Deduplication): PCR 증폭 오류 트리 및 방향성 인접 그래프</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">단순 고유 카운팅의 계수 인플레이션 한계 ➔ 1-Hamming 인접 네트워크 ➔ N_parent ≥ 2N_child - 1 임계 필터링</text>
+
+  <!-- Panel 1: PCR Error Branching Tree -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. PCR 증폭 오류 및 UMI 인플레이션</text>
+
+    <!-- Branching Tree Diagram -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Parent Root Node -->
+    <circle cx="65" cy="86" r="20" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="83" text-anchor="middle" fill="#a7f3d0" font-size="7.5" font-weight="700">True UMI</text>
+    <text x="65" y="94" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">N = 84</text>
+
+    <!-- Child Node 1 -->
+    <circle cx="175" cy="62" r="14" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="175" y="60" text-anchor="middle" fill="#fbbf24" font-size="7">Mutant 1</text>
+    <text x="175" y="70" text-anchor="middle" fill="#fbbf24" font-size="7.5">N = 6</text>
+
+    <!-- Child Node 2 -->
+    <circle cx="175" cy="110" r="14" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="175" y="108" text-anchor="middle" fill="#fbbf24" font-size="7">Mutant 2</text>
+    <text x="175" y="118" text-anchor="middle" fill="#fbbf24" font-size="7.5">N = 2</text>
+
+    <!-- Branch lines -->
+    <path d="M85,82 L158,64" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="118" y="68" fill="#fbbf24" font-size="6.5">1bp PCR error</text>
+    <path d="M85,90 L158,108" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="118" y="108" fill="#fbbf24" font-size="6.5">1bp error</text>
+
+    <!-- Independent Collision Node -->
+    <circle cx="250" cy="86" r="16" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="250" y="83" text-anchor="middle" fill="#38bdf8" font-size="7">Indep UMI</text>
+    <text x="250" y="93" text-anchor="middle" fill="#38bdf8" font-size="7.5">N = 35</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• PCR 중합효소 오류율 (~10^-4 per bp):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">12bp UMI가 증폭 사이클을 거치며 돌연변이 자손 파생</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Naive Unique 카운팅의 치명적 결함:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">1개 분자가 3개로 카운트되어 발현량이 25~40% 과대평가</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 시퀀싱 뎁스 증가에 따른 왜곡 심화:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">시퀀싱 리드가 많아질수록 위양성 UMI 수가 폭발</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.25"/>
+    <text x="150" y="259" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="600">단순 고유 계수는 전사체 정량의 신뢰도를 파괴</text>
+  </g>
+
+  <!-- Panel 2: 4 Deduplication Algorithms -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. UMI 디듀플리케이션 4대 알고리즘</text>
+
+    <!-- Comparison Table / Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#f43f5e" font-size="7.5" font-weight="700">1. Unique (Naive):</text>
+      <text x="90" y="12" fill="#cbd5e1" font-size="7.5">단순 유일 서열 계수 ➔ 인플레이션 +30%</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="7.5" font-weight="700">2. Cluster (CC):</text>
+      <text x="90" y="28" fill="#cbd5e1" font-size="7.5">1-Hamming 연결요소 ➔ 과대 병합 위험</text>
+
+      <text x="0" y="44" fill="#a855f7" font-size="7.5" font-weight="700">3. Adjacency:</text>
+      <text x="90" y="44" fill="#cbd5e1" font-size="7.5">최다 빈도 노드 주변 1-step 통합</text>
+
+      <text x="0" y="60" fill="#34d399" font-size="7.5" font-weight="700">4. Directional:</text>
+      <text x="90" y="60" fill="#34d399" font-size="7.5" font-weight="700">N_A ≥ 2N_B - 1 판정 유향 그래프 (표준)</text>
+
+      <line x1="0" y1="68" x2="250" y2="68" stroke="#334155" stroke-width="0.8"/>
+      <text x="125" y="79" text-anchor="middle" fill="#38bdf8" font-size="7.5">UMI-tools / CellRanger / STARsolo 핵심 표준 엔진</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 연결 요소(Cluster)의 브릿징 오류:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">독립적인 두 고발현 UMI가 우연한 에러로 하나로 융합</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 방향성 인접(Directional Adjacency):</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">카운트 빈도 격차를 조건부 확률로 모델링하여 분기 차단</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 정확도 및 리콜률 최상위 수렴:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">위양성 노이즈는 99% 제거하고 진성 분자는 99.8% 보존</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">독립 분자 과소 계수 없이 PCR 증폭 오류만 정밀 제거</text>
+  </g>
+
+  <!-- Panel 3: N >= 2N-1 Directional Edge Rule -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. N_parent ≥ 2N_child - 1 방향성 엣지 규칙</text>
+
+    <!-- Network Graph Schema -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Node A (Parent, N=100) -->
+    <circle cx="65" cy="86" r="22" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="83" text-anchor="middle" fill="#a7f3d0" font-size="8" font-weight="700">Node A</text>
+    <text x="65" y="94" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">N_A = 100</text>
+
+    <!-- Node B (Valid child, N=12) -->
+    <circle cx="165" cy="64" r="16" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+    <text x="165" y="61" text-anchor="middle" fill="#a7f3d0" font-size="7">Node B</text>
+    <text x="165" y="71" text-anchor="middle" fill="#34d399" font-size="7.5">N_B = 12</text>
+
+    <!-- Directed Edge A -> B -->
+    <path d="M88,77 L147,67" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald04)"/>
+    <text x="125" y="70" fill="#34d399" font-size="6.5">100 ≥ 2(12)-1=23 [성립]</text>
+
+    <!-- Node C (Independent, N=60) -->
+    <circle cx="250" cy="86" r="20" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="250" y="83" text-anchor="middle" fill="#fca5a5" font-size="7.5">Node C</text>
+    <text x="250" y="94" text-anchor="middle" fill="#f43f5e" font-size="8">N_C = 60</text>
+
+    <!-- No Edge between B and C -->
+    <line x1="183" y1="70" x2="230" y2="82" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="208" y="73" fill="#f43f5e" font-size="6.5">12 &lt; 2(60)-1=119 [절단]</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 유향 엣지 판정 규칙:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">Hamming 거리 = 1 이고 N_A ≥ 2N_B - 1 일 때만 A ➔ B</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 자식 노드의 카운트 조건부 흡수:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">자식의 발생 횟수가 부모의 절반 이하일 때만 에러로 병합</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 독립 전사체 충돌 보호:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">우연히 1bp 차이나는 고발현 독립 분자는 각각 온전히 보존</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">수학적 확률 기반 완벽한 분자 계수 정밀도 보장</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 4대 UMI 알고리즘 한계 비교</h3>
+          <ul>
+            <li><strong>1. Unique (Naive)</strong>: <code>set(U)</code> 단순 카운팅 &rarr; 오류 미보정으로 <strong>28~40% 과대계수</strong></li>
+            <li><strong>2. Percentile</strong>: 상위 99% UMI만 보존 &rarr; <strong>저발현 유전자(1 UMI) 전량 학살</strong></li>
+            <li><strong>3. Cluster (무방향 1-Hamming)</strong>: 1bp 차이 나는 독립 참 분자 A(50 reads)와 B(45 reads)를 무차별 병합하여 <strong>과소계수(Under-counting)</strong></li>
+            <li><strong>4. Directional (방향성 인접)</strong>: 리드 수 비율 부등식을 검정하여 참 분자 보존</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 방향성 임계 부등식 (<i>N</i><sub>p</sub> &ge; 2<i>N</i><sub>c</sub> - 1) 수학적 유도</h3>
+          <ul>
+            <li><strong>최악의 증폭 시나리오</strong>: 가장 첫 사이클(<i>k</i>=1)에서 돌연변이 발생 &rarr; <i>N</i><sub>p</sub>(1)=1, <i>N</i><sub>c</sub>(1)=1</li>
+            <li><strong>대등 증폭 상한</strong>: <i>C</i> 사이클 동안 동일 효율 증폭 시 이론적으로 자식 리드 수는 부모 리드 수를 초과 불가: <i>N</i><sub>c</sub> &le; <i>N</i><sub>p</sub></li>
+            <li><strong>실용적 2배 임계 (Smith, Heger &amp; Sudbery)</strong>: 오류는 대부분 이후 사이클에 발생하고 증폭 편향이 누적되어 참 분자 대비 오류 UMI의 카운트 비율이 2배 미만으로 좁혀지는 일은 드묾:
+              <br><strong style="color:var(--accent);"><i>N</i><sub>parent</sub> &ge; 2<i>N</i><sub>child</sub> - 1</strong> (−1은 저빈도 UMI 사슬 병합 보정)</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. 브리지 보존 &amp; 방향성 서브트리 분해</h3>
+          <ul>
+            <li><strong>브리지 보존 (Edge Rejection)</strong>:
+              <br>A(50 reads) &harr; B(45 reads): 50 &ge; 2(45)-1=89 불성립, 역방향 45 &ge; 2(50)-1=99 불성립 (어느 방향도 2배 지배 불충분).
+              <br>&rarr; 부모-자식 관계가 어느 방향으로도 성립하지 않아 엣지 절단 &rarr; <strong>독립 2개 분자 보존!</strong></li>
+            <li><strong>오류 자식 흡수</strong>:
+              <br>A(850 reads) &rarr; u<sub>1</sub>(12 reads): 850 &ge; 2(12)-1=23 압도적 성립, 역방향 12 &ge; 2(850)-1=1699 성립 불가.
+              <br>&rarr; 일방적 지배 성립, u<sub>1</sub>을 A의 오류로 흡수 병합</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        방향성 인접 엣지 성립 조건: &nbsp;
+        (<i>u</i><sub>p</sub> &rarr; <i>u</i><sub>c</sub>) &in; <i>E</i> &nbsp;&iff;&nbsp;
+        <i>d</i><sub>H</sub>(<i>u</i><sub>p</sub>, <i>u</i><sub>c</sub>) = 1 &nbsp;&and;&nbsp;
+        <strong><i>N</i><sub>p</sub> &ge; 2<i>N</i><sub>c</sub> - 1</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Upstream Pipeline Benchmark Table -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/00_ALIGNMENT_AND_BAM_ROADMAP.md &sect; 4 &amp; 03</div>
+      <div class="slide-header">
+        <h2>6. 대규모 업스트림 파이프라인 벤치마크: 메모리, 연산 시간 및 정확도 비교</h2>
+        <span class="tag">Upstream Pipeline Benchmark</span>
+      </div>
+      <p>10x Genomics Chromium PBMC (10,000 세포, 5억 리드) 및 전립선암 snRNA-seq 실측 벤치마크 데이터를 기반으로 Cell Ranger, STARsolo, Alevin-fry, Kallisto|Bustools 4대 업스트림 도구를 종합 비교 평가합니다.</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>비교 지표 / 도구 사양</th>
+            <th>10x Cell Ranger (v7.2)</th>
+            <th>STARsolo (v2.7.11)</th>
+            <th>Alevin-fry (v0.8.2)</th>
+            <th>Kallisto | Bustools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>정렬 알고리즘 패러다임</strong></td>
+            <td>레거시 STAR / BWA 래퍼</td>
+            <td>접미사 배열 (Suffix Array MMP)</td>
+            <td>선택적 준정렬 (Quasi-mapping)</td>
+            <td>드 브루인 의사정렬 (de Bruijn EC)</td>
+          </tr>
+          <tr>
+            <td><strong>최대 메모리 점유 (Peak RAM)</strong></td>
+            <td>32 ~ 64 GB</td>
+            <td>30 ~ 32 GB (shm 공유 메모리 지원)</td>
+            <td><strong style="color:var(--success);">3.5 ~ 4.2 GB (초경량)</strong></td>
+            <td>4.0 ~ 5.5 GB</td>
+          </tr>
+          <tr>
+            <td><strong>연산 소요 시간 (5억 리드, 32코어)</strong></td>
+            <td>4시간 18분</td>
+            <td><strong style="color:var(--accent);">22 분 (11.7배 가속!)</strong></td>
+            <td><strong style="color:var(--success);">~12 분 (21.6배 가속!)</strong></td>
+            <td>~22 분</td>
+          </tr>
+          <tr>
+            <td><strong>중간 파일 디스크 I/O</strong></td>
+            <td>거대 BAM 파일 (~25 GB 쓰기/읽기)</td>
+            <td>인라인 메모리 완결 (BAM 선택적)</td>
+            <td><strong style="color:var(--success);">RAD 이진 스트림 (~1.2 GB)</strong></td>
+            <td>BUS 이진 스트림 (~1.5 GB)</td>
+          </tr>
+          <tr>
+            <td><strong>UMI 중복 제거 알고리즘</strong></td>
+            <td>1-Hamming 휴리스틱 클러스터</td>
+            <td>방향성 인접 그래프 (Directional)</td>
+            <td>방향성 그래프 UMI 분해 (CR/USA)</td>
+            <td>Naive 집계 / Cluster</td>
+          </tr>
+          <tr>
+            <td><strong>snRNA-seq 인트론 포획 모드</strong></td>
+            <td><code>--include-introns</code></td>
+            <td><code>--soloFeatures GeneFull</code></td>
+            <td>Splici Index (USA 행렬 완결)</td>
+            <td>Flanking Introns BUS 인덱스</td>
+          </tr>
+          <tr>
+            <td><strong>카운트 행렬 일치도 (Pearson <i>r</i>)</strong></td>
+            <td>1.000 (표준 기준선)</td>
+            <td><strong style="color:var(--accent);"><i>r</i> = 0.9998</strong> (완벽 일치)</td>
+            <td><strong style="color:var(--success);"><i>r</i> = 0.9958</strong> (초고일치)</td>
+            <td><i>r</i> = 0.9892</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-3" style="margin-top: 18px;">
+        <div class="card accent">
+          <h3>1. 연산 인프라 적합성 판정</h3>
+          <p>랩톱 및 저예산 클라우드 VM(16GB RAM 이하)에서는 <strong>Alevin-fry</strong>가 유일한 해결책이며, 고성능 다중 코어 서버(128GB+ RAM)에서는 <strong>STARsolo</strong>가 게놈 접합부 정밀 정렬을 위한 최선의 선택입니다.</p>
+        </div>
+        <div class="card highlight">
+          <h3>2. 디스크 I/O 병목의 완전 제거</h3>
+          <p>Cell Ranger의 치명적 단점인 25GB 중간 BAM 파일 생성 및 재파싱 병목을 제거하여, STARsolo는 메모리 스트리밍으로, Alevin-fry는 92% 압축된 RAD 바이너리로 디스크 부하를 무력화합니다.</p>
+        </div>
+        <div class="card success">
+          <h3>3. 생물학적 카운트 정밀도 검증</h3>
+          <p>STARsolo 및 Alevin-fry 모두 Cell Ranger 표준 카운트 행렬과 <i>r</i> &gt; 0.995 이상의 피어슨 상관계수를 입증하여, 하류 차별발현유전자(DEG) 및 세포 군집화 결과의 완전한 생물학적 재현성을 보장합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Part 1 Milestone & Part 2 Linkage -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/05_BAM_FILE_MECHANICS_AND_SAMTOOLS.md</div>
+      <div class="slide-header">
+        <h2>7. Part 1 핵심 성과 마일스톤 및 Part 2 BAM 바이너리 조작 연계 로드맵</h2>
+        <span class="tag">Milestone &amp; Part 2 Linkage</span>
+      </div>
+      <p>원시 시퀀싱 리드 처리 완료 및 단일세포 전사체학이 단순 유전자 카운트 행렬을 넘어 유전체 접합부와 융합 리드로 도약하는 필연적 이유를 정립합니다.</p>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>Part 1 핵심 성과 마일스톤</h3>
+          <ul>
+            <li><strong>FASTQ 리드 해부학 &amp; 바코드 보정</strong>:
+              <ul>
+                <li>R1(16bp CB + 12bp UMI)과 R2(cDNA) 분자 카세트 아키텍처 정립</li>
+                <li>1-Hamming 볼(|B<sub>1</sub>|=49)과 베이지안 사후 확률 기반 오류 보정</li>
+                <li>EmptyDrops 디리클레-다항분포 배경 액적 분리 수리 모델 체계화</li>
+              </ul>
+            </li>
+            <li><strong>초고속 정렬 아키텍처 완전 분해</strong>:
+              <ul>
+                <li>접미사 배열(STAR) <i>O(m+log n)</i> 룩업 및 MMP 시드 스티칭</li>
+                <li>Alevin-fry 준정렬, 2비트 RAD 바이너리 압축, Splici <i>L</i>-1 인덱스</li>
+              </ul>
+            </li>
+            <li><strong>방향성 인접 중복제거 수리 모델</strong>:
+              <ul>
+                <li>PCR 지수 증폭 왜곡(11,440배 vs 1,700배)과 나이브 28% 팽창 규명</li>
+                <li><i>N</i><sub>parent</sub> &ge; 2<i>N</i><sub>child</sub> - 1 부등식을 통한 브리지 참 분자 보존</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>Part 2 연계: BAM 바이너리 조작 &amp; 암 이형체 마이닝 (Deck 2)</h3>
+          <ul>
+            <li><strong>Slide Deck 2 핵심 주제</strong>:
+              <ul>
+                <li><strong>BAM 파일 내부 규격</strong>: BGZF 64비트 가상 오프셋(<i>voffset = coffset &ll; 16 &mid; uoffset</i>)과 CIGAR 연산자(M/N/I/D/S) 게놈 소모 기하학</li>
+                <li><strong>단일세포 옵셔널 태그 &amp; pysam 스트리밍</strong>: <code>CB</code>, <code>UB</code>, <code>GN</code> 태그 바이너리 직렬화 및 메모리 누수 없는 제너레이터 스트리밍</li>
+                <li><strong>거세저항성 전립선암(mCRPC) <i>AR-V7</i> 분자 기전</strong>: 인트론 3 잠재 엑손 3b 삽입, LBD 결실, CIGAR N 연산자 기반 단일세포 PSI(&Psi;) 이봉 분리</li>
+                <li><strong>21q22 결실 &amp; <i>TMPRSS2-ERG</i> 융합</strong>: 50M50S 키메라 분할 리드, FLAG 0x800 보충 정렬, RT 템플릿 스위칭 위양성 제거</li>
+                <li><strong>현장 트러블슈팅 &amp; 5단계 업스트림 공학 캡스톤 프로젝트 루브릭</strong></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 16px;">
+        단일세포 전사체학의 패러다임 도약: &nbsp;
+        Gene-level Count Matrix (<i>N &times; G</i>) &nbsp;&longrightarrow;&nbsp;
+        <span style="color:var(--accent); font-weight:700;">Base-level BAM Junction &amp; Fusion Mining (PSI &Psi; &bull; Split-reads)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Controls -->
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">&#9664; 이전 (Prev)</button>
+  <div id="counter">Slide 1 of 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) &#9654;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} of ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

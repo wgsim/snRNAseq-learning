@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrRose04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">UMI 중복 제거(Deduplication): PCR 증폭 오류 트리 및 방향성 인접 그래프</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">단순 고유 카운팅의 계수 인플레이션 한계 ➔ 1-Hamming 인접 네트워크 ➔ N_parent ≥ 2N_child - 1 임계 필터링</text>
+
+  <!-- Panel 1: PCR Error Branching Tree -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. PCR 증폭 오류 및 UMI 인플레이션</text>
+
+    <!-- Branching Tree Diagram -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Parent Root Node -->
+    <circle cx="65" cy="86" r="20" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="83" text-anchor="middle" fill="#a7f3d0" font-size="7.5" font-weight="700">True UMI</text>
+    <text x="65" y="94" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">N = 84</text>
+
+    <!-- Child Node 1 -->
+    <circle cx="175" cy="62" r="14" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="175" y="60" text-anchor="middle" fill="#fbbf24" font-size="7">Mutant 1</text>
+    <text x="175" y="70" text-anchor="middle" fill="#fbbf24" font-size="7.5">N = 6</text>
+
+    <!-- Child Node 2 -->
+    <circle cx="175" cy="110" r="14" fill="#1e293b" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="175" y="108" text-anchor="middle" fill="#fbbf24" font-size="7">Mutant 2</text>
+    <text x="175" y="118" text-anchor="middle" fill="#fbbf24" font-size="7.5">N = 2</text>
+
+    <!-- Branch lines -->
+    <path d="M85,82 L158,64" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="118" y="68" fill="#fbbf24" font-size="6.5">1bp PCR error</text>
+    <path d="M85,90 L158,108" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="118" y="108" fill="#fbbf24" font-size="6.5">1bp error</text>
+
+    <!-- Independent Collision Node -->
+    <circle cx="250" cy="86" r="16" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="250" y="83" text-anchor="middle" fill="#38bdf8" font-size="7">Indep UMI</text>
+    <text x="250" y="93" text-anchor="middle" fill="#38bdf8" font-size="7.5">N = 35</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• PCR 중합효소 오류율 (~10^-4 per bp):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">12bp UMI가 증폭 사이클을 거치며 돌연변이 자손 파생</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Naive Unique 카운팅의 치명적 결함:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">1개 분자가 3개로 카운트되어 발현량이 25~40% 과대평가</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 시퀀싱 뎁스 증가에 따른 왜곡 심화:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">시퀀싱 리드가 많아질수록 위양성 UMI 수가 폭발</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.25"/>
+    <text x="150" y="259" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="600">단순 고유 계수는 전사체 정량의 신뢰도를 파괴</text>
+  </g>
+
+  <!-- Panel 2: 4 Deduplication Algorithms -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. UMI 디듀플리케이션 4대 알고리즘</text>
+
+    <!-- Comparison Table / Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#f43f5e" font-size="7.5" font-weight="700">1. Unique (Naive):</text>
+      <text x="90" y="12" fill="#cbd5e1" font-size="7.5">단순 유일 서열 계수 ➔ 인플레이션 +30%</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="7.5" font-weight="700">2. Cluster (CC):</text>
+      <text x="90" y="28" fill="#cbd5e1" font-size="7.5">1-Hamming 연결요소 ➔ 과대 병합 위험</text>
+
+      <text x="0" y="44" fill="#a855f7" font-size="7.5" font-weight="700">3. Adjacency:</text>
+      <text x="90" y="44" fill="#cbd5e1" font-size="7.5">최다 빈도 노드 주변 1-step 통합</text>
+
+      <text x="0" y="60" fill="#34d399" font-size="7.5" font-weight="700">4. Directional:</text>
+      <text x="90" y="60" fill="#34d399" font-size="7.5" font-weight="700">N_A ≥ 2N_B - 1 판정 유향 그래프 (표준)</text>
+
+      <line x1="0" y1="68" x2="250" y2="68" stroke="#334155" stroke-width="0.8"/>
+      <text x="125" y="79" text-anchor="middle" fill="#38bdf8" font-size="7.5">UMI-tools / CellRanger / STARsolo 핵심 표준 엔진</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 연결 요소(Cluster)의 브릿징 오류:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">독립적인 두 고발현 UMI가 우연한 에러로 하나로 융합</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 방향성 인접(Directional Adjacency):</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">카운트 빈도 격차를 조건부 확률로 모델링하여 분기 차단</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 정확도 및 리콜률 최상위 수렴:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">위양성 노이즈는 99% 제거하고 진성 분자는 99.8% 보존</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">독립 분자 과소 계수 없이 PCR 증폭 오류만 정밀 제거</text>
+  </g>
+
+  <!-- Panel 3: N >= 2N - 1 Directional Edge Rule -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. N_parent ≥ 2N_child - 1 방향성 엣지 규칙</text>
+
+    <!-- Network Graph Schema -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Node A (Parent, N=100) -->
+    <circle cx="65" cy="86" r="22" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <text x="65" y="83" text-anchor="middle" fill="#a7f3d0" font-size="8" font-weight="700">Node A</text>
+    <text x="65" y="94" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">N_A = 100</text>
+
+    <!-- Node B (Valid child, N=12) -->
+    <circle cx="165" cy="64" r="16" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+    <text x="165" y="61" text-anchor="middle" fill="#a7f3d0" font-size="7">Node B</text>
+    <text x="165" y="71" text-anchor="middle" fill="#34d399" font-size="7.5">N_B = 12</text>
+
+    <!-- Directed Edge A -> B -->
+    <path d="M88,77 L147,67" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald04)"/>
+    <text x="125" y="70" fill="#34d399" font-size="6.5">100 ≥ 2(12)-1=23 [성립]</text>
+
+    <!-- Node C (Independent, N=60) -->
+    <circle cx="250" cy="86" r="20" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="250" y="83" text-anchor="middle" fill="#fca5a5" font-size="7.5">Node C</text>
+    <text x="250" y="94" text-anchor="middle" fill="#f43f5e" font-size="8">N_C = 60</text>
+
+    <!-- No Edge between B and C -->
+    <line x1="183" y1="70" x2="230" y2="82" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="208" y="73" fill="#f43f5e" font-size="6.5">12 &lt; 2(60)-1=119 [절단]</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 유향 엣지 판정 규칙:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">Hamming 거리 = 1 이고 N_A ≥ 2N_B - 1 일 때만 A ➔ B</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 자식 노드의 카운트 조건부 흡수:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">자식의 발생 횟수가 부모의 절반 이하일 때만 에러로 병합</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 독립 전사체 충돌 보호:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">우연히 1bp 차이나는 고발현 독립 분자는 각각 온전히 보존</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">수학적 확률 기반 완벽한 분자 계수 정밀도 보장</text>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+[cited]
+PMID:25171411  # "Aceto 2014", L21,L35  [Aceto N 2014 Cell]
+PMID:25830880  # "Gundem et al. 2015", L77,L88  [Gundem G 2015 Nature]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:matplotlib
+SW:networkx
+SW:pandas

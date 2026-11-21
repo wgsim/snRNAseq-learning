@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">멀티스케일 좌표계 등록 &amp; SpatialData OME-Zarr 아키텍처</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">조직학 H&amp;E 픽셀 좌표 ➔ 기준 마커(Fiducial) Affine 정렬 ➔ 물리적 마이크론(µm) 공간 ➔ 계층적 OME-Zarr 통합</text>
+
+  <!-- Panel 1: Pixel Space & Fiducial Alignment -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 조직학 픽셀 공간 (Pixel Space)</text>
+
+    <!-- Schematic: Slide with fiducial corners -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <rect x="35" y="52" width="60" height="54" fill="#334155" fill-opacity="0.4" stroke="#64748b" stroke-width="1"/>
+    <!-- Fiducial markers on 4 corners -->
+    <circle cx="40" cy="57" r="3" fill="#f43f5e"/>
+    <circle cx="90" cy="57" r="3" fill="#f43f5e"/>
+    <circle cx="40" cy="101" r="3" fill="#f43f5e"/>
+    <circle cx="90" cy="101" r="3" fill="#f43f5e"/>
+    <!-- Tissue blob in middle -->
+    <ellipse cx="65" cy="79" rx="18" ry="14" fill="#f43f5e" fill-opacity="0.25" stroke="#f43f5e" stroke-width="1"/>
+    <text x="115" y="66" fill="#38bdf8" font-size="10" font-weight="700">초고해상도 WSI 이미지</text>
+    <text x="115" y="80" fill="#cbd5e1" font-size="9.5">Full-res H&amp;E / DAPI (px 좌표)</text>
+    <text x="115" y="94" fill="#f43f5e" font-size="9">기준 마커: 4-Corner Fiducials</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 스캔 배율 및 픽셀 피치:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">20x/40x 대물렌즈 (0.25 ~ 0.5 µm/pixel)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 광학 왜곡 및 회전 발생:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">슬라이드 장착 편차로 인한 미세 각도 회전</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 피듀셜 프레임 매핑:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">알려진 슬라이드 마커 기반 기준 좌표 추출</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">입력: (x_px, y_px) 원시 카메라 이미지</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 330 200 L 345 200" stroke="#38bdf8" stroke-width="2"/>
+  <polygon points="345,196 350,200 345,204" fill="#38bdf8"/>
+
+  <!-- Panel 2: Affine Transformation to Micron Space -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f59e0b" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="700">2. 어파인 변환 &amp; 마이크론 정렬</text>
+
+    <!-- Schematic: Affine Matrix Transform -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <!-- Formula block -->
+    <text x="150" y="66" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">Affine Transformation Matrix A</text>
+    <text x="150" y="84" text-anchor="middle" fill="#cbd5e1" font-size="10" font-family="monospace">[x_µm, y_µm, 1]ᵀ = A · [x_px, y_px, 1]ᵀ</text>
+    <text x="150" y="102" text-anchor="middle" fill="#4ade80" font-size="9">스케일(s), 회전(θ), 전단(sh), 이동(tx, ty) 보정</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 전역 아핀 정렬 (Global Affine):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">Fiducial 4점을 목표 좌표계로 최소자승 피팅</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 물리적 마이크론 단위 변환:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">픽셀 인덱스를 실제 조직 물리 좌표(µm)로 투영</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 다층 연속 절편(Serial Slice) 정합:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">연속 절편 간 탄성 변형(Elastic B-spline) 교정</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">출력: 공통 물리 공간 (Physical Micron Space)</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 655 200 L 670 200" stroke="#f59e0b" stroke-width="2"/>
+  <polygon points="670,196 675,200 670,204" fill="#f59e0b"/>
+
+  <!-- Panel 3: SpatialData & OME-Zarr Framework -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#4ade80" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#4ade80" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">3. SpatialData &amp; OME-Zarr 표현</text>
+
+    <!-- Schematic: SpatialData 4 container elements -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#16a34a" stroke-width="1"/>
+    <rect x="25" y="49" width="55" height="26" rx="3" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="52" y="66" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">Images</text>
+    <rect x="85" y="49" width="55" height="26" rx="3" fill="#d97706" fill-opacity="0.3"/>
+    <text x="112" y="66" text-anchor="middle" fill="#f59e0b" font-size="8.5" font-weight="700">Shapes</text>
+    <rect x="145" y="49" width="55" height="26" rx="3" fill="#9333ea" fill-opacity="0.3"/>
+    <text x="172" y="66" text-anchor="middle" fill="#c084fc" font-size="8.5" font-weight="700">Points</text>
+    <rect x="205" y="49" width="65" height="26" rx="3" fill="#16a34a" fill-opacity="0.3"/>
+    <text x="237" y="66" text-anchor="middle" fill="#4ade80" font-size="8.5" font-weight="700">Tables</text>
+    <text x="150" y="94" text-anchor="middle" fill="#cbd5e1" font-size="9">단일 OME-Zarr 청크 저장소 및 지연 평가(Dask)</text>
+    <text x="150" y="107" text-anchor="middle" fill="#94a3b8" font-size="8">Transform Graph로 모든 엘리먼트 간 실시간 동기화</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• Images (멀티스케일 피라미드):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">H&amp;E/형광 다채널 거대 이미지 블록 캐싱</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• Shapes &amp; Points (지오메트리 &amp; 분자):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">GeoPandas 폴리곤 및 1천만+ RNA 전사체 점</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• Tables (AnnData 메타데이터 연결):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">발현 행렬 + 세포 주석 + 공간 좌표 상호 링크</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#16a34a" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">결과: 표준화된 오픈소스 멀티모달 공간 데이터</text>
+  </g>
+</svg>

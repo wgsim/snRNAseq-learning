@@ -1,0 +1,8 @@
+[cited]
+PMID:30902100  # "Lun et al. 2019 (EmptyDrops)", L210,L213  [Lun ATL 2019 Genome Biol]
+
+[evidence]
+PMID:35354805  # Hong R 2022 Nat Commun: Comprehensive generation, visualization, and reporting of quality control metrics for single-ce  [근거: SCI-09-011]
+
+[software]
+# (코드 블록에서 import/호출하는 도구 없음)

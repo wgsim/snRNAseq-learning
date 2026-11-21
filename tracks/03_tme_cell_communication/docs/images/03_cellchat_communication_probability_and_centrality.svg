@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">CellChat 신호 전달 확률 모델 &amp; 네트워크 중심성 분석</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">질량작용 법칙 기반 Hill 협동성 함수, 3차원 신호 텐서, 및 2D 세포 통신 허브 역할 규명</text>
+
+  <!-- Panel 1: Mass Action & Hill Function -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 질량작용 &amp; Hill 함수 (Probability)</text>
+
+    <!-- Schematic: Hill Curve -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Coordinate axes -->
+    <line x1="35" y1="105" x2="125" y2="105" stroke="#64748b" stroke-width="1"/>
+    <line x1="35" y1="105" x2="35" y2="52" stroke="#64748b" stroke-width="1"/>
+    <!-- Hill sigmoid curve -->
+    <path d="M35,103 Q65,102 75,85 Q85,68 120,58" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <text x="75" y="102" fill="#fbbf24" font-size="7.5">Kh=0.5</text>
+    <!-- Formula box -->
+    <rect x="135" y="48" width="140" height="60" rx="4" fill="#0284c7" fill-opacity="0.15" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="205" y="66" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">P = (L · R) / (Kh + L · R)</text>
+    <text x="205" y="82" text-anchor="middle" fill="#cbd5e1" font-size="8">L = (∏ L_i)^(1/n)</text>
+    <text x="205" y="97" text-anchor="middle" fill="#cbd5e1" font-size="8">R = (∏ R_j)^(1/m)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 비선형 포화 역동학 (Hill Kinetics):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">리간드-수용체 농도 증가 시 점근적 포화 상태 반영</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 25% 절삭 평균 (Trimmed Mean):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">단일세포 드롭아웃 및 이상치에 의한 과대추정 차단</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 보조인자(Co-factors) 효과 통합:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">촉진/억제 보조 수용체 가중치 가산/감산 계산</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">장점: 생화학적 수용체 결합 동역학 완벽 모사</text>
+  </g>
+
+  <!-- Panel 2: 3D Communication Tensor -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. 3D 신호 전달 텐서 (3D Tensor)</text>
+
+    <!-- Schematic: 3D Tensor Box -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <!-- Isometric Cube / Tensor slices -->
+    <g transform="translate(60, 48)">
+      <!-- Back slice -->
+      <polygon points="30,10 90,10 80,45 20,45" fill="#059669" fill-opacity="0.2" stroke="#34d399" stroke-width="0.8"/>
+      <!-- Mid slice -->
+      <polygon points="40,18 100,18 90,53 30,53" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="0.8"/>
+      <!-- Front slice -->
+      <polygon points="50,26 110,26 100,61 40,61" fill="#059669" fill-opacity="0.4" stroke="#34d399" stroke-width="1.2"/>
+      <text x="75" y="47" text-anchor="middle" fill="#ffffff" font-size="8.5" font-weight="700">P_ijk</text>
+    </g>
+    <text x="185" y="65" fill="#34d399" font-size="9" font-weight="700">Tensor Dimensions</text>
+    <text x="185" y="80" fill="#cbd5e1" font-size="8">i: 발신 세포 (K)</text>
+    <text x="185" y="93" fill="#cbd5e1" font-size="8">j: 수신 세포 (K)</text>
+    <text x="185" y="106" fill="#cbd5e1" font-size="8">k: L-R 경로 (M)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 경로(Pathway) 수준 신호 통합:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일 L-R들을 생물학적 경로(TGFb, WNT 등)로 축약</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 조건 간 비교 분석 (Differential Flux):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">호르몬 반응성 vs 거세저항 전립선암(CRPC) 텐서 비교</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 다변량 행렬 인수분해 (Tensor NMF):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">공통 신호 패턴 모듈 자동 추출 및 클러스터링</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">구조: 세포군 간 전방위 통신을 3차원 공간에 완벽 저장</text>
+  </g>
+
+  <!-- Panel 3: Centrality Roles -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. 2D 네트워크 중심성 (Centrality)</text>
+
+    <!-- Schematic: 4 Roles 2x2 -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#9333ea" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Sender -->
+      <rect x="0" y="0" width="120" height="28" rx="4" fill="#0284c7" fill-opacity="0.3"/>
+      <text x="8" y="14" fill="#38bdf8" font-size="8.5" font-weight="700">발신자 (Sender)</text>
+      <text x="8" y="24" fill="#94a3b8" font-size="7">Out-degree 중심성</text>
+      <!-- Receiver -->
+      <rect x="130" y="0" width="120" height="28" rx="4" fill="#059669" fill-opacity="0.3"/>
+      <text x="138" y="14" fill="#34d399" font-size="8.5" font-weight="700">수신자 (Receiver)</text>
+      <text x="138" y="24" fill="#94a3b8" font-size="7">In-degree 중심성</text>
+      <!-- Mediator -->
+      <rect x="0" y="32" width="120" height="28" rx="4" fill="#d97706" fill-opacity="0.3"/>
+      <text x="8" y="46" fill="#fbbf24" font-size="8.5" font-weight="700">중계자 (Mediator)</text>
+      <text x="8" y="56" fill="#94a3b8" font-size="7">Flow betweenness 중심성</text>
+      <!-- Influencer -->
+      <rect x="130" y="32" width="120" height="28" rx="4" fill="#9333ea" fill-opacity="0.3"/>
+      <text x="138" y="46" fill="#c084fc" font-size="8.5" font-weight="700">영향력자 (Influencer)</text>
+      <text x="138" y="56" fill="#94a3b8" font-size="7">정보(Information) 중심성</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 발신자 vs 수신자 특이성:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">CAF(지배적 발신자), 내피세포/T세포(주요 수신자)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 매개자(Mediator) 허브 규명:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">M2 대식세포가 암세포와 혈관/T세포 간 중계 수행</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 2D 투영 시각화 (Centrality Plot):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">Out-degree vs In-degree 산점도로 신호 흐름 한눈 파악</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#9333ea" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">응용: 네트워크 급소(Vulnerability) 타깃 치료 표적 발굴</text>
+  </g>
+</svg>

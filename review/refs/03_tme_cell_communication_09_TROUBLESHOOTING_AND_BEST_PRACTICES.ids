@@ -1,0 +1,14 @@
+[cited]
+PMID:35680885  # Dimitrov 2022 Nat Commun
+PMID:34584091  # Squair 2021 Nat Commun
+
+[evidence]
+
+
+[software]
+SW:liana
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy

@@ -1,0 +1,11 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:33531494  # Zimmerman KD 2021 Nat Commun: A practical solution to pseudoreplication bias in single-cell studies.  [근거: SCI-00-076; SCI-00-077; ledger L11-22; ledger L136]
+PMID:34584091  # Squair JW 2021 Nat Commun: Confronting false discoveries in single-cell differential expression.  [근거: SCI-00-076; SCI-00-077; ledger L11-22]
+
+[software]
+SW:decoupler
+SW:scanpy
+SW:pydeseq2

@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">세포 틈새(Spatial Niche) 분석 &amp; 거리 감쇠 리간드-수용체 상호작용</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">국소 세포 이웃(CN) 윈도우 집계 ➔ 4대 공간 틈새 클러스터링 ➔ COMMOT 최적 수송 거리 제약 신호 흐름</text>
+
+  <!-- Panel 1: Cellular Neighborhood (CN) Windowing -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 세포 이웃(CN) 윈도우 집계</text>
+
+    <!-- Schematic: Center cell with radius r=30um circle counting neighbors -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Radius circle -->
+    <circle cx="65" cy="79" r="26" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Index cell -->
+    <circle cx="65" cy="79" r="5" fill="#f43f5e"/>
+    <!-- Diverse neighbor cells inside radius -->
+    <circle cx="55" cy="68" r="4" fill="#f43f5e"/>
+    <circle cx="75" cy="66" r="4" fill="#f59e0b"/>
+    <circle cx="56" cy="92" r="4" fill="#4ade80"/>
+    <circle cx="78" cy="88" r="3.5" fill="#c084fc"/>
+    <text x="105" y="65" fill="#38bdf8" font-size="10" font-weight="700">국소 반경 윈도우 (r, 예: 30~50 µm)</text>
+    <text x="105" y="79" fill="#cbd5e1" font-size="9">주변 k개 최근접 세포 탐색</text>
+    <text x="105" y="94" fill="#4ade80" font-size="8.5">세포형 조성 벡터: v_i = [p₁, p₂, .., pₖ]</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 세포 기반 이웃 반경 정의:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">세포 간 직접 접촉 및 측분비(Paracrine) 확산 한계</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 국소 세포형 빈도 벡터 변환:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">각 단일 세포를 주변 환경 구성비(Composition)로 인코딩</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 스케일 불변 정규화:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">총 세포 수 편차 보정 (Σ p_k = 1.0)</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">토대: 세포 단위 환경을 고차원 프로파일로 사상</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 330 200 L 345 200" stroke="#38bdf8" stroke-width="2"/>
+  <polygon points="345,196 350,200 345,204" fill="#38bdf8"/>
+
+  <!-- Panel 2: Spatial Niche Clustering -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f59e0b" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="700">2. 4대 공간 틈새(Niche) 클러스터</text>
+
+    <!-- Schematic: 4 niche badge chips -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <!-- Niche 1 -->
+    <rect x="22" y="48" width="125" height="28" rx="4" fill="#be123c" fill-opacity="0.3"/>
+    <text x="27" y="61" fill="#f43f5e" font-size="8.5" font-weight="700">Niche 1: Cancer Core</text>
+    <text x="27" y="71" fill="#cbd5e1" font-size="7.5">AR+ 선암 상피세포 농축</text>
+    <!-- Niche 2 -->
+    <rect x="153" y="48" width="125" height="28" rx="4" fill="#d97706" fill-opacity="0.3"/>
+    <text x="158" y="61" fill="#f59e0b" font-size="8.5" font-weight="700">Niche 2: Desmoplastic Rim</text>
+    <text x="158" y="71" fill="#cbd5e1" font-size="7.5">CAF / 기질 경계부 장벽</text>
+    <!-- Niche 3 -->
+    <rect x="22" y="81" width="125" height="28" rx="4" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="27" y="94" fill="#38bdf8" font-size="8.5" font-weight="700">Niche 3: TLS Immune Hub</text>
+    <text x="27" y="104" fill="#cbd5e1" font-size="7.5">CD8 T / B / DC 면역 림프</text>
+    <!-- Niche 4 -->
+    <rect x="153" y="81" width="125" height="28" rx="4" fill="#16a34a" fill-opacity="0.3"/>
+    <text x="158" y="94" fill="#4ade80" font-size="8.5" font-weight="700">Niche 4: Bone Front</text>
+    <text x="158" y="104" fill="#cbd5e1" font-size="7.5">골아/파골세포 골기질 재형성</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• K-Means / Leiden 비지도 클러스터링:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">조성 벡터 군집화로 반복되는 미세조직 구조 발견</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 종양 침윤 변연부(Invasive Border):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">섬유아세포 기질 장벽과 암세포 간의 물리적 대치</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 골전이 특이적 전선(Front):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">전립선암의 조골성(Osteoblastic) 병변 미세환경 형성</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">결과: 생물학적으로 해석 가능한 4대 공간 틈새</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 655 200 L 670 200" stroke="#f59e0b" stroke-width="2"/>
+  <polygon points="670,196 675,200 670,204" fill="#f59e0b"/>
+
+  <!-- Panel 3: Distance-Decayed Ligand-Receptor Signaling (COMMOT) -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#4ade80" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#4ade80" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="700">3. 거리 감쇠 L-R 신호망 (COMMOT)</text>
+
+    <!-- Schematic: Sender-Receiver signaling gradient -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#16a34a" stroke-width="1"/>
+    <!-- Sender cell -->
+    <circle cx="45" cy="79" r="10" fill="#d97706" fill-opacity="0.6"/>
+    <text x="45" y="82" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">CAF</text>
+    <!-- Diffusion gradient curve -->
+    <path d="M 60 79 Q 95 65 130 79" fill="none" stroke="#f59e0b" stroke-width="2"/>
+    <polygon points="130,76 135,79 130,82" fill="#f59e0b"/>
+    <!-- Receiver cell -->
+    <circle cx="150" cy="79" r="10" fill="#be123c" fill-opacity="0.6"/>
+    <text x="150" y="82" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="700">Cancer</text>
+    <text x="180" y="65" fill="#4ade80" font-size="8.5" font-weight="700">S_ij = L_i·R_j·e^(-d/d_0)</text>
+    <text x="180" y="78" fill="#f59e0b" font-size="8">TGFB1 ➔ TGFBR2 (EMT)</text>
+    <text x="180" y="91" fill="#c084fc" font-size="8">RANKL ➔ RANK (골흡수)</text>
+    <text x="180" y="104" fill="#94a3b8" font-size="7.5">거리 초과 시 지수적 소멸</text>
+
+    <!-- Technical Details -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 물리적 확산 제약 (Distance Decay):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단순 동시 발현 오류 방지 (d_0: 신호 유형별 설정)</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 최적 수송(Optimal Transport) 플럭스:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">공급자(리간드)와 소비자(수용체) 간 방향성 흐름 추정</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 전립선암 골전이 악성화 축 규명:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">CAF 유래 TGFβ 신호 및 암세포-파골세포 RANKL 회로</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#16a34a" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">결과: 실제 공간 거리 기반 정밀 세포 간 통신망 규명</text>
+  </g>
+</svg>

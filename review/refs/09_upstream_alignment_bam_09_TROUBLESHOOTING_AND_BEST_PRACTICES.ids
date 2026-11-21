@@ -1,0 +1,8 @@
+[cited]
+PMID:21562209  # "Fu 2011 (stochastic labeling)", L157  [Fu GK 2011 Proc Natl Acad Sci U S A]
+
+[evidence]
+PMID:28100584  # Smith T 2017 Genome Res: UMI-tools: modeling sequencing errors in Unique Molecular Identifiers to improve quantification  [근거: SCI-09-070]
+
+[software]
+SW:star

@@ -1,0 +1,14 @@
+[cited]
+PMID:32355025  # Karthaus 2020 Science
+PMID:35688146  # Replogle 2022 Cell
+PMID:27124452  # Tirosh 2016 Science
+PMID:27571553  # Haghverdi 2016 Nat Methods
+PMID:30089906  # La Manno 2018 Nature
+PMID:32747759  # Bergen 2020 Nat Biotechnol
+PMID:30712874  # Schiebinger 2019 Cell
+
+[evidence]
+
+
+[software]
+SW:conda

@@ -1,0 +1,10 @@
+timepoint_id,time_index,clinical_stage,subclone_id,subclone_name,color_hex,driver_mutations,frequency,cell_count,polygon_lower_bound,polygon_upper_bound
+T1_Pre_ADT,0,진단 초기 (치료 전 원발암),Clone_1,Clone 1 (Truncal Luminal),#0284c7,"TMPRSS2-ERG, 8p- (NKX3-1), 8q+ (MYC), 21q-",0.85,850,0.0,0.85
+T1_Pre_ADT,0,진단 초기 (치료 전 원발암),Clone_2,Clone 2 (Enz-Resistant),#fbbf24,Truncal + Chr 10q PTEN CN-LOH + AR Enhancer Amp,0.12,120,0.85,0.97
+T1_Pre_ADT,0,진단 초기 (치료 전 원발암),Clone_3,Clone 3 (t-NEPC Double-Loss),#f43f5e,Truncal + 10q CN-LOH + 13q- (RB1) + 17p- (TP53) + AR Amp,0.03,30,0.97,1.0
+T2_Post_Enzalutamide,1,엔잘루타마이드 치료 저항성 (mCRPC),Clone_1,Clone 1 (Truncal Luminal),#0284c7,"TMPRSS2-ERG, 8p- (NKX3-1), 8q+ (MYC), 21q-",0.1,100,0.0,0.1
+T2_Post_Enzalutamide,1,엔잘루타마이드 치료 저항성 (mCRPC),Clone_2,Clone 2 (Enz-Resistant),#fbbf24,Truncal + Chr 10q PTEN CN-LOH + AR Enhancer Amp,0.65,650,0.1,0.75
+T2_Post_Enzalutamide,1,엔잘루타마이드 치료 저항성 (mCRPC),Clone_3,Clone 3 (t-NEPC Double-Loss),#f43f5e,Truncal + 10q CN-LOH + 13q- (RB1) + 17p- (TP53) + AR Amp,0.25,250,0.75,1.0
+T3_tNEPC_Relapse,2,신경내분비암 역분화 재발 (t-NEPC),Clone_1,Clone 1 (Truncal Luminal),#0284c7,"TMPRSS2-ERG, 8p- (NKX3-1), 8q+ (MYC), 21q-",0.02,20,0.0,0.02
+T3_tNEPC_Relapse,2,신경내분비암 역분화 재발 (t-NEPC),Clone_2,Clone 2 (Enz-Resistant),#fbbf24,Truncal + Chr 10q PTEN CN-LOH + AR Enhancer Amp,0.18,180,0.02,0.2
+T3_tNEPC_Relapse,2,신경내분비암 역분화 재발 (t-NEPC),Clone_3,Clone 3 (t-NEPC Double-Loss),#f43f5e,Truncal + 10q CN-LOH + 13q- (RB1) + 17p- (TP53) + AR Amp,0.8,800,0.2,1.0

@@ -1,0 +1,7 @@
+Metric,Value,Unit,Description
+Queries_Evaluated,50,cells,Number of query vectors
+k_Nearest_Neighbors,30,cells,Top-k target graph degree
+Brute_Force_Time,6629.14,ms,Full exact pairwise distance search
+ANN_IVF_Time,264.45,ms,Centroid-partitioned candidate retrieval
+ANN_Speedup,25.1,fold,Acceleration over brute-force
+Mean_Recall,100.00,%,Fraction of true top-k neighbors recovered

@@ -1,0 +1,27 @@
+================================================================================
+Track 07 Pipeline 01: Pseudobulk & GLMM Differential Expression Report
+================================================================================
+
+Cohort Specification:
+  • Donors: 12 total (6 Enzalutamide Responders, 6 Non-Responders)
+  • Cells: 6,000 single cells across AR_Adeno, t_NEPC, myCAF, CD8_T
+  • Genes: 500 total (100 True DEGs, 400 True Null genes with donor random effects)
+
+Pseudoreplication Catastrophe Benchmark:
+  • Naive Cell-Level Wilcoxon Type I Error : 87.75% (Inflation > 60%)
+  • Donor-Level Pseudobulk Type I Error    : 5.25% (Controlled < 10%)
+
+Model Concordance:
+  • Pearson Correlation (Pseudobulk Log2FC vs GLMM Beta): R = 0.9949
+
+Top Identified Therapeutic Response Genes:
+  • EZH2       | Log2FC:  -3.605 | FDR: 5.99e-02 | t_NEPC
+  • INSM1      | Log2FC:  -3.234 | FDR: 5.99e-02 | t_NEPC
+  • DLL3       | Log2FC:  -2.957 | FDR: 5.99e-02 | t_NEPC
+  • CHGA       | Log2FC:  -3.646 | FDR: 5.99e-02 | t_NEPC
+  • ASCL1      | Log2FC:  -3.537 | FDR: 5.99e-02 | t_NEPC
+  • DEG_myC_080 | Log2FC:  -2.917 | FDR: 5.99e-02 | myCAF
+  • FAP        | Log2FC:  -2.919 | FDR: 5.99e-02 | myCAF
+  • DEG_AR__026 | Log2FC:  -2.596 | FDR: 5.99e-02 | AR_Adeno
+  • DEG_myC_045 | Log2FC:  -2.569 | FDR: 5.99e-02 | myCAF
+  • SYP        | Log2FC:  -2.962 | FDR: 5.99e-02 | t_NEPC

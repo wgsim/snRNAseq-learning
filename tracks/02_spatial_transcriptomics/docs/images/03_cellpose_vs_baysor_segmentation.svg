@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">단일 세포 공간 분할 알고리즘: Watershed vs Cellpose vs Baysor</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">단순 형광 임계값 분할의 한계 극복: 딥러닝 경사 흐름(Gradient Flow) vs 전사체 결합 베이지안 점 과정(MRF)</text>
+
+  <!-- Panel 1: DAPI Watershed (Traditional) -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#f43f5e" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="700">1. 전통적 DAPI Watershed (오류 유발)</text>
+
+    <!-- Schematic: Clustered nuclei merged or split incorrectly -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#be123c" stroke-width="1"/>
+    <!-- Merged nuclei -->
+    <ellipse cx="60" cy="79" rx="22" ry="15" fill="#f43f5e" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1.5"/>
+    <circle cx="53" cy="78" r="4" fill="#38bdf8"/>
+    <circle cx="68" cy="78" r="4" fill="#38bdf8"/>
+    <text x="60" y="103" text-anchor="middle" fill="#f43f5e" font-size="8" font-weight="700">융합 오류 (Under-seg)</text>
+    <!-- Over-split nucleus -->
+    <path d="M 125 65 L 145 65 L 140 92 L 120 92 Z" fill="#f43f5e" fill-opacity="0.2" stroke="#f43f5e" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="135" y="103" text-anchor="middle" fill="#f59e0b" font-size="8" font-weight="700">과분할 (Over-seg)</text>
+    <!-- Cytoplasmic RNA loss -->
+    <circle cx="190" cy="72" r="1.8" fill="#4ade80"/>
+    <circle cx="200" cy="85" r="1.8" fill="#4ade80"/>
+    <text x="215" y="79" fill="#94a3b8" font-size="8.5">&gt;50% 세포질</text>
+    <text x="215" y="90" fill="#f43f5e" font-size="8.5">RNA 누락</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 원리: 거리 변환 및 국소 극소점 침수:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">DAPI 형광 밝기 임계값에 전적으로 의존</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 종양 코어(Dense Core) 취약성:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">핵이 밀집된 암 조직에서 세포 경계 융합</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 세포질 전사체 확장(Expansion) 한계:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">단순 반경 확장은 인접 세포 전사체 오염 초래</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#be123c" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="600">한계: 부정확한 경계 &amp; 전사체 유실율 높음</text>
+  </g>
+
+  <!-- Panel 2: Cellpose (Deep Learning Gradient Flows) -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">2. Cellpose (경사 흐름 벡터장)</text>
+
+    <!-- Schematic: Vector field pointing inward to center -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Irregular cell shape with flow vectors -->
+    <path d="M 40 78 Q 50 56 80 60 Q 105 70 95 95 Q 65 102 45 92 Z" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5"/>
+    <!-- Centroid dot -->
+    <circle cx="72" cy="78" r="3" fill="#38bdf8"/>
+    <!-- Arrows pointing to centroid -->
+    <line x1="52" y1="68" x2="66" y2="74" stroke="#4ade80" stroke-width="1.5"/>
+    <line x1="88" y1="68" x2="78" y2="74" stroke="#4ade80" stroke-width="1.5"/>
+    <line x1="58" y1="92" x2="68" y2="83" stroke="#4ade80" stroke-width="1.5"/>
+    <line x1="86" y1="92" x2="76" y2="82" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="120" y="66" fill="#38bdf8" font-size="10" font-weight="700">Vector Field (∇x, ∇y)</text>
+    <text x="120" y="80" fill="#cbd5e1" font-size="9.5">확산 시뮬레이션 역추적 (오일러 적분)</text>
+    <text x="120" y="94" fill="#4ade80" font-size="9">임의의 불규칙 형태 완벽 복원</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• U-Net 기반 위상 경사 학습:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">세포 중심을 향하는 연속 벡터 흐름 예측</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 세포질 염색(DAPI + Poly-A/IF) 통합:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">핵뿐만 아니라 실제 세포 외곽 막까지 정밀 분할</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 사전 학습 일반화 성능(Zero-shot):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">CAF 방추형 및 암세포의 다형성 형태에 강력</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">장점: 형태학적 유연성 &amp; 높은 이미지 정확도</text>
+  </g>
+
+  <!-- Panel 3: Baysor (Bayesian MRF Point Process) -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. Baysor (베이지안 분자 점 과정)</text>
+
+    <!-- Schematic: Transcripts clustered by identity and space -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#9333ea" stroke-width="1"/>
+    <!-- Weak DAPI background -->
+    <circle cx="55" cy="78" r="14" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2"/>
+    <!-- Cell 1: Red transcripts (Luminal markers) -->
+    <circle cx="48" cy="72" r="2.2" fill="#f43f5e"/>
+    <circle cx="56" cy="70" r="2.2" fill="#f43f5e"/>
+    <circle cx="52" cy="82" r="2.2" fill="#f43f5e"/>
+    <circle cx="62" cy="78" r="2.2" fill="#f43f5e"/>
+    <!-- Cell 2: Green transcripts (CAF markers) -->
+    <circle cx="85" cy="72" r="2.2" fill="#4ade80"/>
+    <circle cx="92" cy="80" r="2.2" fill="#4ade80"/>
+    <circle cx="88" cy="88" r="2.2" fill="#4ade80"/>
+    <!-- Inferred Bayesian boundaries -->
+    <ellipse cx="55" cy="76" rx="17" ry="16" fill="none" stroke="#f43f5e" stroke-width="1.5"/>
+    <ellipse cx="88" cy="80" rx="14" ry="15" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="120" y="66" fill="#c084fc" font-size="10" font-weight="700">MRF 결합 확률 모델</text>
+    <text x="120" y="80" fill="#cbd5e1" font-size="9.5">P(세포 | 위치좌표 + 유전자 조성)</text>
+    <text x="120" y="94" fill="#f59e0b" font-size="9">핵 신호가 약해도 분자 좌표로 보완</text>
+
+    <!-- Technical Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 좌표 + 분자 식별자 동시 추론:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">이웃 분자의 유전자형 마커 일치도를 확률 반영</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• DAPI 염색 불균일/누락 보정:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">분자 좌표·유전자 조성으로 분할 (핵은 선택적 사전정보)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 세포외 배경 노이즈 분자 필터링:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">세포 외 확산 분자를 자동 검출하여 배제</text>
+
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#9333ea" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">장점: 분자 기반 할당으로 할당율 개선 (수치는 데이터 의존)</text>
+  </g>
+</svg>

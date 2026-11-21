@@ -1,0 +1,28 @@
+{
+  "simulation_metadata": {
+    "total_simulated_alignments": 15000,
+    "total_cells": 1000,
+    "num_resistant_cells": 300,
+    "num_sensitive_cells": 700
+  },
+  "ar_splice_junction_metrics": {
+    "total_cells_analyzed": 1000,
+    "cells_passing_coverage_filter": 762,
+    "resistant_cells_passing": 289,
+    "sensitive_cells_passing": 473,
+    "resistant_mean_smoothed_psi": 0.4107,
+    "sensitive_mean_smoothed_psi": 0.0612,
+    "psi_difference": 0.3495,
+    "welch_t_statistic": 51.34,
+    "bimodal_separation_significant": true
+  },
+  "tmprss2_erg_fusion_metrics": {
+    "resistant_fusion_pos_cells": 266,
+    "resistant_total_cells": 300,
+    "resistant_fusion_prevalence_pct": 88.67,
+    "sensitive_fusion_pos_cells": 25,
+    "sensitive_total_cells": 700,
+    "sensitive_fusion_prevalence_pct": 3.57,
+    "odds_ratio_enrichment_in_resistant": 211.24
+  }
+}

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 01: Multiome WNN Integration, Enhancers & eGRN Networks</title>
+<style>
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px 48px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 2rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.1rem; line-height: 1.65; color: #cbd5e1; margin-bottom: 12px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card h3 { font-size: 1.25rem; color: #fff; margin-bottom: 10px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.95rem; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.9rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.95em; }
+  
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 60px 40px;">
+      <span class="tag" style="font-size: 1rem; padding: 6px 16px;">Track 01 Masterclass • Part 2</span>
+      <div style="margin-top: 15px;"><span class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/05_WNN_MULTIMODAL_INTEGRATION.md</span></div>
+      <h1 style="font-size: 2.8rem; color: var(--accent); margin: 20px 0 16px; font-weight: 800;">WNN 멀티모달 융합, 원격 인핸서 및 전사조절망 복원</h1>
+      <h3 style="font-size: 1.4rem; color: #94a3b8; font-weight: 400; margin-bottom: 30px;">MuData 아키텍처, 3D 염색질 루핑, <i>AR</i> 슈퍼인핸서, TF 풋프린팅 및 SCENIC+ Triplet</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+        <p style="margin-bottom: 6px;">🎯 <strong>응용 영역</strong>: 전립선암 거세저항성(CRPC) 4대 분자 아형 및 계통 가소성 추적</p>
+        <p style="margin-bottom: 6px;">🧬 <strong>핵심 알고리즘</strong>: WNN (Weighted Nearest Neighbor) &amp; SCENIC+ (TF-Enhancer-Gene Triplet)</p>
+        <p style="margin-bottom: 0;">🔬 <strong>학습 중점</strong>: 3D 염색질 루프, Peak-to-Gene 링크, 결합 편향 보정 풋프린팅, 인핸서 구동 조절망</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: MuData Architecture & WNN Algorithm -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/05_WNN_MULTIMODAL_INTEGRATION.md § 1, 2</div>
+      <div class="slide-header">
+        <h2>1. MuData 아키텍처와 WNN (Weighted Nearest Neighbor) 융합</h2>
+        <span class="tag">Multimodal Integration</span>
+      </div>
+      <p>서로 다른 물리적 특성을 지닌 RNA 발현과 ATAC 크로마틴 개방성을 <strong>세포별 정보 신뢰도에 따라 유기적으로 가중 결합</strong>합니다.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>MuData 데이터 아키텍처</h3>
+          <ul>
+            <li>공통 세포 바코드(<code>obs</code>)를 축으로 <code>mdata.mod['rna']</code>와 <code>mdata.mod['atac']</code>의 <code>AnnData</code>를 계층 통합</li>
+            <li>단일 슬라이싱(<code>mdata[cells, :]</code>)으로 두 모달리티 행렬이 동기화 필터링</li>
+          </ul>
+        </div>
+        <div class="card accent">
+          <h3>WNN 알고리즘 원리 (Seurat v4 / Muon)</h3>
+          <ul>
+            <li>각 모달리티의 kNN 그래프에서 다른 모달리티의 세포 상태를 얼마나 잘 예측하는지 측정하여 <strong>세포별 가중치(<i>w</i><sub>RNA</sub>, <i>w</i><sub>ATAC</sub>)</strong> 자동 산출 (<i>w</i><sub>RNA</sub> + <i>w</i><sub>ATAC</sub> = 1)</li>
+            <li>단일 오믹스로는 분리되지 않던 <strong>미세 약제 내성 클론</strong> 완벽 분리</li>
+          </ul>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">WNN (Weighted Nearest Neighbor) 이중 오믹스 통합 기하학</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">단일 세포별 전사체(snRNA) 및 염색질(snATAC) 정보량 동적 가중치 학습 (w_RNA + w_ATAC = 1.0) ➔ 통합 kNN 매니폴드</text>
+
+  <!-- Panel 1: Modality Graphs -->
+  <g transform="translate(30, 70)">
+    <rect width="280" height="265" rx="10" fill="url(#gradCard4)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="280" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="140" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 모달리티별 국소 kNN 다양체</text>
+
+    <!-- Schematic: Two graphs -->
+    <rect x="15" y="44" width="250" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="50" cy="70" r="14" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8"/>
+    <text x="50" y="74" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">RNA</text>
+    <path d="M 68 70 L 110 70" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="128" cy="70" r="14" fill="#4338ca" fill-opacity="0.4" stroke="#818cf8"/>
+    <text x="128" y="74" text-anchor="middle" fill="#818cf8" font-size="9" font-weight="700">ATAC</text>
+    <text x="155" y="65" fill="#38bdf8" font-size="9.5">PCA (30 PCs)</text>
+    <text x="155" y="79" fill="#818cf8" font-size="9.5">LSI (30 Dim)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• snRNA kNN 다양체:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">2,500 HVG 발현량 기반 표현형 유사도</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• snATAC kNN 다양체:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">유전체 오픈 크로마틴 후성유전 상태</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 모달리티의 한계:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">RNA나 ATAC 단독으로는 미세 클론 중첩 발생</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="250" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="140" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">독립적 2개 그래프 동시 구성</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 315 200 L 335 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="335,195 345,200 335,205" fill="#818cf8"/>
+
+  <!-- Panel 2: Dynamic Affinity Weight Learning -->
+  <g transform="translate(350, 70)">
+    <rect width="335" height="265" rx="10" fill="url(#gradCard4)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="335" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="167" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. 세포별 신호-잡음비 기반 가중치 학습</text>
+
+    <!-- Formula Box -->
+    <rect x="15" y="44" width="305" height="60" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <text x="25" y="62" fill="#818cf8" font-size="10" font-family="monospace">x̂_i,RNA = Σ_j sim(i,j) · x_j (모달 예측)</text>
+    <text x="25" y="78" fill="#34d399" font-size="10" font-family="monospace">θ_i,RNA = ||x_i - x̂_i,RNA||⁻¹ (예측 친화도)</text>
+    <text x="25" y="94" fill="#fbbf24" font-size="10" font-family="monospace">w_RNA + w_ATAC = 1.0 (Softmax 가중)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="124" fill="#cbd5e1" font-size="11" font-weight="600">• 교차 모달리티 예측 정확도 평가:</text>
+    <text x="25" y="142" fill="#94a3b8" font-size="10.5">RNA 이웃으로 ATAC을 얼마나 잘 예측하는가</text>
+
+    <text x="15" y="164" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 세포 수준 적응적 가중치 (Adaptive):</text>
+    <text x="25" y="182" fill="#94a3b8" font-size="10.5">전체 세포 일괄 가중치가 아닌, 세포별 가중치 부여</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 저품질 모달리티 자동 감쇠:</text>
+    <text x="25" y="222" fill="#94a3b8" font-size="10.5">드롭아웃 심한 축은 스스로 가중치 축소</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="305" height="22" rx="4" fill="#4338ca" fill-opacity="0.3"/>
+    <text x="167" y="250" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">✓ 정보 엔트로피 최적화 가중 결합</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 690 200 L 710 200" stroke="#34d399" stroke-width="2.5"/>
+  <polygon points="710,195 720,200 710,205" fill="#34d399"/>
+
+  <!-- Panel 3: Joint Manifold & Subtle Clones -->
+  <g transform="translate(725, 70)">
+    <rect width="245" height="265" rx="10" fill="url(#gradCard4)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="245" height="32" rx="10" fill="#34d399" fill-opacity="0.2"/>
+    <text x="122" y="22" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">3. 통합 WNN 다양체 &amp; 아형 분리</text>
+
+    <!-- Graphic: Clusters -->
+    <rect x="12" y="44" width="220" height="52" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <circle cx="40" cy="70" r="10" fill="#38bdf8"/>
+    <text x="40" y="73" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">AR+</text>
+    <circle cx="85" cy="65" r="10" fill="#f59e0b"/>
+    <text x="85" y="68" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">Amphi</text>
+    <circle cx="135" cy="72" r="10" fill="#818cf8"/>
+    <text x="135" y="75" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">DNPC</text>
+    <circle cx="185" cy="68" r="10" fill="#f43f5e"/>
+    <text x="185" y="71" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">t-NEPC</text>
+
+    <!-- Bullets -->
+    <text x="12" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• Amphicrine 상태 완벽 분리:</text>
+    <text x="20" y="134" fill="#34d399" font-size="10">RNA는 AR 양성이나 ATAC은 신경계 개방</text>
+
+    <text x="12" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 선행적 후성 재편 포착:</text>
+    <text x="20" y="174" fill="#94a3b8" font-size="10">전사 발현 이전 염색질 개방 선행 감지</text>
+
+    <text x="12" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 2D WNN UMAP 투영:</text>
+    <text x="20" y="214" fill="#94a3b8" font-size="10">높은 해상도로 치료 저항성 궤적 가시화</text>
+
+    <!-- Bottom Badge -->
+    <rect x="12" y="235" width="220" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="122" y="250" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">✓ 임상 미세 아형 분별력 극대화</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 3: Enhancer-Promoter Biophysics & 3D Chromatin Looping -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/06_PEAK_TO_GENE_AND_ENHANCERS.md § 1. 3D 게놈 구조와 인핸서-프로모터 루핑</div>
+      <div class="slide-header">
+        <h2>2. 3D 염색질 루핑과 원격 인핸서-프로모터 결합 기하학</h2>
+        <span class="tag">3D Epigenomics</span>
+      </div>
+      <p>진핵세포 유전체는 선형 1차원 서열이 아닙니다. 3차원 핵 공간에서 수십~수백 kb 떨어진 원격 인핸서가 프로모터와 직접 접촉하여 전사를 점화합니다.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>1. 루프 압출 (Loop Extrusion)</h3>
+          <p>코헤신(Cohesin) 고리 단백질 복합체가 DNA를 압출하다가, 마주 보는 <strong>CTCF 결합 모티프</strong>를 만나 정지하여 절연 경계를 형성합니다.</p>
+        </div>
+        <div class="card accent">
+          <h3>2. 위상학적 연관 도메인 (TADs)</h3>
+          <p>크기 100 kb ~ 2 Mb의 물리적 구획. 인핸서는 오직 <strong>동일한 TAD 내부의 프로모터와 우선적으로 상호작용</strong>하며 타 영역의 비특이 활성화를 차단합니다.</p>
+        </div>
+        <div class="card warning">
+          <h3>3. 거리 감쇠 (Distance Decay)</h3>
+          <p>고분자 물리 이론에 의해 유전체 거리가 멀어질수록 물리적 충돌 확률이 급감합니다. Peak-to-Gene 링크 연산 시 <strong>±500 kb 윈도우</strong>를 표준 제한으로 설정합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Case Study: AR 650-kb Distal Enhancer Duplication in mCRPC -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/06_PEAK_TO_GENE_AND_ENHANCERS.md § 3. 임상 사례 연구: mCRPC AR 상류 650 kb 슈퍼인핸서</div>
+      <div class="slide-header">
+        <h2>3. 임상 사례 연구: mCRPC <i>AR</i> 상류 650 kb 슈퍼인핸서 복제</h2>
+        <span class="tag">Clinical Epigenetics</span>
+      </div>
+      <p>차세대 항안드로겐 치료제(Enzalutamide) 투여 후 발생하는 <strong>치명적 거세저항성 전립선암(mCRPC)의 후성유전학적 내성 메커니즘</strong>입니다.</p>
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>650 kb 원격 인핸서 중복 (Enhancer Duplication)</h3>
+          <ul>
+            <li><i>AR</i> 유전자 본체는 그대로 둔 채, 상류 650 kb에 위치한 센트로미어 인핸서 좌위만을 <strong>국소 복제수 변이(CNA)로 증폭</strong></li>
+            <li>선구자 인자 <i>FOXA1</i> 및 <i>HOXB13</i>이 증폭된 인핸서에 결합하여 염색질을 상시 개방 상태로 고정</li>
+            <li>3D 염색질 루핑을 통해 극소량의 잔여 안드로겐 조건에서도 <i>AR</i> 전사를 폭발적으로 유지</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>Peak-to-Gene Linkage 통계 검증</h3>
+          <ul>
+            <li>동일 단일 핵 <i>c</i> 내에서 <strong>인핸서 개방성(ATAC)과 <i>AR</i> 발현량(RNA)의 스피어만 순위 상관계수(<i>r</i> &gt; 0.30, FDR &lt; 0.05)</strong> 직접 도출</li>
+            <li>단독 snRNA로는 놓쳤던 약제 타깃: <strong>BET 단백질(BRD4) 억제제</strong> 병용 투여로 인핸서 루프 붕괴 유도</li>
+          </ul>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">전립선암 핵심 후성유전 기전: chrX:66.9 Mb AR 인핸서 증폭 및 Peak-to-Gene 연계</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">원발암 정상 1-copy vs mCRPC 650 kb 원거리 인핸서 탠덤 중복(Tandem Duplication) ➔ AR 프로모터 루핑 &amp; 발현 폭발</text>
+
+  <!-- Top Genomic Track Architecture -->
+  <g transform="translate(40, 68)">
+    <rect width="920" height="120" rx="8" fill="#020617" stroke="#334155" stroke-width="1.2"/>
+    <text x="20" y="24" fill="#94a3b8" font-size="11" font-weight="700">Locus: chrX: 66,000,000 ~ 67,200,000 (GRCh38, 1.2 Mb Genomic Window)</text>
+
+    <!-- DNA Backbone -->
+    <line x1="40" y1="65" x2="880" y2="65" stroke="#475569" stroke-width="3"/>
+
+    <!-- AR Gene Promoter -->
+    <rect x="750" y="48" width="100" height="34" rx="5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="800" y="69" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">AR Promoter</text>
+
+    <!-- Normal Enhancer (1-copy) -->
+    <rect x="180" y="50" width="80" height="30" rx="5" fill="#4338ca" stroke="#818cf8" stroke-width="1"/>
+    <text x="220" y="69" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="700">Enhancer (1×)</text>
+
+    <!-- mCRPC Duplication Region -->
+    <rect x="270" y="50" width="120" height="30" rx="5" fill="#b91c1c" fill-opacity="0.3" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="330" y="69" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">Tandem Duplication (2~5×)</text>
+
+    <!-- 3D Chromatin Looping Arc -->
+    <path d="M 220 50 Q 510 -15 800 48" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6,3"/>
+    <text x="510" y="20" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">650-kb 원거리 크로마틴 루핑 (CTCF / Cohesin Loop)</text>
+
+    <text x="220" y="100" text-anchor="middle" fill="#94a3b8" font-size="9.5">-650 kb Distal Enhancer</text>
+    <text x="800" y="100" text-anchor="middle" fill="#38bdf8" font-size="9.5">TSS (전사시작점)</text>
+  </g>
+
+  <!-- Bottom Left: Peak-to-Gene Statistics -->
+  <g transform="translate(40, 200)">
+    <rect width="445" height="135" rx="8" fill="url(#gradCard5)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="20" y="26" fill="#38bdf8" font-size="12.5" font-weight="700">Peak-to-Gene 거리 감쇠 상관 연계 (Distance-Decayed Correlation)</text>
+
+    <rect x="15" y="38" width="415" height="36" rx="5" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <text x="25" y="54" fill="#38bdf8" font-size="9.5" font-family="monospace">Reg_Score = r(Peak_ATAC, Gene_RNA) × exp(-d / 100kb)</text>
+    <text x="25" y="67" fill="#34d399" font-size="9.5" font-family="monospace">유의성 기준: r &gt; 0.30, FDR &lt; 0.05 (±500 kb Window)</text>
+
+    <text x="15" y="93" fill="#cbd5e1" font-size="10.5">• 인핸서 개방도와 AR pre-mRNA 전사량의 완벽한 비례 관계 (r = 0.68***)</text>
+    <text x="15" y="110" fill="#94a3b8" font-size="10">• snATAC 피크 증가가 실시간으로 AR RNA 발현 폭발로 이어짐을 통계적 입증</text>
+  </g>
+
+  <!-- Bottom Right: Clinical Relevance & Resistance -->
+  <g transform="translate(515, 200)">
+    <rect width="445" height="135" rx="8" fill="url(#gradCard5)" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="20" y="26" fill="#fbbf24" font-size="12.5" font-weight="700">호르몬 요법(Enzalutamide) 저항성 분자 기전</text>
+
+    <text x="15" y="52" fill="#cbd5e1" font-size="10.5">• 비암호화 유전체 구조 변이의 전사 활성화:</text>
+    <text x="25" y="68" fill="#94a3b8" font-size="10">코딩 돌연변이 없이 650kb 상류 인핸서 탠덤 증폭만으로 AR 재활성화</text>
+
+    <text x="15" y="90" fill="#cbd5e1" font-size="10.5">• mCRPC의 약 40~60%에서 AR 좌위(인핸서 포함) 증폭이 관찰되는 범용 저항성 표적:</text>
+    <text x="25" y="106" fill="#f87171" font-size="10" font-weight="600">BET 브로모도메인 저해제(JQ1) 및 p300/CBP 억제제를 통한 루핑 차단 필요</text>
+
+    <!-- Bottom summary line -->
+    <rect x="15" y="120" width="415" height="2" fill="#f59e0b" fill-opacity="0.3"/>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 5: Transcription Factor Footprinting -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/07_TF_FOOTPRINTING_AND_CHROMVAR.md § 1. 전사인자 풋프린팅의 원리와 생물물리학</div>
+      <div class="slide-header">
+        <h2>4. 전사인자 풋프린팅과 효소 절단 편향 보정 (Tn5 Bias Correction)</h2>
+        <span class="tag">TF Footprinting</span>
+      </div>
+      <p>피크 내부에서 실제 전사인자가 DNA에 결합해 있는 정확한 염기 위치를 <strong>물리적 차단 골짜기(Footprint Dip)</strong>를 통해 복원합니다.</p>
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>풋프린트 골짜기 (Footprint Dip) 원리</h3>
+          <ul>
+            <li>전사인자(TF)가 DNA 모티프에 물리적으로 결합해 있으면, 거대한 Tn5 효소가 접근하지 못해 <strong>중심부 절단 빈도가 급감</strong></li>
+            <li>TF 결합 부위 양옆으로는 절단이 급증하여 피크 내에 특징적인 <strong>W자형 골짜기(Footprint)</strong> 형성</li>
+            <li>세포 내 TF 실제 체류 시간(Residence time) 및 점유율(Occupancy)을 직접 측정</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>Tn5 고유 서열 선호성(Sequence Bias) 보정</h3>
+          <ul>
+            <li>Tn5는 특정 6-mer 염기 서열을 선호하여 절단하는 내재적 생화학 편향 보유</li>
+            <li>순수 게놈 나체 DNA 절단 프로파일을 바탕으로 <strong>기저 효소 절단 기대치(Background Expectation)를 차감</strong>해야 가짜 풋프린트 위양성 방지 (TOBIAS 알고리즘)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Pioneer Factors & ChromVAR Motif Accessibility -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/07_TF_FOOTPRINTING_AND_CHROMVAR.md § 2, 3</div>
+      <div class="slide-header">
+        <h2>5. 선구자 인자(Pioneer TFs)와 chromVAR 모티프 활성도</h2>
+        <span class="tag">Motif Dynamics</span>
+      </div>
+      <p>단일 세포 수준에서 수백 개 전사인자 모티프의 개방성 편차를 <strong>GC 함량 및 배경 피크 보정 <i>Z</i>-score</strong>로 정량화합니다.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>선구자 전사인자 (Pioneer Factors: FOXA1, HOXB13)</h3>
+          <ul>
+            <li>응축된 이질염색질에 최초로 결합하여 뉴클레오솜을 밀어내고 크로마틴을 열어젖히는 마스터 전사인자</li>
+            <li><i>FOXA1</i>의 Winged-helix 도메인이 링커 히스톤을 대체하여 다른 전사인자(AR)의 결합 통로를 제공</li>
+          </ul>
+        </div>
+        <div class="card accent">
+          <h3>chromVAR 편차 점수 (Deviation <i>Z</i>-score)</h3>
+          <ul>
+            <li>단일 핵 <i>c</i>에서 특정 TF 모티프를 포함하는 모든 피크의 단편 카운트 합산</li>
+            <li>전체 개방도와 GC 함량이 동일하게 매칭된 수백 개 <strong>배경 피크 세트 대비 통계적 초과도(<i>Z</i>-score)</strong> 계산</li>
+            <li>전립선암 아형 판별: <strong>AR/FOXA1 <i>Z</i>-score</strong> (선암) vs <strong>ASCL1/NEUROD1 <i>Z</i>-score</strong> (t-NEPC)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: SCENIC+ Triplet Architecture -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/08_EGRN_AND_SCENICPLUS.md § 1, 2</div>
+      <div class="slide-header">
+        <h2>6. SCENIC+ 삼중자(Triplet) 확장 전사조절망 (eGRN)</h2>
+        <span class="tag">Gene Regulatory Networks</span>
+      </div>
+      <p>단순 유전자 발현 공발현을 넘어, <strong>[전사인자] ──► [원격 인핸서 피크] ──► [표적 유전자]</strong>의 3각 인과관계를 입증하는 차세대 조절망입니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. Region-to-Gene Links</h3>
+          <p>GBM (Gradient Boosting) 기반으로 인핸서 피크 개방성과 동일 핵 내 표적 유전자 mRNA 발현 간의 비선형 조절 상관성 도출.</p>
+        </div>
+        <div class="card warning">
+          <h3>2. TF-to-Region Motifs</h3>
+          <p>인핸서 영역 내 전사인자 DNA 결합 모티프의 물리적 농축(Cistarget) 및 풋프린트 점유율 검증 (위양성 링크 차단).</p>
+        </div>
+        <div class="card success">
+          <h3>3. TF-to-Gene Expression</h3>
+          <p>TF 발현량과 표적 유전자 발현 간의 방향성 일치성(양성 활성화 vs 음성 억제)을 확인하여 <strong>최종 고순도 eRegulon 확립</strong>.</p>
+        </div>
+      </div>
+      <details class="diagram-drawer">
+        <summary>📊 핵심 메커니즘 벡터 다이어그램 펼쳐보기 (Click to toggle)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="gradCard6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">SCENIC+ eGRN 아키텍처: TF ➔ 인핸서 모티프 ➔ 표적 유전자 3중체(Triplet) 네트워크</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">단일 핵 <i>c</i>에서동시 발현-접근성 기반 전사 인자-인핸서-표적 유전자 인과 조절 모듈(eRegulon) 구축</text>
+
+  <!-- Node 1: Master TF -->
+  <g transform="translate(30, 70)">
+    <rect width="280" height="265" rx="10" fill="url(#gradCard6)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="280" height="32" rx="10" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="140" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 마스터 전사 인자 (TF)</text>
+
+    <!-- Schematic: TF node -->
+    <rect x="15" y="44" width="250" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="50" cy="70" r="16" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="50" y="74" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">TF</text>
+    <text x="78" y="64" fill="#38bdf8" font-size="10.5" font-weight="700">FOXA1 / AR / ASCL1</text>
+    <text x="78" y="79" fill="#94a3b8" font-size="9.5">전사체 발현량 (GEX UMI)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• FOXA1 (Pioneer Factor):</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">닫힌 염색질을 최초로 열어내는 개척자</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• AR (Nuclear Receptor):</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">호르몬 의존적 종양 분화 및 증식 지휘</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• ASCL1 (bHLH Factor):</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">t-NEPC 신경내분비 계통 전환 마스터 TF</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="250" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="140" y="250" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">Regulator Expression Score</text>
+  </g>
+
+  <!-- Flow Arrow 1 -->
+  <path d="M 315 200 L 335 200" stroke="#818cf8" stroke-width="2.5"/>
+  <polygon points="335,195 345,200 335,205" fill="#818cf8"/>
+
+  <!-- Node 2: Enhancer Motif & ChromVAR -->
+  <g transform="translate(350, 70)">
+    <rect width="320" height="265" rx="10" fill="url(#gradCard6)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="160" y="22" text-anchor="middle" fill="#818cf8" font-size="13" font-weight="700">2. 오픈 인핸서 &amp; DNA 바인딩 모티프</text>
+
+    <!-- Schematic: DNA Motif -->
+    <rect x="15" y="44" width="290" height="52" rx="6" fill="#0f172a" stroke="#4338ca" stroke-width="1"/>
+    <text x="25" y="63" fill="#818cf8" font-size="10.5" font-family="monospace">Motif: AGAACAnnnTGTTCT (ARE)</text>
+    <text x="25" y="80" fill="#34d399" font-size="9.5" font-family="monospace">ChromVAR Z-score: Motif Accessibility</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• cisTopic 토픽 모델링:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">공 개방 인핸서 피크 공발현 클러스터 도출</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• pycistarget 모티프 인리치먼트:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">열린 피크 중심 실제 TF 결합 서열 물리적 검증</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• Peak-to-Gene 링크 연계:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">인핸서와 프로모터 간 기능적 연결 검증</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="290" height="22" rx="4" fill="#4338ca" fill-opacity="0.3"/>
+    <text x="160" y="250" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="600">✓ 물리적 결합 타당성 확보</text>
+  </g>
+
+  <!-- Flow Arrow 2 -->
+  <path d="M 675 200 L 695 200" stroke="#34d399" stroke-width="2.5"/>
+  <polygon points="695,195 705,200 695,205" fill="#34d399"/>
+
+  <!-- Node 3: Target Gene & eRegulon -->
+  <g transform="translate(710, 70)">
+    <rect width="260" height="265" rx="10" fill="url(#gradCard6)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="260" height="32" rx="10" fill="#34d399" fill-opacity="0.2"/>
+    <text x="130" y="22" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">3. 표적 유전자 발현 &amp; eRegulon</text>
+
+    <!-- Formula / eRegulon Box -->
+    <rect x="15" y="44" width="230" height="52" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <text x="25" y="63" fill="#34d399" font-size="10" font-weight="700">eRegulon = TF ➔ Peak ➔ Target</text>
+    <text x="25" y="80" fill="#94a3b8" font-size="9">KLK3, TMPRSS2, SYP, CHGA</text>
+
+    <!-- Bullets -->
+    <text x="15" y="116" fill="#cbd5e1" font-size="11" font-weight="600">• 단순 상관관계를 넘은 인과성:</text>
+    <text x="25" y="134" fill="#94a3b8" font-size="10.5">TF발현 + 인핸서개방 + 표적전사 3박자 일치</text>
+
+    <text x="15" y="156" fill="#cbd5e1" font-size="11" font-weight="600">• 활성화(+) vs 억제(-) 분기:</text>
+    <text x="25" y="174" fill="#94a3b8" font-size="10.5">REST 억제 해제 및 AR 활성 감쇠 규명</text>
+
+    <text x="15" y="196" fill="#cbd5e1" font-size="11" font-weight="600">• 표적 발굴의 높은 재현성:</text>
+    <text x="25" y="214" fill="#94a3b8" font-size="10.5">단일 모달 대비 위양성 80% 이상 제거</text>
+
+    <!-- Bottom Badge -->
+    <rect x="15" y="235" width="230" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="130" y="250" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">✓ 고신뢰도 유전자 조절망 완성</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 8: Troubleshooting & 5-Stage Multiome Capstone Rubric -->
+  <div class="slide">
+    <div class="slide-content" style="text-align: center;">
+      <div class="doc-ref">📖 대응 교재: tracks/01_multiome_snatac/docs/08_EGRN_AND_SCENICPLUS.md § 4, 5</div>
+      <div class="slide-header" style="justify-content: center;">
+        <h2>7. 멀티오믹스 트러블슈팅 및 5단계 캡스톤 분석 루브릭</h2>
+      </div>
+      <div style="text-align: left; max-width: 900px; margin: 0 auto;">
+        <div class="card accent" style="margin-bottom: 16px;">
+          <h3>5단계 캡스톤 마스터 파이프라인</h3>
+          <p><strong>Step 1</strong>: snATAC TSS Score (&ge;6.0) &amp; 147 bp 래더 QC + CellBender RNA 배경 정제<br>
+          <strong>Step 2</strong>: 슈도벌크 MACS3 피크 콜링, 500 bp 컨센서스 이진 행렬 구축 및 LSI 깊이 편향 보정<br>
+          <strong>Step 3</strong>: MuData 컨테이너 로드 및 WNN 양방향 가중치 멀티모달 그래프 통합<br>
+          <strong>Step 4</strong>: ±500 kb 윈도우 기반 Peak-to-Gene 연관 분석 (<i>AR</i>, <i>ERG</i>, <i>ASCL1</i> 슈퍼인핸서 도출)<br>
+          <strong>Step 5</strong>: pycisTopic 토픽 모델링 및 SCENIC+ eGRN 복원으로 핵심 치료 표적 전사인자 규명</p>
+        </div>
+        <div class="card highlight">
+          <h3>실전 연구자를 위한 골든 룰</h3>
+          <p>✔ <strong>모달리티 불일치 주의</strong>: RNA와 ATAC의 QC 통과 세포 교집합을 엄격히 동기화할 것<br>
+          ✔ <strong>LSI 1번 주성분 검증</strong>: 시퀀싱 깊이와 상관계수 |<i>r</i>| &gt; 0.8일 경우 반드시 폐기할 것<br>
+          ✔ <strong>배치 효과 분리</strong>: 서로 다른 환자/배치 간 통합 시 scVI/Harmony를 WNN 이전에 독립 적용할 것</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">◀ 이전 (Prev)</button>
+  <div id="counter">Slide 1 / 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} / ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

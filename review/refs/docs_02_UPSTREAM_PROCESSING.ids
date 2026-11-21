@@ -1,0 +1,10 @@
+[cited]
+PMID:30902100  # "Lun 2019 (EmptyDrops)", L76  [Lun ATL 2019 Genome Biol]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:scanpy
+SW:star
+SW:cellranger

@@ -1,0 +1,13 @@
+[cited]
+PMID:35277707  # "He et al. 2022 (Alevin-fry)", L10,L43,L162,L166,L323  [He D 2022 Nat Methods]
+PMID:27043002  # "Bray et al. 2016", L31  [Bray NL 2016 Nat Biotechnol]
+PMID:27307617  # "Srivastava et al. 2016 (RapMap)", L31,L43  [Srivastava A 2016 Bioinformatics]
+
+[evidence]
+PMID:32894187  # Srivastava A 2020 Genome Biol: Alignment and mapping methodology influence transcript abundance estimation.  [근거: SCI-09-028]
+PMID:33795888  # Melsted P 2021 Nat Biotechnol: Modular, efficient and constant-memory single-cell RNA-seq preprocessing.  [근거: SCI-09-028]
+
+[software]
+SW:alevin-fry
+SW:pyroe
+SW:salmon

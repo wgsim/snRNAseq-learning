@@ -1,0 +1,14 @@
+pair_name,pathway,ligand_subunits,receptor_subunits,evidence,mode
+IL6_(IL6R+IL6ST),IL6,IL6,IL6R+IL6ST,Heterodimer gp130 signal transducer,Paracrine/Autocrine
+TGFB1_(TGFBR1+TGFBR2),TGFb,TGFB1,TGFBR1+TGFBR2,Ser/Thr kinase heterotetrameric receptor,Paracrine/Autocrine
+TNFSF11_TNFRSF11A,RANKL,TNFSF11,TNFRSF11A,Osteoblast-osteoclast bone remodeling axis,Paracrine/Juxtacrine
+CD274_PDCD1,Checkpoint,CD274,PDCD1,Immune checkpoint inhibitory axis,Juxtacrine
+CD47_SIRPA,Innate_Checkpoint,CD47,SIRPA,Don't eat me macrophage phagocytosis inhibition,Juxtacrine
+CXCL12_CXCR4,CXCL,CXCL12,CXCR4,CAF stromal exclusion and tumor homing,Paracrine
+SPP1_CD44,SPP1,SPP1,CD44,TAM-driven stemness and metastasis,Paracrine
+VEGFA_(FLT1+KDR),VEGF,VEGFA,FLT1+KDR,Endothelial angiogenesis receptor complex,Paracrine
+PTHLH_PTH1R,PTHrP,PTHLH,PTH1R,Tumor-osteoblast feedforward vicious cycle,Paracrine
+COL1A1_(ITGA1+ITGB1),Collagen,COL1A1,ITGA1+ITGB1,Integrin α1β1 collagen ECM adhesive complex,Juxtacrine/ECM
+DLL1_NOTCH1,NOTCH,DLL1,NOTCH1,Direct cell contact juxtacrine Notch signaling,Juxtacrine
+WNT5A_(FZD5+LRP5),WNT,WNT5A,FZD5+LRP5,Frizzled-LRP co-receptor non-canonical Wnt,Paracrine
+BMP2_BMPR1A,BMP,BMP2,BMPR1A,Osteosclerotic osteoblast differentiation,Paracrine

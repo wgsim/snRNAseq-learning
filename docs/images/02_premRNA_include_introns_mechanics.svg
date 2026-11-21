@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" width="1000" height="340" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">핵 전사체 Pre-mRNA 특성과 --include-introns 정렬 원리</text>
+  <text x="500" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">단일 세포(scRNA-seq, Exon 위주) 대비 단일 핵(snRNA-seq, Intron 40~60%) 정량 메커니즘</text>
+
+  <!-- Genomic DNA & Transcript Model -->
+  <g transform="translate(60, 75)">
+    <!-- Genomic DNA -->
+    <text x="0" y="20" fill="#94a3b8" font-size="12" font-weight="700">Genomic DNA:</text>
+    <line x1="120" y1="16" x2="880" y2="16" stroke="#475569" stroke-width="4"/>
+    
+    <!-- Exon 1 -->
+    <rect x="180" y="4" width="90" height="24" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="225" y="20" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Exon 1</text>
+    
+    <!-- Intron 1 -->
+    <text x="365" y="20" text-anchor="middle" fill="#94a3b8" font-size="11">Intron 1 (Pre-mRNA)</text>
+    
+    <!-- Exon 2 -->
+    <rect x="460" y="4" width="110" height="24" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="515" y="20" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Exon 2</text>
+    
+    <!-- Intron 2 -->
+    <text x="670" y="20" text-anchor="middle" fill="#94a3b8" font-size="11">Intron 2 (Pre-mRNA)</text>
+    
+    <!-- Exon 3 -->
+    <rect x="760" y="4" width="80" height="24" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="800" y="20" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Exon 3</text>
+  </g>
+
+  <!-- Comparison Panel -->
+  <g transform="translate(60, 140)">
+    <!-- Standard scRNA-seq Panel -->
+    <rect x="0" y="0" width="420" height="170" rx="8" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="20" y="28" fill="#f43f5e" font-size="14" font-weight="700">A. 기존 scRNA-seq 정렬 (Exon-Only Counting)</text>
+    
+    <text x="20" y="58" fill="#cbd5e1" font-size="12">• 엑손 리드 (Exon Reads): <tspan fill="#10b981" font-weight="700">카운트 인정 (+1 UMI)</tspan></text>
+    <text x="20" y="82" fill="#cbd5e1" font-size="12">• 인트론 리드 (Intronic Reads): <tspan fill="#f43f5e" font-weight="700">폐기 (Discarded, 0 Count)</tspan></text>
+    
+    <rect x="20" y="105" width="380" height="48" rx="6" fill="#0f172a" stroke="#334155"/>
+    <text x="35" y="125" fill="#f43f5e" font-size="11" font-weight="700">⚠️ snRNA-seq 적용 시 치명적 결과:</text>
+    <text x="35" y="142" fill="#94a3b8" font-size="11">핵 전사체의 50% 이상 소실 ➔ 유전자 검출 수 극단적 급감!</text>
+  </g>
+
+  <g transform="translate(520, 140)">
+    <!-- snRNA-seq Panel -->
+    <rect x="0" y="0" width="420" height="170" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="20" y="28" fill="#38bdf8" font-size="14" font-weight="700">B. snRNA-seq 필수 정렬 (--include-introns=true)</text>
+    
+    <text x="20" y="58" fill="#cbd5e1" font-size="12">• 엑손 리드 (Exon Reads): <tspan fill="#10b981" font-weight="700">카운트 인정 (+1 UMI)</tspan></text>
+    <text x="20" y="82" fill="#cbd5e1" font-size="12">• 인트론 리드 (Intron Reads): <tspan fill="#10b981" font-weight="700">카운트 전면 인정 (+1 UMI)</tspan></text>
+    
+    <rect x="20" y="105" width="380" height="48" rx="6" fill="#0f172a" stroke="#0284c7"/>
+    <text x="35" y="125" fill="#38bdf8" font-size="11" font-weight="700">✓ 검증된 성과 지표:</text>
+    <text x="35" y="142" fill="#cbd5e1" font-size="11">검출 유전자 수 1.8~2.5배 증가 ➔ 미세 종양 아형 분별력 확보</text>
+  </g>
+</svg>

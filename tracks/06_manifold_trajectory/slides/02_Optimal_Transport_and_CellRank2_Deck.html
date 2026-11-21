@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 06: Optimal Transport &amp; CellRank 2 Deck</title>
+<style>
+
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --purple: #c084fc;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 1.85rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.02rem; line-height: 1.62; color: #cbd5e1; margin-bottom: 10px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card.purple { border-left: 4px solid var(--purple); }
+  .card h3 { font-size: 1.18rem; color: #fff; margin-bottom: 8px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.92rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.88rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.92em; }
+  
+  /* Semantic Math Formatting */
+  .math-block { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 8px 14px; margin: 8px 0; text-align: center; font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; font-size: 1.08rem; color: #38bdf8; }
+  .math-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-size: 0.95em; line-height: 1.2; }
+  .math-frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+  .math-frac .den { padding-top: 2px; }
+
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.92rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 275px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 50px 36px;">
+      <span class="tag" style="font-size: 0.95rem; padding: 6px 16px;">Track 06 Masterclass • Part 2</span>
+      <div style="margin-top: 14px;"><span class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md &amp; 05</span></div>
+      <h1 style="font-size: 2.45rem; color: var(--accent); margin: 18px 0 14px; font-weight: 800; letter-spacing: -0.5px;">최적 수송 이론 &amp; CellRank 2 운명 매핑</h1>
+      <h3 style="font-size: 1.2rem; color: #94a3b8; font-weight: 400; margin-bottom: 26px;">엔트로피 정규화 Waddington-OT, 다중 커널 볼록 결합, G-PCCA 실 슈어 분해(Real Schur Decomposition), 흡수 마르코프 체인 및 mCRPC 계통 가소성 드라이버 발굴</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 1020px;">
+        <p style="margin-bottom: 6px;">🎯 <strong>타깃 임상 병리</strong>: 전이성 거세저항성 전립선암(mCRPC) 차세대 안드로겐 수용체 저해제(Enzalutamide) 치료 선택압 하의 t-NEPC 및 이중음성(DNPC) 분기 운명 결정</p>
+        <p style="margin-bottom: 6px;">🧬 <strong>핵심 계산 프레임워크</strong>: Waddington-OT(싱크혼-크노프 밸런싱) • CellRank 2 다중 커널 볼록 결합(P = &sum; w<sub>m</sub> P<sub>m</sub>) • G-PCCA 거시상태 분해 • 흡수 마르코프 연쇄 (N = (I - Q)<sup>-1</sup>, B = NR) • 음이항 GAM 스플라인 드라이버 감별</p>
+        <p style="margin-bottom: 0;">🔬 <strong>학습 중점</strong>: 종단적 시계열 세포 집단 질량 수송 복원, 속도-단백질 불일치 극복, 비가역적 개방계의 실 슈어 불변 부분공간 분해, 10만+ 세포 GMRES 크릴로프 고속 해법, 파이오니어 전사인자 vs 말단 마커 동역학 캐스케이드 정량화</p>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 2: Longitudinal Time-series & Waddington-OT -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md § 1 - § 4</div>
+      <div class="slide-header">
+        <h2>1. 종단적 시계열 데이터와 Waddington-OT: 몬지-칸토로비치 최적 수송 &amp; 싱크혼-크노프</h2>
+        <span class="tag">Optimal Transport</span>
+      </div>
+      <p>파괴적 시계열 측정으로 인해 개별 세포의 연속 추적이 불가능한 불연속 세포 집단 사이에서, 엔트로피 정규화 최적 수송과 싱크혼-크노프 교대 사영을 통해 O(N<sup>2</sup>) 초고속으로 전이 결합 행렬을 도출합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Waddington-OT &amp; 싱크혼 수송 결합)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">와딩턴 최적 수송(Waddington-OT) &amp; 엔트로피 싱크혼(Sinkhorn) 결합</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">시점별 확률 측도 밀어내기(Push-forward) ➔ 칸토로비치 수송 계획 행렬 Γ* ➔ 싱크혼 반복 초고속 스케일링</text>
+
+  <!-- Panel 1: Multi-timepoint Measures & Growth Rates -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 다중 시점 측도 &amp; 증식/사멸 보정</text>
+
+    <!-- Schematic: t1 to t2 cloud mapping -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Cloud t1 -->
+      <circle cx="20" cy="22" r="3.5" fill="#38bdf8"/>
+      <circle cx="32" cy="14" r="4.5" fill="#38bdf8"/>
+      <circle cx="24" cy="36" r="3" fill="#38bdf8"/>
+      <text x="25" y="54" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">시점 t_1 (μ)</text>
+
+      <!-- Transport lines with cost C_ij -->
+      <path d="M 38 20 C 70 15, 110 18, 145 22" stroke="#64748b" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <path d="M 38 30 C 70 35, 110 32, 145 35" stroke="#38bdf8" stroke-width="1.5"/>
+
+      <!-- Cloud t2 -->
+      <g transform="translate(130, 0)">
+        <circle cx="25" cy="18" r="4" fill="#34d399"/>
+        <circle cx="38" cy="28" r="5" fill="#34d399"/>
+        <circle cx="20" cy="38" r="3.5" fill="#34d399"/>
+        <text x="30" y="54" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">시점 t_2 (ν)</text>
+      </g>
+
+      <text x="88" y="14" text-anchor="middle" fill="#fbbf24" font-size="6.5">비용 C_ij = ||x_i - y_j||^2</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비평형 세포 집단 동역학:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">시점 간 단순 매칭이 아닌 세포 분열(g_i) 및 사멸율 모델링</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전체 표현형 수송 비용 (Cost Matrix):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">C_ij = ||x_i - y_j||_2^2 (고차원 PCA 발현 공간 거리)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 와딩턴 지형(Landscape) 역학 재구성:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">파괴적 단일세포 측정의 시간적 단절을 수학적 수송으로 연결</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">핵심 원리: 최소 에너지 투입으로 전체 세포 집단 밀도 이동 설명</text>
+  </g>
+
+  <!-- Panel 2: Entropic Regularized Kantorovich Problem -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 엔트로피 정규화 칸토로비치 문제</text>
+
+    <!-- Schematic: Coupling Matrix Gamma & Formula -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="90" height="58" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="45" y="16" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">수송 계획 행렬 Γ*</text>
+      <!-- Matrix grid representation -->
+      <circle cx="25" cy="30" r="3" fill="#38bdf8" fill-opacity="0.8"/>
+      <circle cx="45" cy="30" r="1.5" fill="#64748b"/>
+      <circle cx="65" cy="30" r="4.5" fill="#34d399"/>
+      <circle cx="25" cy="46" r="2" fill="#64748b"/>
+      <circle cx="45" cy="46" r="5" fill="#f43f5e"/>
+      <circle cx="65" cy="46" r="2.5" fill="#fbbf24"/>
+    </g>
+
+    <g transform="translate(130, 48)">
+      <rect width="165" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="82" y="16" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">min_Γ &lt;C, Γ&gt; - ε H(Γ)</text>
+      <text x="82" y="30" text-anchor="middle" fill="#cbd5e1" font-size="6.8">s.t.  Γ 1 = μ,  Γ^T 1 = ν</text>
+      <text x="82" y="46" text-anchor="middle" fill="#34d399" font-size="6.8">H(Γ) = -Σ Γ_ij (log Γ_ij - 1)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 칸토로비치 완화 (Kantorovich Relaxation):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">1:1 단사 함수 한계를 극복하고 확률적 1:다 분기 허용</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 엔트로피 정규화의 수학적 효과:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">강한 볼록성(Strong convexity) 부여 ➔ 유일한 최적해 보장</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 깁스 커널 (Gibbs Kernel Form):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">최적해 구조: Γ_ij^* = u_i K_ij v_j,  K_ij = exp( -C_ij / ε )</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.5" font-weight="600">계산 혁신: O(N^3 log N) 선형 계획법을 O(N^2) 행렬 연산으로 단축</text>
+  </g>
+
+  <!-- Panel 3: Sinkhorn-Knopp Scaling Algorithm -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 싱크혼-크놉(Sinkhorn) 반복 알고리즘</text>
+
+    <!-- Schematic: Sinkhorn Iteration -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="115" height="26" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="57" y="17" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">u^(k+1) = μ ./ (K v^(k))</text>
+
+      <path d="M 125 61 C 145 54, 145 54, 155 61" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrCyan04)"/>
+      <path d="M 155 72 C 145 78, 145 78, 125 72" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrEmerald04)"/>
+
+      <g transform="translate(145, 0)">
+        <rect width="115" height="26" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="57" y="17" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">v^(k+1) = ν ./ (K^T u^(k+1))</text>
+      </g>
+      <text x="130" y="52" text-anchor="middle" fill="#94a3b8" font-size="6.8">교대 대각 스케일링 (Diagonal Scaling)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 교대 행렬-벡터 곱셈 (Matrix-Vector Ops):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">GPU 병렬 연산에 극도로 최적화된 대규모 수송 최적화</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 선조 및 후손 확률 쿼리 (Ancestor/Descendant):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">특정 t-NEPC 종말 세포의 기원 선조 클론을 t_1에서 역추적</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 엔잘루타마이드 치료 유도 계통 전이 검증:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">약물 노출 전 루미날 세포 중 어떤 서브클론이 저항성으로 가는지 규명</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">임상 적용: 치료 저항성 획득 클론의 조상 집단 및 유도 인자 사전 포착</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 칸토로비치 완화 (Kantorovich Relaxation)</h3>
+          <ul>
+            <li>시점 t<sub>1</sub>과 t<sub>2</sub>의 불연속 확률 측도: &mu; = &sum; p<sub>i</sub> &delta;<sub>x<sub>i</sub></sub>, &nu; = &sum; q<sub>j</sub> &delta;<sub>y<sub>j</sub></sub></li>
+            <li>몽주의 1:1 결정론적 사상의 한계 극복 &rarr; 결합 확률 행렬 &Gamma; &in; &reals;<sub>+</sub><sup>N<sub>1</sub>&times;N<sub>2</sub></sup></li>
+            <li>유클리드 비용 행렬 C<sub>ij</sub> = ||x<sub>i</sub> - y<sub>j</sub>||<sub>2</sub><sup>2</sup> 하에서 최소 비용 수송:</li>
+          </ul>
+          <div class="math-block">min<sub>&Gamma; &in; &Pi;(&mu;, &nu;)</sub> &sum;<sub>i=1</sub><sup>N<sub>1</sub></sup> &sum;<sub>j=1</sub><sup>N<sub>2</sub></sup> C<sub>ij</sub> &Gamma;<sub>ij</sub></div>
+          <ul>
+            <li>고전 선형 계획법의 O(N<sup>3</sup> log N) 연산 병목 발생</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 엔트로피 정규화 &amp; 깁스 커널 (Cuturi 2013)</h3>
+          <ul>
+            <li>음의 섀넌 엔트로피 페널티 항 도입:</li>
+          </ul>
+          <div class="math-block">min<sub>&Gamma;</sub> [ &lang;C, &Gamma;&rang; - &epsilon; H(&Gamma;) ], &emsp; H(&Gamma;) = -&sum;<sub>i, j</sub> &Gamma;<sub>ij</sub> (log &Gamma;<sub>ij</sub> - 1)</div>
+          <ul>
+            <li>라그랑주 쌍대성을 통한 깁스 커널(Gibbs Kernel K) 도출:</li>
+          </ul>
+          <div class="math-block">K<sub>ij</sub> = exp( - <span class="math-frac"><span class="num">C<sub>ij</sub></span><span class="den">&epsilon;</span></span> ), &emsp; &Gamma;<sup>*</sup> = diag(u) &middot; K &middot; diag(v)</div>
+          <ul>
+            <li>싱크혼-크노프 교대 사영(u &larr; p / Kv, v &larr; q / K<sup>T</sup>u)으로 O(N<sup>2</sup>) 초고속 수렴</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. 불균형 최적 수송과 조상/후손 추적</h3>
+          <ul>
+            <li>세포 증식 및 사멸률 g(x<sub>i</sub>) 반영: 쿨백-라이블러(KL) 발산 페널티로 질량 비보존계 완벽 모델링</li>
+            <li>전이 확률 행렬 변환: P<sub>ot</sub>(i, j) = &Gamma;<sub>ij</sub><sup>*</sup> / &sum;<sub>k</sub> &Gamma;<sub>ik</sub><sup>*</sup></li>
+            <li>조상 역추적(Pull-back: &mu;<sub>anc</sub> = &Gamma;<sup>T</sup> &nu;) 및 후손 예측(Push-forward: &nu;<sub>desc</sub> = &Gamma; &mu;) 다중 시점 연쇄 결합</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 3: CellRank 2 Multi-Kernel Fusion -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md § 1 - § 3</div>
+      <div class="slide-header">
+        <h2>2. CellRank 2 다중 커널 융합: 속도 + 발달잠재력 + 실시간 커널의 볼록 결합</h2>
+        <span class="tag">Multi-Kernel Fusion</span>
+      </div>
+      <p>단일 양식의 노이즈와 속도 왜곡을 극복하기 위해 속도, 발달 잠재력(CytoTRACE), 시계열 최적 수송(WOT), 공간 전사체 커널을 독립 추상화하고, 행-확률성이 엄밀히 보존되는 볼록 결합으로 마르코프 전이 행렬을 구성합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (다중 커널 융합 &amp; G-PCCA 거시상태)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">CellRank 2 멀티커널 융합 &amp; 일반화 PCCA+(G-PCCA) 거시상태</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">RNA 속도 + 의시간 + 실시간 최적수송 커널 결합 ➔ 비가역 전이 행렬 P ➔ 슈어(Schur) 분해 &amp; 정상 거시상태</text>
+
+  <!-- Panel 1: Multi-Kernel Fusion -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 다중 커널 융합 (Multi-Kernel)</text>
+
+    <!-- Schematic: Kernel Additions -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(20, 50)">
+      <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="30" y="15" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">K_velo (w1)</text>
+
+      <text x="68" y="16" fill="#cbd5e1" font-size="10" font-weight="700">+</text>
+
+      <g transform="translate(76, 0)">
+        <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+        <text x="30" y="15" text-anchor="middle" fill="#c084fc" font-size="7.5" font-weight="700">K_dpt (w2)</text>
+      </g>
+
+      <text x="144" y="16" fill="#cbd5e1" font-size="10" font-weight="700">+</text>
+
+      <g transform="translate(152, 0)">
+        <rect width="60" height="24" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="30" y="15" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">K_ot (w3)</text>
+      </g>
+
+      <line x1="216" y1="12" x2="232" y2="12" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan05)"/>
+      <text x="245" y="16" fill="#fbbf24" font-size="11" font-weight="700">P</text>
+
+      <text x="125" y="42" text-anchor="middle" fill="#94a3b8" font-size="7.2">전이 행렬: P_ij ≥ 0,  Σ_j P_ij = 1 (행 정규화)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단일 모달리티 한계 극복:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">RNA 속도의 국소 노이즈를 전역 DPT 및 OT 방향성으로 상호 보완</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 가중치 볼록 결합 (Convex Combination):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">P = w_1 T_velo + w_2 T_dpt + w_3 T_ot (Σ w_k = 1)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포별 신뢰도 기반 동적 적응:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">속도 벡터 품질이 낮은 미분화 세포는 DPT 가중치 자동 증대</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">견고성 달성: 생물학적 모순 신호 억제 및 안정적 궤적 형성</text>
+  </g>
+
+  <!-- Panel 2: Real Schur Decomposition & Spectrum -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad05)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 실수 슈어(Schur) 분해 &amp; 거시상태</text>
+
+    <!-- Schematic: Schur Form -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="115" height="58" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+      <text x="57" y="16" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">슈어 분해 (Schur Form)</text>
+      <text x="57" y="32" text-anchor="middle" fill="#cbd5e1" font-size="7.5">P = Q R Q^T</text>
+      <text x="57" y="48" text-anchor="middle" fill="#38bdf8" font-size="6.8">Q: 직교, R: 준상삼각</text>
+    </g>
+
+    <g transform="translate(155, 48)">
+      <rect width="135" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="67" y="16" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">스펙트럼 갭 (Gap)</text>
+      <!-- Real eigenvalues plot -->
+      <line x1="15" y1="46" x2="120" y2="46" stroke="#475569" stroke-width="1"/>
+      <circle cx="25" cy="28" r="3" fill="#38bdf8"/>
+      <circle cx="45" cy="30" r="3" fill="#38bdf8"/>
+      <circle cx="65" cy="31" r="3" fill="#38bdf8"/>
+      <circle cx="85" cy="33" r="3" fill="#38bdf8"/>
+      <line x1="95" y1="20" x2="95" y2="46" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <circle cx="108" cy="42" r="2.5" fill="#64748b"/>
+      <text x="67" y="55" text-anchor="middle" fill="#94a3b8" font-size="6.5">k = 6 거시상태 (n_states=6 지정, 예시)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 비가역(Non-reversible) 연산자의 안정적 분해:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">전이 행렬 P는 비대칭이므로 복소수 고유값 문제 내포</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 실수 슈어 벡터 (Real Schur Vectors):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">불변 부분공간(Invariant subspace)을 수치적으로 완벽 보존</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 일반화 페론 클러스터 분석 (G-PCCA):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">슈어 기저를 최적 심플렉스(Simplex) 상의 소속 확률로 사상</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#c084fc" font-size="9.5" font-weight="600">수학적 진보: 복소 고유벡터 섭동(Perturbation) 결함 원천 차단</text>
+  </g>
+
+  <!-- Panel 3: 4 Macrostates & Lineage Branches -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. mCRPC 4대 거시상태 분류</text>
+
+    <!-- Schematic: 4 Macrostate Cards -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Root: AR+ Adeno -->
+      <rect width="58" height="24" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="29" y="15" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">AR+ Adeno</text>
+      <text x="29" y="32" text-anchor="middle" fill="#94a3b8" font-size="6">초기 상태</text>
+
+      <path d="M 60 12 L 80 12" stroke="#38bdf8" stroke-width="1.4" marker-end="url(#arrCyan05)"/>
+
+      <!-- Intermediate: Amphicrine -->
+      <g transform="translate(85, 0)">
+        <rect width="58" height="24" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+        <text x="29" y="15" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">Amphicrine</text>
+        <text x="29" y="32" text-anchor="middle" fill="#94a3b8" font-size="6">과도 전이체</text>
+      </g>
+
+      <!-- Fork arrows -->
+      <path d="M 145 12 L 165 4" stroke="#c084fc" stroke-width="1.4" marker-end="url(#arrPurple05)"/>
+      <path d="M 145 12 L 165 20" stroke="#34d399" stroke-width="1.4" marker-end="url(#arrEmerald05)"/>
+
+      <!-- Terminal 1: DNPC -->
+      <g transform="translate(170, -6)">
+        <rect width="55" height="20" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+        <text x="27" y="13" text-anchor="middle" fill="#c084fc" font-size="6.8" font-weight="700">DNPC</text>
+      </g>
+
+      <!-- Terminal 2: t-NEPC -->
+      <g transform="translate(170, 16)">
+        <rect width="55" height="20" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+        <text x="27" y="13" text-anchor="middle" fill="#34d399" font-size="6.8" font-weight="700">t-NEPC</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 초기(Initial) 및 종말(Terminal) 상태 자동 검증:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">마르코프 연쇄의 유출/유입 플럭스 비율로 생물학적 역할 분별</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 종말 거시상태 1: t-NEPC (ASCL1/SYP/CHGA):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">완전 신경내분비 역분화 (강한 분해 속도 및 비가역 트랩)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 종말 거시상태 2: DNPC (ETV4/FGFR1):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">AR 음성 / NE 음성 이중 음성 표현형 독립 분기</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">임상적 함의: 호르몬 내성 전립선암의 2대 가소성 종착역 정량 규명</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 단일 양식의 한계와 4대 커널 추상화</h3>
+          <ul>
+            <li><strong>속도 커널 (P<sub>vel</sub>)</strong>: 속도 v<sub>i</sub>와 변위 &Delta;x<sub>ij</sub> 간 피어슨 상관 r<sub>ij</sub> 및 지수 온도 정규화</li>
+            <li><strong>의사시간/CytoTRACE 커널 (P<sub>pt</sub>)</strong>: 발달 잠재력 C(i) 기반 로지스틱 단방향 편향 f(&Delta;t<sub>ij</sub>)과 발현 친화도 결합</li>
+            <li><strong>실시간 커널 (P<sub>ot</sub>)</strong>: 종단적 시계열 WOT 싱크혼 결합 행렬의 행 정규화</li>
+            <li><strong>공간 커널 (P<sub>sp</sub>)</strong>: 조직 2D 물리 거리 및 리간드-수용체(LR) 상호작용 결합 (Track 02 연계)</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 볼록 결합(Convex Combination)과 행-확률성</h3>
+          <ul>
+            <li>M개 개별 커널의 선형 가중 결합:</li>
+          </ul>
+          <div class="math-block">P<sub>comb</sub> = &sum;<sub>m=1</sub><sup>M</sup> w<sub>m</sub> P<sub>m</sub>, &emsp; &sum;<sub>m=1</sub><sup>M</sup> w<sub>m</sub> = 1, &emsp; w<sub>m</sub> &ge; 0</div>
+          <ul>
+            <li><strong>행-확률성 보존 수학적 증명</strong>:</li>
+          </ul>
+          <div class="math-block">P<sub>comb</sub> 1 = ( &sum;<sub>m</sub> w<sub>m</sub> P<sub>m</sub> ) 1 = &sum;<sub>m</sub> w<sub>m</sub> (P<sub>m</sub> 1) = &sum;<sub>m</sub> w<sub>m</sub> 1 = 1</div>
+          <ul>
+            <li>모든 커널의 행합이 1이므로 결합 행렬 역시 엄밀한 마르코프 전이 행렬 보장</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>3. mCRPC 계통 가소성 융합 최적화</h3>
+          <ul>
+            <li>Enzalutamide 치료 시 전사 감속으로 인한 속도 음수 왜곡을 CytoTRACE 커널(w<sub>cyto</sub> = 0.5)로 보정</li>
+            <li>속도 벡터(w<sub>vel</sub> = 0.5)의 국소 방향성과 CytoTRACE의 전역적 줄기세포능 경사가 결합하여 역류 아티팩트 완벽 제거</li>
+            <li>시계열 샘플 존재 시 WOT 커널을 추가 결합하되 가중치를 재정규화(예: w<sub>ot</sub> = 0.4, w<sub>vel</sub> = w<sub>cyto</sub> = 0.3, Σw = 1)하여 종단적 질량 수송 보존</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 4: Real Schur Decomposition & G-PCCA Macrostates -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md § 1 - § 4</div>
+      <div class="slide-header">
+        <h2>3. 실 슈어 분해(Real Schur) &amp; G-PCCA: 비가역적 마르코프 거시상태 식별</h2>
+        <span class="tag">G-PCCA Macrostates</span>
+      </div>
+      <p>비가역적 세포 분화에서 세부 균형(Detailed Balance)이 파괴되어 고전적 대칭 스펙트럼 분해가 불가능함을 증명하고, 실 슈어 분해(Real Schur Decomposition)를 통해 느린 거시 동역학 불변 부분공간을 추출하여 4대 mCRPC 거시상태를 분해합니다.</p>
+      <div class="grid-3">
+        <div class="card highlight">
+          <h3>1. 세부 균형 파괴와 비에르미트 분해</h3>
+          <ul>
+            <li>생체 분화는 에너지(ATP)를 소모하는 비평형 개방계: &pi;<sub>i</sub> P<sub>ij</sub> &ne; &pi;<sub>j</sub> P<sub>ji</sub></li>
+            <li>엔트로피 생성률 &sigma; &gt; 0 및 전이 행렬 P의 비대칭성</li>
+            <li>고유값이 복소수 평면(&lambda; = a &plusmn; bi)으로 확장되어 고전적 에르미트 PCCA 알고리즘 적용 불가</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 실 슈어 분해와 지배적 불변 부분공간</h3>
+          <ul>
+            <li>직교 행렬 Q (Q<sup>T</sup>Q = I)와 준상삼각 행렬 T로의 분해:</li>
+          </ul>
+          <div class="math-block">P = Q T Q<sup>T</sup>, &emsp; P Q<sub>k</sub> = Q<sub>k</sub> T<sub>11</sub></div>
+          <ul>
+            <li>기븐스 회전을 통해 상위 k개 지배적 고유값이 좌상단 블록 T<sub>11</sub>에 오도록 정렬</li>
+            <li>Q<sub>k</sub> &in; &reals;<sup>N&times;k</sup>가 시스템의 느린 거시 동역학(Slow Invariant Subspace) 완벽 포착</li>
+            <li>스펙트럼 갭 &Delta;<sub>k</sub> = |&lambda;<sub>k</sub>| - |&lambda;<sub>k+1</sub>| 극대화 지점에서 최적 거시상태 개수 k 결정</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>3. 심플렉스 투영 &amp; 4대 mCRPC 말단 거시상태</h3>
+          <ul>
+            <li>Q<sub>k</sub> 좌표를 외접하는 최소 부피 정규 심플렉스 꼭짓점 탐색 &rarr; 소프트 소속도 행렬 &chi; 도출</li>
+            <li><strong>4대 mCRPC 말단 거시상태</strong>:</li>
+            <li>1. <strong>AR+ 루미날 선암종</strong>: KLK3+, NKX3-1+ 호르몬 의존성 종착점</li>
+            <li>2. <strong>양분비성 암종 (Amphicrine)</strong>: AR+ / CHGA+ 동시 양성</li>
+            <li>3. <strong>이중음성 전립선암 (DNPC)</strong>: AR- / NE-, FGFR1+ / ETV4+ 침윤형</li>
+            <li>4. <strong>치료유발 신경내분비암 (t-NEPC)</strong>: AR- / CHGA+ / SYP+, ASCL1+ / INSM1+</li>
+            <li><strong>가소성 중간체</strong>: KRT4+ / TACSTD2+ 줄기세포능 유지 전이 상태</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 5: Absorbing Markov Chains & Fate Probabilities -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md § 1 - § 4</div>
+      <div class="slide-header">
+        <h2>4. 흡수 마르코프 체인 수리 도출: 기본 행렬 N &amp; 운명 흡수 확률 행렬 B = NR</h2>
+        <span class="tag">Absorbing Chains</span>
+      </div>
+      <p>전이 행렬을 정규 블록 형태로 분할하고, 스펙트럼 반경 &rho;(Q) &lt; 1에 기반한 노이만 급수 수렴 증명을 통해 기본 행렬 N과 흡수 확률 행렬 B = NR을 엄밀히 도출합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (흡수 마르코프 체인 &amp; 운명 확률)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">흡수 마르코프 운명 확률(Fate Probabilities) &amp; 계통 구동자(Drivers)</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">흡수 전이 행렬 분할 ➔ 기본 행렬 N &amp; 운명 흡수 확률 B = N R ➔ 전이 구동 마스터 전사인자 발굴</text>
+
+  <!-- Panel 1: Absorbing Markov Chain Formulation -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 흡수 마르코프 연쇄 분할</text>
+
+    <!-- Schematic: Matrix Block Partition -->
+    <rect x="15" y="42" width="265" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(30, 48)">
+      <!-- Partitioned matrix -->
+      <rect width="105" height="58" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <line x1="65" y1="0" x2="65" y2="58" stroke="#475569" stroke-width="1" stroke-dasharray="2,2"/>
+      <line x1="0" y1="36" x2="105" y2="36" stroke="#475569" stroke-width="1" stroke-dasharray="2,2"/>
+
+      <text x="32" y="22" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">Q (과도기)</text>
+      <text x="85" y="22" text-anchor="middle" fill="#fbbf24" font-size="8.5" font-weight="700">R (흡수)</text>
+      <text x="32" y="49" text-anchor="middle" fill="#64748b" font-size="8.5">0</text>
+      <text x="85" y="49" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">I (항등)</text>
+    </g>
+
+    <g transform="translate(150, 48)">
+      <rect width="120" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="60" y="16" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">기본 행렬 N</text>
+      <text x="60" y="30" text-anchor="middle" fill="#cbd5e1" font-size="7">N = (I - Q)^(-1)</text>
+      <text x="60" y="46" text-anchor="middle" fill="#fbbf24" font-size="6.8">N = Σ_(k=0)^∞ Q^k</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 마르코프 정준형 분할 (Canonical Form):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">상태를 과도 전이 상태(Transient)와 흡수 상태(Absorbing)로 분리</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 기본 행렬 N의 물리적 의미:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">N_ij: 세포 i가 흡수되기 전 상태 j에 머무르는 기대 방문 횟수</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 완전 폐쇄형 대수해 (Closed-Form):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">몬테카를로 경로 무작위 샘플링 없이 역행렬 대수로 엄밀 산출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">수학적 엄밀성: 무한 급수 전이 경로의 정확한 총합 도출</text>
+  </g>
+
+  <!-- Panel 2: Absorption Probability Matrix B -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad06)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 운명 흡수 확률 행렬 B = N R</text>
+
+    <!-- Schematic: Single cell fate bar plot -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <rect width="110" height="58" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="55" y="16" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">B = N · R</text>
+      <text x="55" y="32" text-anchor="middle" fill="#cbd5e1" font-size="7.5">B_ij ∈ [0, 1]</text>
+      <text x="55" y="48" text-anchor="middle" fill="#34d399" font-size="7">Σ_j B_ij = 1.0</text>
+    </g>
+
+    <g transform="translate(150, 48)">
+      <rect width="140" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="70" y="14" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">단일세포 i 운명 확률</text>
+      <!-- Horizontal stacked bar -->
+      <rect x="15" y="22" width="85" height="14" rx="2" fill="#34d399"/>
+      <rect x="100" y="22" width="25" height="14" rx="2" fill="#c084fc"/>
+      <text x="57" y="33" text-anchor="middle" fill="#0f172a" font-size="7" font-weight="700">t-NEPC: 78% (예시)</text>
+      <text x="112" y="33" text-anchor="middle" fill="#f8fafc" font-size="6.5">DN: 22%</text>
+      <text x="70" y="49" text-anchor="middle" fill="#94a3b8" font-size="6.5">세포별 절대 분화 편향성</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단일세포 수준의 흡수 운명 정량화:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">각 세포가 궁극적으로 t-NEPC에 도달할 절대 확률 산출</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 분기 가소성 윈도우 (Plasticity Window):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">B_t-NEPC ≈ 0.5인 임계 세포군이 치료 개입의 최적 타깃</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 엔잘루타마이드 치료 유도 가소성 측정:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">루미날 마커 발현 세포 중 t-NEPC 운명 기약 세포 사전 선별</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.5" font-weight="600">진단적 가치: 형태학적 변화 이전의 전사체 운명 결정 상태 포착</text>
+  </g>
+
+  <!-- Panel 3: Lineage Drivers Correlation -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad06)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 계통 구동 유전자(Drivers) 발굴</text>
+
+    <!-- Schematic: Expression vs Fate Correlation curve -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Axes -->
+      <line x1="15" y1="56" x2="115" y2="56" stroke="#475569" stroke-width="1"/>
+      <line x1="15" y1="56" x2="15" y2="6" stroke="#475569" stroke-width="1"/>
+      <text x="65" y="60" text-anchor="middle" fill="#94a3b8" font-size="6.5">B_t-NEPC 운명 확률 (0 ➔ 1)</text>
+
+      <!-- Up curve (ASCL1) -->
+      <path d="M 15 52 Q 55 50 110 12" stroke="#34d399" stroke-width="2" fill="none"/>
+      <text x="110" y="10" fill="#34d399" font-size="7" font-weight="700">ASCL1 (r=0.92)</text>
+
+      <!-- Down curve (AR) -->
+      <path d="M 15 15 Q 55 20 110 54" stroke="#f43f5e" stroke-width="1.6" fill="none"/>
+      <text x="75" y="38" fill="#f43f5e" font-size="6.5">AR (r=-0.89)</text>
+    </g>
+
+    <g transform="translate(170, 48)">
+      <rect width="115" height="58" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <text x="57" y="14" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">Top t-NEPC Drivers</text>
+      <text x="57" y="27" text-anchor="middle" fill="#cbd5e1" font-size="6.8">1. ASCL1 (r = 0.92, 예시)</text>
+      <text x="57" y="38" text-anchor="middle" fill="#cbd5e1" font-size="6.8">2. INSM1 (r = 0.88)</text>
+      <text x="57" y="49" text-anchor="middle" fill="#cbd5e1" font-size="6.8">3. EZH2  (r = 0.85)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 운명 상관 분석 (Fate Correlation):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">r_g = Corr( X_g, B_(:, target) ) (피어슨/스피어만 상관계수)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 핵심 신경내분비 구동자 규명:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">ASCL1, INSM1, EZH2, SOX2를 구동 후보로 예시</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이중 음성(DNPC) 구동자 규명:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">ETV4, FGFR1을 DNPC 구동 후보로 예시</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">신약 개발 타깃: 후성유전학적 리프로그래밍(EZH2/ASCL1) 표적 억제</text>
+  </g>
+  <text x="500" y="353" text-anchor="middle" fill="#64748b" font-size="9">※ 개념도: 확률·상관계수 수치는 설명용 예시이며 실측 결과가 아님 (toy 파이프라인 산출은 pipelines/results_pipeline_02 참조)</text>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 정규 블록 분해 (Canonical Block Form)</h3>
+          <ul>
+            <li>N개 세포를 전이 세포 t개와 흡수(말단) 세포 r개로 인덱스 재배열:</li>
+          </ul>
+          <div class="math-block">P = <span style="display:inline-block; vertical-align:middle;">[ <span style="display:inline-grid; grid-template-columns:auto auto; gap:4px; text-align:center;"><span>Q</span><span>R</span><span>0</span><span>I<sub>r</sub></span></span> ]</span>, &emsp; Q 1<sub>t</sub> + R 1<sub>r</sub> = 1<sub>t</sub></div>
+          <ul>
+            <li>Q &in; &reals;<sup>t&times;t</sup>: 전이 세포 간 전이 확률 (Q<sub>ij</sub> &ge; 0)</li>
+            <li>R &in; &reals;<sup>t&times;r</sup>: 전이 세포에서 흡수 상태로 1단계 직접 진입할 확률</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 기본 행렬 N과 노이만 급수 수렴</h3>
+          <ul>
+            <li>흡수 상태 도달성 보장에 의해 스펙트럼 반경 &rho;(Q) &lt; 1 성립 &rarr; lim<sub>k&rarr;&infin;</sub> Q<sup>k</sup> = 0</li>
+            <li>노이만 급수(Neumann Series) 항등식으로부터 역행렬 존재 엄밀 증명:</li>
+          </ul>
+          <div class="math-block">N &equiv; (I<sub>t</sub> - Q)<sup>-1</sup> = &sum;<sub>k=0</sub><sup>&infin;</sup> Q<sup>k</sup></div>
+          <ul>
+            <li><strong>기댓값 물리적 의미</strong>: N<sub>ij</sub>는 전이 세포 i에서 출발한 무작위 행보가 임의의 종착지로 흡수되기 전까지 전이 세포 j를 통과하는 총 기대 방문 횟수(Expected Number of Visits)</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>3. 흡수 확률 B = NR 도출 &amp; GMRES 해석</h3>
+          <ul>
+            <li>1단계 조건부 확률(First-step analysis): B = R + QB &hArr; (I - Q)B = R</li>
+          </ul>
+          <div class="math-block">B = (I<sub>t</sub> - Q)<sup>-1</sup> R = N R</div>
+          <ul>
+            <li><strong>행합 보존 증명</strong>: B 1<sub>r</sub> = (I - Q)<sup>-1</sup> (I - Q) 1<sub>t</sub> = 1<sub>t</sub> (확률 1로 어느 한 종착지로 흡수)</li>
+            <li>10만+ 대규모 아틀라스에서 O(t<sup>3</sup>) 직접 역행렬 대신 GMRES 크릴로프 부분공간 반복법 적용</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 6: mCRPC Lineage Plasticity Bifurcation -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md § 5 &amp; 08</div>
+      <div class="slide-header">
+        <h2>5. mCRPC 계통 가소성 추적: t-NEPC vs DNPC 분기 운명 &amp; 계통 프라이밍 엔트로피</h2>
+        <span class="tag">Lineage Plasticity</span>
+      </div>
+      <p>Enzalutamide 치료 압력 하에서 암세포가 선택하는 두 가지 상이한 탈출로(t-NEPC vs. DNPC)의 분기 메커니즘을 규명하고, 계통 프라이밍 엔트로피(H<sub>i</sub>)를 통해 치료적 차단이 가능한 가소성 교차로를 동정합니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. t-NEPC vs DNPC 양방향 분기 스위치</h3>
+          <ul>
+            <li><strong>t-NEPC 분기 (신경내분비 분화)</strong>: TP53/RB1 동시 결손 하에서 뉴런 전사인자(ASCL1, INSM1) 및 EZH2 급증, CHGA+/SYP+ 발현 및 신경 분화 완결</li>
+            <li><strong>DNPC 분기 (이중음성 분화)</strong>: RB1 보존 상태에서 FGFR1/MAPK 활성화 및 ETV4/SOX9 과발현, 상피-중간엽 전이(EMT) 기질 침윤</li>
+            <li>AR 저해제에 대한 생물학적으로 완전히 직교하는 두 갈래의 저항성 회피 경로</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 계통 프라이밍 엔트로피 (Entropy: H_i)</h3>
+          <ul>
+            <li>흡수 확률 분포 B<sub>i&middot;</sub>의 섀넌 엔트로피를 통해 세포의 미분화 가소성 수준 정량화:</li>
+          </ul>
+          <div class="math-block">H<sub>i</sub> = - &sum;<sub>k=1</sub><sup>r</sup> B<sub>ik</sub> log B<sub>ik</sub></div>
+          <ul>
+            <li><strong>H<sub>i</sub> &approx; 0</strong>: 특정 운명으로 이미 비가역적 결정이 완료된 세포 (Commitment)</li>
+            <li><strong>H<sub>i</sub> &ge; 1.8 (극대화, 상한 log<sub>2</sub>4 = 2 bit)</strong>: AR 선암종·Amphicrine·DNPC·t-NEPC 4대 계통 어느 쪽으로도 분화 가능한 다분화능 가소성 교차로 (Bifurcation Checkpoint)</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. Pre-existing vs De Novo 가소성 판별</h3>
+          <ul>
+            <li><strong>Pre-existing 모델 (치료 전 기배정)</strong>: 치료 전 생검의 scCNA 상에서 17p(TP53)/13q(RB1) 결손 클론이 0.1~1% 수준으로 이미 검출되며 B<sub>t-NEPC</sub> &gt; 0.85 기록</li>
+            <li><strong>De Novo 적응 모델 (치료 유도 가소성)</strong>: 치료 전 정상 유전체(B<sub>t-NEPC</sub> &approx; 0)였으나 약제 노출 후 EZH2 크로마틴 리모델러 활성화 및 H<sub>i</sub> 피크를 거쳐 단계적 획득</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 7: Lineage Master Drivers Discovery -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md § 1 - § 5</div>
+      <div class="slide-header">
+        <h2>6. 계통 마스터 드라이버 발굴: 음이항 GAM 스플라인 &amp; 파이오니어 전사인자 동정</h2>
+        <span class="tag">Driver Discovery</span>
+      </div>
+      <p>흡수 확률 벡터 b<sub>k</sub>와 유전자 발현 간의 비선형 음이항 GAM 스플라인 적합을 통해, 단순 말단 지표(Passenger Marker)와 세포 운명을 결정하는 파이오니어 선도 인자(Pioneer Driver)를 시간-동역학적으로 감별합니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 흡수 확률 상관 및 음이항 GAM</h3>
+          <ul>
+            <li>운명 확률 b<sub>k</sub>와 유전자 x<sub>g</sub> 간 피어슨 및 스피어만 순위 상관 분석</li>
+            <li>음이항(Negative Binomial) 일반화 가법 모델(GAM) 큐빅 스플라인 적합:</li>
+          </ul>
+          <div class="math-block">log(&mu;<sub>ig</sub>) = &beta;<sub>0</sub> + s<sub>g</sub>(B<sub>ik</sub>) = &beta;<sub>0</sub> + &sum;<sub>m=1</sub><sup>M</sup> &beta;<sub>gm</sub> &phi;<sub>m</sub>(B<sub>ik</sub>)</div>
+          <ul>
+            <li>단일세포 카운트의 과분산 및 드롭아웃을 보정하고 일시적 펄스(Transient Pulse) 유전자 감지</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 활성화 시점(B_onset)과 t-NEPC 드라이버</h3>
+          <ul>
+            <li>1차 도함수 s&#39;<sub>g</sub>(B)로부터 유전자가 급상승하는 임계 시점 B<sub>onset</sub> 정량화:</li>
+            <li><strong>조기 후성유전 프라이밍 (B<sub>onset</sub> &approx; 0.2~0.3)</strong>: <i>EZH2, SOX2</i> (크로마틴 응축 해제 및 다분화능 개방)</li>
+            <li><strong>파이오니어 전사인자 (B<sub>onset</sub> &approx; 0.4~0.5)</strong>: <i>ASCL1, INSM1</i> (폐쇄된 신경 염색질 부위 직접 결합)</li>
+            <li><strong>치료 표적 리간드</strong>: <i>DLL3</i> (Notch 억제 리간드, t-NEPC 특이적 ADC 표적)</li>
+            <li><strong>말단 기능성 마커 (B<sub>onset</sub> &gt; 0.85)</strong>: <i>CHGA, SYP</i> (분화 완결 후 축적되는 단순 패신저 마커)</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>3. DNPC 드라이버 및 멀티옴 교차 검증</h3>
+          <ul>
+            <li><strong>DNPC 특이적 드라이버 캐스케이드</strong>: <i>FGFR1</i> 증폭 &rarr; <i>ETV4/SOX9</i> regulon 전사 활성화 &rarr; <i>TWIST1</i> 침윤</li>
+            <li><strong>멀티오믹스 교차 검증</strong>: Track 01 SCENIC+ eGRN regulon 활성 점수(AUCell) 및 Track 04 scCNA 서브클론 변이와의 유기적 융합</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Slide 8: Capstone Project Rubric & Synthesis -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md § 3 &amp; § 4</div>
+      <div class="slide-header">
+        <h2>7. 5단계 궤적 분석 캡스톤 프로젝트 루브릭 &amp; Track 06 총괄 마일스톤</h2>
+        <span class="tag">Track 06 Synthesis</span>
+      </div>
+      <p>단일세포 매니폴드 기하학, RNA velocity ODE, 최적 수송 WOT, CellRank 2 다중 커널 융합, G-PCCA 거시상태 분해 및 흡수 마르코프 체인을 아우르는 5단계 캡스톤 프로젝트 완결 루브릭을 제시합니다.</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 15%;">분석 단계</th>
+            <th style="width: 30%;">수학적 &amp; 생물물리학적 핵심 절차</th>
+            <th style="width: 35%;">소프트웨어 툴 &amp; 정량 품질 기준</th>
+            <th style="width: 20%;">산출물 &amp; 임상 검증</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Stage 1<br>QC &amp; 리드 감사</strong></td>
+            <td>Alevin-fry 기반 엑손/인트론 리드 정량화, 미성숙 RNA 비율 감사</td>
+            <td><code>alevin-fry</code>, <code>scanpy</code><br>미성숙 RNA 비율: 15~25% (단일핵 40~60%) 전수 합격</td>
+            <td>저품질 세포 제거 및 U/S 행렬 정제</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 2<br>매니폴드 융합</strong></td>
+            <td>scVI 잠재 공간 k-NN 구축, 4대 커널 가중 볼록 결합 (P = &sum; w<sub>m</sub> P<sub>m</sub>)</td>
+            <td><code>scVI</code>, <code>CellRank 2</code><br>설계 예시 w<sub>ot</sub>=0.4, w<sub>vel</sub>=0.3, w<sub>cyto</sub>=0.2, w<sub>sp</sub>=0.1 (행-확률성 보존)</td>
+            <td>배치 무손실 결합 전이 확률 행렬</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 3<br>G-PCCA 거시상태</strong></td>
+            <td>실 슈어 분해(P = Q T Q<sup>T</sup>), 스펙트럼 갭 &Delta;<sub>k</sub> 및 심플렉스 투영</td>
+            <td><code>GPCCA</code>, <code>scipy.linalg</code><br>조대입자화 전이 행렬 자체 보존도: P&#771;<sub>ss</sub> &ge; 0.90</td>
+            <td>4대 mCRPC 말단 상태 및 가소성 중간체 분해</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 4<br>흡수 운명 확률</strong></td>
+            <td>정규 블록 분해, 기본 행렬 N = (I-Q)<sup>-1</sup>, B = NR 수리 해석</td>
+            <td><code>GMRES Krylov solver</code><br>행합 보존 검증: B 1<sub>r</sub> = 1<sub>t</sub>, 분기 엔트로피 H<sub>i</sub> &ge; 1.8 동정</td>
+            <td>t-NEPC vs DNPC 분기 결정 체크포인트</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 5<br>드라이버 발굴</strong></td>
+            <td>음이항 GAM 스플라인 회귀, B<sub>onset</sub> 동역학 캐스케이드, 멀티옴 검증</td>
+            <td><code>mgcv</code>, <code>SCENIC+</code>, <code>Track 01/04</code><br>FDR q &lt; 0.01, EZH2 &rarr; ASCL1/INSM1 &rarr; DLL3 규명</td>
+            <td>치료적 표적화 가능 파이오니어 전사인자 완결</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2" style="margin-top: 18px;">
+        <div class="card success">
+          <h3>🎓 Track 06 교육적 성취 총괄</h3>
+          <ul>
+            <li>정적 스냅샷의 한계를 극복하고 연속적 시간의 화살 복원</li>
+            <li>단일 양식의 오류를 극복하는 다중 커널 마르코프 프레임워크 체득</li>
+            <li>비가역적 종양 가소성을 수학적으로 정복하는 실 슈어 분해 마스터</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>🔬 임상 중개 연구 및 후속 트랙 연계</h3>
+          <ul>
+            <li>Enzalutamide 내성 조기 차단을 위한 DLL3 ADC 및 EZH2 저해제 병용 근거 수립</li>
+            <li>Track 01(Multiome), Track 02(Spatial), Track 05(Foundation VAE)와의 통합 파이프라인 완성</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+</div>
+
+<!-- Navigation Controls -->
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">◀ 이전 (Prev)</button>
+  <div id="counter">Slide 1 of 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) ▶</button>
+</div>
+
+<script>
+
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} of ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

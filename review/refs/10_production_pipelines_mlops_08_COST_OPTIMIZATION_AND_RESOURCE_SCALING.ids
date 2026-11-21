@@ -1,0 +1,13 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:nextflow
+SW:slurm
+SW:fastqc
+SW:multiqc
+SW:pandas
+SW:numpy

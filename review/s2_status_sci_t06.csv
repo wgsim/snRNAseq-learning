@@ -1,0 +1,30 @@
+id,owner,dim,location,confidence,status,note
+SCI-06-001,sci,A,docs/00:171-176,Confirmed (초록에 전립선 없음); Plausible (세포주명),fixed,"00장 §4.2: Replogle 2022는 인간 세포주 genome-scale CRISPRi Perturb-seq(전립선·NE 분석 아님), 방법론 사례로만 인용, AR/FOXA1/TP53/RB1→NE 도약은 가상 시나리오 표기"
+SCI-06-002,sci,A,docs/00:165-170,Confirmed (초록 불일치); Plausible (일정),fixed,"00장 §4.1: Karthaus 2020 초록 수준(관강세포 재생 기여)으로 한정, 벨로시티/WOT ""탈분화 벡터 증명""은 가상 적용 시나리오, Day 0-28 일정은 교육용 예시"
+SCI-06-003,sci,A,docs/04:319-321,Confirmed,fixed,"04장 문제 2: Karthaus/임상 시계열 인용 삭제 → 가상 시나리오 명시, Day 28과 모의 데이터(Day 0-14) 불일치 주석"
+SCI-06-004,sci,A,"docs/07:14,163; docs/08:109-110; docs/00:102",Confirmed,already-fixed,"2단계 G 적용 확인: 07장 L14 흡수=모델 근사/비가역 아님, 08장 ""(모델상) 고착"", 00장 L102 모순 해소"
+SCI-06-007,sci,A,"docs/01:10,194-200,300,313-315,349,363",Confirmed,fixed,"01장: DPT 거리를 누적 확률 차이의 노름 D²=Σ(λ/(1-λ))²(ψ(x)-ψ(y))²로 정정(§5.2 유도, 목표문, Q 해설, 특이성 논의 동일 수정)"
+SCI-06-010,sci,B,docs/02:201-204; docs/03:212; docs/05:164,Confirmed (0.3.4); 구버전 미확인,fixed,02·03·05장: scv.pp.filter_and_normalize(n_top_genes=) TypeError → min_shared_counts만 사용 + sc.pp.highly_variable_genes(subset=True)
+SCI-06-011,sci,A,"docs/03:249,259-264",Confirmed,fixed,"03장: E-step ""Brent 1차원 볼록 탐색""·""그래프 사전분포(λΣW(t-t_j)²)"" 삭제 → assign_tau 격자 탐색(argmin), 세포 독립 할당; Q1(2) 질문·해설 재작성"
+SCI-06-012,sci,A,"docs/03:178-184,188",Confirmed,fixed,"03장 §4.2: 가중식 w_g=logL·C를 개념식으로 격하, 실제 latent_time 절차(min_likelihood 0.1, root_key/속도 그래프 추정, compute_shared_time 백분위 선형성 2개 합산, 최대 4 root 평균) 병기, ""완전 자율"" 삭제"
+SCI-06-013,sci,A,docs/03:278-281,Confirmed,fixed,"03장 문제 2: 부호 교정 — fast-γ 클론은 u>γ̄ s, v=(γ_fast-γ̄)s>0 거짓 양의 벨로시티, slow 클론은 거짓 억제"
+SCI-06-015,sci,B,"docs/04:236 (ENG-014 참조), 252-258, 269",Confirmed,already-fixed,"ENG-014로 OTModel(adata, day_field, growth_rate_field, ...)·compute_transport_map 적용 확인(wot 1.0.x 시그니처 재확인); 성장률 난수 폴백은 코드 주석에 교육용 모의값으로 명시됨"
+SCI-06-017,sci,B,docs/05:177-179,Confirmed,fixed,05장: VelocityKernel.compute_transition_matrix temperature → softmax_scale
+SCI-06-018,sci,B,docs/05:185-189; docs/09:148-149,Confirmed,fixed,"05장: compute_cytotrace(layer=""Ms""), compute_transition_matrix(threshold_scheme=""soft"", nu=0.5) (threshold_low/high 없음)"
+SCI-06-019,sci,B,docs/06:191; docs/09:164,Confirmed,fixed,"06·09장: coarse_grained_transition_matrix → coarse_T; Reuter 서지를 JCTC 2018(PMID 29812922)·JCP 2019(PMID 31067901)로 정정, CellRank 2 서지를 Nat Methods 2024(PMID 38871986)로 정정"
+SCI-06-020,sci,A,"docs/06:46-51,208-217",Confirmed,fixed,"06장: ""세부균형 위반⇒비정규"" 논리 정정 — 세부균형은 π-가중 자기수반, 가역 P도 일반적으로 PPᵀ≠PᵀP, 순환 치환은 정규이면서 위반; 에르미트 서술도 π-가중으로 한정"
+SCI-06-021,sci,A,"docs/05:141-145,240-250; docs/09:28,49-54,186-193",Confirmed (논리),fixed,"05·09장: v<0은 루미날 유전자 발현 감소=루미날 이탈 정방향임을 정정, 거짓 역류 원인을 하향 유전자 지배/γ·u/s 추정 오류로 재서술"
+SCI-06-022,sci,A,"docs/07:170-174,306-316",Confirmed,fixed,"07장 엔트로피 표·Q3: 4번째 계통(Amphicrine) 잔여로 재계산 0.30/1.68/0.51/0.22 bits, Q3 Group 1 (0.44,0.42,0.14)=1.44 bits(3결과 최대 1.58), ""2.0 bits 근접"" 삭제"
+SCI-06-025,sci,B,docs/08:152-175,Confirmed (시그니처); 실행은 정상상태 분포 부재로 미완,fixed,"08장: compute_lineage_drivers(lineage=, cluster_key=) → lineages= (cluster_key는 clusters와 함께일 때만)"
+SCI-06-026,sci,B,docs/08:178-200,Confirmed,fixed,"08장: gene_trends/heatmap에 time_key 필수 추가, heatmap show_absorption_probabilities → show_fate_probabilities, GAMR은 R(mgcv)+rpy2·기본 gaussian(NB는 distribution=""nb""+raw count) 주석"
+SCI-06-033,sci,A,"docs/08:122-137,238; SVG06",Confirmed,already-fixed,08장 §4가 가상 시나리오·파이프라인(r≈0.58)과 다름을 명시(1·2단계); SVG06은 eng가 Schematic 표기
+SCI-06-034,sci,A,docs/08:282-287,Plausible,softened,"08장 Q3: DLL3 판정 기준을 교육용 가상 기준으로 명시(임상 근거 없음, 임상 선별 금지), ""반응 전무"" 단정 완화"
+SCI-06-038,sci,B,"docs/09:99,262",Confirmed,fixed,09장: SpatialKernel 삭제 → PrecomputedKernel(공간 그래프 기반 전이행렬)
+SCI-06-039,sci,B,docs/09:261,Confirmed,fixed,09장: scVI(RNA 전용) → MultiVI(scvi.model.MULTIVI) 또는 WNN/MOFA+
+SCI-06-040,sci,B,docs/09:158-168,Confirmed,fixed,09장 코드: compute_macrostates 뒤 predict_terminal_states() 추가(없으면 RuntimeError)
+SCI-06-048,sci,C,pipeline02:252-308; results_pipeline_02/macrostate_assignments.csv,Confirmed,softened,"08장 §4 주석: 합성 파이프라인 02의 ""G-PCCA""는 입력 계통 라벨 복사임을 명시(파이프라인 코드는 수정하지 않음)"
+SCI-06-049,sci,C,"pipeline02:395-405; results_pipeline_02/cell_fate_probabilities.csv, pipeline_02_summary.txt",Confirmed,softened,08장 §4 주석: P(t-NEPC)=P(DNPC)=0.5는 흡수 경계 유속 0일 때의 폴백 인공물(파이프라인 코드는 수정하지 않음)
+SCI-06-050,sci,C,pipeline02 (expression L~140-175); results_pipeline_02/lineage_driver_correlations.csv,Confirmed,already-fixed,1·2단계(ENG-033 SIMULATION_NOTICE 및 08장 §4 주석)에서 합성 결과 고지; 이번에 순환 회수·비-TF 포함 주석 추가
+SCI-06-051,sci,C,"pipeline01:335,518; results_pipeline_01/cell_trajectories_and_velocity.csv, pipeline_01_summary.txt",Confirmed,softened,08장 §4 주석: 파이프라인 01의 DPT/latent time은 Haghverdi DPT·scVelo 동역학 잠재 시간이 아닌 단순화 근사임을 명시(코드는 수정하지 않음)
+SCI-06-052,sci,D,SVG06 (텍스트); results_pipeline_02/pipeline_02_metrics.json,Confirmed,already-fixed,"SVG06 하드코딩 수치: eng가 2단계에서 Schematic/예시 표기(텍스트에 ""Schematic"", ""개념도"", ""예시"" 확인); 파일은 수정하지 않음"
+SCI-06-053,sci,A,SVG01 (텍스트),Confirmed,already-fixed,SVG01 M 식이 eng 수정으로 M=Σ_t(T^t-φ0φ0ᵀ)로 교정됨 확인; 파일은 수정하지 않음

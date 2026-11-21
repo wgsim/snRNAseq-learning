@@ -1,0 +1,17 @@
+[cited]
+PMID:35680885  # Dimitrov 2022 Nat Commun
+PMID:39223377  # Dimitrov 2024 Nat Cell Biol (LIANA+)
+PMID:22247279  # Kolde 2012 Bioinformatics (RRA)
+PMID:21353695  # Fizazi 2011 Lancet (denosumab vs zoledronic acid)
+PMID:22093187  # Smith 2012 Lancet (denosumab, bone-metastasis-free survival)
+PMID:24277834  # Feig 2013 PNAS
+
+[evidence]
+
+
+[software]
+SW:liana
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy

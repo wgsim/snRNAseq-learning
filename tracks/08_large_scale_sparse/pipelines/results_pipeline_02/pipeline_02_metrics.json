@@ -1,0 +1,79 @@
+{
+  "metadata_slicing": {
+    "n_matches": 932,
+    "row_time_per_query_ms": 6.160140514373779,
+    "columnar_time_per_query_ms": 0.27823638916015625,
+    "query_speedup": 22.13995276810442,
+    "sub_millisecond_pass": true,
+    "columnar_memory_kb": 380.859375,
+    "row_memory_kb": 9375.0,
+    "memory_reduction_factor": 24.615384615384617
+  },
+  "ann_search": {
+    "n_queries": 50,
+    "k_neighbors": 30,
+    "brute_time_sec": 6.629141807556152,
+    "ann_time_sec": 0.2644526958465576,
+    "ann_speedup": 25.067401133254297,
+    "mean_recall": 1.0,
+    "speedup_target_pass": true,
+    "recall_target_pass": true
+  },
+  "gpu_acceleration": {
+    "total_cpu_time_sec": 127.985,
+    "total_gpu_time_sec": 2.3034924596548083,
+    "overall_speedup_fold": 55.56128454580628,
+    "stages": [
+      {
+        "stage": "1. Host-Device Transfer",
+        "cpu_impl": "System RAM Pageable",
+        "gpu_impl": "PCIe Gen5 DMA (64 GB/s)",
+        "cpu_time_s": 0.085,
+        "gpu_time_s": 0.0034924596548080444,
+        "unit": "s",
+        "speedup": 24.338148010666668
+      },
+      {
+        "stage": "2. PCA / TruncatedSVD (50 PC)",
+        "cpu_impl": "Scikit-Learn (64 Threads)",
+        "gpu_impl": "cuML Tensor Core GEMM",
+        "cpu_time_s": 42.5,
+        "gpu_time_s": 0.38,
+        "unit": "s",
+        "speedup": 111.84210526315789
+      },
+      {
+        "stage": "3. k-NN Graph (k=30)",
+        "cpu_impl": "HNSW / PyNNDescent",
+        "gpu_impl": "NVIDIA CAGRA (Warp Coalesced)",
+        "cpu_time_s": 28.2,
+        "gpu_time_s": 0.95,
+        "unit": "s",
+        "speedup": 29.68421052631579
+      },
+      {
+        "stage": "4. Leiden Clustering",
+        "cpu_impl": "Leidenalg (C++ Engine)",
+        "gpu_impl": "cuGraph Atomic Modularity",
+        "cpu_time_s": 21.4,
+        "gpu_time_s": 0.52,
+        "unit": "s",
+        "speedup": 41.153846153846146
+      },
+      {
+        "stage": "5. UMAP 2D Projection",
+        "cpu_impl": "UMAP-Learn (Parallel SGD)",
+        "gpu_impl": "cuML UMAP (GPU SGD)",
+        "cpu_time_s": 35.8,
+        "gpu_time_s": 0.45,
+        "unit": "s",
+        "speedup": 79.55555555555554
+      }
+    ]
+  },
+  "hardware_profiling": {
+    "peak_ram_mb": 39.51886558532715,
+    "zero_leak_verified": true
+  },
+  "execution_time_total_sec": 10.918447971343994
+}

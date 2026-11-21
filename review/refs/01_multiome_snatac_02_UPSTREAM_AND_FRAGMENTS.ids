@@ -1,0 +1,10 @@
+[cited]
+PMID:34772935  # "Chromap README, Zhang et al. 2021", L60  [Zhang H 2021 Nat Commun]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:htslib
+SW:chromap
+SW:pysam

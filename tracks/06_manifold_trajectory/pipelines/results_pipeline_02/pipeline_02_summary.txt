@@ -1,0 +1,34 @@
+======================================================================
+Track 06 - Pipeline 02: CellRank 2 Multi-Kernel & Fate Mapping Summary
+======================================================================
+
+Analyzed Cohort: 1500 Single Cells
+G-PCCA Identified Macrostates:
+  - AR_Adeno_Macro    : 500 cells
+  - Amphicrine_Macro  : 350 cells
+  - t_NEPC_Macro      : 350 cells
+  - DNPC_Macro        : 300 cells
+
+Top Lineage Driver Transcription Factors (t-NEPC):
+  1. CHGA     : r = +0.5906
+  2. NCAM1    : r = +0.5885
+  3. FOXA2    : r = +0.5883
+  4. EZH2     : r = +0.5882
+  5. INSM1    : r = +0.5880
+  6. SYP      : r = +0.5863
+  7. DLL3     : r = +0.5858
+  8. ASCL1    : r = +0.5839
+
+Top Lineage Driver Transcription Factors (DNPC):
+  1. FGF2     : r = +0.5488
+  2. EGFR     : r = +0.5486
+  3. ETV4     : r = +0.5461
+  4. SOX9     : r = +0.5456
+  5. FGFR1    : r = +0.5445
+  6. TCF4     : r = +0.5431
+  7. BG_GENE_075 : r = +0.0638
+  8. BG_GENE_040 : r = +0.0615
+
+Plasticity Intermediate (Amphicrine) Fate Split:
+  - P(t-NEPC) = 0.4999
+  - P(DNPC)   = 0.5001

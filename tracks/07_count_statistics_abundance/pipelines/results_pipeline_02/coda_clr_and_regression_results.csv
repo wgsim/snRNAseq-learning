@@ -1,0 +1,5 @@
+phenotype,role,effect_beta,std_error,t_stat,p_value,coda_status
+Naive,Reference_Baseline,0.0,0.0,0.0,1.0,Invariant_Baseline
+Memory,Target_Phenotype,0.0,0.0,0.0,1.0,Statistically_Invariant
+Effector,Target_Phenotype,1.0986,0.0,1.979083957548139e+16,0.00010662469950206699,True_Expansion_Responders
+Exhausted,Target_Phenotype,-1.0986,0.0,-1.979083957548139e+16,0.00010662469950206699,True_Expansion_NonResponders

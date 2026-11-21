@@ -1,0 +1,19 @@
+[cited]
+PMID:34584091  # "Squair et al. 2021", L53,L57,L60  [Squair JW 2021 Nat Commun]
+PMID:34719426  # "Kfoury et al. 2021", L9,L87,L107,L296,L297  [Kfoury Y 2021 Cancer Cell]
+PMID:33420488  # "Chen et al. 2021", L9,L97,L114  [Chen S 2021 Nat Cell Biol]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:anndata
+SW:deseq2
+SW:edger
+SW:glmmtmb
+SW:nebula
+SW:numpy
+SW:rpy2
+SW:scanpy
+SW:statsmodels
+SW:pandas

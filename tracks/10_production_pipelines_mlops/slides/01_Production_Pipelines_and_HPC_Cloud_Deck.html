@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 10: Production Pipelines &amp; HPC/Cloud Deck</title>
+<style>
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --purple: #c084fc;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-content::-webkit-scrollbar { width: 6px; height: 6px; }
+  .slide-content::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+  .slide-content::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 3px; }
+  .slide-content::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
+
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 1.85rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.02rem; line-height: 1.62; color: #cbd5e1; margin-bottom: 10px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card.purple { border-left: 4px solid var(--purple); }
+  .card h3 { font-size: 1.18rem; color: #fff; margin-bottom: 8px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.92rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.88rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.92em; }
+  
+  /* Semantic Math Formatting */
+  .math-block { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 16px; margin: 10px 0; text-align: center; font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; font-size: 1.08rem; color: #38bdf8; }
+  .math-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-size: 0.95em; line-height: 1.2; }
+  .math-frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+  .math-frac .den { padding-top: 2px; }
+
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.92rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 310px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 46px 36px;">
+      <span class="tag" style="font-size: 0.95rem; padding: 6px 16px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase;">Track 10 Masterclass &bull; Part 1</span>
+      <div style="margin-top: 14px;"><span class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/00_PRODUCTION_PIPELINES_ROADMAP.md &amp; 01</span></div>
+      <h1 style="font-size: 2.35rem; color: var(--accent); margin: 18px 0 14px; font-weight: 800; letter-spacing: -0.5px;">엔터프라이즈급 바이오인포매틱스 파이프라인 &amp; 컨테이너 아키텍처</h1>
+      <h3 style="font-size: 1.15rem; color: #94a3b8; font-weight: 400; margin-bottom: 24px;">학술용 Ad-hoc 노트북에서 임상 등급 무인 분산 오케스트레이션으로: 불변 OCI 컨테이너, Nextflow DSL2 리액티브 데이터플로우, Snakemake 타깃 DAG, SLURM &amp; 클라우드 배치 자동 스케일링</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 1060px;">
+        <p style="margin-bottom: 6px;">&#127919; <strong>산업 표준 벤치마크 코호트</strong>: 300명 전립선암 환자 임상 코호트 (Primary 150 + mCRPC 150 검체, 240억 개 리드, 18.5 TB FASTQ, 32.0 TB BAMs, 1.5M 단일핵 전사체).</p>
+        <p style="margin-bottom: 6px;">&#129516; <strong>핵심 계산생물학 아키텍처</strong>: Linux 6대 Namespaces + cgroups v2 + OverlayFS &bull; Docker 루트 데몬 취약점 vs Singularity 비특권 SIF FUSE 마운트 &bull; CSP 비동기 큐/밸류 채널 &bull; Snakemake 와일드카드 확장 및 위상 정렬 스케줄러 &bull; SLURM 다요소 페어셰어 및 지수 백오프 동적 재시도.</p>
+        <p style="margin-bottom: 0;">&#128300; <strong>학습 중점</strong>: 전산 재현성 위기 극복 수리 모델, 비트 단위 멱등성 및 콘텐츠 해시 캐싱, AWS Batch Spot 인스턴스 약 69% 비용 절감과 무손실 <code>-resume</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Reproducibility Crisis -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/00_PRODUCTION_PIPELINES_ROADMAP.md &sect; 1 - &sect; 2</div>
+      <div class="slide-header">
+        <h2>1. 재현성 위기와 Ad-hoc 스크립트 탈피의 당위성</h2>
+        <span class="tag">Reproducibility Crisis &amp; mCRPC Cohort</span>
+      </div>
+      <p>단일세포 전사체학은 수천만 세포와 테라바이트 데이터를 다루는 고성능 컴퓨팅(HPC) 영역으로 도약했습니다. 연구실 단위의 비구조화 Jupyter 노트북과 절차형 Bash 스크립트는 암묵적 상태 오염, 하드웨어 종속성, 중간 실패 시 전체 재실행이라는 치명적 재현성 위기(Reproducibility Crisis)를 야기합니다.</p>
+      
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>&#9888; 학술용 Ad-hoc 주피터 노트북의 4대 구조적 결함</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>상태 오염 및 비선형 실행 순서</strong>: 셀을 위아래로 대화식 실행하며 전역 네임스페이스 오염, <code>Restart &amp; Run All</code> 시 결과 불일치</li>
+            <li><strong>"내 컴퓨터에서는 돌아간다"는 환상</strong>: 호스트 OS <code>glibc</code>, 컴파일러 플래그, BLAS/LAPACK 수치 라이브러리 차이로 타 기관 실행 불가</li>
+            <li><strong>체크포인팅 부재와 연산 낭비</strong>: 100개 샘플 중 99번째에서 OOM 발생 시 선행 98개 샘플의 수십 시간 연산 전체 재실행 참사</li>
+            <li><strong>수평적 확장성(Horizontal Scalability) 한계</strong>: 단일 노드 RAM/CPU에 묶여 다중 HPC 노드나 클라우드 배치로 작업 분산 불가</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>&#10004; 300명 mCRPC 대규모 임상 코호트 표준화 요구사항</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>극심한 유전체 이질성</strong>: 국소 원발암(Primary 150)부터 뼈/내장 전이암(mCRPC 150)까지 전구 전사체(Intron &gt;40%) snRNA-seq 처리</li>
+            <li><strong>빅데이터 스케일</strong>: 240억 개 리드(24.0&times;10<sup>9</sup>), 원시 FASTQ.gz 18.5 TB, BAM 32.0 TB, 150만 세포핵(Nuclei)</li>
+            <li><strong>이종 분산 인프라 적응</strong>: 병원 보안망(Secure Enclave), 학술 HPC(Lustre/GPFS), 퍼블릭 클라우드(AWS Batch) 간 무수정 이식성</li>
+            <li><strong>임상 규제 및 개인정보(PHI)</strong>: HIPAA/GDPR 데이터 격리, 감사 추적(Audit Trail) 및 무인(Zero-touch) 자동화</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        결정론적 파이프라인 함수: &nbsp; <i>Y</i> = <i>f</i>(<i>X</i>; &theta;, &Epsilon;) &nbsp;&nbsp;|&nbsp;&nbsp;
+        시간적 불변성: &forall;<i>t</i><sub>1</sub>, <i>t</i><sub>2</sub>: <i>f</i><sub><i>t</i><sub>1</sub></sub>(<i>X</i>; &theta;, &Epsilon;) &equiv; <i>f</i><sub><i>t</i><sub>2</sub></sub>(<i>X</i>; &theta;, &Epsilon;) &nbsp;&nbsp;|&nbsp;&nbsp;
+        멱등성: <i>f</i>(<i>f</i>(<i>X</i>)) = <i>f</i>(<i>X</i>)
+      </div>
+
+      <div class="grid-3" style="margin-top: 12px;">
+        <div class="card accent">
+          <h3>선언적 비순환 유향 그래프 (DAG)</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">프로세스 간 암묵적 순서를 배제하고, 입력과 출력 파일 간의 명시적 의존성 그래프만을 기반으로 실행 스케줄링.</p>
+        </div>
+        <div class="card warning">
+          <h3>불변 OCI 컨테이너 가상화</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">바이너리, 라이브러리, 환경변수를 단일 SHA-256 다이제스트 이미지로 봉인하여 호스트 환경 오염 원천 차단.</p>
+        </div>
+        <div class="card purple">
+          <h3>콘텐츠 주소 지정 재실행 캐싱</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">입력 데이터, 쉘 스크립트, 컨테이너 다이제스트 해시가 일치할 때 <i>O</i>(1) 캐시 즉시 반환으로 무손실 재개 보장.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Docker vs Singularity -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/01_CONTAINERIZATION_DOCKER_SINGULARITY.md &sect; 1 - &sect; 3</div>
+      <div class="slide-header">
+        <h2>2. Docker vs Singularity: HPC 보안 제약과 SIF 이미지 가상화</h2>
+        <span class="tag">Container Isolation &amp; HPC Security</span>
+      </div>
+      <p>컨테이너는 하이퍼바이저 가상머신(VM)과 달리 단일 호스트 리눅스 커널을 공유하며 6대 네임스페이스(<code>PID</code>, <code>NET</code>, <code>MNT</code>, <code>IPC</code>, <code>UTS</code>, <code>USER</code>)와 cgroups로 격리됩니다. 다중 사용자 HPC 클러스터에서는 보안 및 아키텍처 특성으로 인해 Docker 대신 Singularity(Apptainer)가 강제됩니다.</p>
+      
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>&#9888; Docker의 클라이언트-서버 모델과 루트 데몬 취약점</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>루트 데몬 의존성</strong>: 모든 컨테이너 명령이 소켓(<code>/var/run/docker.sock</code>)을 통해 UID 0 <code>dockerd</code>로 전달되어 실행</li>
+            <li><strong>호스트 루트 파일시스템 탈취</strong>: 일반 사용자가 <code>docker</code> 그룹에 속하면 <code>docker run -v /:/host_root alpine chroot</code>로 즉각 루트 권한 탈취</li>
+            <li><strong>HPC 보안 불가 판정</strong>: 다중 사용자 공유 노드에서 단 한 명의 연구원이라도 악의적/실수로 호스트 전체를 장악할 수 있어 사용 금지</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>&#10004; Singularity/Apptainer의 비특권 단일 바이너리 SIF 아키텍처</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>데몬리스(Daemon-less) 실행</strong>: 별도 백그라운드 데몬 없이 사용자의 호스트 UID/GID를 100% 동일하게 유지</li>
+            <li><strong>단일 불변 파일 (SIF)</strong>: 압축된 SquashFS 읽기 전용 단일 파일(<code>.sif</code>)을 사용자 공간에서 비특권 FUSE(squashfuse) 마운트</li>
+            <li><strong>HPC 네이티브 연동</strong>: Lustre/GPFS 분산 병렬 파일시스템, InfiniBand MPI, NVIDIA GPU 호스트 드라이버 제로 오버헤드 직접 패스스루</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        cgroups v2 CPU 대역폭: &nbsp; <i>R</i><sub>cpu</sub> = <span class="math-frac"><span class="num">cpu.max [quota]</span><span class="den">cpu.max [period]</span></span> = <span class="math-frac"><span class="num"><i>Q</i></span><span class="den"><i>P</i></span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+        OOM 발동 조건: <i>M</i><sub>anon</sub> + <i>M</i><sub>file_active</sub> + <i>M</i><sub>slab</sub> &gt; <i>M</i><sub>max</sub> &nbsp;&implies;&nbsp; <span style="color:var(--highlight); font-weight:700;">SIGKILL (Exit Code 137)</span>
+      </div>
+
+      <details class="diagram-drawer" open>
+        <summary>&#128208; 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Docker 루트 데몬 취약점 vs Singularity 비특권 SIF 가상화)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Docker vs. Singularity/Apptainer HPC 컨테이너 보안 및 실행 아키텍처</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">Root 데몬 취약점(Docker) vs HPC 멀티유저 환경 비특권 SIF 사용자 공간 격리(Singularity/Apptainer)</text>
+
+  <!-- Panel 1: Docker Root Daemon & HPC Vulnerability -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. Docker Root 데몬 &amp; HPC 취약점</text>
+
+    <!-- Schematic: Docker Architecture -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    
+    <!-- User CLI -->
+    <rect x="25" y="52" width="65" height="26" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="1"/>
+    <text x="57" y="65" text-anchor="middle" fill="#f1f5f9" font-size="8" font-weight="700">User CLI</text>
+    <text x="57" y="74" text-anchor="middle" fill="#94a3b8" font-size="7">UID: 1002</text>
+
+    <!-- Arrow to dockerd -->
+    <line x1="90" y1="65" x2="116" y2="65" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrRose01)"/>
+    <text x="103" y="60" text-anchor="middle" fill="#f43f5e" font-size="6.5">socket</text>
+
+    <!-- dockerd (Root Daemon) -->
+    <rect x="120" y="48" width="68" height="34" rx="4" fill="#881337" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="154" y="62" text-anchor="middle" fill="#ffe4e6" font-size="7.5" font-weight="700">dockerd</text>
+    <text x="154" y="74" text-anchor="middle" fill="#f43f5e" font-size="7" font-weight="700">Root (UID 0)</text>
+
+    <!-- Arrow to container -->
+    <line x1="188" y1="65" x2="208" y2="65" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrRose01)"/>
+
+    <!-- Container -->
+    <rect x="212" y="52" width="63" height="26" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+    <text x="243" y="64" text-anchor="middle" fill="#fb7185" font-size="7.5" font-weight="700">Container</text>
+    <text x="243" y="73" text-anchor="middle" fill="#f43f5e" font-size="6.5">Root 권한상승</text>
+
+    <!-- Threat warning banner -->
+    <rect x="25" y="90" width="250" height="38" rx="4" fill="#4c0519" fill-opacity="0.6" stroke="#e11d48" stroke-width="1"/>
+    <text x="150" y="103" text-anchor="middle" fill="#fecdd3" font-size="7.5" font-weight="700">🚨 보안 결함: 컨테이너 탈출(Breakout) 시</text>
+    <text x="150" y="114" text-anchor="middle" fill="#fda4af" font-size="7">호스트 커널 및 공유 스토리지(/shared) 전체 장악 위험</text>
+    <text x="150" y="123" text-anchor="middle" fill="#fda4af" font-size="6.5">다중 사용자(Multi-tenant) 클러스터에서 사용 불가</text>
+
+    <!-- Bullet description -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 백그라운드 Root 데몬 의존성:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">클라이언트와 분리된 데몬이 호스트 슈퍼유저 권한 행사</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• POSIX 파일 권한 왜곡:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">생성된 파일이 root:root 소유로 생성되어 권한 충돌</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• HPC 보안 정책 위반:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">기관 공유 클러스터에서 일반 연구원 sudo 권한 부여 불가</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#881337" fill-opacity="0.4"/>
+    <text x="150" y="259" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="600">HPC 환경 배제: 슈퍼유저 탈취 및 공유 파일 파괴 위험</text>
+  </g>
+
+  <!-- Panel 2: Singularity/Apptainer Unprivileged SIF Architecture -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. Singularity/Apptainer 비특권 SIF 구조</text>
+
+    <!-- Schematic: Singularity Architecture -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- User CLI -->
+    <rect x="25" y="52" width="70" height="28" rx="4" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+    <text x="60" y="65" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">User Process</text>
+    <text x="60" y="75" text-anchor="middle" fill="#bae6fd" font-size="7">UID: 1002 (Host)</text>
+
+    <!-- Direct invocation arrow -->
+    <line x1="95" y1="66" x2="120" y2="66" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan01)"/>
+
+    <!-- SIF Image -->
+    <rect x="124" y="49" width="74" height="34" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="161" y="62" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">image.sif</text>
+    <text x="161" y="74" text-anchor="middle" fill="#7dd3fc" font-size="6.5">SquashFS (RO)</text>
+
+    <!-- Exec arrow -->
+    <line x1="198" y1="66" x2="220" y2="66" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan01)"/>
+
+    <!-- Executing Container -->
+    <rect x="224" y="52" width="62" height="28" rx="4" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+    <text x="255" y="65" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">Apptainer</text>
+    <text x="255" y="75" text-anchor="middle" fill="#38bdf8" font-size="7">UID: 1002 (유지)</text>
+
+    <!-- Mounts & Security banner -->
+    <rect x="25" y="90" width="260" height="38" rx="4" fill="#082f49" fill-opacity="0.6" stroke="#0284c7" stroke-width="1"/>
+    <text x="155" y="103" text-anchor="middle" fill="#bae6fd" font-size="7.5" font-weight="700">🛡️ 비특권 사용자 공간 마운트 (Unprivileged)</text>
+    <text x="155" y="114" text-anchor="middle" fill="#e0f2fe" font-size="7">데몬 없음 (Daemonless) ➔ 프로세스 포크 방식으로 직접 실행</text>
+    <text x="155" y="123" text-anchor="middle" fill="#7dd3fc" font-size="6.5">호스트 사용자 ID/그룹 ID 및 파일시스템 권한 100% 보존</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 파일 이식성 (SIF 포맷):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">압축된 읽기 전용 SquashFS 파일 하나로 배포 및 공유</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 네이티브 HPC 스토리지 바인드:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">--bind /scratch,/shared 옵션으로 Lustre/GPFS 직접 접근</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• GPU 드라이버 네이티브 패스스루:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">--nv 플래그를 통한 NVIDIA CUDA 라이브러리 직접 바인딩</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0369a1" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">HPC 표준: 일반 유저 권한 실행 및 완전한 격리 보장</text>
+  </g>
+
+  <!-- Panel 3: OCI to SIF Conversion & SLURM Workflow -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. OCI 변환 및 SLURM 파이프라인 연계</text>
+
+    <!-- Workflow Pipeline Graphic -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Step 1: Docker registry -->
+    <rect x="22" y="50" width="72" height="32" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="58" y="62" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">DockerHub/Quay</text>
+    <text x="58" y="74" text-anchor="middle" fill="#94a3b8" font-size="6.5">docker://starsolo</text>
+
+    <line x1="94" y1="66" x2="110" y2="66" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Step 2: SIF cache -->
+    <rect x="114" y="50" width="76" height="32" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+    <text x="152" y="62" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">NXF_SINGULARITY</text>
+    <text x="152" y="74" text-anchor="middle" fill="#6ee7b7" font-size="6.5">CACHEDIR (*.sif)</text>
+
+    <line x1="190" y1="66" x2="206" y2="66" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald01)"/>
+
+    <!-- Step 3: SLURM Task -->
+    <rect x="210" y="50" width="75" height="32" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="247" y="62" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">SLURM Worker</text>
+    <text x="247" y="74" text-anchor="middle" fill="#fde68a" font-size="6.5">cgroups 64GB</text>
+
+    <!-- Execution code snippet -->
+    <rect x="22" y="90" width="263" height="38" rx="4" fill="#022c22" stroke="#059669" stroke-width="1"/>
+    <text x="30" y="103" fill="#a7f3d0" font-family="monospace" font-size="7">$ singularity exec --bind /scratch \</text>
+    <text x="38" y="114" fill="#a7f3d0" font-family="monospace" font-size="7">  starsolo_2.7.sif STAR --soloType Droplet ...</text>
+    <text x="30" y="123" fill="#6ee7b7" font-size="6.5">➔ SLURM 배치 스크립트 내 비대화형(Headless) 자동 실행</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• OCI 레이어 자동 병합 및 변환:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">Nextflow가 docker:// 태그를 감지하여 SIF로 자동 빌드</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 중앙 캐시를 통한 네트워크 I/O 최소화:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">수백 개 워커 노드가 공유 스토리지 SIF를 재참조</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 재현성 및 버전 고정(Digest Pinning):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">sha256 다이제스트를 통한 소프트웨어 빌드 불변성 보장</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">SLURM + Singularity + Nextflow 무결점 통합</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 4: Nextflow DSL2 -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md &sect; 1 - &sect; 3</div>
+      <div class="slide-header">
+        <h2>3. Nextflow DSL2 리액티브 채널과 데이터플로우 프로그래밍 패러다임</h2>
+        <span class="tag">CSP Dataflow &amp; Reactive Streams</span>
+      </div>
+      <p>Nextflow는 1978년 토니 호어의 CSP(Communicating Sequential Processes) 이론과 리액티브 스트림을 구현한 엔진입니다. 프로세스는 공유 메모리 없이 오직 불변 비동기 FIFO 채널을 통해서만 메시지를 주고받으며, 데이터가 도착하는 즉시 비동기적으로 실행됩니다.</p>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>&#128640; CSP 반응형 데이터플로우의 계산 장점</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>Pipelined Streaming</strong>: 100개 샘플이 완료될 때까지 기다리지 않고, Sample 1 정렬이 끝나는 즉시 Sample 1 QC 프로세스 비동기 트리거</li>
+            <li><strong>관심사의 완벽한 분리</strong>: 프로세스 로직(<code>process</code>), 서브워크플로우 체인(<code>subworkflow</code>), 런타임 인프라 구성(<code>nextflow.config</code>) 분리</li>
+            <li><strong>독립 작업 격리</strong>: 각 태스크는 고유한 해시 작업 디렉토리(<code>work/ab/c1234...</code>)에서 심볼릭 링크 기반 격리 실행</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>&#128256; Queue 채널 vs Value 채널의 결정적 차이</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>Queue Channel (소모성 FIFO)</strong>: N개 샘플의 FASTQ 스트림 병렬 처리 (<code>Channel.fromPath</code>), 데이터 소비 시 즉시 제거</li>
+            <li><strong>Value Channel (영구 브로드캐스트)</strong>: 유전체 인덱스(STAR Index, 12GB) 및 화이트리스트 무한 재사용 (<code>Channel.value</code>)</li>
+            <li><strong>치명적 안티패턴 방어</strong>: 레퍼런스 인덱스를 Queue 채널로 연결하면 첫 번째 샘플만 소비하고 채널이 고갈되어 파이프라인 영구 행(Hang) 발생</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        프로세스 변환 사상: &nbsp; <i>p</i><sub><i>i</i></sub>: &prod;<sub><i>k</i> &isin; in(<i>p</i><sub><i>i</i></sub>)</sub> <i>C</i><sub><i>k</i></sub> &longrightarrow; &prod;<sub><i>l</i> &isin; out(<i>p</i><sub><i>i</i></sub>)</sub> <i>C</i><sub><i>l</i></sub> &nbsp;&nbsp;|&nbsp;&nbsp;
+        발동 조건: &tau;(<i>p</i><sub><i>i</i></sub>) &iff; &forall;<i>C</i><sub><i>k</i></sub> &isin; in(<i>p</i><sub><i>i</i></sub>), |<i>C</i><sub><i>k</i></sub>| &gt; 0
+      </div>
+
+      <details class="diagram-drawer" open>
+        <summary>&#128208; 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Nextflow DSL2 리액티브 채널 및 스트림 조작)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrPurple02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Nextflow DSL2 반응형 데이터플로우 채널 및 비동기 동시성 엔진</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">Dataflow 패러다임: Queue/Value 채널 분리, 선언적 고차 오퍼레이터 및 이벤트 기반 프로세스 스케줄링</text>
+
+  <!-- Panel 1: Queue vs. Value Channels -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 채널 유형: Queue vs. Value 채널</text>
+
+    <!-- Schematic: Queue & Value channels -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Queue Channel Box -->
+    <rect x="22" y="48" width="256" height="38" rx="4" fill="#0369a1" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1"/>
+    <text x="30" y="60" fill="#38bdf8" font-size="8" font-weight="700">Queue Channel (FIFO, 일회성 소비):</text>
+    
+    <!-- Packets in Queue -->
+    <rect x="30" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="64" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_01</text>
+    <rect x="103" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="137" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_02</text>
+    <rect x="176" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="210" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_03</text>
+
+    <!-- Value Channel Box -->
+    <rect x="22" y="92" width="256" height="38" rx="4" fill="#581c87" fill-opacity="0.25" stroke="#c084fc" stroke-width="1"/>
+    <text x="30" y="104" fill="#c084fc" font-size="8" font-weight="700">Value Channel (영구 브로드캐스트):</text>
+    <rect x="30" y="109" width="120" height="16" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+    <text x="90" y="120" text-anchor="middle" fill="#e9d5ff" font-size="7">Reference Genome (GRCh38)</text>
+    <text x="160" y="120" fill="#c084fc" font-size="6.5">➔ 모든 태스크에 무한 재사용</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• Queue Channel (Channel.fromPath):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">선입선출(FIFO) 비동기 버퍼, 요소 도착 즉시 다운스트림 트리거</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• Value Channel (Channel.value):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">소진되지 않는 단일 상태 유지, 공통 참조 인덱스 공유</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 반응형 데이터 바인딩:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">폴링 없는 이벤트 기반 통신으로 스레드 락 및 블로킹 제거</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">생산자-소비자(Producer-Consumer) 비동기 큐잉</text>
+  </g>
+
+  <!-- Panel 2: DSL2 Reactive Operators -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">2. DSL2 선언적 채널 오퍼레이터</text>
+
+    <!-- Operators Schema -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Operator block 1: map & filter -->
+    <rect x="22" y="49" width="125" height="36" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="28" y="60" fill="#fbbf24" font-family="monospace" font-size="7.5" font-weight="700">.map { id, r1, r2 -&gt; }</text>
+    <text x="28" y="72" fill="#94a3b8" font-family="monospace" font-size="7">  [meta(id), [r1, r2]]</text>
+    <text x="28" y="80" fill="#fde68a" font-size="6.5">메타데이터 튜플 주입</text>
+
+    <!-- Operator block 2: combine & groupTuple -->
+    <rect x="155" y="49" width="132" height="36" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+    <text x="160" y="60" fill="#34d399" font-family="monospace" font-size="7.5" font-weight="700">.combine(genome_idx)</text>
+    <text x="160" y="72" fill="#94a3b8" font-family="monospace" font-size="7">.groupTuple(by: 0)</text>
+    <text x="160" y="80" fill="#6ee7b7" font-size="6.5">데카르트 곱 &amp; 샘플 병합</text>
+
+    <!-- Operator block 3: branch & multi-ch -->
+    <rect x="22" y="90" width="265" height="42" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="28" y="102" fill="#38bdf8" font-family="monospace" font-size="7.5" font-weight="700">reads.branch {</text>
+    <text x="35" y="113" fill="#94a3b8" font-family="monospace" font-size="7">  pass: it.reads &gt; 50000 ➔ FASTQC | fail: ➔ DISCARD }</text>
+    <text x="28" y="125" fill="#bae6fd" font-size="6.5">조건부 데이터플로우 분기(Branching) 제어</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 스트림 함수형 조작 (Functional Stream):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">map, filter, flatMap을 통한 비파괴적 데이터 스트림 가공</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 백프레셔(Backpressure) 자동 조절:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">소비 속도에 맞추어 업스트림 생성 속도를 제어하여 OOM 방지</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 모듈식 재사용 (DSL2 Modules):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">프로세스와 워크플로우를 독립 모듈로 캡슐화 및 재사용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#b45309" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">선언적 함수형 합성으로 복잡한 파이프라인 단순화</text>
+  </g>
+
+  <!-- Panel 3: Asynchronous Parallel Process Execution -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">3. 비동기 병렬 프로세스 실행 엔진</text>
+
+    <!-- Execution graphic -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Process A -->
+    <rect x="22" y="48" width="76" height="36" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="60" y="60" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">FASTQC</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/a1/3b4c</text>
+    <text x="60" y="78" text-anchor="middle" fill="#34d399" font-size="6.5">COMPLETED</text>
+
+    <!-- Process B -->
+    <rect x="108" y="48" width="82" height="36" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="149" y="60" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">STARSOLO</text>
+    <text x="149" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/f2/89de</text>
+    <text x="149" y="78" text-anchor="middle" fill="#fbbf24" font-size="6.5">RUNNING (48 cores)</text>
+
+    <!-- Process C -->
+    <rect x="200" y="48" width="85" height="36" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+    <text x="242" y="60" text-anchor="middle" fill="#c084fc" font-size="7" font-weight="700">EMPTYDROPS</text>
+    <text x="242" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/7c/11aa</text>
+    <text x="242" y="78" text-anchor="middle" fill="#94a3b8" font-size="6.5">WAITING (Ch input)</text>
+
+    <!-- Dynamic Retry & workdir isolation -->
+    <rect x="22" y="90" width="263" height="42" rx="3" fill="#3b0764" fill-opacity="0.4" stroke="#a855f7" stroke-width="1"/>
+    <text x="30" y="103" fill="#e9d5ff" font-size="7.5" font-weight="700">🔄 동적 실패 복구 (Dynamic Error Strategy):</text>
+    <text x="30" y="114" fill="#c084fc" font-family="monospace" font-size="7">errorStrategy 'retry', maxRetries 3, memory { 16.GB * Math.pow(2, task.attempt - 1) }</text>
+    <text x="30" y="125" fill="#d8b4fe" font-size="6.5">OOM 137 에러 감지 시 메모리 2배 자동 증설 후 재시도</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 작업 디렉토리 완전 격리 (Workdir Sandbox):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">프로세스마다 독립적 고유 해시 디렉토리에서 I/O 실행</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 스마트 캐싱 (-resume):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">입력 파일 해시 + 스크립트 코드 검증으로 기연산 작업 100% 스킵</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 무제한 스케일아웃 (Scale-out):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">로컬 스레드 풀, SLURM 노드, AWS Batch 워커로 투명 확장</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">자가 치유(Self-Healing) 및 대규모 분산 스케일아웃</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 5: Snakemake Target-driven DAG -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>4. Snakemake 타깃 기반 규칙과 파일 패턴 DAG 의존성 해결</h2>
+        <span class="tag">Target-driven DAG &amp; Wildcards</span>
+      </div>
+      <p>Snakemake는 GNU Make의 선언적 철학을 현대 Python 생태계로 확장한 도구입니다. 데이터 스트림이 전방으로 흐르는 Nextflow와 달리, 사용자가 요구한 최종 타깃 파일로부터 역방향(Bottom-up)으로 의존성을 추적하여 유향 비순환 그래프(DAG)를 완성하고 위상 정렬로 스케줄링합니다.</p>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>&#128269; GNU Make 철학의 계승: 역방향 타깃 중심 의존성 해결</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>Bottom-up DAG 구성</strong>: 타깃(<code>results/multiqc.html</code>) 요구 &rarr; 생성 규칙 역추적 &rarr; 리프 노드(원시 FASTQ 존재 확인)</li>
+            <li><strong>위상 정렬(Topological Sorting)</strong>: Kahn's 알고리즘을 통해 진입 차수(In-degree) 0인 작업부터 순차적 디스패치</li>
+            <li><strong>mtime 타임스탬프 vs 해시 추적</strong>: 입력 파일의 수정 시각이 출력 파일보다 최신일 때만 선택적으로 재실행</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>&#9881; 와일드카드 패턴 매칭과 <code>expand()</code> 집계 연산자</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>와일드카드 치환</strong>: <code>{sample}</code>, <code>{replicate}</code> 문자열 패턴 매칭을 통해 수백 개 샘플에 대한 단일 규칙 인스턴스화</li>
+            <li><strong>모호한 규칙 충돌 방지</strong>: <code>wildcard_constraints: sample = "[A-Za-z0-9_-]+"</code> 및 <code>ruleorder</code> 우선순위 강제</li>
+            <li><strong>조합 확장</strong>: 데카르트 곱 <code>expand("qc/{s}_{r}.html", s=SAMPLES, r=REPLICATES)</code> vs 1:1 결합 <code>zip</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        그래프 위상 순서: &nbsp; <i>G</i> = (<i>V</i>, <i>E</i>), &nbsp; (<i>u</i>, <i>v</i>) &isin; <i>E</i> &implies; &pi;(<i>u</i>) &lt; &pi;(<i>v</i>) &nbsp;&nbsp;|&nbsp;&nbsp;
+        자원 제약 배낭 문제: &sum;<sub><i>j</i> &isin; <i>J</i><sub>active</sub></sub> <i>threads</i>(<i>j</i>) &le; <i>C</i><sub>max</sub>, &nbsp; &sum;<sub><i>j</i></sub> <i>mem</i>(<i>j</i>) &le; <i>M</i><sub>max</sub>
+      </div>
+
+      <details class="diagram-drawer" open>
+        <summary>&#128208; 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Snakemake 타깃 중심 역방향 DAG 및 위상 정렬 스케줄러)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Snakemake 타깃 주도형 DAG 해결 및 와일드카드 전파 메커니즘</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">역방향 타깃 해결(Rule all ➔ input/output 매칭), 정규표현식 와일드카드 확장 및 위상 정렬 스케줄링</text>
+
+  <!-- Panel 1: Target-Driven Bottom-Up Resolution -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 역방향 타깃 해결 (Bottom-Up)</text>
+
+    <!-- Schematic: Rule hierarchy -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Rule All Target -->
+    <rect x="22" y="48" width="256" height="20" rx="3" fill="#0369a1" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <text x="30" y="62" fill="#38bdf8" font-family="monospace" font-size="7.5" font-weight="700">rule all: input: "counts/{sample}.h5ad"</text>
+
+    <!-- Backward arrow 1 -->
+    <line x1="150" y1="68" x2="150" y2="76" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan03)"/>
+
+    <!-- Rule Count -->
+    <rect x="22" y="78" width="256" height="26" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="89" fill="#94a3b8" font-family="monospace" font-size="7">rule count: output: "counts/{sample}.h5ad"</text>
+    <text x="30" y="99" fill="#fbbf24" font-family="monospace" font-size="6.5">  input: "aligned/{sample}.bam"</text>
+
+    <!-- Backward arrow 2 -->
+    <line x1="150" y1="104" x2="150" y2="112" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan03)"/>
+
+    <!-- Rule Align -->
+    <rect x="22" y="113" width="256" height="21" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="123" fill="#34d399" font-family="monospace" font-size="6.5">rule align: output: "aligned/{sample}.bam" &lt;- raw FASTQ</text>
+    <text x="30" y="131" fill="#64748b" font-size="6">역방향 체이닝으로 필요한 규칙만 선택적 평가</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• GNU Make의 데이터 기반 진화:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">최종 타깃에서 시작하여 output ➔ input 매칭으로 의존성 추론</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 불필요한 연산의 원천 차단:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">타깃 산출물에 도달하지 않는 중간 산출물은 DAG에서 배제</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 파일 타임스탬프 기반 캐싱:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">입력 파일보다 최신인 출력 파일은 연산 없이 자동 재사용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">타깃 주도형(Target-Driven) 역방향 의존성 해석</text>
+  </g>
+
+  <!-- Panel 2: Wildcards Pattern Matching & Expansion -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">2. 와일드카드 패턴 매칭 및 확장</text>
+
+    <!-- Schematic: Wildcards expansion -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Pattern Box -->
+    <rect x="22" y="48" width="265" height="34" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="30" y="60" fill="#fbbf24" font-family="monospace" font-size="7.5" font-weight="700">pattern: "qc/{sample}_{batch}_{run}.html"</text>
+    <text x="30" y="73" fill="#94a3b8" font-size="7">정규식 토큰화: {sample: [A-Za-z0-9]+}, {batch: B[0-9]+}</text>
+
+    <!-- Expand function -->
+    <rect x="22" y="86" width="265" height="46" rx="3" fill="#78350f" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <text x="30" y="99" fill="#fde68a" font-family="monospace" font-size="7.5" font-weight="700">expand("results/{pt}_{cond}.tsv",</text>
+    <text x="40" y="110" fill="#fde68a" font-family="monospace" font-size="7">       pt=["P1", "P2"], cond=["Ctrl", "Drug"])</text>
+    <text x="30" y="124" fill="#fbbf24" font-size="6.5">➔ 2 × 2 데카르트 곱(Cartesian Product) = 4개 잡 자동 생성</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 문자열 템플릿 기반 메타데이터 추출:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">파일 경로 자체로부터 샘플/배치/조건 변수를 자동으로 파싱</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 와일드카드 제약(Constraints):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">wildcard_constraints를 설정하여 탐욕적 매칭 오류 완벽 방지</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 다차원 파라메트릭 스윕:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">수백 명 환자 코호트의 조합론적 작업망을 한 줄 코드로 확장</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#b45309" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">선언적 패턴 전파로 수천 개 병렬 태스크 자동 생성</text>
+  </g>
+
+  <!-- Panel 3: Topological Sort DAG & Job Scheduling -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. 위상 정렬 DAG 및 스케줄링</text>
+
+    <!-- DAG Schema -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- DAG Nodes -->
+    <circle cx="45" cy="65" r="14" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="45" y="68" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">QC (A)</text>
+
+    <circle cx="45" cy="112" r="14" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="45" y="115" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">QC (B)</text>
+
+    <!-- Edges -->
+    <line x1="59" y1="65" x2="105" y2="85" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrEmerald03)"/>
+    <line x1="59" y1="112" x2="105" y2="92" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrEmerald03)"/>
+
+    <rect x="110" y="72" width="70" height="32" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+    <text x="145" y="85" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">STARsolo</text>
+    <text x="145" y="96" text-anchor="middle" fill="#6ee7b7" font-size="6.5">In-degree: 0 도달</text>
+
+    <line x1="180" y1="88" x2="215" y2="88" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald03)"/>
+
+    <circle cx="235" cy="88" r="18" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="235" y="87" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">Report</text>
+    <text x="235" y="97" text-anchor="middle" fill="#94a3b8" font-size="6">(Target)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• Kahn 알고리즘 기반 위상 정렬:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">진입차수(In-degree)가 0인 작업부터 순차/병렬 큐에 투입</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 순환 참조 검출 (Cycle Detection):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">A ➔ B ➔ A 순환 발생 시 실행 전 즉각 PeriodicRuleError 방출</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 드라이런(-n) 사전 시뮬레이션:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">snakemake -n -p 로 파일 입출력 및 전체 DAG 유효성 선검증</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">위상 정렬 기반의 수학적 무결성 및 최적 자원 패킹</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 6: SLURM HPC & Cloud Batch -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>5. SLURM HPC 클러스터 큐잉과 퍼블릭 클라우드 배치 자동 스케일링</h2>
+        <span class="tag">HPC SLURM &amp; Cloud Orchestration</span>
+      </div>
+      <p>단일 워크스테이션을 넘어 온프레미스 HPC 클러스터(SLURM)와 퍼블릭 클라우드(AWS Batch / Google Cloud Batch)로 파이프라인을 확장할 때, 작업 큐잉 정책, 자원 경합 완화, 그리고 실패한 태스크의 자가 치유(Self-healing)가 필수적입니다.</p>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>&#127970; SLURM 다요소 스케줄링과 동적 지수 백오프</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>다요소 우선순위</strong>: Fair-Share Factor <i>F</i>(과거 7일 자원 소비 지분), 작업 크기, 대기 시간에 따른 큐 정렬</li>
+            <li><strong>Job Array Throttling</strong>: 100개 샘플을 일괄 제출하되 <code>%10</code> 플래그로 동시 실행 개수를 제어하여 스토리지 I/O 폭주 방어</li>
+            <li><strong>OOM 자가 치유(Self-healing)</strong>: Nextflow <code>task.attempt</code>를 통해 Exit 137 발생 시 메모리를 <code>32.GB * Math.pow(2, task.attempt - 1)</code>로 2배 증설 자동 재시도</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>&#9729; AWS Batch / Cloud Batch 및 Fusion 가상 파일시스템</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>무제한 수평 확장</strong>: 작업 적체 시 EC2/Fargate 스팟 인스턴스 수백 대를 수 분 내 자동 프로비저닝</li>
+            <li><strong>Fusion VFS 혁신</strong>: Rust 기반 S3 가상 파일시스템으로 대용량 FASTQ/BAM의 로컬 EBS 스테이징 복사 시간 제로화(Zero-copy)</li>
+            <li><strong>이종 클라우드 이식성</strong>: 동일한 파이프라인 코드를 프로파일 전환(<code>-profile slurm</code> &harr; <code>-profile awsbatch</code>)만으로 즉각 배포</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        SLURM 우선순위: <i>P</i><sub>job</sub> = <i>W</i><sub>age</sub><i>A</i> + <i>W</i><sub>fairshare</sub><i>F</i> + <i>W</i><sub>size</sub><i>S</i> + <i>W</i><sub>qos</sub><i>Q</i> &nbsp;&nbsp;|&nbsp;&nbsp;
+        동적 메모리 증설: <i>M</i>(<i>k</i>) = <i>M</i><sub>base</sub> &times; 2<sup><i>k</i> - 1</sup> &nbsp; (Exit Code 137 대응)
+      </div>
+
+      <details class="diagram-drawer" open>
+        <summary>&#128208; 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (SLURM HPC 스케줄링 및 클라우드 배치 오케스트레이션)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrPurple04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">HPC SLURM 클러스터 vs. 퍼블릭 클라우드 배치 실행 아키텍처</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">온프레미스 고정 노드 큐잉(SLURM) vs 클라우드 탄력적 스팟 인스턴스(Cloud Batch) &amp; 오브젝트 스토리지 패브릭</text>
+
+  <!-- Panel 1: On-Premises SLURM Cluster Executor -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 온프레미스 HPC SLURM 클러스터</text>
+
+    <!-- Schematic: SLURM Nodes -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Controller -->
+    <rect x="22" y="48" width="70" height="26" rx="3" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+    <text x="57" y="60" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">slurmctld</text>
+    <text x="57" y="70" text-anchor="middle" fill="#bae6fd" font-size="6.5">마스터 스케줄러</text>
+
+    <line x1="92" y1="61" x2="114" y2="61" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan04)"/>
+
+    <!-- Worker Nodes -->
+    <rect x="118" y="47" width="160" height="42" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="198" y="59" text-anchor="middle" fill="#f1f5f9" font-size="7.5" font-weight="700">Compute Nodes (Partition: 'scRNA')</text>
+    <rect x="124" y="65" width="70" height="18" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="159" y="77" text-anchor="middle" fill="#7dd3fc" font-size="6.5">Node 01 (64c/512G)</text>
+    <rect x="202" y="65" width="70" height="18" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="237" y="77" text-anchor="middle" fill="#7dd3fc" font-size="6.5">Node 02 (64c/512G)</text>
+
+    <!-- POSIX Storage Bar -->
+    <rect x="22" y="94" width="256" height="38" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="30" y="106" fill="#38bdf8" font-size="7.5" font-weight="700">Shared POSIX Storage (/scratch):</text>
+    <text x="30" y="117" fill="#94a3b8" font-size="7">Lustre / IBM GPFS 병렬 파일시스템 (직접 인피니밴드 RDMA)</text>
+    <text x="30" y="127" fill="#fde68a" font-size="6.5">한계: 메타데이터 락 경합 및 대규모 동시 I/O 병목</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 고정 인프라 자원 관리:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">정적 노드 풀, 공정 점유(Fair-share) 큐 정책으로 대기 시간 발생</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• cgroups 하드웨어 엄격 제어:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">CPU/RAM 초과 시 커널 OOM Killer로 작업 강제 종료 (Code 137)</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 지속적 운영비(CapEx) 효율성:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">24/7 지속 가동하는 대규모 유전체 센터에 적합</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">대규모 상시 워크로드에 최적화된 온프레미스 HPC</text>
+  </g>
+
+  <!-- Panel 2: Cloud Batch & Serverless Auto-scaling -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">2. 클라우드 배치 &amp; 스팟 자동확장</text>
+
+    <!-- Schematic: Cloud Batch -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Orchestrator -->
+    <rect x="22" y="48" width="75" height="28" rx="3" fill="#065f46" stroke="#34d399" stroke-width="1"/>
+    <text x="59" y="60" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">Nextflow Tower</text>
+    <text x="59" y="71" text-anchor="middle" fill="#a7f3d0" font-size="6.5">Cloud API Hub</text>
+
+    <line x1="97" y1="62" x2="120" y2="62" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald04)"/>
+
+    <!-- Dynamic Fleet -->
+    <rect x="124" y="47" width="158" height="42" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+    <text x="203" y="58" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">AWS Batch / GCP Life Sciences</text>
+    <text x="203" y="70" text-anchor="middle" fill="#6ee7b7" font-size="7">0 ➔ 100 ➔ 0 VM 동적 프로비저닝</text>
+    <text x="203" y="82" text-anchor="middle" fill="#a7f3d0" font-size="6.5">Spot / Preemptible (70~80% 비용 절감)</text>
+
+    <!-- Fault tolerant checkpoint -->
+    <rect x="22" y="94" width="260" height="38" rx="3" fill="#022c22" stroke="#059669" stroke-width="1"/>
+    <text x="30" y="106" fill="#6ee7b7" font-size="7.5" font-weight="700">⚡ 스팟 회수 내성 (Preemption Resilience):</text>
+    <text x="30" y="117" fill="#a7f3d0" font-size="7">인스턴스 회수 2분 경고 수신 시 작업 상태 S3 체크포인트 저장</text>
+    <text x="30" y="127" fill="#d1fae5" font-size="6.5">신규 스팟 VM에서 -resume으로 즉각 무손실 복구 실행</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 제로 대기시간 (Zero Queue Time):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">큐 적체 없이 분석 요청 즉시 가상 머신 수백 대를 탄력 할당</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 초단위 과금(OpEx) 효율화:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">분석 완료 즉시 VM을 종료하여 유휴 자원 비용 완전 제거</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 최신 GPU 인프라 즉시 도입:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">H100/A100 등 고성능 가속기를 별도 하드웨어 구매 없이 활용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">탄력적 대규모 버스트 분석 및 클라우드 비용 극대화</text>
+  </g>
+
+  <!-- Panel 3: Storage Fabric: POSIX vs. Object Store -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">3. 하이브리드 스토리지 패브릭</text>
+
+    <!-- Schematic: S3 Staging & Compute -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Object Store -->
+    <rect x="22" y="48" width="80" height="34" rx="3" fill="#581c87" stroke="#c084fc" stroke-width="1"/>
+    <text x="62" y="60" text-anchor="middle" fill="#f3e8ff" font-size="7.5" font-weight="700">Cloud Storage</text>
+    <text x="62" y="70" text-anchor="middle" fill="#d8b4fe" font-size="6.5">AWS S3 / GCS</text>
+    <text x="62" y="78" text-anchor="middle" fill="#e9d5ff" font-size="6">페타바이트 불변 저장</text>
+
+    <!-- Staging arrows -->
+    <line x1="102" y1="60" x2="132" y2="60" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrPurple04)"/>
+    <text x="117" y="55" text-anchor="middle" fill="#c084fc" font-size="6">Stage-in</text>
+
+    <line x1="132" y1="74" x2="102" y2="74" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald04)"/>
+    <text x="117" y="83" text-anchor="middle" fill="#34d399" font-size="6">Stage-out</text>
+
+    <!-- Ephemeral Worker -->
+    <rect x="136" y="48" width="145" height="38" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="208" y="59" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">Ephemeral Worker Instance</text>
+    <rect x="142" y="65" width="133" height="17" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="208" y="77" text-anchor="middle" fill="#7dd3fc" font-size="6.5">Local NVMe SSD (/tmp 고속 연산)</text>
+
+    <!-- Storage decoupling explanation -->
+    <rect x="22" y="94" width="260" height="38" rx="3" fill="#3b0764" fill-opacity="0.3" stroke="#a855f7" stroke-width="1"/>
+    <text x="30" y="106" fill="#e9d5ff" font-size="7.5" font-weight="700">💾 컴퓨팅-스토리지 완전 분리 (Decoupled Fabric):</text>
+    <text x="30" y="117" fill="#d8b4fe" font-size="7">영구 보관은 99.999999999% 내구성의 오브젝트 스토리지(S3)</text>
+    <text x="30" y="127" fill="#c084fc" font-size="6.5">연산 시에만 로컬 고속 NVMe에 캐싱 후 최종 결과물 역전송</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• HTTP/S3 기반 스트리밍 I/O:</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">POSIX 파일 핸들 부족 및 네트워크 파일 락 문제 원천 해소</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 데이터 지역성(Locality) 최적화:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">리전(Region) 내 데이터 전송 무료 정책 활용으로 Egress 비용 0원</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 멀티 클라우드 및 하이브리드 연동:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">온프레미스 원천 데이터 ➔ 클라우드 연산 ➔ 결과 저장의 유연성</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">페타바이트급 오믹스 빅데이터의 클라우드 스토리지 패브릭</text>
+  </g>
+</svg>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slide 7: Cost Optimization & Spot Strategy -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>6. 대규모 컴퓨팅 인프라 비용 최적화와 스팟 인스턴스 방어 전략</h2>
+        <span class="tag">Cloud Economics &amp; Spot Defense</span>
+      </div>
+      <p>300명 환자 코호트의 240억 개 리드를 클라우드에서 처리할 때, 온디맨드 인스턴스만 사용하면 수천 달러의 비용이 소모됩니다. 온디맨드 대비 70~90% 저렴한 스팟 인스턴스를 활용하되, 강제 회수(Reclamation)에 대비한 다중 풀링과 무손실 <code>-resume</code> 방어 전략을 구축해야 합니다.</p>
+      
+      <div class="grid-2">
+        <div class="card warning">
+          <h3>&#128178; 스팟 인스턴스 경제학과 2분 회수 경고(Reclamation)</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>대규모 비용 격차</strong>: 300 검체 기준 온디맨드 $6,090 &rarr; 최적화 스팟 풀 + Fusion VFS $1,862 (<strong>69.4% 순절감</strong>)</li>
+            <li><strong>2분 강제 퇴거 알림</strong>: 클라우드 용량 부족 시 AWS가 인스턴스 메타데이터로 2분 전 경고 후 <code>SIGTERM</code> (Exit 143) 발송</li>
+            <li><strong>인프라 이벤트 분기</strong>: Exit Code 143을 소프트웨어 버그가 아닌 정상 인프라 신호로 인식하여 재시도 및 온디맨드 폴백</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>&#128737; 다중 가용영역 풀링과 <code>-resume</code> 무손실 체크포인트 재개</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>다중 인스턴스 패밀리 분산</strong>: <code>r6i</code>, <code>r6a</code>, <code>r5</code>, <code>m6i</code> 등 이종 아키텍처 및 다중 AZ(us-east-1a, b, c)로 리스크 분산 (회수율 &lt;2%)</li>
+            <li><strong>콘텐츠 해시 기반 <code>-resume</code></strong>: 중간 실패 시 성공 완료된 선행 태스크는 S3 캐시(<code>work/</code>)에서 <i>O</i>(1)로 재사용, 중단된 태스크만 재개</li>
+            <li><strong>Fusion S3 Zero-copy</strong>: 수십 GB의 중간 파일 스테이징 디스크 비용과 EBS 프로비저닝 비용 75% 절감</li>
+          </ul>
+        </div>
+      </div>
+
+      <table style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th>인프라 구성 전략</th>
+            <th>컴퓨트 인스턴스 비용</th>
+            <th>EBS / 스토리지 비용</th>
+            <th>총 소요 시간 (Makespan)</th>
+            <th>총 비용 및 절감률</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>On-Demand 단일 AZ (전통적)</strong></td>
+            <td>$4,850.00</td>
+            <td>$1,240.00 (EBS gp3 고정)</td>
+            <td>48.5 시간</td>
+            <td><strong style="color:var(--text-main);">$6,090.00 (기준 100%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Spot Only (단일 풀, 순진한 구성)</strong></td>
+            <td>$1,210.00 (회수 실패율 18%)</td>
+            <td>$1,240.00</td>
+            <td>72.0 시간 (중복 재실행)</td>
+            <td><strong style="color:var(--warning);">$2,450.00 (-59.8%)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Multi-Family Spot + Fusion VFS (엔터프라이즈)</strong></td>
+            <td>$1,552.00 (회수율 &lt;2%)</td>
+            <td>$310.00 (S3 Zero-copy VFS)</td>
+            <td>36.2 시간 (최적 병렬화)</td>
+            <td><strong style="color:var(--success);">$1,862.00 (-69.4% 순절감)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Slide 8: Part 1 Milestones & Part 2 Roadmap -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/10_production_pipelines_mlops/docs/00_PRODUCTION_PIPELINES_ROADMAP.md &sect; 4</div>
+      <div class="slide-header">
+        <h2>7. Part 1 마일스톤 및 Part 2 재현성 감사 &amp; MLOps 연계 로드맵</h2>
+        <span class="tag">Milestones &amp; Phase 2 Outlook</span>
+      </div>
+      <p>Track 10 Part 1에서는 학술 연구용 일회성 노트북의 한계를 극복하고, 리눅스 커널 가상화, Nextflow DSL2/Snakemake 선언적 워크플로우, SLURM HPC 큐잉 및 AWS Batch 스팟 비용 최적화에 이르는 프로덕션 파이프라인 인프라를 완성했습니다.</p>
+      
+      <div class="grid-2">
+        <div class="card success">
+          <h3>&#9989; Part 1 핵심 성취 마일스톤</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>커널 가상화 &amp; SIF 아키텍처</strong>: Linux 6대 Namespaces, cgroups v2 CFS 및 Singularity 비특권 SIF 가상화 정립</li>
+            <li><strong>리액티브 데이터플로우</strong>: CSP 비동기 큐/밸류 채널과 Nextflow DSL2 모듈형 서브워크플로우 구축</li>
+            <li><strong>타깃 중심 DAG &amp; 위상 정렬</strong>: Snakemake 와일드카드 치환, 정규식 제약, <code>expand()</code> 집계 및 Kahn's 스케줄링</li>
+            <li><strong>HPC &amp; 클라우드 오케스트레이션</strong>: SLURM Fair-Share 스케줄링, OOM 137 지수 백오프, AWS Batch Spot 69.4% 비용 절감</li>
+          </ul>
+        </div>
+        <div class="card accent">
+          <h3>&#128640; Part 2 연계 핵심 영역 (Reproducibility &amp; MLOps)</h3>
+          <ul style="padding-left: 20px; margin-top: 8px;">
+            <li><strong>글로벌 표준 <code>nf-core/scrnaseq</code></strong>: STARsolo vs Alevin-fry 8배 메모리 트레이드오프 및 임상 메타데이터 결합</li>
+            <li><strong>FAIR 원칙 &amp; 암호학적 데이터 출처</strong>: SHA-256 머클 트리 무결성 검증 및 FDA 21 CFR Part 11 연쇄 보관 기록</li>
+            <li><strong>scVI/scANVI MLOps 모델 레지스트리</strong>: ELBO 수렴 추적, MLflow 거버넌스 및 TorchScript C++ 직렬화</li>
+            <li><strong>초저지연 실시간 임상 서빙</strong>: FastAPI 비동기 마이크로서비스, 동적 마이크로배칭, t-NEPC 전이 위험 스코어링</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 18px 26px; text-align: center;">
+        <span style="color:var(--accent); font-size: 1.15rem; font-weight: 700;">&#127891; 엔터프라이즈 바이오인포매틱스의 새로운 기준</span>
+        <p style="color: #cbd5e1; font-size: 0.98rem; margin-top: 8px; margin-bottom: 0;">프로덕션 파이프라인은 코드를 실행하는 것에 머물지 않습니다. 이종 분산 인프라에서 비트 단위 재현성을 보증하고, 수백 명 환자의 유전체 데이터를 중단 없이 처리하며, 실시간 임상 AI 서빙으로 환자 치료 결정을 지원하는 생명정보학 MLOps 체계로 완성됩니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Controls -->
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">&#9664; 이전 (Prev)</button>
+  <div id="counter">Slide 1 of 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) &#9654;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} of ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

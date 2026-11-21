@@ -1,0 +1,13 @@
+[cited]
+PMID:17637754  # "Attard et al. 2008", L176,L390  [Attard G 2008 Oncogene]
+PMID:26344096  # "An et al. 2015", L383  [An J 2015 Mol Cell]
+PMID:16254181  # "Tomlins 표기", L61  [Tomlins SA 2005 Science]
+
+[evidence]
+PMID:26544944  # Cancer Genome Atlas Research Network 2015 Cell: The Molecular Taxonomy of Primary Prostate Cancer.  [근거: SCI-09-061]
+PMID:28091601  # Zheng GX 2017 Nat Commun: Massively parallel digital transcriptional profiling of single cells.  [근거: SCI-09-060]
+PMID:25221645  # Rastogi A 2014 Genes Cancer: Functional antagonism of TMPRSS2-ERG splice variants in prostate cancer.  [근거: SCI-09-065]
+
+[software]
+SW:pandas
+SW:pysam

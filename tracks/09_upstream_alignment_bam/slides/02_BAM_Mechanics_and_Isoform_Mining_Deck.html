@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 09: BAM Mechanics &amp; Isoform Mining Deck</title>
+<style>
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --purple: #c084fc;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-content::-webkit-scrollbar { width: 6px; height: 6px; }
+  .slide-content::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+  .slide-content::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 3px; }
+  .slide-content::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
+
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 1.85rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.02rem; line-height: 1.62; color: #cbd5e1; margin-bottom: 10px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card.purple { border-left: 4px solid var(--purple); }
+  .card h3 { font-size: 1.18rem; color: #fff; margin-bottom: 8px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.92rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.88rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.92em; }
+  
+  /* Semantic Math Formatting */
+  .math-block { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 16px; margin: 10px 0; text-align: center; font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; font-size: 1.08rem; color: #38bdf8; }
+  .math-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-size: 0.95em; line-height: 1.2; }
+  .math-frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+  .math-frac .den { padding-top: 2px; }
+
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.92rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 285px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 46px 36px;">
+      <span class="tag" style="font-size: 0.95rem; padding: 6px 16px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase;">Track 09 Masterclass &bull; Part 2</span>
+      <div style="margin-top: 14px;"><span class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/05_BAM_FILE_MECHANICS_AND_SAMTOOLS.md &amp; 06</span></div>
+      <h1 style="font-size: 2.35rem; color: var(--accent); margin: 18px 0 14px; font-weight: 800; letter-spacing: -0.5px;">BAM 바이너리 아키텍처, pysam 스트리밍 &amp; 암 이형체·융합 정밀 발굴</h1>
+      <h3 style="font-size: 1.15rem; color: #94a3b8; font-weight: 400; margin-bottom: 24px;">BGZF 64비트 가상 오프셋, CIGAR N 연산자, 전립선암 거세저항성 AR-V7 스플라이싱 포함률(PSI) 및 TMPRSS2-ERG 염색체 융합 키메라 리드 검출</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 1060px;">
+        <p style="margin-bottom: 6px;">&#127919; <strong>임상 정밀의학 타겟 코호트</strong>: 전이성 거세저항성 전립선암(mCRPC) 환자 골전이 검체 &bull; 2세대 안드로겐 표적치료제(Enzalutamide, Abiraterone) 치료 실패 및 불응성 분자 기전 추적</p>
+        <p style="margin-bottom: 6px;">&#129516; <strong>핵심 전산 분자생물학 기전</strong>: Block GZIP(BGZF) 64비트 가상 파일 오프셋(<i>voffset = coffset &ll; 16 &mid; uoffset</i>) &bull; CIGAR 4비트 패킹 및 <code>N</code> 연산자 게놈 소모 기하학 &bull; pysam 제너레이터 기반 무누수(Leak-free) 스트리밍 &bull; FLAG 0x800(보충 정렬) &bull; 50M50S 키메라 분할 리드(Split-Reads)</p>
+        <p style="margin-bottom: 0;">&#128300; <strong>카운트 행렬의 한계 돌파</strong>: 표준 Gene-level 카운트가 은폐하는 인트론 3 잠재 엑손 3b 삽입(<i>AR-V7</i> LBD 결실)을 단일세포 PSI(&Psi;)로 이봉 분리하고, 21q22.2 간질성 결실에 의한 <i>TMPRSS2-ERG</i> 융합 리드를 오즈비 211배 농축으로 정밀 복원</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: BAM Internal Mechanics & CIGAR Geometry -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/05_BAM_FILE_MECHANICS_AND_SAMTOOLS.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>1. BAM 바이너리 내부 규격, BGZF 64비트 가상 오프셋 및 CIGAR 기하학</h2>
+        <span class="tag">BGZF Offset &amp; CIGAR Geometry</span>
+      </div>
+      <p>수백 GB 텍스트 SAM의 극심한 I/O 병목을 극복하는 독립 압축 블록 BGZF, 64비트 가상 오프셋(<i>voffset</i>)의 무작위 탐색 수학, CIGAR 연산자의 게놈 vs 쿼리 소모(Consumption) 기하학을 정립합니다.</p>
+      
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. BGZF 블록 &amp; 64비트 가상 오프셋</h3>
+          <ul>
+            <li><strong>BGZF 블록 구조</strong>: 비압축 원본 페이로드 최대 <strong>64 KB</strong>로 제한된 독립 gzip 블록들의 연결체</li>
+            <li><strong>64비트 <i>voffset</i> 인코딩</strong>:
+              <br><i>voffset = (coffset &ll; 16) &mid; (uoffset &amp; 0xFFFF)</i>
+              <ul>
+                <li><code>coffset</code> (48비트): 파일 내 압축 블록 물리 바이트 주소</li>
+                <li><code>uoffset</code> (16비트): 블록 내 압축 해제 레코드 시작 위치</li>
+              </ul>
+            </li>
+            <li><strong>.bai 인덱스</strong>: <i>O</i>(1) fseek 점프 후 해당 64KB 블록만 해제하여 <i>O</i>(log <i>N</i>) 임의 좌표 슬라이싱 완결</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. BAM 정렬 레코드 바이너리 패킹</h3>
+          <ul>
+            <li><strong>4비트 니블(Nibble) 염기 압축</strong>:
+              <br>A=0x1, C=0x2, G=0x4, T=0x8, N=0xF
+              <br>&rarr; 1바이트에 2염기 패킹 (서열 용량 50% 절감)</li>
+            <li><strong>12비트 SAM 플래그 (FLAG Bitmask)</strong>:
+              <ul>
+                <li><code>0x0001</code>: 페어드 리드 &bull; <code>0x0004</code>: 미매핑</li>
+                <li><code>0x0010</code>: 역가닥(Reverse strand)</li>
+                <li><code>0x0100</code>: 2차 정렬 (Secondary)</li>
+                <li><code>0x0400</code>: PCR 광학 중복 (Duplicate)</li>
+                <li><strong style="color:var(--accent);"><code>0x0800</code> (2048)</strong>: 보충 정렬 (Supplementary / 키메라)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. CIGAR 연산자 게놈 소모 기하학</h3>
+          <ul>
+            <li><strong>게놈 좌표 전진 (<i>R &larr; R + l</i>)</strong>:
+              <ul>
+                <li><code>M</code> (Match/Mismatch), <code>D</code> (Deletion)</li>
+                <li><strong style="color:var(--accent);"><code>N</code> (Skipped Intron)</strong>: 스플라이스 접합부</li>
+              </ul>
+            </li>
+            <li><strong>쿼리 리드만 소모 (게놈 <i>R</i> 불변)</strong>:
+              <ul>
+                <li><code>I</code> (Insertion), <code>S</code> (Soft-clip)</li>
+              </ul>
+            </li>
+            <li><strong>스플라이싱 리드 판독 예시</strong>:
+              <br><code>50M1500N50M</code>: 50bp 엑손 매핑 &rarr; 1,500bp 인트론 건너뛰기 &rarr; 50bp 하류 엑손 매핑</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        가상 오프셋 인코딩 &amp; 디코딩: &nbsp;
+        <i>voffset</i> = (coffset &ll; 16) &mid; (uoffset &amp; 0xFFFF)
+        &nbsp;&iff;&nbsp;
+        coffset = <i>voffset</i> &gg; 16, &nbsp;&nbsp;
+        uoffset = <i>voffset</i> &amp; 0xFFFF
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Single-cell Optional Tags & pysam Streaming -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/05_BAM_FILE_MECHANICS_AND_SAMTOOLS.md &sect; 5 &amp; 06</div>
+      <div class="slide-header">
+        <h2>2. 단일세포 옵셔널 태그(`CB`, `UB`, `GN`)와 pysam 무누수(Leak-free) 스트리밍</h2>
+        <span class="tag">SAM Tags &amp; pysam Streaming</span>
+      </div>
+      <p>10x 단일세포 메타데이터가 BAM aux_data에 직렬화되는 바이너리 규격과, Python/C 상호운용 시 메모리 누수를 원천 차단하는 제너레이터 스트리밍 패턴을 정립합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (BAM 바이너리 레코드, CIGAR 연산자 및 pysam 무누수 스트리밍)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">BAM 바이너리 정렬 레코드 구조: CIGAR 연산자 및 단일세포 전용 태그</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">BGZF 블록 압축 ➔ CIGAR 정렬 기하학(M, N, I, D, S) ➔ 단일세포 식별 태그(CB, UB, GN, RE)</text>
+
+  <!-- Panel 1: BAM Binary Architecture -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. BAM 바이너리 레코드 메모리 구조</text>
+
+    <!-- Binary Field Layout -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(22, 48)">
+      <rect x="0" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="27" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">refID (4B)</text>
+
+      <rect x="60" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="87" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">POS (4B)</text>
+
+      <rect x="120" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="147" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">MAPQ (1B)</text>
+
+      <rect x="180" y="0" width="75" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="217" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">FLAG (2B)</text>
+
+      <rect x="0" y="24" width="80" height="18" rx="2" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+      <text x="40" y="36" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">CIGAR (4B × k)</text>
+
+      <rect x="85" y="24" width="80" height="18" rx="2" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="125" y="36" text-anchor="middle" fill="#cbd5e1" font-size="7">SEQ (4-bit pac)</text>
+
+      <rect x="170" y="24" width="85" height="18" rx="2" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <text x="212" y="36" text-anchor="middle" fill="#cbd5e1" font-size="7">QUAL (Phred)</text>
+
+      <rect x="0" y="48" width="255" height="20" rx="2" fill="#059669" fill-opacity="0.25" stroke="#34d399" stroke-width="1"/>
+      <text x="127" y="62" text-anchor="middle" fill="#34d399" font-size="8" font-weight="700">Optional Tags (CB, UB, GN, RE ... 가변 길이)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• BGZF (Blocked GNU Zip Format) 압축:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">64 KB 독립 압축 블록으로 BAI 인덱스 기반 O(1) 랜덤 점프</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 바이너리 정렬 압축 효율:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">SAM 텍스트 대비 용량 75% 절감 및 역직렬화 가속</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 0-based 게놈 좌표계 변환:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">SAM(1-based)에서 BAM 바이너리 저장 시 0-based로 인덱싱</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">인덱싱된 대용량 단일세포 전사체 표준 바이너리 포맷</text>
+  </g>
+
+  <!-- Panel 2: CIGAR String Operators -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">2. CIGAR 연산자 해부 (M, N, I, D, S)</text>
+
+    <!-- CIGAR Schema -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#34d399" font-size="8" font-weight="700">M (Alignment Match):</text>
+      <text x="105" y="12" fill="#cbd5e1" font-size="7.5">염기 일치 또는 단일 미스매치 (소비: Read/Ref)</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="8" font-weight="700">N (Skipped Region):</text>
+      <text x="105" y="28" fill="#fbbf24" font-size="7.5" font-weight="700">스플라이스 인트론 건너뜀 (소비: Ref only)</text>
+
+      <text x="0" y="44" fill="#38bdf8" font-size="8" font-weight="700">I / D (InDel):</text>
+      <text x="105" y="44" fill="#cbd5e1" font-size="7.5">삽입(소비: Read) / 결실(소비: Ref)</text>
+
+      <text x="0" y="60" fill="#f43f5e" font-size="8" font-weight="700">S (Soft Clipping):</text>
+      <text x="105" y="60" fill="#cbd5e1" font-size="7.5">불일치 말단 서열 (소비: Read only)</text>
+
+      <!-- Example CIGAR -->
+      <line x1="0" y1="67" x2="250" y2="67" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="78" fill="#a7f3d0" font-size="7.5" font-weight="700">예시: 45M 12400N 55M ➔ 12.4kb 인트론을 건너뛴 스플라이싱</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• RNA-seq 스플라이싱의 핵심 연산자 N:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">게놈 상 수십만 bp 인트론을 건너뛰는 전사체 정렬 표현</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Soft Clip(S)을 통한 융합 절단점 검출:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">유전자 융합(Fusion) 경계에서 비정상 정렬 분할점 식별</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 정렬 길이 계산 산술 규칙:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">End_POS = Start_POS + sum(M, D, N, = , X)</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">정렬 갭과 엑손-엑손 스플라이싱 기하학을 정밀 압축 기술</text>
+  </g>
+
+  <!-- Panel 3: Single-Cell Specific Tags -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">3. 단일세포 전용 옵션 태그 (CB, UB, GN, RE)</text>
+
+    <!-- Tags Detail Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#34d399" font-size="8" font-weight="700">CB:Z:</text>
+      <text x="45" y="12" fill="#cbd5e1" font-size="7.5">오류 교정된 세포 바코드 (Corrected Cell Barcode)</text>
+
+      <text x="0" y="28" fill="#fbbf24" font-size="8" font-weight="700">UB:Z:</text>
+      <text x="45" y="28" fill="#cbd5e1" font-size="7.5">오류 교정된 분자 식별자 (Corrected UMI)</text>
+
+      <text x="0" y="44" fill="#38bdf8" font-size="8" font-weight="700">GN:Z:</text>
+      <text x="45" y="44" fill="#cbd5e1" font-size="7.5">HUGO 공식 유전자 심볼 (Gene Symbol e.g. AR, ERG)</text>
+
+      <text x="0" y="60" fill="#c084fc" font-size="8" font-weight="700">RE:A:</text>
+      <text x="45" y="60" fill="#cbd5e1" font-size="7.5">영역 유형 (E: Exonic, N: Intronic, I: Intergenic)</text>
+
+      <!-- Raw vs Corrected -->
+      <line x1="0" y1="67" x2="250" y2="67" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="78" fill="#94a3b8" font-size="7.5">원시(Raw) 태그: CR:Z (Raw CB), UR:Z (Raw UMI)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일 리드에 다차원 메타데이터 바인딩:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">정렬 위치 + 세포 소속 + 분자 원점 + 유전자 주석 결합</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 세포별/유전자별 실시간 스트리밍 그룹화:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">BAM 전체를 스캔하며 CB/UB 기반 인메모리 행렬 축적</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 스플라이스 아이소폼 및 유전변이 마이닝:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">특정 세포 서브클론의 스플라이스 접합부 1-리드 단위 추출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">세포 수준의 발현 및 유전체 변이 추적을 가능케 하는 핵심 태그</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 단일세포 핵심 옵셔널 태그 규격</h3>
+          <ul>
+            <li><code>CB:Z:</code> 오류 보정된 16bp 세포 바코드 (예: <code>AAACCCAAGAAACACT-1</code>)</li>
+            <li><code>UB:Z:</code> 방향성 그래프 보정된 12bp 분자 UMI (예: <code>AGTCGATCGATC</code>)</li>
+            <li><code>GN:Z:</code> 정합된 유전자 심볼 (예: <code>AR</code>, <code>TMPRSS2</code>, <code>ERG</code>)</li>
+            <li><code>xf:i:</code> 10x 전사체 정량 플래그 비트마스크:
+              <br>1=고유 전사체 매핑, 2=엑손, 4=인트론(snRNA-seq), 8=엑손 다중매핑</li>
+            <li><code>NH:i:</code> 유전체 매핑 좌위 수 (1: 고유 매핑, &gt;1: 다중 매핑)</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. pysam 제너레이터 스트리밍 원칙</h3>
+          <ul>
+            <li><strong>금기 패턴 (Anti-pattern)</strong>:
+              <br><code>reads = list(bam.fetch('chrX'))</code>
+              <br>&rarr; 수천만 개 C 구조체가 Python 객체로 복제되어 수십 GB RAM 폭증 및 Linux OOM Killer 발동!</li>
+            <li><strong>프로덕션 패턴 (Best Practice)</strong>:
+              <br><code>for read in bam.fetch('chrX', start, end):</code>
+              <br>&rarr; C 레벨 htslib 내부 버퍼를 재활용하는 제너레이터 스트리밍으로 상시 <strong>&lt;50 MB RAM</strong> 유지</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. C/Python 메모리 누수 방어</h3>
+          <ul>
+            <li><strong>컨텍스트 매니저 필수</strong>: <code>with pysam.AlignmentFile(...) as bam:</code> 미준수 시 파일 핸들 및 BGZF 버퍼 누수</li>
+            <li><strong><code>get_aligned_pairs()</code> 회피</strong>: 대규모 리드 순회 시 수만 개의 파이썬 튜플을 생성하므로, CIGAR 정수 튜플(<code>read.cigartuples</code>)을 수식으로 직접 순회</li>
+            <li><strong>Zero-copy 태그 추출</strong>: 불필요한 태그 파싱 배제, <code>read.has_tag('CB')</code> 사전 점검</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        BAM 태그 메모리 레이아웃: &nbsp;
+        <code>Tag(2B: 'CB') + Type(1B: 'Z') + Value(16B: 'AAAC...-1') + Null(1B: '\0') = 20 Bytes</code>
+        &nbsp;&mid;&nbsp;
+        <strong>htslib 제너레이터 스트리밍: RAM 점유 <i>O</i>(1) 불변</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: AR-V7 Alternative Splicing Molecular Mechanics -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/07_ALTERNATIVE_SPLICING_AND_ISOFORM_AR_V7.md &sect; 1 - &sect; 2</div>
+      <div class="slide-header">
+        <h2>3. 거세저항성 전립선암(mCRPC)의 재앙: 안드로겐 수용체 *AR-V7* 스플라이싱 분자 기전</h2>
+        <span class="tag">AR-V7 Splicing &amp; Therapy Resistance</span>
+      </div>
+      <p>2세대 호르몬 치료제(Enzalutamide) 표적인 LBD(Exon 4-8)가 결실되고 인트론 3 내부 잠재 엑손 3b가 삽입되어 상시 활성화되는 전사체 분자 메커니즘을 규명합니다.</p>
+      
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 표준 전장 안드로겐 수용체 (AR-FL)</h3>
+          <ul>
+            <li><strong>도메인 구조</strong>: Exon 1 (NTD 전사활성) &ndash; Exon 2/3 (DBD 아연집게) &ndash; Exon 4 (Hinge/NLS) &ndash; Exon 5~8 (LBD 리간드 결합)</li>
+            <li><strong>약제 감수성 기전</strong>:
+              <br>Enzalutamide / Abiraterone이 LBD에 결합하여 HSP90 샤페론 해리 및 핵 내 이동을 차단 &rarr; 전립선암 세포 증식 억제</li>
+            <li><strong>임상 위기</strong>: 환자의 20~40%는 원발성 내성, 반응군도 1~2년 내 재발(mCRPC)</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 변이체 *AR-V7*의 구성적 상시 활성화</h3>
+          <ul>
+            <li><strong>잠재 엑손 3b (CE3) 활성화</strong>:
+              <br>안드로겐 차단 스트레스 하에서 인트론 3 내부의 잠재적 엑손 3b(Cryptic Exon 3b, CE3)가 스플라이소솜에 의해 선택적 포함</li>
+            <li><strong>LBD 완전 결실</strong>: CE3 내부 16개 아미노산 번역 후 조기 종결 코돈(PTC) 출현 &rarr; <strong>Exon 4~8 LBD 완전 소실</strong></li>
+            <li><strong>치료제 무력화</strong>: 약물 표적이 없어 Enzalutamide에 100% 내성, 리간드 없이도 핵으로 자가 전위하여 종양 촉진 유전자(*UBE2C*, *KLK3*) 상시 전사</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. 단일세포 카운트 행렬의 치명적 맹점</h3>
+          <ul>
+            <li><strong>표준 Gene 카운트의 실패</strong>:
+              <br>Cell Ranger 및 STARsolo Gene 모드는 *AR* 유전자(`ENSG00000169083`) 아래로 모든 리드를 단일 정수로 병합</li>
+            <li><strong>위양성/위음성 혼선</strong>: 종양 세포가 정상 AR-FL을 발현하는지 내성 변이체 AR-V7을 발현하는지 전혀 식별 불가</li>
+            <li><strong>해결책</strong>: Exon 3 &rarr; CE3 사이를 연결하는 **스플라이스 접합부 리드(Junction Reads)**를 BAM에서 직접 정량화해야 함</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        안드로겐 수용체 유전체 좌표 (GRCh38 <code>chrX</code>): &nbsp;
+        Exon 3 Donor (<code>67,686,126</code>) &nbsp;&rarr;&nbsp; 
+        <span style="color:var(--highlight); font-weight:700;">Cryptic Exon 3b Acceptor (<code>67,694,673</code>)</span> &nbsp;&rarr;&nbsp; 
+        Intron 3 Skip Length &approx; <strong>8.5 kb</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: CIGAR N Operator & Single-cell PSI -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/07_ALTERNATIVE_SPLICING_AND_ISOFORM_AR_V7.md &sect; 3 - &sect; 5</div>
+      <div class="slide-header">
+        <h2>4. CIGAR 'N' 연산자 접합부 판독, 단일세포 PSI(&Psi;) 수리 모델 &amp; 이봉 분리</h2>
+        <span class="tag">CIGAR N &amp; Single-Cell PSI</span>
+      </div>
+      <p>CIGAR <code>N</code> 연산자의 공여점/수용점 게놈 좌표 추출, 희소 UMI 드롭아웃을 보정하는 베이지안 베타-이항 수축, 내성 클론(&Psi;=0.41)과 민감 클론(&Psi;=0.06)의 이봉 분리 메커니즘입니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (AR-V7 스플라이스 접합부, 단일세포 PSI 산출 및 TMPRSS2-ERG 융합)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrRose06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">전립선암 단일세포 스플라이스 변이 및 염색체 융합: AR-V7 및 TMPRSS2-ERG</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">AR 잠재 엑손 3b(CE3b) 접합부 ➔ 엔잘루타마이드 저항성 서브클론 PSI(Ψ) ➔ 21q22 간질 결실 융합 유전자</text>
+
+  <!-- Panel 1: AR-FL vs AR-V7 Splicing -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12" font-weight="700">1. AR 유전자좌: AR-FL vs AR-V7 변이체</text>
+
+    <!-- Exon Junction Diagram -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Exon 3 -->
+    <rect x="25" y="65" width="40" height="20" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="45" y="78" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Exon 3</text>
+
+    <!-- Cryptic Exon 3b (AR-V7) -->
+    <rect x="100" y="80" width="45" height="18" rx="3" fill="#be123c" stroke="#f43f5e" stroke-width="1.2"/>
+    <text x="122" y="92" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">CE3b (V7)</text>
+
+    <!-- Exon 4 (Canonical AR-FL) -->
+    <rect x="195" y="65" width="40" height="20" rx="3" fill="#059669" stroke="#34d399" stroke-width="1"/>
+    <text x="215" y="78" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Exon 4</text>
+
+    <!-- Exons 5-8 LBD -->
+    <rect x="245" y="65" width="32" height="20" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+    <text x="261" y="78" text-anchor="middle" fill="#94a3b8" font-size="7">Ex 5-8</text>
+
+    <!-- Splicing lines -->
+    <!-- AR-V7 Inclusion Junction -->
+    <path d="M65,70 Q82,88 100,88" fill="none" stroke="#f43f5e" stroke-width="1.8"/>
+    <text x="75" y="96" fill="#f43f5e" font-size="7" font-weight="700">8.5 kb (V7)</text>
+
+    <!-- AR-FL Exclusion/Canonical Junction -->
+    <path d="M65,65 Q130,42 195,65" fill="none" stroke="#34d399" stroke-width="1.8"/>
+    <text x="130" y="52" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">25.3 kb (AR-FL 정규 접합)</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 잠재 엑손 3b(Cryptic Exon 3b) 조기 종결:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">인트론 3 내부 CE3b가 삽입되며 조기 정지 코돈(PTC) 발생</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 리간드 결합 도메인(LBD) 완전 결손:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">안드로겐 없이도 핵으로 이행해 하위 신호를 상시 활성화</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 엔잘루타마이드(Enzalutamide) 불응성 기전:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">호르몬 치료제 표적인 LBD 부재로 치료 저항성 획득</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.25"/>
+    <text x="150" y="259" text-anchor="middle" fill="#f43f5e" font-size="9" font-weight="600">전립선암 표적 치료 불응의 결정적 바이오마커</text>
+  </g>
+
+  <!-- Panel 2: Single-Cell PSI Quantification -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">2. 단일세포 PSI (Percent Spliced-In, Ψ) 정량화</text>
+
+    <!-- PSI Formula & Subclone Distribution -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Formula -->
+    <rect x="25" y="50" width="260" height="22" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="155" y="65" text-anchor="middle" fill="#38bdf8" font-size="8.5" font-weight="700">Ψ = I_CE3b / (I_CE3b + E_Ex4) [Inclusion Ratio]</text>
+
+    <!-- Bimodal PSI curves -->
+    <g transform="translate(25, 78)">
+      <!-- Subclone Sensitive -->
+      <rect x="10" y="8" width="105" height="18" rx="2" fill="#065f46" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+      <text x="62" y="20" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">민감성 클론 (Ψ ≈ 0.06)</text>
+
+      <!-- Subclone Resistant -->
+      <rect x="135" y="8" width="115" height="18" rx="2" fill="#9f1239" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+      <text x="192" y="20" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">저항성 서브클론 (Ψ ≈ 0.41)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 단일세포 스플라이스 정션 리드 마이닝:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">CIGAR 'N' 연산자의 게놈 좌표를 추출하여 I와 E 판정</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 종양 이질성(Tumor Heterogeneity) 해명:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">벌크 분석에서 희석되던 소수 저항성 세포군을 명확히 식별</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 최소 접합부 리드 수(Coverage ≥ 3) 필터:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">드롭아웃에 의한 PSI 과대 추정 방지 및 통계적 보정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="155" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">세포별 아이소폼 분율의 이봉형(Bimodal) 클론 분리</text>
+  </g>
+
+  <!-- Panel 3: TMPRSS2-ERG Breakpoint -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">3. TMPRSS2-ERG 21q22 간질 결실 융합</text>
+
+    <!-- Fusion Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- TMPRSS2 Exon 1 -->
+    <rect x="25" y="52" width="85" height="18" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+    <text x="67" y="64" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">TMPRSS2 (Ex 1)</text>
+
+    <!-- Deleted Interstitial region -->
+    <line x1="110" y1="61" x2="165" y2="61" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="137" y="56" text-anchor="middle" fill="#f43f5e" font-size="6.5">~3 Mb 결실</text>
+
+    <!-- ERG Exon 4 -->
+    <rect x="165" y="52" width="85" height="18" rx="2" fill="#7e22ce" stroke="#c084fc" stroke-width="1"/>
+    <text x="207" y="64" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">ERG (Ex 4)</text>
+
+    <!-- Split Read Bar -->
+    <rect x="45" y="80" width="180" height="16" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <rect x="45" y="80" width="85" height="16" rx="2" fill="#0284c7" fill-opacity="0.5"/>
+    <text x="87" y="91" text-anchor="middle" fill="#38bdf8" font-size="7">50M (TMPRSS2)</text>
+    <rect x="130" y="80" width="95" height="16" rx="2" fill="#7e22ce" fill-opacity="0.5"/>
+    <text x="177" y="91" text-anchor="middle" fill="#c084fc" font-size="7">50S (ERG Chimeric)</text>
+
+    <text x="155" y="116" text-anchor="middle" fill="#fbbf24" font-size="7.5">Breakpoint: chr21:41,498,120 ^ chr21:38,445,000</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 안드로겐 반응 프로모터에 의한 발암 구동:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">TMPRSS2 전사 조절을 받아 ERG 전사인자가 과발현</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• Chimeric Split Read &amp; Discordant Pairs:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">CIGAR 50M50S 키메라 연산자를 통해 융합 절단점 검출</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• AR-V7 발현 서브클론과의 공존성 검증:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">동일 세포 바코드(CB) 내에서 융합 유전자와 변이체 동시 검출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">단일세포 분해능으로 암 유전자 재배열과 스플라이싱 통합</text>
+  </g>
+</svg>
+        </div>
+      </details>
+
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. CIGAR 'N' 접합부 좌표 산출 수학</h3>
+          <ul>
+            <li><strong>게놈 순회 갱신</strong>: <code>POS</code>에서 출발, CIGAR 순회 중 <i>op</i> = <code>N</code> (길이 <i>l</i>) 도달 시:
+              <ul>
+                <li>스플라이스 공여점: <i>J</i><sub>start</sub> = <i>R</i> - 1 (Exon End)</li>
+                <li>스플라이스 수용점: <i>J</i><sub>end</sub> = <i>R</i> + <i>l</i> (Exon Start)</li>
+                <li>좌표 전진: <i>R</i> &larr; <i>R</i> + <i>l</i></li>
+              </ul>
+            </li>
+            <li><strong>정상 전장 접합부 (<i>J</i><sub>AR-FL</sub>)</strong>: Exon 3 &rarr; Exon 4 (건너뛰기 &approx; 25.3 kb)</li>
+            <li><strong>저항성 접합부 (<i>J</i><sub>AR-V7</sub>)</strong>: Exon 3 &rarr; CE3 (건너뛰기 &approx; 8.5 kb)</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 단일세포 PSI(&Psi;) 공식 &amp; 베이지안 수축</h3>
+          <ul>
+            <li><strong>말단 정지형 변이체 직접 비 공식</strong>:
+              <br>&Psi;<sub>c</sub> = <span class="math-frac"><span class="num"><i>I</i><sub>c</sub></span><span class="den"><i>I</i><sub>c</sub> + <i>S</i><sub>c</sub></span></span>
+              (<i>I</i><sub>c</sub>: CE3 포함 UMI, <i>S</i><sub>c</sub>: Exon 4 전장 UMI)</li>
+            <li><strong>희소 드롭아웃 보정 (베타-이항 수축)</strong>:
+              <br>&Psi;&#770;<sub>c</sub> = <span class="math-frac"><span class="num"><i>I</i><sub>c</sub> + &alpha;</span><span class="den">(<i>I</i><sub>c</sub> + <i>S</i><sub>c</sub>) + (&alpha; + &beta;)</span></span></li>
+            <li><strong>경험적 베이즈 적합</strong>: 분자 수가 적은 세포(1~2 UMI)는 집단 사전 분포로 안전하게 수축, 풍부한 세포는 실측치 수렴</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. 벌크 위음성 분쇄 &amp; 이봉(Bimodal) 분리</h3>
+          <ul>
+            <li><strong>벌크 시퀀싱의 치명적 위음성</strong>:
+              <br>조직 전체 RNA 혼합으로 Bulk &Psi; &approx; 0.8% 검출 한계 이하 &rarr; "AR-V7 음성" 오진!</li>
+            <li><strong>단일세포 해상도의 이봉 분리</strong>:
+              <ul>
+                <li>감수성 서브클론 (98% 세포): <strong>&Psi; = 0.06</strong></li>
+                <li>잠복 내성 서브클론 (2% 세포): <strong style="color:var(--highlight);">&Psi; = 0.41</strong></li>
+              </ul>
+            </li>
+            <li>치료 개시 후 2% 잠복 내성 클론이 78%로 선택적 팽창하는 진화 역학 조기 경보</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        단일세포 베이지안 PSI 사후 평균: &nbsp;
+        &Psi;&#770;<sub>c</sub> = <span class="math-frac"><span class="num"><i>I</i><sub>c</sub> + &alpha;</span><span class="den">(<i>I</i><sub>c</sub> + <i>S</i><sub>c</sub>) + (&alpha; + &beta;)</span></span>
+        &nbsp;&nbsp;&mid;&nbsp;&nbsp;
+        <span style="color:var(--success);">내성 클론 (&Psi;=0.41) vs 민감 클론 (&Psi;=0.06) 이봉 분리 증명</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: TMPRSS2-ERG Fusion & Split-Reads Detection -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/08_GENE_FUSION_DETECTION_TMPRSS2_ERG.md &sect; 1 - &sect; 4</div>
+      <div class="slide-header">
+        <h2>5. 21q22.2 간질성 결실, *TMPRSS2-ERG* 유전자 융합과 키메라 분할 리드(Split-Reads)</h2>
+        <span class="tag">TMPRSS2-ERG &amp; Chimeric Reads</span>
+      </div>
+      <p>전립선암 50%의 발암 드라이버인 3Mb 간질성 결실, 50M50S 분할 리드, FLAG 0x800 보충 정렬, 역전사 템플릿 스위칭 위양성 제거 및 오즈비 211배 농축 검증을 체계화합니다.</p>
+      
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 21q22.2 게놈 재배열 분자병리</h3>
+          <ul>
+            <li><strong>염색체 21번 3Mb 간질성 결실 (Edel)</strong>:
+              <br>안드로겐 유도 프로모터 <i>TMPRSS2</i>(Exon 1)와 ETS 전사인자 <i>ERG</i>(Exon 4-17)의 물리적 결합</li>
+            <li><strong>병리학적 파국</strong>: 안드로겐 자극 시 전립선 상피에서 발암성 ERG 단백질이 수백 배 폭발적 과발현 &rarr; 암세포 침습 및 혈관신생 유도</li>
+            <li><strong>Type III 이소폼 (~65%)</strong>: <i>TMPRSS2</i> Exon 1 &rarr; <i>ERG</i> Exon 4 (완전한 천연 ERG 단백질 생산)</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. BAM 내 융합 신호: 분할 리드 vs 불일치 쌍</h3>
+          <ul>
+            <li><strong>분할 리드 (Split-read / Chimeric)</strong>: 150bp 단일 리드가 융합점을 가로지름
+              <ul>
+                <li>Primary Alignment: <i>TMPRSS2</i> 매핑, CIGAR <code>45M105S</code>, FLAG 99, <code>SA:Z:chr21,41498120,+,105M45S,60,0;</code></li>
+                <li>Supplementary Alignment: <i>ERG</i> 매핑, CIGAR <code>45S105M</code>, <strong style="color:var(--accent);">FLAG 2147 (0x0800 활성화)</strong></li>
+              </ul>
+            </li>
+            <li><strong>불일치 리드 쌍 (Discordant Pairs)</strong>: R1은 <i>TMPRSS2</i>, R2는 <i>ERG</i> 매핑 (단편 크기 3Mb 비정상 초과)</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. RT 템플릿 스위칭 위양성 4단계 필터</h3>
+          <ul>
+            <li><strong>인공 산물 발생 기전</strong>: M-MLV 역전사 효소가 유사 서열로 점프하여 가짜 키메라 cDNA 생성</li>
+            <li><strong>4단계 정밀 차단 트리</strong>:
+              <ul>
+                <li>1. 미세 상동성(Microhomology) <i>L</i><sub>homo</sub> &lt; 5bp 필터</li>
+                <li>2. 최소 오버행 길이 min(<i>L</i><sub>1</sub>, <i>L</i><sub>2</sub>) &ge; 15bp</li>
+                <li>3. 동일 세포 바코드 내 독립 UMI 지지 <i>N</i><sub>UMI</sub> &ge; 2</li>
+                <li>4. 정상 기질/내피 세포 음성 대조군 대조</li>
+              </ul>
+            </li>
+            <li><strong>검증</strong>: 진성 종양 클론에서 <strong>오즈비 211배 농축</strong> 입증</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        키메라 분할 리드 플래그 연산: &nbsp;
+        FLAG = 99 (Proper pair) + 2048 (0x0800 Supplementary) = <strong>2147</strong>
+        &nbsp;&mid;&nbsp;
+        <strong>통계적 피셔 정확 검정: Odds Ratio = 211.4 &nbsp; (<i>p</i> &lt; 10<sup>-45</sup>)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Production Troubleshooting Guide -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md &sect; 1 - &sect; 3</div>
+      <div class="slide-header">
+        <h2>6. 업스트림 시퀀싱 분석 현장 10대 장애 모드 트러블슈팅 및 베스트 프랙티스</h2>
+        <span class="tag">Troubleshooting &amp; Production Guard</span>
+      </div>
+      <p><code>samtools sort -m</code> 메모리 폭발, FASTQ R1/R2 스왑, GTF 속성 불일치, snRNA-seq 인트론 리드 44.4% 증발 방지 및 Ambient RNA 오염 정화 원칙을 정립합니다.</p>
+      
+      <div class="grid-3">
+        <div class="card highlight">
+          <h3>1. Top 시스템 장애 모드 &amp; 긴급 조치</h3>
+          <ul>
+            <li><strong><code>samtools sort -@ 32 -m 8G</code> OOM 파국</strong>:
+              <br><code>-m</code>은 전체 메모리가 아닌 <strong>스레드당 메모리</strong>!
+              <br>32 &times; 8GB = <strong>256 GB RAM 요청</strong> &rarr; 커널 OOM Killer 강제 종료. 조치: <code>-m 2G</code> (총 64GB) 하향</li>
+            <li><strong>FASTQ R1/R2 Swap 참사</strong>:
+              <br><code>--readFilesIn R2.fastq R1.fastq</code> 순서 역전 시 10x 화이트리스트 매칭률 0%로 모든 리드 증발</li>
+            <li><strong>GTF Attributes 키 불일치</strong>:
+              <br>GTF 파일 태그가 <code>gene_id</code>가 아닌 <code>ID</code>로 되어 있으면 정렬률 82%에도 카운트 행렬 100% 0 출력</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. snRNA-seq <code>--soloFeatures GeneFull</code> 원칙</h3>
+          <ul>
+            <li><strong>핵 내 전사체 성상</strong>: 세포핵 RNA의 40~50%는 미성숙 전구체 전사체(Nascent Pre-mRNA 인트론)</li>
+            <li><strong><code>--soloFeatures Gene</code>의 치명적 오류</strong>:
+              <br>성숙 엑손만 카운팅하므로 인트론 리드 전량 폐기 &rarr; <strong>전체 전사체 분자의 44.4% 영구 소실!</strong>
+              <br>&rarr; 희귀 줄기세포/소형 세포가 EmptyDrops에서 빈 액적으로 오판되어 탈락</li>
+            <li><strong><code>GeneFull</code> 적용 결과</strong>:
+              <br>엑손+인트론 전장 포획으로 세포당 중앙 UMI 수 1.8배~2.2배 대폭 상승, 저발현 마커 유전자 보존</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. Ambient RNA 가짜 양성(Pseudoclonality) 정화</h3>
+          <ul>
+            <li><strong>골전이 조직 세포 용해(45% Lysis) 오염</strong>:
+              <br>유출된 고농도 종양 RNA(AR, AR-V7, TMPRSS2-ERG)가 정상 내피/대식세포 액적에 무작위 캡슐화</li>
+            <li><strong>오진 위험</strong>: 정상 세포에서도 융합 리드가 1~2개 검출되어 환자 전체 세포가 암세포로 둔갑</li>
+            <li><strong>3단계 정화 파이프라인</strong>:
+              <br>1) Empty droplets 배경 농도(&rho;) 모델링 (SoupX/CellBender)
+              <br>2) 포아송 유의성 검정 (<i>P &lt; 0.01</i>, <i>N</i><sub>UMI</sub> &ge; 3)
+              <br>3) InferCNV 21q 결실 종양 유전체 1:1 교차 검증</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 14px;">
+        핵 내 인트론 분자 소실 계산: &nbsp;
+        <i>N</i><sub>intron</sub> = <i>N</i><sub>GeneFull</sub> (21.6M) - <i>N</i><sub>Gene</sub> (12.0M) = 9.6M
+        &nbsp;&implies;&nbsp;
+        <span style="color:var(--highlight); font-weight:700;">Fraction<sub>intron</sub> = 44.4%</span> &nbsp;
+        (<code>GeneFull</code> 필수!)
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Capstone Rubric & Track Summary -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">&#128214; 대응 교재: tracks/09_upstream_alignment_bam/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md &sect; 4</div>
+      <div class="slide-header">
+        <h2>7. 5단계 업스트림 시퀀싱 공학 캡스톤 프로젝트 루브릭 및 트랙 총괄 마일스톤</h2>
+        <span class="tag">Capstone Rubric &amp; Track Summary</span>
+      </div>
+      <p>원시 BCL 형광 신호부터 단일세포 전사체 카운트 행렬, 이형체 및 유전자 융합 정량에 이르는 5단계 실전 엔지니어링 역량 평가 기준과 트랙 09 완결 마일스톤입니다.</p>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>5단계 캡스톤 프로젝트 평가 루브릭</h3>
+          <ul>
+            <li><strong>[Stage 1] FASTQ 품질 검정 및 1-Hamming 바코드 화이트리스트 베이지안 복원 (20점)</strong>:
+              <br>R1/R2 파싱, Phred 점수 가중 1-Hamming 볼 반경(|B<sub>1</sub>|=49) 탐색 및 Ambiguity 필터 구현</li>
+            <li><strong>[Stage 2] STARsolo vs Alevin-fry 듀얼 정렬 및 GeneFull 인트론 포획 (20점)</strong>:
+              <br>인간 게놈 SA 인덱스 구축, snRNA-seq 인트론 포획(GeneFull/Splici) 및 4억 리드 벤치마크</li>
+            <li><strong>[Stage 3] pysam 기반 BAM 바이너리 파싱 &amp; CIGAR N 연산자 정션 추출 (20점)</strong>:
+              <br>BGZF 64비트 가상 오프셋 슬라이싱, 무누수 제너레이터 스트리밍, CIGAR N 접합부 좌표 산출</li>
+            <li><strong>[Stage 4] mCRPC 단일세포 *AR-V7* 스플라이싱 포함률(PSI, &Psi;) 베이지안 수축 (20점)</strong>:
+              <br>Exon 3 &rarr; CE3 잠재 엑손 접합부 정량, 베타-이항 수축 모델 적합, 내성 클론(&Psi;=0.41) 이봉 분리</li>
+            <li><strong>[Stage 5] *TMPRSS2-ERG* 키메라 분할 리드 검출 &amp; 멀티오믹스 검증 (20점)</strong>:
+              <br>50M50S 분할 리드 및 FLAG 0x800 필터링, RT 템플릿 스위칭 차단, 21q 결실(CNA) 교차 검증</li>
+          </ul>
+        </div>
+        <div class="card purple">
+          <h3>트랙 09 마스터클래스 완결 요약</h3>
+          <ul>
+            <li><strong>탈신비화된 업스트림 전산 생물학</strong>:
+              <ul>
+                <li>시퀀서 레이저 형광 신호(BCL)부터 <i>N</i> &times; <i>G</i> 희소 카운트 행렬까지 전 계층 데이터 변환 완전 정복</li>
+                <li>접미사 배열(STAR 32GB)과 의사정렬(Alevin-fry 4GB)의 하드웨어 트레이드오프 규명</li>
+              </ul>
+            </li>
+            <li><strong>수리 모델 기반 오류 보정</strong>:
+              <ul>
+                <li>바코드 생일 역설 충돌률 및 EmptyDrops 디리클레-다항분포 배경 분리</li>
+                <li>PCR 지수 증폭 왜곡 극복을 위한 UMI 방향성 인접 그래프 (<i>N</i><sub>p</sub> &ge; 2<i>N</i><sub>c</sub> - 1) 확립</li>
+              </ul>
+            </li>
+            <li><strong>암 정밀의학 현장 혁신</strong>:
+              <ul>
+                <li>카운트 행렬이 가려온 호르몬 치료 불응성 *AR-V7* 스플라이싱 이형체 단일세포 검출</li>
+                <li>21q22.2 염색체 결실에 의한 *TMPRSS2-ERG* 종양 융합 리드의 211배 농축 입증</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-block" style="margin-top: 16px;">
+        트랙 09 업스트림 공학 인증 기준: &nbsp;
+        5개 평가 단계 합산 <strong>90점 이상 달성</strong> &nbsp;&mid;&nbsp;
+        <span style="color:var(--success); font-weight:700;">Zero-Leak &bull; Zero-CDN &bull; Production-Ready Pipeline Complete</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Controls -->
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">&#9664; 이전 (Prev)</button>
+  <div id="counter">Slide 1 of 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) &#9654;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} of ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

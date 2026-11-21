@@ -1,0 +1,10 @@
+[cited]
+PMID:23104886  # "Dobin 등 (STAR)", L50  [Dobin A 2013 Bioinformatics]
+DOI:10.1101/2021.05.05.442755  # STARsolo (bioRxiv 2021), L178
+
+[evidence]
+PMID:25751142  # Kim D 2015 Nat Methods: HISAT: a fast spliced aligner with low memory requirements.  [근거: SCI-09-024]
+DOI:10.1101/2021.05.05.442755  # PubMed 미등록 또는 미확정(ledger/log 근거)
+
+[software]
+SW:star

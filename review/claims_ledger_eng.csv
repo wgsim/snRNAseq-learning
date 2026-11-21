@@ -1,0 +1,357 @@
+track,file,line,claim,verdict,evidence,checker
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,8,"밀집 10^6×30,000×4B ≈ 120 GB",supported,산술 1.2e11 B,eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,63,"33M×35,000×4B = 4.62 TB",supported,산술 4.62e12 B,eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,92,"CSR(1M×30k, 95% 희소, int64 indptr+int32 idx+float32) ≈ 12.01 GB, 밀집의 1/10",supported,산술: 8MB + 1.5e9×8 B = 12.008 GB (nnz<2^31 이므로 scipy에서도 int32 가능),eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,230,"nnz=6e9, indptr int64 + indices int32 → 48.04 GB",wrong,scipy는 indices/indptr 동일 dtype → nnz>2^31 시 둘 다 int64 → 72 GB (SCI-08-007),eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,252,CSR(int64 인덱스)이 밀집보다 작아지는 임계 희소도 66.7%,supported,12·nnz < 4·N·G → S>2/3 재유도,eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,289,HDF5 전역 뮤텍스+POSIX 잠금이 워커를 직렬화,wrong,읽기 전용은 공유 잠금; 뮤텍스는 프로세스 내부 (SCI-08-006; HDF5 file locking 문서),eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,104,"Tabula Sapiens ~483,152 세포, 58,870 피처, 24개 조직",supported,Science 2022 보고 수치와 일치(기억; 본 검토 미재조회),eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,106,"HCA Prostate Atlas (Cell 2021) ~120,000 세포",unsupported,해당 출판물 특정 불가 (SCI-08-035),eng-verifier
+08,tracks/08_large_scale_sparse/docs/00_LARGE_SCALE_COMPUTATION_ROADMAP.md,107,"Census 33M+ 세포, 1,000+ 연구",context-dependent,"LTS 2023-12-15: 인간 고유 36.2M/총 63.0M, 데이터셋 651 (SCI-08-034)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/01_SPARSE_MATRIX_MEMORY_CSR_CSC.md,75,CSR 메모리 공식 (N+1)·S_ptr + nnz·(S_idx+S_data),supported,공식 정확,eng-verifier
+08,tracks/08_large_scale_sparse/docs/01_SPARSE_MATRIX_MEMORY_CSR_CSC.md,182,CSR 열 슬라이싱이 행 슬라이싱보다 50~100배 이상 느림,supported,"실측 >1,500× (SCI-08-023); 원인 서술은 부정확",eng-verifier
+08,tracks/08_large_scale_sparse/docs/01_SPARSE_MATRIX_MEMORY_CSR_CSC.md,221,SpMV 산술강도 0.167~0.25 FLOP/B,supported,2·nnz/(12·nnz+8N) 재계산,eng-verifier
+08,tracks/08_large_scale_sparse/docs/01_SPARSE_MATRIX_MEMORY_CSR_CSC.md,335,csr_matrix.var(axis=0) 존재,wrong,"hasattr(csr,'var')=False (SCI-08-008)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/01_SPARSE_MATRIX_MEMORY_CSR_CSC.md,354,nnz>2^31에서 indices가 int32 오버플로,wrong,열 인덱스<G는 오버플로 안 함; indptr가 대상 (SCI-08-007),eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,93,1M 세포 backed 열기 <100 ms,wrong,"실측 1,405 ms (SCI-08-036)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,146,"HDF5 C 라이브러리는 기본 non-threadsafe, threadsafe 빌드는 전역 뮤텍스",supported,HDF5 문서와 일치(프로세스 내부 직렬화에 한정),eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,151,HDF5 1.10+부터 파일 잠금 기본 활성,supported,HDF5 file locking 문서,eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,153,락 경합으로 8워커 중 7 대기,wrong,읽기 전용은 공유 잠금 (SCI-08-006),eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,269,"1,000×30,000 청크로 압축된 data/indices",wrong,"CSR 1D 배열, 청크=nnz 축 (SCI-08-020)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/02_OUT_OF_CORE_HDF5_ANN_DATA_BACKED.md,302,"SWMR: 새 Dataset 생성 불가, maxshape=(None,) 확장만, POSIX FS 필요",supported,HDF5 SWMR 제약과 일치(일반 지식),eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,123,"LZ4 해제 3–5 GB/s, ZSTD 1.5–2.5 GB/s, GZIP 200–350 MB/s",context-dependent,코어당 통상 범위와 부합하나 출처 없음,eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,152,소형 청크 S3 API 비용 수천 달러,wrong,자체 계산 PUT $7.50 / GET $60 (SCI-08-013),eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,187,s3://cellxgene-data-public/census/2024-01-01/hca.zarr,wrong,HTTP 404; Census는 SOMA (SCI-08-015),eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,243,"write_zarr(chunks=(cells,genes))+Blosc 적용",wrong,"희소 X는 chunks 무시, compressor 미사용 (SCI-08-016)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,295,"PUT $0.005/1,000, GET $0.004/10,000 → $7.50, $60",supported,재계산 일치,eng-verifier
+08,tracks/08_large_scale_sparse/docs/03_ZARR_ARRAY_CHUNKING_AND_COMPRESSION.md,302,"20,000×30,000 청크 = 10–64MB",wrong,비압축 dense 2.4 GB (SCI-08-014),eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,21,SOMA = Single-cell Open Memory Architecture,wrong,"Stack of Matrices, Annotated (SCI-08-018)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,61,TileDB-SOMA는 Hilbert 곡선 채택,wrong,기본 cell/tile order row-major 실측 (SCI-08-001),eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,253,Hilbert 곡선은 인접 인덱스가 맨해튼 거리 1,supported,Hilbert 곡선 성질(일반 수학),eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,29,"SOMA 객체 계층(Experiment/Measurement/DataFrame/SparseNDArray), soma_joinid int64",supported,tiledbsoma 2.3.0에서 ms['RNA'].X['data'] 구조 확인,eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,132,cellxgene_census.open_soma(census_version='2023-12-15'),supported,LTS 2023-12-15 존재(Census 릴리스 문서),eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,141,tissue_general == 'prostate',unsupported,Census 레이블은 UBERON 'prostate gland'일 가능성 (SCI-08-019),eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,203,"soma.io.from_anndata(experiment_uri, anndata, measurement_name) 시그니처",supported,"inspect.signature 일치; 단 tiledbsoma 2.3.0+anndata 0.13.4에서 TypeError(sanitize_key) 발생(원인 미확정, 버전 호환 문제 추정)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/04_TILEDB_SOMA_SINGLE_CELL_DATABASE.md,303,obs 컬럼 n_counts,wrong,Census obs는 raw_sum/nnz (SCI-08-019),eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,30,"1M×35k, 98% 희소 CSR ≈ 5.6 GB",supported,7e8×8 B + 4 MB 재계산,eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,146,분산 병합식 SST=Σ(n_p−1)s_p²+Σn_p(μ_p−μ)² (Chan–Golub–LeVeque),supported,표준 분산 분해 항등식; Am Stat 1983;37:242,eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,326,코드의 분산 계산이 CGL,wrong,sum/sumsq 교과서형 (SCI-08-024),eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,373,in-place 변환 추가 메모리 0 바이트,wrong,np.repeat 임시 O(nnz) 실측 (SCI-08-005),eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,503,"csr / counts(n,1) → 밀집 ndarray 강제 변환",wrong,COO 희소 유지 실측 (SCI-08-004),eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,384,Dask 워커의 비정렬 Zarr 병렬 쓰기 안전,wrong,동시 청크 수정 경합 (SCI-08-017),eng-verifier
+08,tracks/08_large_scale_sparse/docs/05_DASK_LAZY_EVALUATION_DISTRIBUTED_QC.md,435,"Peak 62.8→8.4GB, 18:42→2:15 등",unsupported,재현 가능한 출처 없음 (SCI-08-009),eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,32,풀 SVD 1.2e15 FLOPs ≈ 수 주,wrong,≈3.4 h @100 GFLOPS (SCI-08-010),eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,95,IPCA 공분산 병합 및 증강행렬 Z=[UΣ | X̃_Bᵀ | √(nm/(n+m))Δμ],supported,Ross et al. 2008 / sklearn IPCA 구조와 일치,eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,124,IPCA 총 시간 O(N·G·k),wrong,O(N·G·(k+m)²/m) (SCI-08-025),eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,222,E‖X−QQᵀX‖₂ ≤ (1+√(k/(p−1)))σ_{k+1} + (e√(k+p)/p)(Σσ_j²)^{1/2},supported,Halko et al. 2011 Thm 10.6,eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,226,파워반복 상한식 [..]^{1/(2q+1)},supported,Halko et al. 2011 Cor 10.10,eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,413,"Σ_{j=51}^{35000} 1/j ≈ ln700 ≈ 6.55; 상한 항 0.470, 5.39",supported,재계산 일치,eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,429,"Σ j^{-5} ≈ 4e-8, √=2e-4, σ̃51=5.3e-5",supported,"재계산 일치 (그러나 결론 '0에 수렴'은 과장, SCI-08-026)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/06_INCREMENTAL_PCA_RANDOMIZED_SVD.md,393,"Full SVD(10^6×3,000) Peak 140 GB",wrong,10^6×3000×4B=12 GB (SCI-08-009),eng-verifier
+08,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md,31,"PCIe Gen4 x16 31.5 GB/s, Gen5 63 GB/s",supported,표준 사양,eng-verifier
+08,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md,153,"cublasSgemm 텐서코어, Gram(1M×3k) 수십 ms",wrong,≥0.92 s @19.5 TFLOPS (SCI-08-011),eng-verifier
+08,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md,270,HVG seurat_v3를 log1p 이후 호출,wrong,seurat_v3는 count 필요 (SCI-08-012),eng-verifier
+08,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md,342,"log1p 정규화 산술강도 0.75 FLOP/B, A100 ridge 9.56",supported,"재계산 일치 (A100 19.5 TFLOPS, 2,039 GB/s)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md,316,CPU 48분24초 vs GPU 30.12초 (96.4×),wrong,CPU 단계 합 49분03초; 출처 없음 (SCI-08-009),eng-verifier
+08,tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md,8,CAGRA = CUDA Anisotropic Graph; 각도 가지치기,wrong,rank-based reordering + reverse edges (SCI-08-002; arXiv:2308.15136),eng-verifier
+08,tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md,29,"N(N−1)/2≈5e11 쌍, 2 TB, 7.5e13 FLOPs",supported,"산술 일치 (단 '불가능' 결론은 과장, SCI-08-031)",eng-verifier
+08,tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md,106,ΔQ(i→C) 공식 및 2노드 검산 ΔQ=+0.5,supported,표준 모듈러리티 이동 이득식 재유도,eng-verifier
+08,tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md,153,Louvain은 연결되지 않은 커뮤니티를 만들 수 있다 (Traag 2019),supported,Sci Rep 2019;9:5233 PMID 30914743,eng-verifier
+08,tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md,398,Leiden 정제가 희귀 NEPC 0.1% 100% 분리,wrong,해상도 한계는 Leiden도 동일 (SCI-08-003; PMID 17190818),eng-verifier
+08,tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,282,cuml.PCA(svd_solver='randomized'),wrong,cuML은 full/jacobi/auto (SCI-08-022),eng-verifier
+08,tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,310,RMM이 GMMU 페이지 재매핑으로 100% 할당 성공 보장,unsupported,근거 없음 (SCI-08-021),eng-verifier
+08,tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,318,"100 cells 청크 560 KB, P=10,000, 태스크 ≈1 ms 오버헤드",supported,"70,000 nnz×8 B=560 KB 재계산; Dask 태스크 오버헤드 ~1 ms 통념",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/00_PRODUCTION_PIPELINES_ROADMAP.md,141,챕터 05-09 파일명/주제 목록,wrong,실제 파일명과 전부 불일치(ls),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/00_PRODUCTION_PIPELINES_ROADMAP.md,85,"36,601 유전자 (GENCODE v44)",unsupported,"10x 2020-A 레퍼런스 수치로 알려짐, 미조회",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/01_CONTAINERIZATION_DOCKER_SINGULARITY.md,7,6대 Namespaces,wrong,Linux namespaces 8종 (man 7 namespaces),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/01_CONTAINERIZATION_DOCKER_SINGULARITY.md,62,OOM 조건 M_anon+M_file_active+M_slab>M_max,context-dependent,cgroup은 페이지 캐시를 먼저 회수; ch09와 모순,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/01_CONTAINERIZATION_DOCKER_SINGULARITY.md,275,STAR 2.7.11b static 바이너리 wget URL,wrong,curl 404; 소스 tarball은 200,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/01_CONTAINERIZATION_DOCKER_SINGULARITY.md,211,libcurl4-gnutls-dev 빌드 + 런타임 libcurl4,unsupported,"링크 변형 불일치 가능, 빌드 미수행",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md,141,quay.io/biocontainers/star:2.7.11b--h9ee0642_0,wrong,quay API 해당 태그 없음; 실제 h43eeafb_0 등,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md,283,단일 값 채널 결합 시 영구 대기,wrong,실제로는 가장 짧은 채널 길이만큼 실행 후 종료,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md,370,join으로 tumor/normal 짝짓기,wrong,join은 중복 키 미지원; combine(by:0) 필요,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md,101,branch corrupted 분기,wrong,앞선 분기가 모두 포획해 도달 불가,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/02_NEXTFLOW_DSL2_MODULAR_ARCHITECTURE.md,66,maxRetries 메모리 에스컬레이션 3단계,context-dependent,maxRetries=3이면 총 4회 시도,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md,138,Nextflow 입력 콘텐츠 SHA256 해시 캐시,wrong,공식 문서: 경로+mtime+크기 (deep만 내용),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md,196,출력 선언 {sample}_Solo.out vs prefix {sample}.,wrong,STAR는 prefix+Solo.out 이어붙임 -> {sample}.Solo.out,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md,323,--rerun-triggers mtime code input 로 mtime 왜곡 무시,wrong,mtime을 제외해야 함,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md,190,ch03 §5 Snakefile 파싱/DAG,supported,Snakemake 9.27.0 드라이런 8 jobs,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/03_SNAKEMAKE_RULE_BASED_EXECUTION.md,360,protected()가 삭제를 원천 방지,context-dependent,"쓰기 권한만 제거, 디렉터리 권한이면 삭제 가능",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,117,check_max(...) 사용 (정의 없음),wrong,설정 로딩 시 메서드 없음 오류,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,302,스팟 회수 시 143 수신 후 온디맨드 자동 전환,wrong,Seqera 문서: 회수는 진단 종료코드 없음; maxSpotAttempts,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,171,Fusion 로컬 스토리지 0,wrong,NVMe/EBS 로컬 캐시 요구/권장,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,268,queueSize 제한으로 페어셰어 보존,unsupported,페어셰어=누적 사용량; 대기 작업 비반영은 추정,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,329,AR 좌표 chrX:66760000-66950000,context-dependent,GRCh37 좌표; 트랙은 GRCh38,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/04_HPC_SLURM_AND_CLOUD_ORCHESTRATION.md,149,스팟 할인 70-90% 등,context-dependent,AWS 공개는 최대 90%; 챕터마다 수치 상이,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/05_NF_CORE_SCRNASEQ_END_TO_END.md,262,--aligner alevin-fry,wrong,최신 enum simpleaf/kallisto/star/cellranger/cellrangermulti,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/05_NF_CORE_SCRNASEQ_END_TO_END.md,246,samplesheet strandedness 열,wrong,scrnaseq 샘플시트에 strandedness 없음,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/05_NF_CORE_SCRNASEQ_END_TO_END.md,197,M.mad() median absolute deviation,wrong,"Series.mad는 평균절대편차, pandas 2.0에서 제거 (3.0.6 실측)",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/05_NF_CORE_SCRNASEQ_END_TO_END.md,152,conda-forge::python-annflow=0.1.2,wrong,conda-forge API 404,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/05_NF_CORE_SCRNASEQ_END_TO_END.md,113,snRNA-seq 골전이 mt 18.5% 세포막 파열,context-dependent,핵 분리 데이터 mt는 낮음; 루트 ch03과 모순,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,29,Enzalutamide CHEMBL1201585,wrong,ChEMBL API: trastuzumab; 정답 CHEMBL1082407,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,428,RxNorm:1306289 (enzalutamide),wrong,RxNav: HIV 복합제; 정답 1307298,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,428,DrugBank:DB08871,unsupported,"조회 403, 미검증",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,29,NCIT:C3343 = Prostate Carcinoma,wrong,EVS: Prostate Neoplasm,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,29,CL:0002327 = prostate luminal cell,wrong,OLS4: mammary gland epithelial cell,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,29,UBERON:0002367 = prostate,supported,OLS4: prostate gland,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,82,Part 11은 수학적 증명을 요구,wrong,"eCFR 11.10: 밸리데이션/감사추적 등, 해시 요구 없음",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,97,S3 멀티파트 무결성은 이진 머클 트리,wrong,S3 composite checksum-of-checksums,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/06_DATA_PROVENANCE_AND_REPRODUCIBILITY.md,301,actions/upload-artifact@v3,wrong,2025-01-30 퇴역(GitHub 공지),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,100,Model Registry Staging->Production 승격,wrong,"MLflow 2.9부터 stages deprecated, alias 사용",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,146,FusedGemmNormRelu 융합 연산자,unsupported,ORT 문서에 없음,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,237,nepc_fraction>0.05 경고 vs Q3 4% 시나리오,wrong,0.04<0.05로 경고 미발령(코드 판독),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,432,INSM1 6.096 TPM은 배경 잡음 수준,wrong,0.1->6.1 TPM은 약 60배 상승(챕터 내부 산술),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,305,COPY /root/.local + USER clinical_user,unsupported,"권한 문제 가능성, 빌드 미수행",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/07_MLOPS_MODEL_SERVING_SINGLE_CELL.md,330,python:slim 이미지 HEALTHCHECK curl,unsupported,slim에 curl 미포함,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md,322,Q1 스팟 비용 $756 -> $241.92 (68%),supported,산술 재계산 일치,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md,129,check_max 'time' 처리,wrong,time 분기 없어 null 반환,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md,69,파일 내용 해싱 없이 크기/mtime 검사,supported,공식 문서: 경로+mtime+크기 (ch03과 모순),eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/08_COST_OPTIMIZATION_AND_RESOURCE_SCALING.md,209,PRICE_VCPU_ONDEMAND=0.04048 (c6i),unsupported,"Fargate 단가로 알려짐, 미조회",eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,49,nextflow.fileSys.disableFileLock,unsupported,설정 레퍼런스/이슈에서 확인 불가,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,128,dynamicDelay 디렉티브,wrong,디렉티브 목록에 없음,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,176,nextflow clean -f -k = 최신 실행 보존,wrong,-k = keep-logs,eng-verifier
+10,tracks/10_production_pipelines_mlops/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,104,오류 문구 Another instance of Nextflow is running,wrong,실제: Unable to acquire lock on session,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,250,NB log_prob: probs=theta/(theta+mu),wrong,"분포 평균 0.152 vs μ 26.3; 정답 probs=mu/(theta+mu), 로그우도 -9.553 (실행)",eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,51,Ahlmann-Eltze&Huber 2023이 log(1+x) 분산 왜곡을 규명,wrong,PMID 37037999: 로그+의사카운트+PCA가 동등/우수,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,73,"scGPT Cui 2024 Nat Methods, 3,300만 세포 사전학습",supported,PMID 38409223; scGPT README whole-human 33M normal cells,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,74,"Geneformer Theodoris Nature 2023, 3,000만 전사체",supported,PMID 37258680 (~30M transcriptomes),eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,126,TCGA-PRAD Cell 2015 499례,wrong,PMID 26544944: 333 primary carcinomas,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,127,SU2C/PCF mCRPC 333례,wrong,Robinson 2015 150례(PMID 26000489); Abida 2019 429례(PMID 31061129),eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,128,Dong et al. Science 2020 369:eaaw2629,wrong,doi 10.1126/science.aaw2629 404; Crossref/PubMed 없음,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,129,He et al. Nat Med 2021 27:1426-1439,wrong,PMID 33664492: 27:426-433,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,130,Labrecque et al. Clin Cancer Res 2019 25:4686,wrong,PMID 31361600: J Clin Invest 129:4492-4505,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,134,Tabula Sapiens 단일 기증자 기반,wrong,PMID 35549404 초록: many from the same donor (복수 기증자),eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,138,HLCA 486명 240만 세포,supported,PMID 37291214: 2.4M cells from 486 individuals,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,144,Replogle Cell 2022 >2.5M 세포 genome-scale CRISPRi,supported,PMID 35688146 (>2.5 million human cells),eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,274,본 트랙은 5개의 심층 챕터,wrong,docs 00~09 총 10개,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,62,z_c: 배치 효과가 완전히 제거된 표현,unsupported,ELBO에 독립성 항 없음; SCI-00-058,eng-verifier
+05,tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md,171,"python>=3.10, scvi-tools>=1.1.0, transformers for scGPT",context-dependent,scvi-tools 1.5.1 requires_python>=3.12; scgpt는 torchtext 의존,eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,128,Var(X)=mu+mu^2/theta (Gamma-Poisson 유도),supported,유도·MC 일치; PMF 재계산,eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,157,"ZINB P(X=0), P(X=k) 식",supported,scvi.distributions ZINB와 7.6e-6 이내,eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,167,scvi-tools scVI가 NB를 기본 우도로 채택,wrong,gene_likelihood 기본 zinb (0.20.3~1.5.1 소스),eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,166,ERCC 스파이크인 10x로 영과잉 없음 완벽 일치,unsupported,Svensson 2020은 음성 대조 데이터; ERCC 서술 미확인,eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,355,"mu=0.05, theta=1이면 영점 확률 약 95.2%",supported,(1/1.05)=0.9524,eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,227,NegativeBinomialLoss/ZINB 손실 구현,supported,"scvi NB 최대차 1.1e-5, ZINB 7.6e-6",eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,413,"log1p와 clamp(1e-4,1e4)로 극단 theta 안정화",unsupported,"코드는 log1p 미사용, clamp min=1e-8; theta=1e6에서 오차 0.39",eng-verifier
+05,tracks/05_generative_foundation_models/docs/01_PROBABILISTIC_COUNT_MODELING.md,386,scVI는 l_c를 잠재 변수로 설정(q(l|x)),context-dependent,원 논문은 맞음; scvi-tools 기본 use_observed_lib_size=True,eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,139,가우시안 KL 폐형식 1/2 Σ(σ²+μ²-1-logσ²),supported,표준 유도; 코드 kl_z 동일,eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,164,KL 워밍업 통상 20~40 에포크,context-dependent,scvi-tools 기본 n_epochs_kl_warmup=400,eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,316,"SCVI(n_hidden=128,n_latent=20,n_layers=2,gene_likelihood=nb,dispersion=gene-batch) 인자",supported,"1.5.1 시그니처 유효; 기본 n_latent=10, n_layers=1",eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,338,get_normalized_expression: 배치 효과가 제거된 발현,wrong,transform_batch=None이면 관측 배치 사용(docstring),eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,350,"differential_expression(group1='t-NEPC_cluster',…)",wrong,존재하지 않는 군집명 → ZeroDivisionError (실행),eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,398,인코더에도 s 주입이 필수; z ⊥ s 달성,unsupported,기본 encode_covariates=False; ELBO는 독립성 미보장,eng-verifier
+05,tracks/05_generative_foundation_models/docs/02_SCVI_VARIATIONAL_AUTOENCODER.md,430,scVI DE는 거짓 양성이 엄격히 통제,unsupported,Bayes factor는 보정 p값 아님; 세포 수준 의사반복,eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,122,"비레이블 손실 = Σ q L(x,y) + H(q) (Kingma M2)",supported,표준 M2 ELBO,eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,89,"분류기 q(y|x,s)=Softmax(MLP(x,s))",wrong,scANVI 분류기 입력은 z1 (_scanvae.py:207),eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,228,"SCANVI.from_scvi_model(scvi_model, adata, unlabeled_category, labels_key)",supported,1.5.1 시그니처 일치,eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,265,layers['scvi_normalized'] + expm1,wrong,레이어 미생성 KeyError; 값은 로그 아님 (실행),eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,323,Top-M 절단이 수렴 정밀도를 완벽 보존,wrong,재정규화 절단은 편향 근사,eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,345,OOD 세포는 모든 세포형에 고른 확률→엔트로피 극대화,unsupported,소프트맥스 분류기 과신 문제,eng-verifier
+05,tracks/05_generative_foundation_models/docs/03_SCANVI_SEMISUPERVISED_ANNOTATION.md,314,"B×K=204,800, ×3,000=6.1e8 요소",supported,산술 6.144e8,eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,91,레퍼런스 z가 1e-8 오차조차 없이 불변,context-dependent,weight_decay=0 일 때만 정확; 1e-6이면 2.05e-5 (실행),eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,232,드리프트 검증 Strict Zero Drift Verified,wrong,ref_model끼리 비교하는 항진 검사 (항상 0.0),eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,221,query train plan_kwargs weight_decay=1e-6,wrong,튜토리얼 weight_decay=0.0 권고; 1e-6은 드리프트 유발,eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,195,prepare_query_anndata 반환값을 query_adata에 대입,wrong,ENG-009 후속: 기본 inplace=True는 None 반환 (실행),eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,205,"load_query_data(freeze_dropout, freeze_expression, freeze_decoder_first_layer, freeze_batchnorm_encoder, freeze_classifier)",supported,1.5.1 시그니처 유효,eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,331,DP-SGD로 역추적이 수학적으로 완벽히 불가능,wrong,"(ε,δ)-DP는 확률 상한 보장",eng-verifier
+05,tracks/05_generative_foundation_models/docs/04_SCARCHES_ARCHITECTURAL_SURGERY.md,129,HIPAA/GDPR이 원시 데이터 반출을 엄격히 금지,context-dependent,조건부 허용(조문 미조회),eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,85,"Geneformer (Theodosiou et al., Nature 2023)",wrong,정확: Theodoris CV (PMID 37258680),eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,92,argsort(2x)=argsort(x) → 심도 보정 불필요,context-dependent,전역 스케일에만 성립; Geneformer는 코퍼스 유전자별 정규화,eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,159,Var(q·k)=d_k 유도,supported,MC d=64: 63.9,eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,78,"Geneformer 어휘 25,424",supported,"HF V1 config vocab_size 25426 = 25,424 + 2 특수",eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,78,"scGPT 어휘 60,682",unsupported,체크포인트 접근 불가로 미검증,eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,419,"2000² 어텐션 16MB, 20000² 1.6GB",supported,산술 확인,eng-verifier
+05,tracks/05_generative_foundation_models/docs/05_TRANSFORMER_ARCHITECTURE_SINGLE_CELL.md,410,어텐션 재배선(EZH2→AR 침묵)이 관찰된다,unsupported,데이터 없음; attention≠regulation,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,58,scGPT 사전학습: MGM(마스크 유전자 15%)+GEP+CTC,wrong,scGPT는 값 마스킹(GEP)+GEPC(MVC); 15% 유전자 예측은 Geneformer,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,41,B=51 구간 기본,supported,scGPT 튜토리얼 n_bins=51,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,110,배치 토큰 고정으로 제로샷 배치 소거,unsupported,Kedzierska 2025: 제로샷 신뢰성 문제 (PMID 40251685),eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,21,scGPT Pre-LN,wrong,pre_norm 기본 False (model.py),eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,123,scGPT Human 33M Checkpoint,supported,README whole-human 33M normal cells,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,287,제로샷 세포 임베딩 추출 (코드),wrong,임의 초기화 모델; 가중치 미로드,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,189,분위수 Binning (np.linspace),wrong,코드는 선형 등간격; 빈 세포는 NaN,eng-verifier
+05,tracks/05_generative_foundation_models/docs/06_SCGPT_PRETRAINED_CELL_EMBEDDINGS.md,366,"iLISI 범위 1..B, cLISI 이상값 1",supported,Luecken 2022 정의 일치,eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,41,Geneformer 6층/256/4헤드/512/입력2048,supported,HF V1 config (현재 기본은 V2 316M),eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,69,정규화 순위 r=Rank/L_c,wrong,실제는 코퍼스 유전자별 스케일 후 순위 (모델카드),eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,42,"사전학습 코퍼스: 정상 및 질환 조직 3,000만",context-dependent,"악성 세포 제외; 암 변형은 별도 1,400만",eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,136,Attention Rollout 정의 ∏(I+A)/2,supported,Abnar&Zuidema 정의; 코드 일치,eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,149,In-degree 중심성으로 하류 효과기 선별,wrong,롤아웃 행합≡1 → 모든 유전자 1.0 (실행),eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,167,AR 0.88→0.05 등 중심성 표,unsupported,모의 어텐션에 하드코딩 가중치(+2.5/+2.0); 데이터 없음,eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,344,어텐션이 ASCL1 프로모터 조절부로 재배선,wrong,"입력은 유전자 토큰뿐, 프로모터 정보 없음",eng-verifier
+05,tracks/05_generative_foundation_models/docs/07_GENEFORMER_AND_GENOME_ATTENTION.md,309,MYC 전역 증폭을 순위 인코딩이 포착 못함,supported,전역 스케일 불변성의 결과(논리적으로 타당),eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,98,AR Virtual KO cos=+0.82 등 가상 스크리닝 결과,unsupported,난수 모델·무데이터; 파이프라인02 실제 cos 0.704/억제 2.48%,eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,107,가상으로 규명한 최적 병용 후보,unsupported,미검증 시뮬레이션 근거,eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,223,from scgpt_model_mock import ScGPTFineTuningModel,wrong,ModuleNotFoundError (저장소에 없음),eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,309,d차원 무작위 코사인 Var=1/d,supported,MC d=512: 0.001951,eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,319,경험적 p=(1+Σ I)/(B+1),supported,표준 add-one 치환 p,eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,351,"Tarlatamab: 가장 강력한 치료 대안, 완전 박멸",wrong,SCLC 승인만; NEPC 1b상 DLL3 양성 18/32,eng-verifier
+05,tracks/05_generative_foundation_models/docs/08_IN_SILICO_PERTURBATION_AND_DRUG_DISCOVERY.md,19,FM 섭동 예측이 정확/선형 접근 열세,wrong,Ahlmann-Eltze 2025 PMID 40759747: 5 FM 모두 단순 기준선 미돌파,eng-verifier
+05,tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,83,scIB 4대 핵심 지표,wrong,Luecken 2022: 14개 지표 (PMID 34949812),eng-verifier
+05,tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,96,Total = 0.6 Bio + 0.4 Batch,supported,scIB 가중치 일치,eng-verifier
+05,tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,208,간이 scIB: NMI 계산,wrong,"NMI 임포트만, 미계산; 난수 임베딩 종합 0.698",eng-verifier
+05,tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,49,FlashAttention-2 표준 대비 2~4배,context-dependent,2-4×는 FlashAttention v1 초록 수치 (arXiv 2307.08691),eng-verifier
+05,tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,325,iLISI 최댓값 = B (코시-슈바르츠),supported,min Σp²=1/B,eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,69,"Kfoury 2021 GSE143791 ~35,000 cells, SPP1-CD44 규명",unsupported,초록 핵심은 CCL20-CCR6·T세포 소진 (PMID 34719426); 세포 수 미확인,eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,70,"Chen 2021 ~42,000 cells, myCAF vs iCAF, IL6/STAT3",wrong,"PMID 33420488: 36,424 cells/13 tumours; 초점 KLK3·aEC",eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,71,"Bill et al., Cancer Discovery 2023, EGAS00001006653 전립선 3자 아틀라스",wrong,"Bill R: Science 2023;381:515 CXCL9:SPP1 (PMID 37535729), 다암종",eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,51,전립선암 환자의 80% 이상에서 뼈 전이,context-dependent,전이성/CRPC 환자 비율(분모 오류); 직접 조회 안 함,eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,90,Ch 06 NMF / Ch 07 차별 정보 흐름 / Ch 08 마스터 파이프라인,wrong,"실제 06=LIANA+, 07=MISTy, 08=골전이 회로",eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,104,pip install liana decoupler (Python 3.10),context-dependent,decoupler 2.2.0 Python>=3.11; squidpy 누락,eng-verifier
+03,tracks/03_tme_cell_communication/docs/00_TME_COMMUNICATION_ROADMAP.md,202,"CXCR4 길항제 + ICI, Bintrafusp alfa/Galunisertib + Denosumab",unsupported,"bintrafusp alfa 미승인·중단, denosumab은 SRE/BMFS 근거",eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,136,IL6:IL6R:gp130 2:2:2 육량체,supported,표준 구조생물학,eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,143,TGFBR1/2 사량체 복합체,supported,표준 구조,eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,103,"ADAM10/17가 pro-TNF, HB-EGF, TGFA 셰딩",supported,표준 지식,eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,169,Endothelial_Tip 마커 VEGFR2,wrong,HGNC 심볼은 KDR; var_names 매칭 실패(실행),eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,207,기하평균 np.prod 함수,context-dependent,스케일(음수) 데이터에서 NaN (실행),eng-verifier
+03,tracks/03_tme_cell_communication/docs/01_TME_BIOLOGY_AND_LIGAND_RECEPTORS.md,286,기하평균/최소값이 위양성을 완벽히 차단,context-dependent,드롭아웃 시 위음성 증가,eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,3,"LIANA+ 합의: Borda, RRA, Mean Rank",wrong,liana aggregate_method는 rra/mean만; Borda 없음 (소스),eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,99,"Kolde RRA: U_(k)~Beta(k,K-k+1), rho=min_k beta_k",supported,Kolde 2012; liana _robust_rank_aggregate,eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,58,"Dimitrov et al., Nature Methods 2022",wrong,Nat Commun 13:3224 (PMID 35680885),eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,51,"5대 DB 교집합 25~35%, 최대 60% 달라짐",unsupported,"논문: 평균 고유 상호작용 10.4%, Jaccard 중앙값 0.08/0.119",eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,35,"ICELLNET 374개, 6계열(사이토카인…증식인자)",wrong,380개; 6계열=antigen binding/checkpoint/chemokine/cytokine/growth factor/Notch,eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,38,"LRdb 3,251쌍, 문헌 텍스트마이닝",context-dependent,"3,251 맞음; FANTOM5·HPRD·HPMR·IUPHAR 통합+수작업 (PMC7261168)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,230,PTPRC-CD22는 LRdb에만 있고 CellPhoneDB/CellChatDB에 없음,wrong,"liana 번들: cellphonedb·cellchatdb에 존재, lrdb 없음 (실행)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,148,"rank_aggregate(expr_prop=0.1, min_cells=5, use_raw=False)",supported,liana 1.10.0 시그니처 유효,eng-verifier
+03,tracks/03_tme_cell_communication/docs/02_DATABASE_CURATION_AND_CONSENSUS.md,141,li.rs.get_consensus_resources(),wrong,ENG-006 (비실재 함수),eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,75,질량작용 평형 [LR]=[L][R]/Kd,supported,표준 화학평형,eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,83,S=Ē_L×Ē_R이 CellPhoneDB/LIANA 엔진,wrong,"lr_means=mean(L,R) 산술평균; 복합체 min (liana 소스)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,115,경험적 p=(Σ+1)/(B+1),supported,유효한 순열 p; 단 liana는 +1 없음(p=0.0 실측),eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,123,(b+1)/(B+1)는 비편향이면서 보수적 추정량,wrong,자기모순; 보수적=편향,eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,51,CellChat도 발현율 임계 10~20% 강제,wrong,"CellChat은 trimean(25% 미만 발현 0), 비율 임계 아님",eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,132,"20,000×0.05=1,000 위양성",supported,산술,eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,145,"BH q_(i)=min_{j>=i} min(1,M p_(j)/j)",supported,표준 BH 조정 p,eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,312,"M=1,296,000, E[FP]=12,960",supported,18*18*4000 산술,eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,321,p_min=0.001이면 모든 q=1.0,wrong,"동률 25,894건 이상이면 BH 기각 (실측 26,000건)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/03_EXPRESSION_THRESHOLDING_AND_PERMUTATIONS.md,156,scipy false_discovery_control(method='bh'),supported,실행 확인,eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,17,최소값 연산자 CellPhoneDB v5~,wrong,v2부터 min 사용 (CellChat 논문 서술),eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,29,소단위체 기하평균으로 복합체 발현,supported,CellChat 논문: geometric mean of subunits,eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,51,"P=LR/(Kh+LR), Kh=0.5",supported,liana cellchat._kh=0.5; CellChat Hill 형,eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,66,보조인자 계수 (1+A)/(1+I),wrong,원식은 (1+AG)/(Kh+AG)·Kh/(Kh+AN)·집단크기항; P>1 가능(실행 1.0839),eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,55,Kh는 데이터셋 분포에 맞춰 보정,wrong,기본 상수 0.5,eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,101,"Mediator=최단경로 betweenness, Influencer=eigenvector",wrong,"CellChat: flow betweenness, information centrality (sna)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,176,Computed IL-6 Signaling Probability,wrong,출력 1.0839 > 1,eng-verifier
+03,tracks/03_tme_cell_communication/docs/04_CELLCHAT_MULTISUBUNIT_MODELING.md,319,SPP1이 CD44/αvβ3로 T세포 IFNγ·세포독성 직접 차단,unsupported,전립선 근거 미제시,eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,41,"Browaeys et al., Nature Methods 2020",supported,PMID 31819264 Nat Methods 17:159-162,eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,59,가중치를 Gradient Descent로 학습,wrong,mlrMBO (nichenetr parameter_optimization.R),eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,107,단계 2: TF에서 시드한 두 번째 RWR,wrong,ligand-TF PPR × TF-target GRN 행렬곱,eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,82,재시작 확률 r=0.5 (damping 0.5),supported,nichenetr damping_factor=0.5,eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,94,"M=I-(1-r)P 가역, 스펙트럼 반지름<1",supported,수학적 확인(열 대각 지배),eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,283,리간드 활성도를 Pearson으로 정렬; AUPR 권장,context-dependent,"v1=Pearson, v2=AUPR(corrected) (vignette)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,253,li.rs.get_nichenet_prior / li.mt.nichenet,wrong,ENG-004 (비실재 API),eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,373,WNT5A→FZD5/ROR2→NFATc1→ASCL1/PEG10,unsupported,Ren 2019 JEM: 골아세포 Wnt5a는 휴면 유도 (PMID 30593464),eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,371,TGFB1→SMAD3→SOX2 활성화로 t-NEPC,unsupported,PubMed 근거 미발견,eng-verifier
+03,tracks/03_tme_cell_communication/docs/05_NICHENET_INTRACELLULAR_SIGNALING.md,380,Cabozantinib이 ROR 축 차단,unsupported,MET/VEGFR 계열; COMET-1 OS 개선 없음,eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,91,전역 이변량 모란 I = (N/S0) Σ w dL dR / (√ΣdL² √ΣdR²),supported,z^T W z/S0와 대수적 동치(검산),eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,107,"국소 I_i = z_L,i Σ w_ij z_R,j 와 LISA 4사분면 부호",supported,표준 정의,eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,159,LIANA+ Nature Communications 2022 및 Nature Genetics 2024,wrong,Nat Cell Biol 2024;26:1613 (PMID 39223377),eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,162,LIANA+ 합의: 중앙값/기하평균 후 Moran I·감쇄 곱,wrong,RRA/mean; 공간 지표는 별도 메서드,eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,205,li.rs.get_resource / li.mt.spatial_bivariate / li.ut.spatial_local_bivariate,wrong,ENG-005 (비실재 API),eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,196,sq.gr.spatial_neighbors(radius=150) with exponential decay,unsupported,감쇄 커널 인자 없음; LIANA+ spatial_neighbors(kernel=) 사용,eng-verifier
+03,tracks/03_tme_cell_communication/docs/06_SPATIAL_CELL_COMMUNICATION_LIANA_PLUS.md,44,지수 감쇄 = 반응-확산 그린 함수,context-dependent,1D 한정,eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,32,"Torafo et al., Genome Biology 2021, MISTy Spatio-Temporal",wrong,"Tanevski J, Genome Biol 2022;23:97; SpaTial",eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,268,메타모델 Ridge(positive=True),context-dependent,liana: RidgeCV 후 clip(min=0)·정규화,eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,246,K-fold 공간 교차검증,wrong,무작위 KFold; liana는 OOB 예측,eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,221,Juxta d<=15µm 이웃,context-dependent,"1,500세포/mm²에서 평균 1.07개; Visium 불가 (실행)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,235,"Paraview l=150µm, k=50 최근접",context-dependent,50번째 최근접 평균 109µm로 절단 (실행),eng-verifier
+03,tracks/03_tme_cell_communication/docs/07_MULTIVIEW_MODELING_MISTY.md,160,"R²_intra 0.12, ΔJuxta 0.42, ΔPara 0.28 'MISTy 분해 결과'",unsupported,산출 코드·데이터 없음,eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,61,ET-1 → EDNRA → 조골 자극,supported,Nelson 1995 Nat Med; Yin 2003 PNAS(유방암 세포주),eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,25,종양 WNT5A → 조골세포 FZD/ROR2 골경화,unsupported,Ren 2019: 골아세포 Wnt5a→휴면; 방향 챕터 간 모순,eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,16,종양 TNFSF11(RANKL) → 파골 전구세포 RANK,context-dependent,ch00은 PTHrP→골아세포 RANKL; 공급원 상충,eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,297,폐루프 이득>0 → 고유치 RHP → 불안정(증명),wrong,"반례: 부호 모두 성립하나 안정 (Re λ max −0.04, −0.26)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,107,정상상태는 T가 K_T에 도달할 때까지 멈추지 않는 파멸 루프,wrong,"수치 해: T=0.903, 0.988 < K_T=1 에서 포화",eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,148,"Bintrafusp alfa + Plerixafor, Magrolimab + Nivolumab 구원요법",unsupported,bintrafusp 미승인·중단; magrolimab 임상보류/중단,eng-verifier
+03,tracks/03_tme_cell_communication/docs/08_PROSTATE_BONE_METASTASIS_TME_CIRCUITS.md,184,Circuit_1 점수와 종양 세포 TGF-β 가소성 상관,wrong,CTSK/ACP5/ATP6V0D2는 파골세포 유전자(종양 비발현),eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,16,"15×14×1,500=315,000; 20×19×2,000=760,000, E[FP]=38,000",supported,산술,eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,9,Squair 2021이 L-R 통신 도구의 거짓 양성을 벤치마크,wrong,Squair 2021은 DE 벤치마크 (PMID 34584091),eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,196,top_consensus['aggregate_rank']<0.05; ligand.complex,wrong,"컬럼은 magnitude_rank/specificity_rank, ligand_complex → KeyError(실행)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,182,유사벌크 집계(pb_adata)가 유사반복 제거,wrong,"pb_adata 미사용, rank_aggregate는 단일세포 adata",eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,253,[C]=K_eq∏[x]이므로 기하평균이 질량작용 충족,context-dependent,질량작용=곱; 기하평균=m제곱근 변환,eng-verifier
+03,tracks/03_tme_cell_communication/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,275,Harmony로 배치 보정한 발현 공간,wrong,Harmony는 PCA 임베딩 보정,eng-verifier
+03,tracks/03_tme_cell_communication/pipelines/results_pipeline_01/pipeline_summary_metrics.json,1,top_sender_cell_type TAM_M2 (9.3096),wrong,CSV 최대 out-degree는 myCAF 11.5168 (코드 L621 out+in 정렬 버그),eng-verifier
+03,tracks/03_tme_cell_communication/docs/images/04_nichenet_ligand_to_target_causal_network.svg,1,AUROC TGFB1 0.88 / CXCL12 0.79 / TNFSF11 0.74,unsupported,pipeline02 실제 0.962/0.917/0.989; 스크립트 하드코딩(L547-555),eng-verifier
+03,tracks/03_tme_cell_communication/docs/images/05_spatial_misty_multiview_modeling.svg,1,"Intrinsic 45% + Juxta 20% + Para 35%, Spatial Gain +55%",wrong,"총 R²=100% 암시; 하드코딩(L679,681)",eng-verifier
+03,tracks/03_tme_cell_communication/docs/images/02_liana_consensus_and_permutation_testing.svg,1,파이프라인 간 일치도 75% 이상 향상,unsupported,근거 없음; 스크립트 L260,eng-verifier
+06,tracks/06_manifold_trajectory/docs/00_TRAJECTORY_ROADMAP.md,171,Replogle 2022 Perturb-seq로 전립선 TF 결손의 NE 도약 확률 규명,unsupported,"PMID 35688146 초록: 인간 세포주 genome-scale CRISPRi, 전립선/NE 없음 (SCI-06-001)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/00_TRAJECTORY_ROADMAP.md,165,Karthaus 2020: 벨로시티/WOT로 탈분화 벡터 증명,unsupported,PMID 32355025 초록에 벨로시티·WOT 없음 (SCI-06-002),eng-verifier
+06,tracks/06_manifold_trajectory/docs/00_TRAJECTORY_ROADMAP.md,102,정적 그래프는 비가역성 공리를 가정한다는 한계(경고),supported,scanpy DPT는 대칭 그래프 기반; 서술 타당. 단 후속 챕터 흡수 가정과 모순(SCI-06-004),eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,319,Karthaus 및 임상 시계열에서 Day 28 NEPC 출현,unsupported,PMID 32355025 초록에 NEPC·임상 시계열 없음; docs/04:277 모의 시점은 Day 0/1/3/7/14 (SCI-06-003),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,14,말단 상태는 흡수 상태로 영원히 머문다 (P_kk=1),context-dependent,모델링 선택으로 타당하나 생물학적 비가역성으로 서술하면 Ku 2017(PMID 28059767: EZH2 억제로 AR 회복)과 상충 (SCI-06-004),eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,58,"G-PCCA: Reuter et al., J. Chem. Phys. 2018",wrong,"JCTC 2018;14:3579(PMID 29812922), JCP 2019;150:174103(PMID 31067901) (SCI-06-005)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,49,"CellRank 2: Weiler et al., Nature Biotechnology 2024",wrong,"Nature Methods 2024;21:1196, PMID 38871986 (SCI-06-006)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/01_MANIFOLD_GEOMETRY_AND_DIFFUSION.md,10,DPT 거리 가중치 λ²/(1−λ²),wrong,scanpy 1.12.4 neighbors/__init__.py: (λ/(1−λ))²; Haghverdi 2016 DPT=적분된 확률의 노름 (SCI-06-007),eng-verifier
+06,tracks/06_manifold_trajectory/docs/01_MANIFOLD_GEOMETRY_AND_DIFFUSION.md,68,"α=1 Coifman–Lafon 정규화가 Laplace–Beltrami 수렴, 궤적 분석에서 표준",supported,scanpy compute_transitions density_normalize=True가 α=1 구현 (소스 확인),eng-verifier
+06,tracks/06_manifold_trajectory/docs/01_MANIFOLD_GEOMETRY_AND_DIFFUSION.md,106,"확산맵 T=D^-1W 행확률, λ0=1>λ1≥…",supported,수식 재계산 및 scanpy diffmap 소스 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/01_MANIFOLD_GEOMETRY_AND_DIFFUSION.md,259,본문 가우시안 적응 커널 vs 코드 method='umap',context-dependent,"scanpy method='umap'은 fuzzy simplicial 연결성, gauss는 별도 (SCI-06-008)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/01_MANIFOLD_GEOMETRY_AND_DIFFUSION.md,274,sc.tl.dpt(n_branchings=1) 다중 분기점,wrong,"scanpy 기본 n_branchings=0, 1회 분기만 검출 (SCI-06-009)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/02_RNA_VELOCITY_SPLICING_KINETICS.md,81,"정상상태 모델 ds/dt=βu−γs, v=u−γ̃s, 극단 분위 회귀",supported,"scvelo 소스/La Manno 서술과 일치, 시뮬레이션 실행 확인",eng-verifier
+06,tracks/06_manifold_trajectory/docs/02_RNA_VELOCITY_SPLICING_KINETICS.md,201,"scv.pp.filter_and_normalize(..., n_top_genes=...)",wrong,scvelo 0.3.4 TypeError normalize_per_cell unexpected n_top_genes (SCI-06-010),eng-verifier
+06,tracks/06_manifold_trajectory/docs/02_RNA_VELOCITY_SPLICING_KINETICS.md,175,속도 그래프 코사인 유사도 기반 전이 커널,supported,scvelo velocity_graph 코사인 상관 (소스),eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,212,"filter_and_normalize(min_shared_counts=30, n_top_genes=...)",wrong,SCI-06-010와 동일 TypeError,eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,259,scVelo E-step이 k-NN 그래프 사전분포로 시간 평활,wrong,"scvelo _em_model_utils.assign_tau는 유전자별 격자 탐색, 그래프 항 없음 (SCI-06-011)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,139,E-step을 Brent 1차원 볼록 탐색으로 정확히 투영,wrong,scvelo는 격자 탐색 (SCI-06-011),eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,178,"τ_i=Σ w_g t̃_i^g, w_g=logL_g×C_g, root 불필요",wrong,latent_time: fit_likelihood≥0.1 필터 + compute_shared_time + terminal_states 기반 root (SCI-06-012),eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,278,fast-γ 클론의 u가 평균 회귀선 아래 ⇒ 음수 벨로시티,wrong,u=γ_fast s>γ̄ s ⇒ v>0 (대수 유도) (SCI-06-013),eng-verifier
+06,tracks/06_manifold_trajectory/docs/03_DYNAMICAL_VELOCITY_AND_LATENT_TIME.md,21,동역학 모델 u(t)=u0e^-βt+(α/β)(1−e^-βt),supported,ODE 해 직접 검산 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,63,"엔트로피 정규화 OT min<C,Γ>−εH(Γ), Sinkhorn u=μ/(Kv)",supported,수식 재유도 및 POT 0.9.7 수치 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,152,"UOT: λ1 KL(Γ1‖g⊙p)+λ2 KL(Γ^T1‖q), 지수 λ/(λ+ε) 업데이트",supported,"Chizat 유형 UOT 업데이트와 일치; wot 기본 ε=0.05, λ1=1, λ2=50",eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,236,wot.Dataset(...),wrong,wot 1.0.8.post2에 Dataset 없음 (ENG-014),eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,258,"OTModel(..., growth_rate=cell_growth_rates); compute_transport_matrix(t1,t2)",wrong,"OTModel growth_rate_field 사용, 메서드는 compute_transport_map (SCI-06-015)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,243,"growth_rate 결측 시 exp(N(0,0.1)) 난수 폴백",unsupported,임의 난수 성장률; 생물학적 근거 없음 (SCI-06-015),eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,143,g(x)=exp(Δt/τ·(s_prolif−s_apopt)/σ)가 Schiebinger 로지스틱 모델,context-dependent,본문 '로지스틱'과 식 불일치; 원문 식 미대조 (SCI-06-016),eng-verifier
+06,tracks/06_manifold_trajectory/docs/04_OPTIMAL_TRANSPORT_WADDINGTON_OT.md,277,"모의 데이터 시점 Day 0,1,3,7,14",context-dependent,Q2의 Day 28과 불일치 (SCI-06-003),eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,177,VelocityKernel.compute_transition_matrix(temperature=0.1),wrong,cellrank 2.3.3 TypeError; 인자는 softmax_scale (SCI-06-017),eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,185,ck.compute_cytotrace() 기본 호출,wrong,KeyError 'imputed'; layer='Ms' 필요 (SCI-06-018),eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,187,"CytoTRACE compute_transition_matrix(threshold_low/high, nu)",wrong,"TypeError; 실제 threshold_scheme, frac_to_keep, b, nu (SCI-06-018)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,194,"combined_kernel = 0.7*vk + 0.3*ck, 행확률성",supported,"실행: 결합 후 compute_transition_matrix, 행합=1 확인",eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,141,Enzalutamide→v<0→가소성 세포가 루미날로 역류,wrong,v<0은 루미날 유전자 하향=루미날 이탈 방향 (SCI-06-021),eng-verifier
+06,tracks/06_manifold_trajectory/docs/05_CELLRANK2_MULTIKERNEL_INTEGRATION.md,146,CytoTRACE 루미날 0.2→중간체 0.85,unsupported,데이터·인용 없음 (SCI-06-047),eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,46,"세부균형 위반 ⇒ P 비정규, 이로 인해 비직교 고유벡터",wrong,순환 치환 행렬은 정규+세부균형 위반; 가역 P도 비정규 (‖PPᵀ−PᵀP‖=0.53) (SCI-06-020),eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,78,G-PCCA: 실 슈어 분해로 지배 불변 부분공간,supported,Reuter 2019 초록(PMID 31067901): real Schur vectors 사용,eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,191,g.coarse_grained_transition_matrix,wrong,AttributeError; 올바른 속성 coarse_T (SCI-06-019),eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,120,조대 전이 행렬 P~_ss≈1 ⇒ 말단 흡수 상태,supported,coarse_T 대각 해석; 실행 출력 확인,eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,86,"암시 시간척도 t_rel=−1/ln|λ|, 스펙트럼 갭 산술",supported,수치 재계산 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/06_MARKOV_CHAINS_AND_MACROSTATES.md,196,"set_terminal_states(AR+_Adeno, Amphicrine, DNPC, t-NEPC)",context-dependent,같은 챕터 Q/ch07의 말단 정의와 충돌 (SCI-06-045),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,62,"스펙트럼 반지름 ρ(Q)<1, N=(I−Q)^-1=ΣQ^k, B=NR, ΣB=1",supported,Gershgorin·Neumann 증명 재검산; 소형 예 수치 확인,eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,171,계통 엔트로피 표: 0.28/1.74/0.44/0.21 bits,wrong,재계산 0.236/1.467/0.440/0.222; 3결과 최대 1.585 (SCI-06-022),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,306,"Group1 (0.44,0.42,0.14) H=1.88 bits",wrong,H=1.444 bits (SCI-06-022),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,306,"Group2 (0.98,…) H=0.18 bits",supported,H≈0.17~0.18 (잔여 0.02 분산에 따라) 재계산,eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,212,cr.pl.fate_probabilities,wrong,CellRank 2에 없음 (ENG-008),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,226,"cr.pl.circular_projection(keys='fate_probabilities', color=...)",unsupported,"keys는 obs 키, color 인자 없음 (SCI-06-023)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,196,"compute_fate_probabilities(solver='gmres', tol=1e-7, preconditioner='ilu')",context-dependent,"시그니처상 허용(preconditioner str); 시뮬레이션 gmres tol=1e-7 정상 동작, 데이터에 따라 음수 오류 가능",eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,178,Clone A/B/C 흡수 확률 임계 0.90/0.85/0.92,unsupported,Track 04에 해당 클론 정의 없음 (SCI-06-024),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,152,"g.compute_lineage_drivers(lineage='t-NEPC', cluster_key=...)",wrong,파라미터명 lineages; cluster_key는 clusters 병용 (SCI-06-025),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,178,"cr.pl.gene_trends/heatmap(data_key='X', show_absorption_probabilities)",wrong,"time_key 필수, show_fate_probabilities; GAMR은 R mgcv 필요, 기본 gaussian (SCI-06-026)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,231,설명된 이탈도 = 1−D_model/D_null,supported,"GLM 표준 정의, 수식 확인",eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,39,"피어슨 r, t=r√((n−2)/(1−r²)) 자유도 n−2, BH FDR",supported,"표준 통계 공식, 재계산 일치",eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,47,스피어만 ρ=1−6Σd²/(t(t²−1)),context-dependent,동순위 없을 때만 유효 (SCI-06-028),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,225,NB-GAM이 0·이상치 왜곡을 완벽히 차단,unsupported,순환성·영과잉 한계 (SCI-06-027),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,102,B_onset 정의로 드라이버/패신저 판별,context-dependent,θ_slope 미정의; 시간적 선행≠인과 (SCI-06-029),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,125,REST 복합체 단백 분해,wrong,PMID 34312180: REST4 스플라이싱(SRRM3/4)·저발현 (SCI-06-030),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,107,INSM1은 파이오니어 TF,unsupported,문헌 미제시 (SCI-06-031),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,133,SOX9/TWIST1 DNPC 마스터 TF; ETV4/5가 AR을 완전 대체,unsupported,1차 문헌 없음 (SCI-06-032),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,126,ASCL1 r=0.91 q<1e-70; EZH2 0.81; CHGA 0.95,unsupported,코호트·PMID 없음; 내부/SVG/파이프라인 불일치 (SCI-06-033),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,282,"Tarlatamab 수혜 기준: B≥0.70 과반, DLL3≥30%, AUCell 상위 10%",unsupported,임상 근거 없는 임계 (SCI-06-034),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,283,DLL3는 ASCL1의 직접 전사 표적,supported,널리 보고된 ASCL1–DLL3 축(문헌 직접 대조는 미수행; 일반 지식),eng-verifier
+06,tracks/06_manifold_trajectory/docs/08_LINEAGE_DRIVER_DISCOVERY.md,264,ASCL1 결합 모티프 E-box CANNTG,context-dependent,"bHLH 공통 E-box, ASCL1 선호는 CAGSTG 계열 (SCI-06-035)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,138,"velocity_confidence=코사인 평균, 0.75/0.5 기준",wrong,"scvelo: 유전자 평균제거 Pearson, 0 절삭, 기준 없음; velocity_graph 선행 필요 (SCI-06-036)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,208,"Q2: cos 값 1.00/0.45/−1.00, C_vel=0.15",supported,수치 재계산 일치 (0.447 → 0.149),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,78,CBC=net forward flux 비율; Graph coherence 제공,wrong,CellRank Kernel.cbc는 추정/경험 벡터장 Pearson; coherence API 없음 (SCI-06-037),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,99,SpatialKernel 결합,wrong,cellrank.kernels에 없음 (SCI-06-038),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,261,scVI로 snRNA+snATAC 결합 잠재 공간,wrong,scvi.model.MULTIVI가 정답 (SCI-06-039),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,168,compute_macrostates 직후 compute_fate_probabilities,wrong,RuntimeError: terminal states 필요 (SCI-06-040),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,122,Unspliced 15~25% 유지(Stage1) vs 40~60%(Q1),context-dependent,챕터 내 모순 (SCI-06-041),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,110,속도 계산은 원시 카운트 기반; 레이어 배치 보정 금지,context-dependent,"경고는 타당, scVelo는 정규화+모멘트 사용 (SCI-06-042)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,126,합격 기준 임계값 및 표 셀 내 raw 파이프,unsupported,임계 출처 없음; 렌더링 ENG-022 (SCI-06-043),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,35,t-NEPC에서 γ 현저히 증가,unsupported,근거 없는 가설 (SCI-06-014),eng-verifier
+06,tracks/06_manifold_trajectory/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md,273,scCNA로 0.1~1% 서브클론의 biallelic loss 검출,unsupported,scCNA 한계 (SCI-06-046),eng-verifier
+06,tracks/06_manifold_trajectory/docs/07_FATE_ABSORPTION_PROBABILITIES.md,14,4상태(AR+/Amphicrine/DNPC/t-NEPC) 분류의 출처,unsupported,Track 06에 인용 없음 (SCI-06-044; SCI-00-015는 미재발),eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/01_diffusion_maps_and_pseudotime_geometry.svg,1,"dpt=‖M(e_x0−e_x)‖, M=(I−T)^-1",wrong,I−T 특이(rank 2/3 예) (SCI-06-053),eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/02_rna_velocity_phase_portrait_kinetics.svg,1,"v=u−γs, 위상평면 상단=유도",supported,정상상태 모델과 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/03_dynamical_scvelo_latent_time_optimization.svg,1,EM 20-30회 수렴; τ(Amphi)=0.5,wrong,recover_dynamics max_iter=10; pipeline01 Amphicrine latent 0.864 (SCI-06-054),eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/04_waddington_ot_sinkhorn_transport_coupling.svg,1,"엔트로피 OT, Sinkhorn u=μ/(Kv), v=ν/(K^T u)",supported,수식 일치,eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/05_cellrank2_multikernel_gpcca_macrostates.svg,1,"K_velo 0.4/K_dpt 0.3/K_ot 0.3, k=4 자동 결정",context-dependent,"본문·파이프라인 가중치와 불일치, n_states는 사용자 지정 (SCI-06-054)",eng-verifier
+06,tracks/06_manifold_trajectory/docs/images/06_fate_probabilities_and_lineage_drivers.svg,1,"t-NEPC 78% / DN 22%; ASCL1 r=0.92, INSM1 0.88, EZH2 0.85",unsupported,pipeline02 실제 0.4999/0.5001; r 0.584/0.588/0.588 (SCI-06-052),eng-verifier
+06,tracks/06_manifold_trajectory/pipelines/02_cellrank2_fate_mapping_pipeline.py,252,G-PCCA로 4개 매크로상태 식별,wrong,"라벨 복사, Schur 벡터 폐기 (SCI-06-048)",eng-verifier
+06,tracks/06_manifold_trajectory/pipelines/02_cellrank2_fate_mapping_pipeline.py,405,Amphicrine 운명 분기 P=0.4999/0.5001,wrong,"840/1500 세포 폴백 (0.5,0.5) 인공물 (SCI-06-049)",eng-verifier
+06,tracks/06_manifold_trajectory/pipelines/results_pipeline_02/lineage_driver_correlations.csv,1,상위 TF 드라이버 r≈0.58,unsupported,"합성 데이터, 동률 상관, TF 아님 (SCI-06-050)",eng-verifier
+06,tracks/06_manifold_trajectory/pipelines/01_diffusion_and_velocity_pipeline.py,518,latent time τ=0.85·DPT+0.15·coherence,wrong,scVelo 동역학 잠재 시간 아님; DPT-진행도 Spearman 0.549 (SCI-06-051),eng-verifier
+06,tracks/06_manifold_trajectory/pipelines/results_pipeline_01/pipeline_01_summary.txt,1,Mean velocity coherence 0.161,context-dependent,"루브릭 ≥0.75 미충족, 40.8% 세포 0 (SCI-06-043/051)",eng-verifier

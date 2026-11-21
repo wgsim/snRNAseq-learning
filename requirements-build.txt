@@ -1,0 +1,17 @@
+# Build environment for the Master Book / HTML / DOCX generators
+# (scripts/build_master_documents.py, tracks/*/scripts/build_*_master.py,
+#  scripts/inject_global_track_switcher.py)
+#
+# Verified 2026-10-18: Python 3.8.16 + mistune 2.0.5 rebuilds all 11 tracks with
+# every built-in assertion passing and no raw pipe-table / literal "**" artifacts.
+# mistune 3.x leaves ~989 literal "**" in the HTML (review finding ENG-020).
+#
+# Order: run the build scripts first, then scripts/inject_global_track_switcher.py.
+# Slide decks: after the deck generators (tracks 02/03/04/05 slides scripts) run scripts/inject_slide_layout.py (idempotent, ENG-040).
+# Note: 9 track build scripts also re-run their pipelines/ (results_pipeline_*).
+mistune==2.0.5
+#
+# The build scripts re-run pipelines with the build interpreter. Since the hard-coded conda path
+# was removed (ENG-024), point the pipelines at the scanpy environment explicitly, e.g.:
+#   SCRNA_ENV_SITE_PACKAGES=<conda-base>/envs/scRNAseq_anal/lib/python3.8/site-packages
+# (see requirements-pipelines.txt for that environment's package versions)

@@ -1,0 +1,16 @@
+[cited]
+PMID:31361600  # "Labrecque et al. 2019", L36,L174  [Labrecque MP 2019 J Clin Invest]
+PMID:29017058  # "Bluemn et al. 2017", L36,L174  [Bluemn EG 2017 Cancer Cell]
+PMID:35617398  # "Tang et al. 2022", L36  [Tang F 2022 Science]
+
+[evidence]
+PMID:28059768  # Mu P 2017 Science: SOX2 promotes lineage plasticity and antiandrogen resistance in TP53- and RB1-deficient prostat  [근거: ledger L50-53]
+PMID:30510133  # Wu H 2019 J Am Soc Nephrol: Advantages of Single-Nucleus over Single-Cell RNA Sequencing of Adult Kidney: Rare Cell Types a  [근거: SCI-00-013; ledger L67]
+PMID:32487174  # Denisenko E 2020 Genome Biol: Systematic assessment of tissue dissociation and storage biases in single-cell and single-nucle  [근거: SCI-00-012; ledger L68]
+PMID:32840568  # Osorio D 2021 Bioinformatics: Systematic determination of the mitochondrial proportion in human and mice tissues for single-c  [근거: ledger L141]
+PMID:33420488  # Chen S 2021 Nat Cell Biol: Single-cell analysis reveals transcriptomic remodellings in distinct cell types that contribute  [근거: SCI-00-014]
+PMID:35013146  # Song H 2022 Nat Commun: Single-cell analysis of human primary prostate cancer reveals the heterogeneity of tumor-associ  [근거: SCI-00-014]
+PMID:35042723  # Gupta A 2022 Genome Res: Characterization of transcript enrichment and detection bias in single-nucleus RNA-seq for mapp  [근거: SCI-00-012; ledger L142; ledger L68]
+
+[software]
+# (코드 블록에서 import/호출하는 도구 없음)

@@ -1,0 +1,15 @@
+[cited]
+DOI:10.21105/joss.00861  # McInnes 2018 UMAP (JOSS)
+ARXIV:1106.5730  # "Niu et al., NeurIPS 2011" Hogwild! (L173)
+
+[evidence]
+
+
+[software]
+SW:anndata
+SW:cupy
+SW:numpy
+SW:rapids-singlecell
+SW:rmm
+SW:scanpy
+SW:scipy

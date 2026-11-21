@@ -1,0 +1,36 @@
+{
+  "pipeline": "scvi_and_scanvi_generative_pipeline",
+  "cohort": {
+    "n_cells": 2000,
+    "n_batches": 4,
+    "n_cell_types": 5,
+    "labeled_ratio": 0.3,
+    "unlabeled_ratio": 0.7
+  },
+  "model_architecture": {
+    "model": "SingleCellVAE + scANVI Classifier",
+    "latent_dim": 10,
+    "hidden_dim": 32,
+    "epochs": 50,
+    "likelihood": "Negative Binomial (NB)"
+  },
+  "scanvi_performance": {
+    "unlabeled_accuracy": 0.5574,
+    "macro_f1": 0.5359,
+    "per_class_f1": {
+      "Luminal_AR_Pos": 0.7134,
+      "t_NEPC": 0.4404,
+      "Basal_Progenitor": 0.4233,
+      "Stromal_Fibroblast": 0.5792,
+      "Myeloid_TAM": 0.5232
+    }
+  },
+  "scib_metrics": {
+    "raw_ilisi": 2.2676,
+    "latent_ilisi": 2.224,
+    "normalized_ilisi": 0.556,
+    "raw_clisi": 1.6035,
+    "latent_clisi": 2.4749,
+    "batch_mixing_improvement_pct": -1.92
+  }
+}

@@ -1,0 +1,11 @@
+[cited]
+DOI:10.1016/j.laa.2004.10.026  # Deuflhard & Weber 2005 (PCCA+)
+PMID:29812922  # Reuter 2018 JCTC (G-PCCA)
+PMID:31067901  # Reuter 2019 J Chem Phys (G-PCCA)
+
+[evidence]
+
+
+[software]
+SW:cellrank
+SW:matplotlib

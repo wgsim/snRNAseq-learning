@@ -1,0 +1,74 @@
+{
+  "pipeline": "01_pseudobulk_and_glmm_differential_expression",
+  "total_donors": 12,
+  "total_cells": 6000,
+  "total_genes": 500,
+  "true_deg_count": 100,
+  "true_null_count": 400,
+  "naive_type1_error_pct": 87.75,
+  "pseudobulk_type1_error_pct": 5.25,
+  "effect_size_concordance_r": 0.9949,
+  "execution_time_seconds": 7.27,
+  "top_genes": [
+    {
+      "name": "EZH2",
+      "log2fc": -3.6048,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    },
+    {
+      "name": "INSM1",
+      "log2fc": -3.2341,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    },
+    {
+      "name": "DLL3",
+      "log2fc": -2.9566,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    },
+    {
+      "name": "CHGA",
+      "log2fc": -3.6463,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    },
+    {
+      "name": "ASCL1",
+      "log2fc": -3.5365,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    },
+    {
+      "name": "DEG_myC_080",
+      "log2fc": -2.9174,
+      "fdr": 0.059873619914531384,
+      "celltype": "myCAF"
+    },
+    {
+      "name": "FAP",
+      "log2fc": -2.9193,
+      "fdr": 0.059873619914531384,
+      "celltype": "myCAF"
+    },
+    {
+      "name": "DEG_AR__026",
+      "log2fc": -2.5961,
+      "fdr": 0.059873619914531384,
+      "celltype": "AR_Adeno"
+    },
+    {
+      "name": "DEG_myC_045",
+      "log2fc": -2.5691,
+      "fdr": 0.059873619914531384,
+      "celltype": "myCAF"
+    },
+    {
+      "name": "SYP",
+      "log2fc": -2.9618,
+      "fdr": 0.059873619914531384,
+      "celltype": "t_NEPC"
+    }
+  ]
+}

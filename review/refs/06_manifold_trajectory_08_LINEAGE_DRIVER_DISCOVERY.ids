@@ -1,0 +1,11 @@
+[cited]
+PMID:34312180  # Labrecque 2021 Cancer Res
+PMID:29017058  # Bluemn 2017 Cancer Cell
+
+[evidence]
+
+
+[software]
+SW:cellrank
+SW:matplotlib
+SW:scanpy

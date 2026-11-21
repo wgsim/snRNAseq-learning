@@ -1,0 +1,13 @@
+[cited]
+PMID:36690742  # "Cang et al. 2023 (COMMOT)", L102  [Cang Z 2023 Nat Methods]
+PMID:9356436  # "Francis & Palsson 1997", L52  [Francis K 1997 Proc Natl Acad Sci U S A]
+PMID:12941866  # "Yin 2003", L170  [Yin JJ 2003 Proc Natl Acad Sci U S A]
+
+[evidence]
+PMID:35102346  # Palla G 2022 Nat Methods: Squidpy: a scalable framework for spatial omics analysis.  [근거: SCI-02-052]
+
+[software]
+SW:commot
+SW:matplotlib
+SW:scanpy
+SW:squidpy

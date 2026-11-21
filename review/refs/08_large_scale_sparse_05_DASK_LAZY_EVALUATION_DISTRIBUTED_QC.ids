@@ -1,0 +1,12 @@
+[cited]
+DOI:10.1080/00031305.1983.10483115  # Chan, Golub, LeVeque 1983
+
+[evidence]
+
+
+[software]
+SW:dask
+SW:h5py
+SW:numpy
+SW:scipy
+SW:zarr

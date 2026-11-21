@@ -1,0 +1,35 @@
+{
+  "pipeline": "02_numbat_baf_and_clonal_phylogeny_pipeline",
+  "cohort": {
+    "n_cells": 800,
+    "n_snps": 3000,
+    "subclone_1_truncal_cells": 400,
+    "subclone_2_enz_resist_cells": 250,
+    "subclone_3_t_nepc_cells": 150
+  },
+  "cn_loh_evaluation": {
+    "target_locus": "Chr 10q PTEN",
+    "subclone_1_detected_cn_loh": false,
+    "subclone_2_detected_cn_loh": true,
+    "subclone_3_detected_cn_loh": true,
+    "subclone_2_observed_baf": 0.9802,
+    "subclone_2_depth_ratio": 0.9649
+  },
+  "phylogenetic_tree": {
+    "method": "Neighbor-Joining (Saitou-Nei)",
+    "n_taxa": 61,
+    "tree_format": "Newick",
+    "root_outgroup": "Diploid_Root"
+  },
+  "muller_plot_summary": {
+    "n_timepoints": 3,
+    "stages": [
+      "Pre-ADT (Primary)",
+      "Post-Enzalutamide (mCRPC)",
+      "t-NEPC Relapse"
+    ],
+    "dominant_clone_t1": "Clone 1 (85%)",
+    "dominant_clone_t2": "Clone 2 (65%)",
+    "dominant_clone_t3": "Clone 3 (80%)"
+  }
+}

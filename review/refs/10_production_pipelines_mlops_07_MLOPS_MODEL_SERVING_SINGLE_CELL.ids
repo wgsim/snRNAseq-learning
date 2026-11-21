@@ -1,0 +1,15 @@
+[cited]
+
+
+[evidence]
+
+
+[software]
+SW:mlflow
+SW:onnxruntime
+SW:fastapi
+SW:pydantic
+SW:torch
+SW:scanpy
+SW:scvi-tools
+SW:numpy

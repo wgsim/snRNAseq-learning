@@ -1,0 +1,13 @@
+[cited]
+PMID:26544944  # "TCGA", L364  [Cancer Genome Atlas Research Network 2015 Cell]
+PMID:22610119  # "Barbieri et al.", L364  [Barbieri CE 2012 Nat Genet]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:numpy
+SW:scipy
+SW:star
+SW:pandas
+SW:pysam

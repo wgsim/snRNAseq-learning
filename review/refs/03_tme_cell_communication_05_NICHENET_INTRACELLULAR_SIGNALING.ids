@@ -1,0 +1,21 @@
+[cited]
+PMID:31819264  # Browaeys 2020 Nat Methods (NicheNet)
+PMID:26198319  # Ramilowski 2015 Nat Commun
+PMID:28059767  # Ku 2017 Science
+PMID:28978002  # Li 2017 Oncotarget (SRRM4)
+PMID:30593464  # Ren 2019 J Exp Med
+PMID:21353695  # Fizazi 2011 Lancet (denosumab vs zoledronic acid)
+PMID:22093187  # Smith 2012 Lancet (denosumab, bone-metastasis-free survival)
+NCT:NCT04066491  # INTR@PID BTC 055 registry record (terminated after IDMC review); cited in text with Merck KGaA 2021, whose announcement itself has no PMID/DOI
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy
+SW:seaborn
+SW:scikit-learn

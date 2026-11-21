@@ -1,0 +1,14 @@
+[cited]
+PMID:31937974  # "Svensson 2020", L9,L208,L224,L226,L229,L247,L420  [Svensson V 2020 Nat Biotechnol]
+PMID:32718323  # "Choi et al. 2020", L247  [Choi K 2020 Genome Biol]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:glmmtmb
+SW:numpy
+SW:scipy
+SW:statsmodels
+SW:mass
+SW:pandas

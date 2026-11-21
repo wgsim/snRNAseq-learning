@@ -1,0 +1,10 @@
+[cited]
+PMID:34062119  # "Hao et al. 2021", L63  [Hao Y 2021 Cell]
+
+[evidence]
+PMID:24097267  # Buenrostro JD 2013 Nat Methods: Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin  [근거: SCI-00-069; ledger L40]
+PMID:33603203  # Cable DM 2022 Nat Biotechnol: Robust decomposition of cell type mixtures in spatial transcriptomics.  [근거: SCI-00-071; ledger L98]
+PMID:35027729  # Kleshchevnikov V 2022 Nat Biotechnol: Cell2location maps fine-grained cell types in spatial transcriptomics.  [근거: SCI-00-071]
+
+[software]
+# (코드 블록에서 import/호출하는 도구 없음)

@@ -1,0 +1,19 @@
+[cited]
+PMID:34719426  # "Kfoury et al. 2021", L14,L113  [Kfoury Y 2021 Cancer Cell]
+PMID:35013146  # "Song et al. 2022", L114  [Song H 2022 Nat Commun]
+PMID:33420488  # "Chen et al. 2021", L115  [Chen S 2021 Nat Cell Biol]
+PMID:35617398  # "Tang et al. 2022", L116  [Tang F 2022 Science]
+PMID:32355025  # "Karthaus et al. 2020", L117  [Karthaus WR 2020 Science]
+
+[evidence]
+PMID:32487174  # Denisenko E 2020 Genome Biol: Systematic assessment of tissue dissociation and storage biases in single-cell and single-nucle  [근거: SCI-00-006; ledger L16]
+PMID:32840568  # Osorio D 2021 Bioinformatics: Systematic determination of the mitochondrial proportion in human and mice tissues for single-c  [근거: SCI-00-008; ledger L98]
+PMID:35042723  # Gupta A 2022 Genome Res: Characterization of transcript enrichment and detection bias in single-nucleus RNA-seq for mapp  [근거: SCI-00-006; ledger L16]
+PMID:35981096  # Chan JM 2022 Science: Lineage plasticity in prostate cancer depends on JAK/STAT inflammatory signaling.  [근거: SCI-00-001; ledger L115]
+PMID:34428202  # Hippen AA 2021 PLoS Comput Biol: miQC: An adaptive probabilistic framework for quality control of single-cell RNA-sequencing dat  [근거: SCI-00-008]
+
+[software]
+SW:anndata
+SW:cellbender
+SW:scanpy
+SW:scvi-tools

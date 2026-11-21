@@ -1,0 +1,62 @@
+{
+  "dataset": {
+    "n_cells": 50000,
+    "n_genes": 1000,
+    "total_nnz": 2477341,
+    "sparsity_fraction": 0.95
+  },
+  "benchmarks": {
+    "memory_coo_mb": 28.35091781616211,
+    "memory_csr_mb": 19.091350555419922,
+    "memory_csc_mb": 18.904430389404297,
+    "memory_dense_mb": 190.73486328125,
+    "compression_ratio": 9.99064276398725,
+    "row_slice_csr_sec": 0.00015592575073242188,
+    "row_slice_csc_sec": 0.10503697395324707,
+    "row_slice_speedup_csr_vs_csc": 673.6345565749235,
+    "col_slice_csc_sec": 4.76837158203125e-06,
+    "col_slice_csr_sec": 0.15633201599121094,
+    "col_slice_speedup_csc_vs_csr": 32785.2,
+    "spmv_runtime_sec": 0.21652579307556152,
+    "spmv_flops": 4954682,
+    "dense_flops": 100000000,
+    "flop_reduction_factor": 20.182930004387767,
+    "spmv_gflops": 0.022882641045313953
+  },
+  "streaming": {
+    "num_chunks": 10,
+    "streaming_time_sec": 3.138400077819824,
+    "peak_ram_mb": 4.973285675048828,
+    "strict_budget_pass": true,
+    "median_lib_size": 643.7999997138977
+  },
+  "incremental_svd": {
+    "k_components": 4,
+    "runtime_sec": 13.29880976676941,
+    "mean_cosine_similarity": 0.9955271104965391,
+    "concordance_pass": true,
+    "components": [
+      {
+        "pc": "PC_1",
+        "eigenvalue": 60182478.1346266,
+        "cosine_similarity": 0.9952300282438213
+      },
+      {
+        "pc": "PC_2",
+        "eigenvalue": 36317408.54062389,
+        "cosine_similarity": 0.9959326592965974
+      },
+      {
+        "pc": "PC_3",
+        "eigenvalue": 21398168.963892896,
+        "cosine_similarity": 0.9957959632403269
+      },
+      {
+        "pc": "PC_4",
+        "eigenvalue": 11690657.771133177,
+        "cosine_similarity": 0.9951497912054107
+      }
+    ]
+  },
+  "execution_time_total_sec": 29.73309087753296
+}

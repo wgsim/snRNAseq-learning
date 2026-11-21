@@ -1,0 +1,29 @@
+{
+  "pipeline": "Nextflow_DSL2_Reactive_Engine_Simulation",
+  "cohort_size": 4,
+  "stages_count": 8,
+  "cold_execution": {
+    "duration_seconds": 0.394,
+    "total_tasks": 30,
+    "successful_tasks": 29,
+    "failed_oom_retried": 1,
+    "peak_cluster_ram_allocated_gb": 32
+  },
+  "warm_execution": {
+    "duration_seconds": 0.0,
+    "total_tasks": 29,
+    "cached_tasks": 29,
+    "cache_hit_percentage": 100.0
+  },
+  "retries_audit": [
+    {
+      "task_id": "TASK-011",
+      "process": "Spliced_Align",
+      "sample": "Sample_03_CRPC_Metastasis",
+      "failed_attempt": 1,
+      "failed_memory_gb": 16,
+      "error": "Exit 137: Out of Memory (OOM Killer). Memory limit exceeded.",
+      "action": "DSL2 errorStrategy 'retry': Doubling memory allocation for attempt 2"
+    }
+  ]
+}

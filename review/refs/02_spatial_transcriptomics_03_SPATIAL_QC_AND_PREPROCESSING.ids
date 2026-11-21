@@ -1,0 +1,11 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:33367645  # Young MD 2020 Gigascience: SoupX removes ambient RNA contamination from droplet-based single-cell RNA sequencing data.  [근거: SCI-02-024]
+
+[software]
+SW:matplotlib
+SW:numpy
+SW:scanpy
+SW:squidpy

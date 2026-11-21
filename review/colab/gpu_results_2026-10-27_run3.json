@@ -1,0 +1,148 @@
+{
+  "meta": {
+    "date": "2026-10-27 19:46:17",
+    "python": "3.13.16",
+    "gpu": "Tesla T4",
+    "gpu_mem_gb": 14.6,
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "scvi": "1.5.1",
+      "cell2location": "0.1.5",
+      "scanpy": "1.12.4",
+      "anndata": "0.13.4",
+      "transformers": "5.20.2",
+      "cupy": "14.0.1",
+      "cudf": "26.06.00",
+      "cuml": "26.06.00",
+      "cugraph": "26.06.00",
+      "cuvs": "26.06.00",
+      "rmm": "26.06.00",
+      "rapids_singlecell": "0.18.1"
+    },
+    "nvidia_smi_head": "580.82.07, Tesla T4"
+  },
+  "blocks": {
+    "B1": {
+      "id": "B1",
+      "location": "tracks/05_generative_foundation_models/docs/00_FOUNDATION_MODELS_ROADMAP.md:182",
+      "status": "PASS",
+      "phase": "block",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 1.78,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).",
+        "FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('anndata')` instead.",
+        "FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead"
+      ]
+    },
+    "B2": {
+      "id": "B2",
+      "location": "tracks/05_generative_foundation_models/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:139",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 0.84,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).",
+        "FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.",
+        "FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead."
+      ]
+    },
+    "B3": {
+      "id": "B3",
+      "location": "tracks/02_spatial_transcriptomics/docs/05_SPATIAL_DECONVOLUTION_MATHEMATICS.md:222",
+      "status": "PASS",
+      "phase": "block",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 69.1,
+      "notes": "",
+      "replacements": [
+        [
+          "max_epochs=250",
+          "max_epochs=20"
+        ],
+        [
+          "max_epochs=30000",
+          "max_epochs=300"
+        ]
+      ],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).",
+        "FutureWarning: The function spatial is deprecated and will be removed in the future. Use :func:`squidpy.pl.spatial_scatter` instead.",
+        "FutureWarning: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.",
+        "PossibleUserWarning: The number of training batches (1) is smaller than the logging interval Trainer(log_every_n_steps=10). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.",
+        "UserWarning: You passed in a `val_dataloader` but have no `validation_step`. Skipping val loop."
+      ]
+    },
+    "B4": {
+      "id": "B4",
+      "location": "tracks/08_large_scale_sparse/docs/07_GPU_ACCELERATION_RAPIDS_SINGLECELL.md:184",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 33.23,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: The NearestNeighbors or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstimator` and/or other appropri",
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstimator` and/or other appropriate mixins su",
+        "DeprecationWarning: `ndarray.scatter_add` is deprecated. Please use `cupy.add.at` instead.",
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC)."
+      ]
+    },
+    "B5": {
+      "id": "B5",
+      "location": "tracks/08_large_scale_sparse/docs/08_GPU_GRAPH_COMMUNITY_DETECTION.md:171",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 15.74,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC)."
+      ]
+    },
+    "B7": {
+      "id": "B7",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:205",
+      "status": "PASS",
+      "phase": "post",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 0.04,
+      "notes": "",
+      "replacements": [],
+      "warnings": [
+        "DeprecationWarning: The PCA or classes from which it inherits use `_get_tags` and `_more_tags`. Please define the `__sklearn_tags__` method, or inherit from `sklearn.base.BaseEstimator` and/or other appropriate mixins su",
+        "DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC)."
+      ]
+    },
+    "B6": {
+      "id": "B6",
+      "location": "tracks/08_large_scale_sparse/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md:105",
+      "status": "PASS",
+      "phase": "block",
+      "error": null,
+      "traceback": null,
+      "elapsed_s": 0.0,
+      "notes": "",
+      "replacements": [
+        [
+          "initial_pool_size=\"64GB\"",
+          "initial_pool_size=\"2GB\""
+        ]
+      ],
+      "warnings": []
+    }
+  }
+}

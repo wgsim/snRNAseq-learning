@@ -1,0 +1,26 @@
+{
+  "n_ligands_evaluated": 9,
+  "n_target_genes": 84,
+  "n_deg_programs": 3,
+  "rwr_restart_probability": 0.5,
+  "spatial_bandwidth_sigma_um": 30.0,
+  "top_drivers_by_program": {
+    "CD8_T_Exhaustion": [
+      "CXCL12 (AUROC=0.91667, r=0.5484)",
+      "VEGFA (AUROC=0.91667, r=0.5484)",
+      "SPP1 (AUROC=0.86111, r=0.2575)"
+    ],
+    "Tumor_EMT_Metastasis": [
+      "TGFB1 (AUROC=0.96181, r=0.4959)",
+      "SPP1 (AUROC=0.62847, r=0.2853)",
+      "PTHLH (AUROC=0.62847, r=0.2853)"
+    ],
+    "Osteoclast_Maturation": [
+      "TNFSF11 (AUROC=0.98919, r=0.4427)",
+      "BMP2 (AUROC=0.47297, r=-0.0813)",
+      "IL6 (AUROC=0.44595, r=-0.0709)"
+    ]
+  },
+  "baseline_vicious_cycle_pathology_score": 0.270724,
+  "tri_therapy_percent_inhibition": 97.57
+}

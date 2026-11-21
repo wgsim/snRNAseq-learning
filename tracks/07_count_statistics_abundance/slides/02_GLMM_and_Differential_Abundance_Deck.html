@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 07: GLMM &amp; Differential Abundance Deck</title>
+<style>
+
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --card-bg: rgba(30, 41, 59, 0.85);
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --highlight: #f43f5e;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --purple: #c084fc;
+    --code-bg: #090d16;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  body { background: var(--bg-primary); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  
+  /* Slide Container */
+  #presentation { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease; transform: scale(0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 60px; }
+  .slide.active { opacity: 1; visibility: visible; transform: scale(1); }
+  
+  /* Slide Layout */
+  .slide-content { max-width: 1200px; width: 100%; max-height: 85vh; overflow-y: auto; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(12px); }
+  .slide-header { border-bottom: 2px solid var(--accent-glow); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .slide-header h2 { font-size: 1.85rem; color: var(--accent); font-weight: 700; letter-spacing: -0.5px; }
+  .slide-header .tag { font-size: 0.85rem; padding: 4px 12px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; text-transform: uppercase; }
+  .doc-ref { font-size: 0.85rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  
+  /* Typography & Components */
+  p, li { font-size: 1.02rem; line-height: 1.62; color: #cbd5e1; margin-bottom: 10px; }
+  strong { color: #ffffff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; }
+  .card.accent { border-left: 4px solid var(--accent); }
+  .card.highlight { border-left: 4px solid var(--highlight); }
+  .card.warning { border-left: 4px solid var(--warning); }
+  .card.success { border-left: 4px solid var(--success); }
+  .card.purple { border-left: 4px solid var(--purple); }
+  .card h3 { font-size: 1.18rem; color: #fff; margin-bottom: 8px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.92rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 600; }
+  
+  pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.88rem; color: #38bdf8; overflow-x: auto; margin-top: 12px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-size: 0.92em; }
+  
+  /* Semantic Math Formatting */
+  .math-block { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 16px; margin: 10px 0; text-align: center; font-family: "Cambria Math", "Latin Modern Math", "STIX Two Math", Georgia, serif; font-size: 1.08rem; color: #38bdf8; }
+  .math-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; padding: 0 4px; font-size: 0.95em; line-height: 1.2; }
+  .math-frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+  .math-frac .den { padding-top: 2px; }
+
+  /* Footer Controls */
+  #controls { height: 60px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn:hover { background: var(--accent); color: var(--bg-primary); }
+  #counter { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+  .progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+  /* Diagram Drawer */
+  .diagram-drawer {
+    margin-top: 14px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .diagram-drawer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.92rem;
+  }
+  .diagram-drawer .svg-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 275px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+/* SLIDE-LAYOUT:BEGIN:css */
+/* ---- desktop fit-to-viewport: .sl-fit wraps the slide content and is zoomed by the JS below ---- */
+.slide { overflow: hidden; }
+.slide-content { max-height: calc(100vh - 60px - 24px) !important; }   /* 60px = #controls */
+.slide-content .sl-fit { transform-origin: top center; }
+.svg-container svg, .slide-content svg { max-width: 100%; height: auto; }
+.diagram-drawer .svg-container svg { max-height: min(310px, 42vh); }
+.slide-content table { max-width: 100%; }
+.slide-content pre { max-width: 100%; overflow-x: auto; }
+/* ---- mobile: vertical scroll mode, no scaling ---- */
+@media (max-width: 768px) {
+  body { height: 100dvh; }
+  .slide { padding: 12px 10px !important; justify-content: flex-start !important; overflow-y: auto; }
+  .slide-content { max-height: none !important; overflow-y: visible !important; padding: 18px 14px !important; }
+  .slide-content .sl-fit { zoom: 1 !important; }
+  .slide-header { flex-direction: column; align-items: flex-start !important; gap: 6px; }
+  .slide-header h2 { font-size: 1.3rem !important; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+  p, li { font-size: 0.95rem !important; }
+  .slide-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  .slide-content [style*="display: flex"], .slide-content [style*="display:flex"] { flex-wrap: wrap !important; }
+  .slide-content :not(pre) > code { white-space: normal; overflow-wrap: anywhere; }
+  .slide-content .card { max-width: 100%; min-width: 0; }
+  .slide-content table { display: block; overflow-x: auto; font-size: 0.8rem; }
+  .slide-content pre { font-size: 0.74rem; }
+  .slide-content h1 { font-size: 1.6rem !important; }
+  .doc-ref { display: flex !important; max-width: 100%; white-space: normal; word-break: break-all; font-size: 0.75rem !important; }
+  #controls { padding: 0 12px; }
+  .diagram-drawer .svg-container svg { max-height: none; }
+}
+/* SLIDE-LAYOUT:END:css */
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="presentation">
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="slide-content" style="text-align: center; padding: 50px 36px;">
+      <span class="tag" style="font-size: 0.95rem; padding: 6px 16px;">Track 07 Masterclass • Part 2</span>
+      <div style="margin-top: 14px;"><span class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/04_GLMM_HIERARCHICAL_MODELING.md &amp; 05</span></div>
+      <h1 style="font-size: 2.45rem; color: var(--accent); margin: 18px 0 14px; font-weight: 800; letter-spacing: -0.5px;">위계적 혼합 모델(GLMM) &amp; 세포 차등 풍부도(DA) 통계학</h1>
+      <h3 style="font-size: 1.2rem; color: #94a3b8; font-weight: 400; margin-bottom: 26px;">단일세포 연속 공변량 보존, NEBULA 고속 피셔 정보 행렬, Milo kNN 그래프 Spatial FDR 및 조성 데이터(CoDa) 심플렉스 기하학</h3>
+      <div style="display: inline-block; text-align: left; background: rgba(15,23,42,0.6); padding: 20px 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 1040px;">
+        <p style="margin-bottom: 6px;">🎯 <strong>타깃 질환 &amp; 임상 난제</strong>: 전이성 거세저항성 전립선암(mCRPC) 골전이 미세환경 내 면역 억제성 골수성 세포(MDSC) 침윤 및 엔잘루타마이드 치료 저항성 루미날-신경내분비 연속 가소성 스펙트럼</p>
+        <p style="margin-bottom: 6px;">🧬 <strong>핵심 계산 패러다임</strong>: 2단계 일반화 선형 혼합 모델(GLMM) • NEBULA 블록 대각 O(N) 최적화 • Milo kNN 이웃 그래프 차등 풍부도(Differential Abundance) &amp; Spatial FDR • scCODA 디리클레-다항 베이지안 회귀 및 아이치슨(Aitchison) 기하학</p>
+        <p style="margin-bottom: 0;">🔬 <strong>학습 중점</strong>: 슈도벌크의 세포 수준 정보 증발 및 심슨의 역설(Simpson's Paradox) 극복, 인위적 클러스터링 경계의 파괴와 국소 이웃 그래프 통계, 닫힌 단체(Simplex) 제약 하 허위 음의 상관 해소, 환자 수(N) vs 세포 수(n) 검정력 황금률과 5단계 캡스톤 루브릭</p>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 2: Limits of Pseudobulk & Simpson's Paradox -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/04_GLMM_HIERARCHICAL_MODELING.md § 1 &amp; § 2</div>
+      <div class="slide-header">
+        <h2>1. 왜 슈도벌크만으로 불충분한가? 연속 공변량 손실과 심슨의 역설</h2>
+        <span class="tag">Pseudobulk Limits &amp; Simpson's Paradox</span>
+      </div>
+      <p>슈도벌크 집계는 환자 수준의 제1종 오류를 완벽하게 제어하지만, 세포 수준의 연속적인 생물학적 정보(세포 주기, 유사시간, 국소 환경)를 단일 카운트로 압축하여 영구 소실시키며 심각한 <strong>심슨의 역설(Simpson's Paradox)</strong>을 야기할 수 있습니다.</p>
+      <div class="grid-3">
+        <div class="card accent">
+          <h3>1. 세포 수준 연속 공변량의 완전 소실</h3>
+          <ul>
+            <li><strong>연속 정보의 평탄화</strong>: 슈도벌크는 환자-세포형별로 단일 카운트 벡터로 합산함</li>
+            <li>세포 주기 점수(G1/S/G2M), 발달 유사시간(&tau;, Pseudotime), 대사 스트레스 점수 등 세포마다 고유한 연속 공변량을 통계 모델에 투입할 수 없음</li>
+            <li>세포 분화 궤적 상의 동적 유전자 조절(Dynamic Gene Regulation) 분석 불가</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>2. 심슨의 역설 (Simpson's Paradox)</h3>
+          <ul>
+            <li><strong>생태학적 오류(Ecological Fallacy)</strong>: 하위 개별 세포 수준에서는 유전자 X와 저항성 표현형 Y가 강한 양의 상관관계를 가짐에도, 환자별로 합산하면 기저 환자 간 발현 차이로 인해 <strong>음의 상관관계로 역전</strong>될 수 있음</li>
+            <li>개별 세포 단위의 미세한 분자 메커니즘이 환자 간 거시적 편차에 의해 완전히 왜곡됨</li>
+          </ul>
+        </div>
+        <div class="card warning">
+          <h3>3. 희소 하위 세포 상태(Substate) 희석</h3>
+          <ul>
+            <li><strong>신호 대 잡음비(SNR) 붕괴</strong>: 단일 클러스터 내에서 오직 5%의 극소수 약제 저항성 줄기세포(Stem-like state)만 유의하게 반응하는 경우</li>
+            <li>슈도벌크 합산 시 나머지 95%의 반응 없는 비활성 세포들에 의해 신호가 희석되어 통계적 검정력(Power)이 급격히 저하됨</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card success" style="margin-top: 14px;">
+        <h3>💡 해결책: 위계적 일반화 선형 혼합 모델 (Hierarchical GLMM)의 필연성</h3>
+        <p style="margin-bottom: 0;">개별 세포의 관측 단위를 유지하여 모든 세포 수준 연속 공변량을 모델에 포함하면서도, 환자 간의 생물학적 변동성을 <strong>변량 효과(Random Effects u<sub>i</sub> &sim; &Nscr;(0, &Sigma;))</strong>로 흡수하여 가짜 반복 없이 제1종 오류를 통제하는 2단계 위계 모델이 필수적입니다.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 3: Hierarchical GLMM Architecture -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/04_GLMM_HIERARCHICAL_MODELING.md § 3 &amp; § 4</div>
+      <div class="slide-header">
+        <h2>2. 2단계 일반화 선형 혼합 모델(GLMM): 세포 고정 효과 + 환자 변량 효과</h2>
+        <span class="tag">Two-Level Hierarchical Architecture</span>
+      </div>
+      <p>단일세포 RNA 카운트의 이산성과 과분산성을 음이항 분포로 모델링하고, 세포 수준 고정 효과와 환자 수준 변량 효과를 결합하는 2단계 위계적 구조(Two-level Hierarchical GLMM)를 수립합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (2단계 일반화 선형 혼합 모델 아키텍처)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrPurple04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">2단계 계층적 일반화 선형 혼합 모델(GLMM) &amp; NEBULA 가속 기하학</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">세포 수준 고정 효과(Covariates) + 공여자 수준 무작위 효과(Random Effects) + 블록-대각 정보 행렬 가속</text>
+
+  <!-- Panel 1: Hierarchical Formulation -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 계층적 2단계 수식 아키텍처</text>
+
+    <!-- Schematic: Formula block -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <rect x="5" y="5" width="240" height="26" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="125" y="22" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="700">log(μ_ic) = log(S_c) + X_c^T β + u_i</text>
+
+      <text x="35" y="45" fill="#34d399" font-size="7">Y_ic ~ NB(μ_ic, ϕ)</text>
+      <text x="145" y="45" fill="#fbbf24" font-size="7">u_i ~ N(0, σ²_donor)</text>
+      <text x="125" y="58" text-anchor="middle" fill="#94a3b8" font-size="6.5">i: Donor ID, c: Single Cell ID, S_c: Sequencing Depth</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포 수준 고정 효과 (Fixed Effects β):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">약물 반응군(Responder), 세포주기 점수, 미토콘드리아 %</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 공여자 무작위 절편 (Random Intercept u_i):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자 간 기저 전사체 편차 및 유전적 배경 차이 흡수</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 오프셋(Offset)을 통한 깊이 보정:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">세포별 총 유전자 발현량 log(S_c)를 계수 1로 고정하여 정규화</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포 수준 연속 공변량 보정과 환자 통계 엄밀성의 결합</text>
+  </g>
+
+  <!-- Panel 2: Cell-within-Donor Nested Hierarchy Tree -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 공여자-세포 내포 계층 트리</text>
+
+    <!-- Schematic: Tree of Donors to Cells -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Root Cohort -->
+      <circle cx="140" cy="8" r="6" fill="#38bdf8"/>
+      <text x="140" y="7" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">C</text>
+
+      <!-- Branches to Donors -->
+      <line x1="140" y1="14" x2="60" y2="28" stroke="#475569" stroke-width="1"/>
+      <line x1="140" y1="14" x2="140" y2="28" stroke="#475569" stroke-width="1"/>
+      <line x1="140" y1="14" x2="220" y2="28" stroke="#475569" stroke-width="1"/>
+
+      <rect x="35" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="60" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor 1 (u_1)</text>
+
+      <rect x="115" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="140" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor 2 (u_2)</text>
+
+      <rect x="195" y="25" width="50" height="15" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="220" y="36" text-anchor="middle" fill="#fbbf24" font-size="6.5" font-weight="700">Donor M (u_M)</text>
+
+      <!-- Branches to Single Cells -->
+      <line x1="60" y1="40" x2="45" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="60" y1="40" x2="75" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="45" cy="54" r="3" fill="#34d399"/>
+      <circle cx="75" cy="54" r="3" fill="#34d399"/>
+
+      <line x1="140" y1="40" x2="125" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="140" y1="40" x2="155" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="125" cy="54" r="3" fill="#34d399"/>
+      <circle cx="155" cy="54" r="3" fill="#34d399"/>
+
+      <line x1="220" y1="40" x2="205" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <line x1="220" y1="40" x2="235" y2="52" stroke="#64748b" stroke-width="0.8"/>
+      <circle cx="205" cy="54" r="3" fill="#34d399"/>
+      <circle cx="235" cy="54" r="3" fill="#34d399"/>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 분산 분해 원리 (Variance Partitioning):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">σ²_total = σ²_donor (환자간) + σ²_cell (세포간) + 샷노이즈</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 동일 환자 세포의 잠재 상관성 흡수:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">무작위 효과 u_i를 통해 환자 내 세포 간 유사도 완벽 분리</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 의사벌크가 평균화로 잃는 정보 보존:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">개별 세포의 상태(미세 이질성, 아형 비율)를 직접 활용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">환자 간 이질성이 높은 면역 세포 및 종양 클론 분석의 최적해</text>
+  </g>
+
+  <!-- Panel 3: NEBULA Block-Diagonal Speedup -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad04)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">3. NEBULA 블록 대각 정보 행렬 가속</text>
+
+    <!-- Schematic: Dense vs Block-Diagonal Hessian -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Dense Hessian (standard glmm) -->
+      <rect x="15" y="8" width="46" height="46" rx="2" fill="#1e293b" stroke="#f43f5e" stroke-width="1.2"/>
+      <path d="M 18 12 L 58 50 M 18 50 L 58 12" stroke="#f43f5e" stroke-width="0.8"/>
+      <text x="38" y="62" text-anchor="middle" fill="#f43f5e" font-size="6">Dense O(N³)</text>
+
+      <!-- Versus Arrow -->
+      <line x1="75" y1="31" x2="105" y2="31" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrPurple04)"/>
+      <text x="90" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.5">NEBULA</text>
+
+      <!-- Block-Diagonal Matrix -->
+      <rect x="120" y="8" width="55" height="46" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+      <rect x="123" y="11" width="13" height="11" fill="#34d399"/>
+      <rect x="140" y="25" width="13" height="11" fill="#34d399"/>
+      <rect x="158" y="40" width="13" height="11" fill="#34d399"/>
+      <text x="147" y="62" text-anchor="middle" fill="#34d399" font-size="6">Block-Diag O(N)</text>
+
+      <text x="215" y="28" fill="#34d399" font-size="8" font-weight="700">100x ~ 1000x</text>
+      <text x="215" y="40" fill="#cbd5e1" font-size="6.8">Speedup!</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 전통적 GLMM 역행렬 계산 병목:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">N_cells × N_cells 조밀 헤시안 역행렬 계산으로 수 시간 소요</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• NEBULA 블록 대각 구조 분해:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자별 그룹화를 통해 피셔 정보 행렬 I(β,u)를 대각 블록화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 셔먼-모리슨-우드베리(SMW) 공식:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">선형 시간 O(M·m²) 닫힌 형태 역행렬로 유전자당 밀리초 달성</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#c084fc" font-size="9.2" font-weight="600">수십만 세포 코호트에서 전유전체(20,000개) 실시간 적합 가능</text>
+  </g>
+</svg>
+        </div>
+      </details>
+      
+      <div class="grid-2">
+        <div class="card accent">
+          <h3>1. 수학적 모델 구조 (Negative Binomial GLMM)</h3>
+          <ul>
+            <li><strong>조건부 카운트 관측</strong>: Y<sub>ij</sub> | u<sub>i</sub> &sim; NB(&mu;<sub>ij</sub>, &theta;) &nbsp; (환자 i의 j번째 세포)</li>
+            <li><strong>로그 연결 함수 (Log Link Function)</strong>:
+              <div class="math-block" style="margin: 6px 0; font-size: 1.0rem;">
+                log(&mu;<sub>ij</sub>) = x<sub>ij</sub><sup>T</sup> &beta; + z<sub>ij</sub><sup>T</sup> u<sub>i</sub> + log(S<sub>ij</sub>)
+              </div>
+            </li>
+            <li><strong>고정 효과 (&beta;)</strong>: 세포 수준 공변량(유사시간, 세포주기) 및 환자 수준 처치(치료 저항성, 질환군)</li>
+            <li><strong>변량 효과 (u<sub>i</sub>)</strong>: 환자 i 고유의 생물학적 잠재 편차
+              <div class="math-block" style="margin: 6px 0; font-size: 1.0rem;">
+                u<sub>i</sub> &sim; &Nscr;(0, &Sigma;<sub>donor</sub>) &nbsp; (&Sigma;<sub>donor</sub> = diag(&sigma;<sub>1</sub><sup>2</sup>, ..., &sigma;<sub>q</sub><sup>2</sup>))
+              </div>
+            </li>
+            <li><strong>오프셋 (log(S<sub>ij</sub>))</strong>: 개별 세포 j의 시퀀싱 깊이 정규화 인자</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. 가짜 반복 극복과 통계적 추론의 완전성</h3>
+          <ul>
+            <li><strong>급내 상관(ICC)의 완전한 흡수</strong>: 동일 환자 내 세포들 간의 공분산 Cov(Y<sub>ij</sub>, Y<sub>ik</sub>)가 변량 효과 분산 &Sigma;<sub>donor</sub>에 의해 정확히 모형화됨</li>
+            <li><strong>정당한 유효 자유도 보존</strong>: 고정 효과 계수 &beta;의 공분산 행렬 추정 시 환자 간 변동성이 분모에 반영되므로, 세포 수 n이 아닌 <strong>환자 수 N에 맞춰 표준 오차가 정확히 산출됨</strong></li>
+            <li><strong>연속 궤적 보존</strong>: 발달 유사시간(&tau;)에 따른 유전자 발현의 비선형 스플라인 곡선을 환자 배치 효과와 분리하여 순수하게 추출 가능</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 4: Fast Engine NEBULA -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/05_FAST_CELL_LEVEL_NEBULA.md § 1 - § 5</div>
+      <div class="slide-header">
+        <h2>3. 초고속 연산 엔진 NEBULA: 블록 대각 피셔 정보 행렬과 O(N) 최적화</h2>
+        <span class="tag">Computational Breakthrough</span>
+      </div>
+      <p>기존 통계 패키지(<code>lme4</code>, <code>glmmTMB</code>)는 수십만 개 단일세포에 GLMM을 적용할 때 피셔 정보 행렬 역행렬 계산으로 인해 연산 시간이 수십 일 소요됩니다. <code>NEBULA</code>는 블록 대각 행렬 분해로 이를 O(N)으로 가속합니다.</p>
+      <div class="grid-3">
+        <div class="card highlight">
+          <h3>1. 전통적 GLMM의 계산 병목 (Computational Wall)</h3>
+          <ul>
+            <li><strong>라플라스 근사 및 수치 적분(GHQ)의 한계</strong>: 단일 유전자 피팅에 수 초~수 분 소요</li>
+            <li>20,000개 유전자 &times; 100,000개 세포 적용 시 <strong>전체 런타임 수십 일 소요</strong> 및 기가바이트 메모리 폭주</li>
+            <li>피셔 정보 행렬 I(&beta;, &sigma;<sup>2</sup>) 크기가 전체 세포 수 n에 비례하여 역행렬 계산 복잡도 <strong>O(n<sup>3</sup>) 폭발</strong></li>
+          </ul>
+        </div>
+        <div class="card accent">
+          <h3>2. NEBULA의 블록 대각(Block-Diagonal) 혁신</h3>
+          <ul>
+            <li><strong>환자 간 독립성 활용</strong>: 환자 변량 효과 u<sub>i</sub>가 상호 독립이라는 특성으로부터 피셔 정보 행렬을 환자별 블록 대각 구조로 재배열</li>
+            <li><strong>셔먼-모리슨-우드베리(Sherman-Morrison-Woodbury) 공식</strong>:
+              <div class="math-block" style="margin: 6px 0; font-size: 0.98rem;">
+                I(&beta;, &sigma;<sup>2</sup>)<sup>-1</sup> &rArr; O(N &middot; p<sup>2</sup>)
+              </div>
+            </li>
+            <li>전체 세포 수 n이 아닌 환자 수 N에 비례하는 <strong>O(N) 복잡도로 극적 단축</strong>, 기존 대비 10,000배 이상 고속화 달성!</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>3. NEBULA 알고리즘 모드 (LN vs HL)</h3>
+          <ul>
+            <li><strong>NEBULA-LN (Log-Normal Model)</strong>:
+              대규모 단일세포 아틀라스 초고속 스크리닝 (초당 수백 개 유전자 검정 가능)
+            </li>
+            <li><strong>NEBULA-HL (Hierarchical Likelihood)</strong>:
+              소표본 환자 코호트 및 고과분산 유전자에 대한 고정밀도 H-우도 수치 최적화, 최상의 1종 오류 제어력 제공
+            </li>
+            <li>Python (Scanpy 연동) 및 R (<code>nebula</code> 패키지) 완벽 지원</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card purple" style="margin-top: 14px;">
+        <h3>⚡ 벤치마크: 100,000 세포 &times; 20,000 유전자 분석 런타임 비교</h3>
+        <p style="margin-bottom: 0;">표준 <code>glmmTMB</code>: 약 14.5일 소요 (실행 불가능) &nbsp;|&nbsp; <strong>NEBULA-LN: 단 3.2분 소요 (초당 ~100 유전자 검정, 6,500배 이상 가속)</strong></p>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 5: Milo Differential Abundance -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/07_DIFFERENTIAL_ABUNDANCE_MILO.md § 1 - § 5</div>
+      <div class="slide-header">
+        <h2>4. 클러스터 분할의 함정과 Milo kNN 이웃 차등 풍부도(DA)</h2>
+        <span class="tag">Differential Abundance &amp; Spatial FDR</span>
+      </div>
+      <p>단순 세포 클러스터링(Louvain/Leiden)은 연속적인 세포 상태에 인위적인 이산 경계를 부여하여 생물학적 신호를 왜곡합니다. <code>Milo</code>는 kNN 그래프 위에 중첩 이웃(Neighborhood)을 정의하고 Spatial FDR을 통해 국소 차등 풍부도(DA)를 정밀 검정합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (Milo kNN 그래프 국소 이웃 분할 및 Spatial FDR 가중 보정)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">Milo kNN 이웃 그래프 차등 세포 풍부도(Differential Abundance) 프레임워크</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">고차원 kNN 그래프 ➔ 대표 인덱스 세포 추출 ➔ 중첩 이웃 계수 행렬 ➔ 음이항 GLM &amp; 공간 FDR 보정</text>
+
+  <!-- Panel 1: Graph & Index Cell Sampling -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. kNN 그래프 &amp; 인덱스 샘플링</text>
+
+    <!-- Schematic: Graph with overlapping neighborhoods -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Edges -->
+      <line x1="40" y1="20" x2="80" y2="15" stroke="#334155" stroke-width="1"/>
+      <line x1="40" y1="20" x2="60" y2="45" stroke="#334155" stroke-width="1"/>
+      <line x1="80" y1="15" x2="120" y2="35" stroke="#334155" stroke-width="1"/>
+      <line x1="60" y1="45" x2="120" y2="35" stroke="#334155" stroke-width="1"/>
+      <line x1="120" y1="35" x2="170" y2="25" stroke="#334155" stroke-width="1"/>
+      <line x1="170" y1="25" x2="210" y2="48" stroke="#334155" stroke-width="1"/>
+
+      <!-- Neighborhood 1 (dashed circle) -->
+      <circle cx="60" cy="25" r="22" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2"/>
+      <!-- Neighborhood 2 (dashed circle overlapping) -->
+      <circle cx="120" cy="35" r="24" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2,2"/>
+
+      <!-- Nodes -->
+      <circle cx="40" cy="20" r="3.5" fill="#94a3b8"/>
+      <circle cx="80" cy="15" r="3.5" fill="#94a3b8"/>
+      <circle cx="60" cy="45" r="3.5" fill="#94a3b8"/>
+      <circle cx="170" cy="25" r="3.5" fill="#94a3b8"/>
+      <circle cx="210" cy="48" r="3.5" fill="#94a3b8"/>
+
+      <!-- Index Cells (Star/Gold) -->
+      <circle cx="60" cy="25" r="5" fill="#38bdf8"/>
+      <circle cx="120" cy="35" r="5" fill="#fbbf24"/>
+      <text x="60" y="24" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">v1</text>
+      <text x="120" y="34" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">v2</text>
+      <text x="210" y="20" fill="#fbbf24" font-size="6.5">Overlap!</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이산적 클러스터링 경계 오류 탈피:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Leiden/Louvain의 주관적 해상도 및 경계 인위성 극복</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 그래프 기반 대표 인덱스 샘플링:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">그래프 위상 전체를 균일하게 덮는 대표 세포 추출 (~10%)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 연속적 전이 표현형(Cell State) 보존:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">각 인덱스 세포의 kNN 반경 내 중첩 이웃(Neighborhood) 정의</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포 상태의 연속적인 궤적과 아형 변화를 보존하는 기하학</text>
+  </g>
+
+  <!-- Panel 2: Neighborhood Count Matrix Assembly -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 이웃별 환자 계수 행렬 (Count Matrix)</text>
+
+    <!-- Schematic: Matrix M x D -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Matrix Box -->
+      <rect x="10" y="6" width="160" height="48" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="90" y="18" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">Donors (D_1 ... D_P)</text>
+      <!-- Grid rows -->
+      <line x1="10" y1="22" x2="170" y2="22" stroke="#475569" stroke-width="0.8"/>
+      <line x1="10" y1="36" x2="170" y2="36" stroke="#475569" stroke-width="0.8"/>
+      <text x="15" y="31" fill="#38bdf8" font-size="6">N_1 (Index 1)</text>
+      <text x="15" y="46" fill="#38bdf8" font-size="6">N_m (Index m)</text>
+      <!-- Values -->
+      <text x="80" y="31" fill="#cbd5e1" font-size="6.5">14</text>
+      <text x="110" y="31" fill="#cbd5e1" font-size="6.5">2</text>
+      <text x="145" y="31" fill="#f43f5e" font-size="6.5">38</text>
+      <text x="80" y="46" fill="#cbd5e1" font-size="6.5">5</text>
+      <text x="110" y="46" fill="#34d399" font-size="6.5">42</text>
+      <text x="145" y="46" fill="#cbd5e1" font-size="6.5">3</text>
+
+      <!-- Modeling Arrow -->
+      <line x1="180" y1="30" x2="205" y2="30" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrAmber05)"/>
+      <rect x="210" y="10" width="55" height="40" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <text x="237" y="22" text-anchor="middle" fill="#34d399" font-size="6.5" font-weight="700">NB GLM</text>
+      <text x="237" y="34" text-anchor="middle" fill="#cbd5e1" font-size="5.5">Log2FC</text>
+      <text x="237" y="44" text-anchor="middle" fill="#fbbf24" font-size="5.5">p-value</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이웃별 환자 세포 수 집계:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">C_{m,d} = Σ_{c ∈ d} I(c ∈ N_m) (M개 이웃 × P명 환자 행렬)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 환자별 총 세포 수 오프셋 정규화:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자간 총 세포 포획 효율 편차를 라이브러리 크기로 보정</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 음이항 GLM을 통한 조건별 효과 검정:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">반응군 vs 비반응군 간 세포 풍부도 변화 log2FC 및 유의성 도출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">세포 조성 차이를 신뢰할 수 있는 카운트 통계 검정으로 전환</text>
+  </g>
+
+  <!-- Panel 3: Spatial FDR Smoothing & Beeswarm -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 공간 FDR 평활화 &amp; Beeswarm</text>
+
+    <!-- Schematic: Beeswarm Plot of Neighborhoods -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Central zero FC line -->
+      <line x1="20" y1="31" x2="255" y2="31" stroke="#475569" stroke-width="1"/>
+      <text x="25" y="25" fill="#64748b" font-size="6">Log2FC &gt; 0 (Resp Enriched)</text>
+      <text x="25" y="45" fill="#64748b" font-size="6">Log2FC &lt; 0 (Non-Resp Enriched)</text>
+
+      <!-- Neighborhood dots across phenotypes -->
+      <!-- Naive T (near zero) -->
+      <circle cx="65" cy="30" r="3" fill="#94a3b8"/>
+      <circle cx="75" cy="33" r="2.5" fill="#94a3b8"/>
+      <text x="70" y="62" text-anchor="middle" fill="#94a3b8" font-size="6">Naive T</text>
+
+      <!-- Effector T (Enriched in Responders: Blue/Cyan) -->
+      <circle cx="120" cy="18" r="4" fill="#38bdf8"/>
+      <circle cx="130" cy="12" r="4.5" fill="#38bdf8"/>
+      <circle cx="140" cy="16" r="3.5" fill="#38bdf8"/>
+      <text x="130" y="62" text-anchor="middle" fill="#38bdf8" font-size="6" font-weight="700">Effector T</text>
+
+      <!-- Exhausted T (Enriched in Non-Responders: Red/Rose) -->
+      <circle cx="190" cy="48" r="4.5" fill="#f43f5e"/>
+      <circle cx="205" cy="52" r="5" fill="#f43f5e"/>
+      <circle cx="220" cy="46" r="4" fill="#f43f5e"/>
+      <text x="205" y="62" text-anchor="middle" fill="#f43f5e" font-size="6" font-weight="700">Exhausted T</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 중첩 이웃 가설 검정의 다중성 보정:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">공간적 상관성을 반영하는 가중 Benjamini-Hochberg 보정</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 그래프 거리 기반 공간 가중치 (Spatial Weights):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">이웃 간 연결 강도(W_ij)를 통해 국소적 p-값 평활화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 소진(Exhaustion) 대 작동(Effector) T세포 분리:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">약물 저항 환자에서 특이적으로 팽창하는 면역 아형 확정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">임상 시험 바이오마커 발굴을 위한 최상위 정밀 차등 풍부도 도구</text>
+  </g>
+</svg>
+        </div>
+      </details>
+      
+      <div class="grid-2">
+        <div class="card warning">
+          <h3>1. 고전적 클러스터 기반 풍부도 검정의 3대 결함</h3>
+          <ul>
+            <li><strong>해상도 편향 (Resolution Bias)</strong>: 클러스터링 해상도 파라미터(resolution = 0.5 vs 1.2)에 따라 유의한 세포 집단 결과가 완전히 역전됨</li>
+            <li><strong>연속 궤적 절단</strong>: 분화 궤적이나 중간 이행기 상태(Transition State)를 인위적으로 단절시켜 과도기적 세포 집단의 동역학 포착 실패</li>
+            <li><strong>국소 하위 집단 마스킹</strong>: 거대 클러스터 내에서 오직 10%의 국소 서브셋만 약제 저항성으로 팽창해도, 클러스터 전체 평균화로 인해 검정력 상실</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. Milo의 국소 이웃(Neighborhood) 그래프 &amp; Spatial FDR</h3>
+          <ul>
+            <li><strong>대표 인덱스 세포 샘플링</strong>: kNN 그래프 상에서 공간을 균일하게 커버하도록 스마트 샘플링하여 국소 이웃(Nhoods) 구축</li>
+            <li><strong>환자-이웃 카운트 행렬 (Nhood &times; Patient)</strong>: 각 이웃에 속한 환자별 세포 카운트 행렬에 음이항 GLM (edgeR 프레임워크) 적용</li>
+            <li><strong>Spatial FDR (S-FDR) 수학적 보정</strong>:
+              이웃 간의 공간적 중첩(Overlap)으로 인한 다중 검정 가설 간 상관성을 <strong>그래프 라플라시안 가중치(k-NN distance weighting)</strong>로 보정하여 유효 가설 수를 정밀 조정, 위발견율(FDR)을 엄밀히 제어
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 6: Compositional Simplex & scCODA -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/08_COMPOSITIONAL_DATA_ANALYSIS_CODA.md § 1 - § 4</div>
+      <div class="slide-header">
+        <h2>5. 조성 데이터(CoDa)의 닫힌 단체(Simplex) 제약과 Aitchison 기하학</h2>
+        <span class="tag">Compositional Simplex &amp; scCODA</span>
+      </div>
+      <p>단일세포 샘플의 세포형 비율은 합이 1인 닫힌 단체(Simplex S<sup>D</sup>) 제약을 따르므로, 특정 세포형의 팽창이 다른 무관한 세포형의 허위 감소를 강제합니다. 아이치슨(Aitchison) 기하학과 <code>scCODA</code> 베이지안 디리클레-다항 회귀로 이를 극복합니다.</p>
+      
+      <details class="diagram-drawer" open>
+        <summary>📐 핵심 메커니즘 인포그래픽 아키텍처 벡터 다이어그램 보기 (조성 데이터 심플렉스 닫힌 제약 &amp; scCODA 베이지안 회귀)</summary>
+        <div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">조성 데이터(CoDa) 심플렉스 제약 &amp; scCODA 베이지안 회귀 분석</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">합 = 1 심플렉스 제약의 허위 음의 상관관계 ➔ 중심 로그비(CLR) 유클리드 투영 ➔ 희소 디리클레-다항 회귀</text>
+
+  <!-- Panel 1: The Simplex Constraint & Spurious Depletion -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12.5" font-weight="700">1. 심플렉스 제약과 허위 감소 참사</text>
+
+    <!-- Schematic: Proportional Stacked Bars Collapse -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#e11d48" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Baseline Patient A -->
+      <rect x="20" y="8" width="35" height="24" fill="#38bdf8"/>
+      <rect x="20" y="32" width="35" height="24" fill="#fbbf24"/>
+      <text x="37" y="22" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">50% T</text>
+      <text x="37" y="46" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">50% M</text>
+      <text x="37" y="65" text-anchor="middle" fill="#94a3b8" font-size="6">Patient A (100 T, 100 M)</text>
+
+      <!-- Arrow -->
+      <path d="M 68 32 L 95 32" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrCyan06)"/>
+      <text x="82" y="24" text-anchor="middle" fill="#f43f5e" font-size="6.5">+900 T!</text>
+
+      <!-- Patient B (T expanded 10x, M unchanged at 100) -->
+      <rect x="110" y="8" width="35" height="42" fill="#38bdf8"/>
+      <rect x="110" y="50" width="35" height="6" fill="#fbbf24"/>
+      <text x="127" y="28" text-anchor="middle" fill="#0f172a" font-size="6.5" font-weight="700">91% T</text>
+      <text x="127" y="55" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">9%</text>
+      <text x="127" y="65" text-anchor="middle" fill="#f43f5e" font-size="6">M depleted?! (False!)</text>
+
+      <!-- Warning text -->
+      <text x="185" y="25" fill="#f43f5e" font-size="7" font-weight="700">Σ p_k = 1</text>
+      <text x="185" y="37" fill="#cbd5e1" font-size="6">스퓨리어스 음의 상관</text>
+      <text x="185" y="47" fill="#fbbf24" font-size="6">t-test 시 위양성</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 심플렉스 닫힘 제약 (Closure Constraint):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">S^D = { p ∈ R^D : p_k &gt; 0, Σ_{k=1}^D p_k = 1 } (자유도 D-1)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 허위 음의 상관관계 (Spurious Correlation):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">한 세포형의 진정한 팽창이 다른 무변화 세포형의 비율 급감 초래</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 원시 비율(Percentage) 검정의 위험성:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">t-test나 ANOVA를 비율에 직접 적용 시 수많은 가짜 감소 세포 식별</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="9.2" font-weight="600">세포 비율의 독립성 가정을 전제하는 표준 통계학의 완전한 붕괴</text>
+  </g>
+
+  <!-- Panel 2: Aitchison Geometry & CLR Projection -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">2. 아치슨 기하학과 중심 로그비(CLR)</text>
+
+    <!-- Schematic: Simplex to Euclidean Plane Projection -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Ternary Simplex Triangle -->
+      <polygon points="40,55 75,12 110,55" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+      <circle cx="75" cy="38" r="3" fill="#f43f5e"/>
+      <text x="75" y="8" text-anchor="middle" fill="#fbbf24" font-size="6">S³ Simplex</text>
+
+      <!-- Projection Arrow -->
+      <line x1="125" y1="34" x2="155" y2="34" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan06)"/>
+      <text x="140" y="26" text-anchor="middle" fill="#38bdf8" font-size="6.5">CLR / ilr</text>
+
+      <!-- Euclidean 2D Plane -->
+      <rect x="170" y="10" width="85" height="46" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <line x1="175" y1="33" x2="250" y2="33" stroke="#475569" stroke-width="0.8"/>
+      <line x1="212" y1="12" x2="212" y2="53" stroke="#475569" stroke-width="0.8"/>
+      <circle cx="230" cy="22" r="3" fill="#34d399"/>
+      <text x="212" y="62" text-anchor="middle" fill="#34d399" font-size="6">R^(D-1) Euclidean Space</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 중심 로그비 공식 (Centered Log-Ratio):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">CLR(p) = [ log(p_1 / g(p)), ..., log(p_D / g(p)) ], g(p) = (Π p_k)^(1/D)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 아치슨 기하학(Aitchison Geometry)의 해방:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">심플렉스 곡면을 유클리드 무제약 공간 R^(D-1)으로 선형 사상</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 참조 세포형(Reference Cell Type) 선택:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">안정적 기저 세포형(예: 섬유아세포)을 분모로 설정하여 왜곡 해소</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">조성 데이터를 위한 유일한 수학적으로 엄밀한 변환 프레임워크</text>
+  </g>
+
+  <!-- Panel 3: scCODA Sparse Bayesian Regression -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. scCODA 희소 베이지안 회귀 분석</text>
+
+    <!-- Schematic: Forest plot of scCODA effects -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Zero effect axis -->
+      <line x1="140" y1="8" x2="140" y2="58" stroke="#475569" stroke-width="1"/>
+      <text x="140" y="65" text-anchor="middle" fill="#64748b" font-size="6">Effect β = 0</text>
+
+      <!-- Cell Type 1: CD8 Exhausted (True Expansion, Credible) -->
+      <text x="20" y="18" fill="#f43f5e" font-size="6.5" font-weight="700">CD8 Exhausted</text>
+      <line x1="170" y1="16" x2="230" y2="16" stroke="#f43f5e" stroke-width="1.5"/>
+      <circle cx="200" cy="16" r="3.5" fill="#f43f5e"/>
+      <text x="235" y="19" fill="#f43f5e" font-size="6" font-weight="700">Credible (+)</text>
+
+      <!-- Cell Type 2: CD8 Effector (Shrunk to 0 by spike prior) -->
+      <text x="20" y="32" fill="#94a3b8" font-size="6.5">CD8 Effector</text>
+      <circle cx="140" cy="30" r="3" fill="#94a3b8"/>
+      <text x="150" y="33" fill="#94a3b8" font-size="6">β = 0 (Shrunk)</text>
+
+      <!-- Cell Type 3: Macrophages (Unchanged, Shrunk to 0) -->
+      <text x="20" y="46" fill="#34d399" font-size="6.5">Macrophage</text>
+      <circle cx="140" cy="44" r="3" fill="#34d399"/>
+      <text x="150" y="47" fill="#34d399" font-size="6">β = 0 (Ref/Invariant)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 디리클레-다항 분포 (Dirichlet-Multinomial):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Y_d ~ Multinomial(N_d, π_d), π_d ~ Dirichlet(α_d)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 스파이크 앤 슬랩(Spike-and-Slab) 희소 사전분포:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">유의하지 않은 미세 변화를 사후 확률적으로 정확히 0으로 수축</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 최적 참조 세포형 자동 탐색:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">환자 간 변동성이 가장 낮은 불변 세포형을 기준선으로 확정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">소표본(N=5~10) 코호트에서 조성 변화를 규명하는 궁극의 베이지안 해법</text>
+  </g>
+</svg>
+        </div>
+      </details>
+      
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>1. 심플렉스 제약과 허위 음의 상관 (Spurious Correlation)</h3>
+          <ul>
+            <li><strong>닫힌 단체 제약</strong>: p = (p<sub>1</sub>, ..., p<sub>D</sub>)<sup>T</sup> &in; &Sscr;<sup>D</sup>, &nbsp; &sum;<sub>c=1</sub><sup>D</sup> p<sub>c</sub> = 1, p<sub>c</sub> &gt; 0</li>
+            <li><strong>음의 공분산 강제성 수학적 증명</strong>:
+              <div class="math-block" style="margin: 6px 0; font-size: 0.98rem;">
+                &sum;<sub>j &ne; i</sub> Cov(p<sub>i</sub>, p<sub>j</sub>) = -Var(p<sub>i</sub>) &lt; 0
+              </div>
+              적어도 하나 이상의 세포형 쌍은 반드시 음의 공분산을 가져야 함!
+            </li>
+            <li><strong>임상적 재앙</strong>: 종양 침윤 T세포 절대 수가 불변임에도, 골수성 세포(MDSC)가 5배 팽창하면 T세포의 '비율'은 절반으로 급감하여 나이브 검정에서 "T세포 고갈"로 오판</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>2. Aitchison 기하학 &amp; scCODA 베이지안 디리클레-다항 회귀</h3>
+          <ul>
+            <li><strong>로그비 변환 (Log-Ratio)</strong>: CLR(Centered Log-Ratio) 또는 ALR로 심플렉스를 유클리드 공간 &reals;<sup>D-1</sup>로 사상</li>
+            <li><strong>scCODA 계층 모델</strong>:
+              <div class="math-block" style="margin: 6px 0; font-size: 0.98rem;">
+                Y<sub>s</sub> &sim; Multinomial(N<sub>s</sub>, p<sub>s</sub>), &nbsp; p<sub>s</sub> = Softmax(&alpha; + X<sub>s</sub> &beta;)
+              </div>
+            </li>
+            <li><strong>기준 세포형(Reference Cell Type) 앵커링</strong>: 생체 내 비율 분산이 가장 적은 세포형(e.g., 내피세포)을 불변 기준점으로 설정</li>
+            <li><strong>스파이크-앤-슬랩(Spike-and-Slab) 희소 사전분포</strong>: 미미한 효과의 회귀 계수 &beta;를 정확히 0으로 수축하여 소규모 환자 코호트(N &lt; 10)에서도 위양성을 철저히 차단</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 7: Experimental Design & Statistical Power -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md § 1</div>
+      <div class="slide-header">
+        <h2>6. 단일세포 실험 설계의 황금률: 세포 수(n) vs 환자 수(N) 검정력 분석</h2>
+        <span class="tag">Experimental Design &amp; Statistical Power</span>
+      </div>
+      <p>동일한 총 30,000개 세포 시퀀싱 예산이 주어졌을 때, 환자 3명에게서 10,000개씩 세포를 뽑는 설계(Design A)와 환자 30명에게서 1,000개씩 세포를 뽑는 설계(Design B)의 통계적 검정력(Power)은 극적인 차이를 보입니다.</p>
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>디자인 A: 3명 환자 &times; 10,000개 세포 (치명적 실패)</h3>
+          <ul>
+            <li><strong>총 시퀀싱 비용</strong>: 동일 (총 30,000개 단일세포)</li>
+            <li><strong>생물학적 유효 자유도</strong>: df = 3 - 2 = <strong>단 1</strong> (극심한 소표본)</li>
+            <li><strong>표준 오차 분산 성분 분해 수식</strong>:
+              <div class="math-block" style="margin: 6px 0; font-size: 0.98rem;">
+                Var(&beta;&#770;) &approx; <span class="math-frac"><span class="num">&sigma;<sub>donor</sub><sup>2</sup></span><span class="den">N</span></span> + <span class="math-frac"><span class="num">&sigma;<sub>cell</sub><sup>2</sup></span><span class="den">N &middot; n</span></span>
+              </div>
+            </li>
+            <li>세포 수 n=10,000으로 늘려도 두 번째 항만 0에 수렴할 뿐, 첫 번째 생물학적 분산 항(&sigma;<sub>donor</sub><sup>2</sup> / 3)이 지배하여 <strong>검정력은 20%~35%에 영구 정체</strong></li>
+            <li>아무리 깊게 시퀀싱해도 환자 간 이질성을 극복할 수 없음</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>디자인 B: 30명 환자 &times; 1,000개 세포 (압도적 승리)</h3>
+          <ul>
+            <li><strong>총 시퀀싱 비용</strong>: 동일 (총 30,000개 단일세포)</li>
+            <li><strong>생물학적 유효 자유도</strong>: df = 30 - 2 = <strong>28</strong> (풍부한 자유도)</li>
+            <li><strong>표준 오차의 획기적 축소</strong>: 첫 번째 항의 분모가 N=30으로 10배 증가하여 생물학적 분산이 1/10로 격감</li>
+            <li><strong>통계적 검정력</strong>: 중간 효과 크기(log2FC &ge; 0.5)에 대해 <strong>검정력 92%~98% 달성</strong></li>
+            <li><strong>단일세포 통계학의 제1법칙</strong>: 진정한 통계적 검정력은 세포 수가 아니라 <strong>생물학적 독립 개체 수(N<sub>donors</sub>)</strong>에서 나옴!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card accent" style="margin-top: 14px;">
+        <h3>💡 예산 최적화 전략: Cell Hashing &amp; Sample Multiplexing</h3>
+        <p style="margin-bottom: 0;">올리고 결합 항체(Hashtag Oligonucleotide, HTO)를 이용해 여러 환자의 샘플을 단일 채널에 풀링(Multiplexing) 시퀀싱하고, 환자당 세포 수는 1,000~2,000개 수준으로 적정화하되 환자 수(N)를 20~30명 이상 확보하는 것이 임상 바이오마커 발굴의 절대적 성공 공식입니다.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Slide 8: Capstone Evaluation & Synthesis -->
+  <div class="slide">
+    <div class="slide-content">
+      <div class="doc-ref">📖 대응 교재: tracks/07_count_statistics_abundance/docs/09_TROUBLESHOOTING_AND_BEST_PRACTICES.md § 5</div>
+      <div class="slide-header">
+        <h2>7. 5단계 단일세포 통계학 캡스톤 루브릭 &amp; 트랙 총괄 마일스톤</h2>
+        <span class="tag">Capstone Evaluation &amp; Synthesis</span>
+      </div>
+      <p>단일세포 카운트 통계학, 가짜 반복 제어, 슈도벌크 프레임워크, 위계적 GLMM, 고속 NEBULA 엔진, Milo 차등 풍부도 및 scCODA 조성 회귀를 총망라하는 5단계 프로덕션 등급 캡스톤 평가 루브릭과 마스터클래스 마일스톤을 선언합니다.</p>
+      <div class="grid-2">
+        <div class="card purple">
+          <h3>📋 5단계 단일세포 통계 캡스톤 평가 루브릭</h3>
+          <ul>
+            <li><strong>Stage 1 (데이터 감사 및 QC)</strong>: 카운트 행렬 무결성 감사, 이중항(Doublet) 및 저품질 세포 필터링, 환자-세포형별 세포 수 분할표 검증</li>
+            <li><strong>Stage 2 (슈도벌크 집계)</strong>: 원시 카운트 합산(Summation) 엄수, 저발현 유전자 필터링(CPM &ge; 1 in &ge; 3 donors), TMM/RLE 정규화 오프셋 수립</li>
+            <li><strong>Stage 3 (가설 검정 모델링)</strong>: edgeR-QLF 준우도 F-검정 및 복합 임상 디자인 행렬(나이, 이전 치료력, 생검 부위) 공변량 직교화</li>
+            <li><strong>Stage 4 (세포 수준 GLMM &amp; DA)</strong>: NEBULA O(N) 블록 대각 회귀 및 Milo kNN 이웃 그래프 Spatial FDR 차등 풍부도 연동</li>
+            <li><strong>Stage 5 (조성 분석 &amp; 벤치마크)</strong>: scCODA 디리클레-다항 심플렉스 회귀, 나이브 윌콕슨 1종 오류 대조군 비교 및 재현 가능 보고서 완성</li>
+          </ul>
+        </div>
+        <div class="card success">
+          <h3>🏁 Track 07 학습 완결 마일스톤</h3>
+          <ul>
+            <li><strong>통계적 정직성(Statistical Honesty) 복원</strong>: n<sub>cells</sub> 착시를 타파하고 가짜 반복 없는 엄밀한 재현 가능 바이오인포매틱스 표준 확립</li>
+            <li><strong>하이브리드 생태계 완성</strong>: Python (<code>scanpy</code>, <code>decoupleR</code>, <code>milo</code>, <code>scCODA</code>) &harr; R (<code>edgeR</code>, <code>DESeq2</code>, <code>limma</code>, <code>nebula</code>, <code>speckle</code>)의 매끄러운 연계</li>
+            <li><strong>임상 중개 연구 역량</strong>: 단순 클러스터링을 넘어 거세저항성 전립선암(mCRPC) 환자 코호트의 치료 저항성 및 전이 기전을 통계적으로 완벽히 입증할 수 있는 최상위 역량 확보</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Controls -->
+<div id="controls">
+  <button class="nav-btn" id="prevBtn">◀ 이전 (Prev)</button>
+  <div id="counter">Slide 1 of 8</div>
+  <button class="nav-btn" id="nextBtn">다음 (Next) ▶</button>
+</div>
+
+<script>
+
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  let current = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    counter.textContent = `Slide ${index + 1} of ${slides.length}`;
+    progressBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+  }
+
+  function nextSlide() {
+    if (current < slides.length - 1) {
+      current++;
+      showSlide(current);
+    }
+  }
+
+  function prevSlide() {
+    if (current > 0) {
+      current--;
+      showSlide(current);
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  showSlide(0);
+
+</script>
+<script>
+/* SLIDE-LAYOUT:BEGIN:js */
+(function () {
+  var MIN = 0.7;
+  function wrap(sc) {
+    if (sc.querySelector(':scope > .sl-fit')) return sc.querySelector(':scope > .sl-fit');
+    var w = document.createElement('div'); w.className = 'sl-fit';
+    while (sc.firstChild) w.appendChild(sc.firstChild);
+    sc.appendChild(w); return w;
+  }
+  function fit() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    document.querySelectorAll('.slide-content').forEach(function (sc) {
+      var w = wrap(sc);
+      if (mobile) { w.style.zoom = ''; return; }
+      var slide = sc.closest('.slide');
+      if (slide && !slide.classList.contains('active')) return;
+      w.style.zoom = 1;
+      var cs = getComputedStyle(sc);
+      var avail = sc.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var need = w.scrollHeight;
+      w.style.zoom = need > avail ? Math.max(MIN, avail / need) : 1;
+    });
+  }
+  window.addEventListener('resize', fit);
+  document.addEventListener('keydown', function () { setTimeout(fit, 0); });
+  document.addEventListener('click', function () { setTimeout(fit, 0); setTimeout(fit, 400); });
+  document.addEventListener('toggle', function () { setTimeout(fit, 0); }, true);
+  if (document.readyState !== 'loading') setTimeout(fit, 0); else document.addEventListener('DOMContentLoaded', function () { setTimeout(fit, 0); });
+  setTimeout(fit, 450);
+})();
+/* SLIDE-LAYOUT:END:js */
+</script>
+</body>
+</html>

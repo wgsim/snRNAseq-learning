@@ -1,0 +1,24 @@
+[cited]
+PMID:35688146  # Replogle 2022 Cell
+PMID:31870412  # Townes 2019 Genome Biol
+PMID:37037999  # Ahlmann-Eltze 2023 Nat Methods
+PMID:31740819  # Korsunsky 2019 Nat Methods (Harmony)
+PMID:38409223  # Cui 2024 Nat Methods (scGPT)
+PMID:37258680  # Theodoris 2023 Nature
+PMID:35549404  # Tabula Sapiens 2022 Science
+PMID:37291214  # Sikkema 2023 Nat Med (HLCA)
+PMID:40759747  # Ahlmann-Eltze 2025 Nat Methods
+PMID:26544944  # TCGA 2015 Cell
+PMID:26000489  # Robinson 2015 Cell
+PMID:31061129  # Abida 2019 PNAS
+PMID:33420488  # Chen 2021 Nat Cell Biol
+PMID:33664492  # He 2021 Nat Med
+PMID:31361600  # Labrecque 2019 J Clin Invest
+PMID:30504886  # Lopez 2018 Nat Methods (scVI)
+
+[evidence]
+PMID:34949812  # Luecken 2022 Nat Methods (scIB)
+PMID:40251685  # Kedzierska 2025 Genome Biol
+
+[software]
+SW:torch

@@ -1,0 +1,14 @@
+[cited]
+PMID:30089906  # La Manno 2018 Nature
+PMID:38871986  # Weiler 2024 Nat Methods (CellRank 2)
+PMID:31974247  # Gulati 2020 Science (CytoTRACE)
+PMID:30712874  # Schiebinger 2019 Cell
+
+[evidence]
+
+
+[software]
+SW:cellrank
+SW:numpy
+SW:scanpy
+SW:scvelo

@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">단일세포 계통수 재건 &amp; 뮬러 플롯(Muller Plot) 클론 진화 동역학</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">트렁크(Truncal) vs 서브클론(Subclonal) 이벤트 ➔ 이웃결합(NJ) 계통수 ➔ 치료 경과별 종단 클론 팽창/수축</text>
+
+  <!-- Panel 1: Truncal vs Subclonal -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 트렁크 vs 서브클론 변이 위계</text>
+
+    <!-- Schematic: Clonal Trunk and Branches -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+
+    <g transform="translate(25, 52)">
+      <!-- Trunk Line -->
+      <line x1="15" y1="36" x2="95" y2="36" stroke="#38bdf8" stroke-width="4"/>
+      <circle cx="15" cy="36" r="4" fill="#38bdf8"/>
+      <text x="55" y="28" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">트렁크 (Trunk)</text>
+      <text x="55" y="48" text-anchor="middle" fill="#94a3b8" font-size="7">ERG / 8p- / PTEN-</text>
+
+      <!-- Fork Point -->
+      <circle cx="95" cy="36" r="4" fill="#fbbf24"/>
+
+      <!-- Branch 1 (Subclone 1: Enz-Resistant) -->
+      <line x1="95" y1="36" x2="165" y2="15" stroke="#fbbf24" stroke-width="2.5"/>
+      <rect x="165" y="6" width="75" height="18" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="202" y="18" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">AR Amp / 10q LOH</text>
+
+      <!-- Branch 2 (Subclone 2: t-NEPC) -->
+      <line x1="95" y1="36" x2="165" y2="52" stroke="#f43f5e" stroke-width="2.5"/>
+      <rect x="165" y="44" width="75" height="18" rx="2" fill="#1e293b" stroke="#f43f5e" stroke-width="0.8"/>
+      <text x="202" y="56" text-anchor="middle" fill="#f43f5e" font-size="7.5" font-weight="700">TP53- / RB1- 소실</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 트렁크(Truncal) 원형 변이 (100% 보존):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">모든 종양 세포가 공유하는 TMPRSS2-ERG 융합 및 8p 결손</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 서브클론(Subclonal) 분지 변이:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">국소 미세환경 및 치료 저항성에 따라 차별 획득된 변이</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 종양 내 이종성(ITH)의 유전체 근원:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">동일 환자 내에서도 복수 클론의 공존 및 생존 경쟁</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">계통 법칙: 트렁크 변이는 표적 치료의 가장 안전한 타겟</text>
+  </g>
+
+  <!-- Panel 2: NJ Tree Reconstruction -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. 이웃결합(NJ) 계통수 재건</text>
+
+    <!-- Schematic: Neighbor-Joining Tree -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+
+    <g transform="translate(25, 48)">
+      <!-- Root: Normal Diploid -->
+      <rect x="0" y="22" width="45" height="16" rx="2" fill="#475569"/>
+      <text x="22" y="33" text-anchor="middle" fill="#fff" font-size="7">Normal 2n</text>
+
+      <line x1="45" y1="30" x2="75" y2="30" stroke="#94a3b8" stroke-width="1.5"/>
+
+      <!-- Internal Node 1 (Founder) -->
+      <line x1="75" y1="12" x2="75" y2="48" stroke="#38bdf8" stroke-width="1.5"/>
+
+      <!-- Clade 1: Clone 1 -->
+      <line x1="75" y1="12" x2="135" y2="12" stroke="#38bdf8" stroke-width="1.5"/>
+      <rect x="135" y="4" width="105" height="15" rx="2" fill="#0284c7"/>
+      <text x="187" y="15" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">Clone 1 (Primary AR+)</text>
+
+      <!-- Fork 2 -->
+      <line x1="75" y1="48" x2="110" y2="48" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="110" y1="34" x2="110" y2="60" stroke="#94a3b8" stroke-width="1.5"/>
+
+      <!-- Clade 2: Clone 2 -->
+      <line x1="110" y1="34" x2="135" y2="34" stroke="#fbbf24" stroke-width="1.5"/>
+      <rect x="135" y="26" width="105" height="15" rx="2" fill="#d97706"/>
+      <text x="187" y="37" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">Clone 2 (Enz-Resist AR-Amp)</text>
+
+      <!-- Clade 3: Clone 3 -->
+      <line x1="110" y1="60" x2="135" y2="60" stroke="#f43f5e" stroke-width="1.5"/>
+      <rect x="135" y="52" width="105" height="15" rx="2" fill="#be123c"/>
+      <text x="187" y="63" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">Clone 3 (t-NEPC Double-Loss)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 게놈 복제수 거리 행렬 (Saitou-Nei NJ):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단일세포 간 맨해튼/해밍 거리 기반 Q-행렬 최적화</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 진화 속도 이질성(Rate Heterogeneity) 보정:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">서브클론 간 유전체 돌연변이 가속도 차이 정밀 계산</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 뉴윅(Newick) 표준 포맷 트리 출력:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">계통 발생 분기점 및 가지 길이(Branch Length) 정량화</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">수식: Q(i,j) = (n-2)d(i,j) - Σd(i,k) - Σd(j,k)</text>
+  </g>
+
+  <!-- Panel 3: Muller Plot Dynamics -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#fbbf24" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">3. 뮬러 플롯 종단적 클론 동역학</text>
+
+    <!-- Schematic: Muller Stream Plot -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+
+    <g transform="translate(25, 46)">
+      <!-- Timeline axis -->
+      <line x1="10" y1="62" x2="240" y2="62" stroke="#475569" stroke-width="1"/>
+      <text x="30" y="69" text-anchor="middle" fill="#94a3b8" font-size="6.5">Pre-ADT</text>
+      <text x="125" y="69" text-anchor="middle" fill="#94a3b8" font-size="6.5">Enzalutamide</text>
+      <text x="215" y="69" text-anchor="middle" fill="#94a3b8" font-size="6.5">t-NEPC</text>
+
+      <!-- Muller Polygon Streams -->
+      <!-- Clone 1 (Primary - Dominant then shrank) -->
+      <path d="M 10,10 C 60,10 100,35 130,42 C 160,50 200,55 240,58 L 240,62 L 10,62 Z"
+        fill="#0284c7" fill-opacity="0.85"/>
+      <text x="45" y="40" fill="#fff" font-size="7.5" font-weight="700">Clone 1 (85%)</text>
+
+      <!-- Clone 2 (AR Amp - Rose in Enz) -->
+      <path d="M 50,15 C 80,12 110,8 140,10 C 180,12 210,32 240,38 L 240,58 C 200,55 160,50 130,42 Z"
+        fill="#fbbf24" fill-opacity="0.85"/>
+      <text x="135" y="28" fill="#1e293b" font-size="7.5" font-weight="700">Clone 2 (65%)</text>
+
+      <!-- Clone 3 (t-NEPC - Exploded at end) -->
+      <path d="M 140,10 C 170,8 200,6 240,5 L 240,38 C 210,32 180,12 140,10 Z"
+        fill="#f43f5e" fill-opacity="0.9"/>
+      <text x="210" y="20" fill="#fff" font-size="7.5" font-weight="700">Clone 3 (80%)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 시간적/치료별 서브클론 빈도 변화:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">진단부터 치료 반응 및 최종 재발까지의 클론 적합도 추적</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 엔잘루타마이드 치료 선택압 (Selection):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">기존 Clone 1 박멸 후 AR 증폭 Clone 2의 신속한 대체</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 신경내분비 역분화 클론의 폭발적 우점:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">TP53/RB1 소실 Clone 3가 종양의 80% 이상을 장악</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">진화 법칙: 치료압력은 저항성 희귀 클론의 선택적 번식을 촉발</text>
+  </g>
+</svg>

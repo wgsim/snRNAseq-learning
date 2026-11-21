@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad05" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald05" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">Milo kNN 이웃 그래프 차등 세포 풍부도(Differential Abundance) 프레임워크</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">고차원 kNN 그래프 ➔ 대표 인덱스 세포 추출 ➔ 중첩 이웃 계수 행렬 ➔ 음이항 GLM &amp; 공간 FDR 보정</text>
+
+  <!-- Panel 1: Graph & Index Cell Sampling -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad05)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. kNN 그래프 &amp; 인덱스 샘플링</text>
+
+    <!-- Schematic: Graph with overlapping neighborhoods -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Edges -->
+      <line x1="40" y1="20" x2="80" y2="15" stroke="#334155" stroke-width="1"/>
+      <line x1="40" y1="20" x2="60" y2="45" stroke="#334155" stroke-width="1"/>
+      <line x1="80" y1="15" x2="120" y2="35" stroke="#334155" stroke-width="1"/>
+      <line x1="60" y1="45" x2="120" y2="35" stroke="#334155" stroke-width="1"/>
+      <line x1="120" y1="35" x2="170" y2="25" stroke="#334155" stroke-width="1"/>
+      <line x1="170" y1="25" x2="210" y2="48" stroke="#334155" stroke-width="1"/>
+
+      <!-- Neighborhood 1 (dashed circle) -->
+      <circle cx="60" cy="25" r="22" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2"/>
+      <!-- Neighborhood 2 (dashed circle overlapping) -->
+      <circle cx="120" cy="35" r="24" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2,2"/>
+
+      <!-- Nodes -->
+      <circle cx="40" cy="20" r="3.5" fill="#94a3b8"/>
+      <circle cx="80" cy="15" r="3.5" fill="#94a3b8"/>
+      <circle cx="60" cy="45" r="3.5" fill="#94a3b8"/>
+      <circle cx="170" cy="25" r="3.5" fill="#94a3b8"/>
+      <circle cx="210" cy="48" r="3.5" fill="#94a3b8"/>
+
+      <!-- Index Cells (Star/Gold) -->
+      <circle cx="60" cy="25" r="5" fill="#38bdf8"/>
+      <circle cx="120" cy="35" r="5" fill="#fbbf24"/>
+      <text x="60" y="24" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">v1</text>
+      <text x="120" y="34" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">v2</text>
+      <text x="210" y="20" fill="#fbbf24" font-size="6.5">Overlap!</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이산적 클러스터링 경계 오류 탈피:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Leiden/Louvain의 주관적 해상도 및 경계 인위성 극복</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 그래프 기반 대표 인덱스 샘플링:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">그래프 위상 전체를 균일하게 덮는 대표 세포 추출 (~10%)</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 연속적 전이 표현형(Cell State) 보존:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">각 인덱스 세포의 kNN 반경 내 중첩 이웃(Neighborhood) 정의</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포 상태의 연속적인 궤적과 아형 변화를 보존하는 기하학</text>
+  </g>
+
+  <!-- Panel 2: Neighborhood Count Matrix Assembly -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 이웃별 환자 계수 행렬 (Count Matrix)</text>
+
+    <!-- Schematic: Matrix M x D -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Matrix Box -->
+      <rect x="10" y="6" width="160" height="48" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+      <text x="90" y="18" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">Donors (D_1 ... D_P)</text>
+      <!-- Grid rows -->
+      <line x1="10" y1="22" x2="170" y2="22" stroke="#475569" stroke-width="0.8"/>
+      <line x1="10" y1="36" x2="170" y2="36" stroke="#475569" stroke-width="0.8"/>
+      <text x="15" y="31" fill="#38bdf8" font-size="6">N_1 (Index 1)</text>
+      <text x="15" y="46" fill="#38bdf8" font-size="6">N_m (Index m)</text>
+      <!-- Values -->
+      <text x="80" y="31" fill="#cbd5e1" font-size="6.5">14</text>
+      <text x="110" y="31" fill="#cbd5e1" font-size="6.5">2</text>
+      <text x="145" y="31" fill="#f43f5e" font-size="6.5">38</text>
+      <text x="80" y="46" fill="#cbd5e1" font-size="6.5">5</text>
+      <text x="110" y="46" fill="#34d399" font-size="6.5">42</text>
+      <text x="145" y="46" fill="#cbd5e1" font-size="6.5">3</text>
+
+      <!-- Modeling Arrow -->
+      <line x1="180" y1="30" x2="205" y2="30" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrAmber05)"/>
+      <rect x="210" y="10" width="55" height="40" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <text x="237" y="22" text-anchor="middle" fill="#34d399" font-size="6.5" font-weight="700">NB GLM</text>
+      <text x="237" y="34" text-anchor="middle" fill="#cbd5e1" font-size="5.5">Log2FC</text>
+      <text x="237" y="44" text-anchor="middle" fill="#fbbf24" font-size="5.5">p-value</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이웃별 환자 세포 수 집계:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">C_{m,d} = Σ_{c ∈ d} I(c ∈ N_m) (M개 이웃 × P명 환자 행렬)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 환자별 총 세포 수 오프셋 정규화:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자간 총 세포 포획 효율 편차를 라이브러리 크기로 보정</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 음이항 GLM을 통한 조건별 효과 검정:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">반응군 vs 비반응군 간 세포 풍부도 변화 log2FC 및 유의성 도출</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.2" font-weight="600">세포 조성 차이를 신뢰할 수 있는 카운트 통계 검정으로 전환</text>
+  </g>
+
+  <!-- Panel 3: Spatial FDR Smoothing & Beeswarm -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad05)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 공간 FDR 평활화 &amp; Beeswarm</text>
+
+    <!-- Schematic: Beeswarm Plot of Neighborhoods -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Central zero FC line -->
+      <line x1="20" y1="31" x2="255" y2="31" stroke="#475569" stroke-width="1"/>
+      <text x="25" y="25" fill="#64748b" font-size="6">Log2FC &gt; 0 (Resp Enriched)</text>
+      <text x="25" y="45" fill="#64748b" font-size="6">Log2FC &lt; 0 (Non-Resp Enriched)</text>
+
+      <!-- Neighborhood dots across phenotypes -->
+      <!-- Naive T (near zero) -->
+      <circle cx="65" cy="30" r="3" fill="#94a3b8"/>
+      <circle cx="75" cy="33" r="2.5" fill="#94a3b8"/>
+      <text x="70" y="62" text-anchor="middle" fill="#94a3b8" font-size="6">Naive T</text>
+
+      <!-- Effector T (Enriched in Responders: Blue/Cyan) -->
+      <circle cx="120" cy="18" r="4" fill="#38bdf8"/>
+      <circle cx="130" cy="12" r="4.5" fill="#38bdf8"/>
+      <circle cx="140" cy="16" r="3.5" fill="#38bdf8"/>
+      <text x="130" y="62" text-anchor="middle" fill="#38bdf8" font-size="6" font-weight="700">Effector T</text>
+
+      <!-- Exhausted T (Enriched in Non-Responders: Red/Rose) -->
+      <circle cx="190" cy="48" r="4.5" fill="#f43f5e"/>
+      <circle cx="205" cy="52" r="5" fill="#f43f5e"/>
+      <circle cx="220" cy="46" r="4" fill="#f43f5e"/>
+      <text x="205" y="62" text-anchor="middle" fill="#f43f5e" font-size="6" font-weight="700">Exhausted T</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 중첩 이웃 가설 검정의 다중성 보정:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">공간적 상관성을 반영하는 가중 Benjamini-Hochberg 보정</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 그래프 거리 기반 공간 가중치 (Spatial Weights):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">이웃 간 연결 강도(W_ij)를 통해 국소적 p-값 평활화</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 소진(Exhaustion) 대 작동(Effector) T세포 분리:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">약물 저항 환자에서 특이적으로 팽창하는 면역 아형 확정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">임상 시험 바이오마커 발굴을 위한 최상위 정밀 차등 풍부도 도구</text>
+  </g>
+</svg>

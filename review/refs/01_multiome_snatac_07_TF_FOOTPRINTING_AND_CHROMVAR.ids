@@ -1,0 +1,14 @@
+[cited]
+PMID:28825706  # "Schep et al. 2017", L115,L209  [Schep AN 2017 Nat Methods]
+PMID:32848148  # "Bentsen et al. 2020", L39,L56,L62  [Bentsen M 2020 Nat Commun]
+PMID:35477723  # "Nouruzi et al. 2022", L96  [Nouruzi S 2022 Nat Commun]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:muon
+SW:pandas
+SW:scanpy
+SW:pychromvar
+SW:pyjaspar

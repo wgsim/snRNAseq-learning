@@ -1,0 +1,11 @@
+[cited]
+PMID:31937974  # Svensson 2020 Nat Biotechnol
+PMID:31870412  # Townes 2019 Genome Biol
+PMID:33526946  # Cao 2021 Nat Biotechnol
+PMID:30504886  # Lopez 2018 Nat Methods (scVI)
+
+[evidence]
+
+
+[software]
+SW:torch

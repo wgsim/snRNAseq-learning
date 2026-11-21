@@ -1,0 +1,9 @@
+Metric,Value,Unit,Description
+Cells_Indexed,30000,cells,Total cells in metadata table
+Patients,15,donors,Unique clinical donors
+Columnar_Memory,380.86,KB,Contiguous typed Arrow arrays
+Row_Memory,9375.00,KB,Python object row-dict table
+Memory_Reduction,24.6,fold,Columnar memory compactness
+Row_Query_Latency,6.160,ms,Naive row scan time
+Columnar_Query_Latency,0.278,ms,Indexed columnar slice time
+Slicing_Speedup,22.1,fold,Retrieval acceleration factor

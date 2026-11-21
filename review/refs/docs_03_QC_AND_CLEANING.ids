@@ -1,0 +1,13 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:32840568  # Osorio D 2021 Bioinformatics: Systematic determination of the mitochondrial proportion in human and mice tissues for single-c  [근거: SCI-00-031; ledger L25]
+PMID:37002403  # Heumos L 2023 Nat Rev Genet: Best practices for single-cell analysis across modalities.  [근거: SCI-00-032]
+PMID:37550580  # Fleming SJ 2023 Nat Methods: Unsupervised removal of systematic background noise from droplet-based single-cell experiments   [근거: ledger L72]
+
+[software]
+SW:cellbender
+SW:numpy
+SW:scanpy
+SW:scrublet

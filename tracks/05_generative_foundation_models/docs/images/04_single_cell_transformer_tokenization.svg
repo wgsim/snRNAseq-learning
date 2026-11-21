@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald04" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="17" font-weight="700">단일세포 트랜스포머 토큰화 &amp; 멀티헤드 자기주의(Self-Attention) 메커니즘</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">발현량 순위-값(Rank-Value) 토큰화 ➔ 자기주의 가중치 행렬 ➔ 문맥 인식 유전자 조절망 및 [CLS] 세포 임베딩</text>
+
+  <!-- Panel 1: Rank-Value Tokenization -->
+  <g transform="translate(20, 65)">
+    <rect width="295" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="295" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="147" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 발현 순위-값(Rank-Value) 토큰화</text>
+
+    <!-- Schematic: Gene sorting & embedding tokens -->
+    <rect x="14" y="42" width="267" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    
+    <g transform="translate(22, 50)">
+      <!-- Expression bar ranks -->
+      <text x="0" y="12" fill="#94a3b8" font-size="7">발현량 내림차순 정렬:</text>
+      <!-- Tokens -->
+      <g transform="translate(0, 18)">
+        <!-- Token 1: AR -->
+        <rect x="0" y="0" width="46" height="36" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <text x="23" y="13" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">AR</text>
+        <rect x="3" y="18" width="40" height="12" rx="2" fill="#0284c7" fill-opacity="0.3"/>
+        <text x="23" y="27" text-anchor="middle" fill="#cbd5e1" font-size="6.5">Val: 31 (Rank 1)</text>
+
+        <!-- Token 2: KLK3 -->
+        <rect x="52" y="0" width="48" height="36" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <text x="76" y="13" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">KLK3</text>
+        <rect x="55" y="18" width="42" height="12" rx="2" fill="#0284c7" fill-opacity="0.3"/>
+        <text x="76" y="27" text-anchor="middle" fill="#cbd5e1" font-size="6.5">Val: 28 (Rank 2)</text>
+
+        <!-- Token 3: EZH2 -->
+        <rect x="106" y="0" width="48" height="36" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+        <text x="130" y="13" text-anchor="middle" fill="#fbbf24" font-size="7.5" font-weight="700">EZH2</text>
+        <rect x="109" y="18" width="42" height="12" rx="2" fill="#d97706" fill-opacity="0.3"/>
+        <text x="130" y="27" text-anchor="middle" fill="#cbd5e1" font-size="6.5">Val: 24 (Rank 3)</text>
+
+        <!-- Truncation / Pad -->
+        <text x="162" y="22" fill="#64748b" font-size="10">···</text>
+
+        <!-- Token K: Top 128 -->
+        <rect x="180" y="0" width="58" height="36" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+        <text x="209" y="13" text-anchor="middle" fill="#cbd5e1" font-size="7.5">Top-K</text>
+        <text x="209" y="27" text-anchor="middle" fill="#94a3b8" font-size="6.5">Non-Zero 유전자</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 스파스성 극복: 0-카운트 유전자 제외</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">세포당 1,000~2,000개 활성 발현 유전자만 선별하여 시퀀스 압축</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 3중 임베딩 합성 (Embedding Triplet):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">x_i = E_gene(ID) + E_value(Bin, B=51) + E_batch</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 순위·값 정보 보존 (모델마다 방식 상이):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">Geneformer: 순위 정렬 시퀀스 / scGPT: 값 구간 임베딩</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="267" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="147" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.5" font-weight="600">어휘: 유전자 토큰 + 51 단계 발현량 구간 (scGPT 기준)</text>
+  </g>
+
+  <!-- Panel 2: Multi-Head Self-Attention Matrix -->
+  <g transform="translate(330, 65)">
+    <rect width="320" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="320" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="160" y="21" text-anchor="middle" fill="#fbbf24" font-size="12.5" font-weight="700">2. 자기주의 행렬 &amp; 전사 조절망</text>
+
+    <!-- Schematic: Attention Heatmap & Formula -->
+    <rect x="15" y="42" width="290" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    
+    <g transform="translate(25, 46)">
+      <!-- 5x5 Attention Grid -->
+      <rect x="0" y="0" width="65" height="65" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+      <!-- Strong weights (AR-KLK3 block) -->
+      <rect x="0" y="0" width="26" height="26" fill="#f43f5e" fill-opacity="0.7"/>
+      <rect x="26" y="0" width="13" height="13" fill="#fbbf24" fill-opacity="0.8"/>
+      <!-- Strong weights (EZH2-ASCL1 block) -->
+      <rect x="39" y="39" width="26" height="26" fill="#38bdf8" fill-opacity="0.75"/>
+      <text x="13" y="16" text-anchor="middle" fill="#fff" font-size="6" font-weight="700">AR 모듈</text>
+      <text x="52" y="55" text-anchor="middle" fill="#fff" font-size="6" font-weight="700">NE 모듈</text>
+
+      <!-- Labels -->
+      <text x="80" y="16" fill="#fbbf24" font-size="8" font-weight="700">Attn = Softmax(QK^T / √d_k) V</text>
+      <text x="80" y="30" fill="#cbd5e1" font-size="7">• Q, K, V 투영 행렬 (Head = 8~16)</text>
+      <text x="80" y="42" fill="#cbd5e1" font-size="7">• 유전자 간 전사 공발현 결합도 포착</text>
+      <text x="80" y="54" fill="#34d399" font-size="7">• 동적 유전자 조절망(GRN) 자동 구축</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전자-유전자 전역 상호작용 (All-to-All Interaction):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">전사인자(AR, EZH2)와 하류 타깃(KLK3, ASCL1) 간 주의 집중</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 문맥 의존적 전사 네트워크 해석:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">세포 상태(mCRPC vs t-NEPC)에 따라 자기주의 가중치 재구성</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 고속화 최적화 (FlashAttention &amp; Flash-Decoding):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">메모리 I/O 병목 해소로 O(N^2) 연산의 GPU 타일링 가속</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="292" height="22" rx="4" fill="#d97706" fill-opacity="0.22"/>
+    <text x="160" y="257" text-anchor="middle" fill="#fbbf24" font-size="9.5" font-weight="600">핵심 기능: 사전 지식 없이 전사체 발현만으로 인과 조절망 역공학</text>
+  </g>
+
+  <!-- Panel 3: Contextual Gene & Cell Embeddings -->
+  <g transform="translate(665, 65)">
+    <rect width="315" height="275" rx="10" fill="url(#cardGrad04)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="315" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="157" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 문맥 인식 임베딩 &amp; [CLS] 세포 벡터</text>
+
+    <!-- Schematic: CLS Token & Gene vectors -->
+    <rect x="15" y="42" width="285" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    
+    <g transform="translate(25, 48)">
+      <!-- CLS Token output -->
+      <rect x="0" y="0" width="70" height="32" rx="3" fill="#047857" fill-opacity="0.5" stroke="#34d399" stroke-width="1.5"/>
+      <text x="35" y="14" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">h_[CLS]</text>
+      <text x="35" y="25" text-anchor="middle" fill="#cbd5e1" font-size="6.5">전체 세포 대표 벡터</text>
+
+      <!-- Arrow -->
+      <line x1="74" y1="16" x2="100" y2="16" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrEmerald04)"/>
+
+      <!-- Downstream tasks -->
+      <rect x="104" y="0" width="165" height="32" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="186" y="13" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">하류 과제: 세포 주석 &amp; 가상 섭동</text>
+      <text x="186" y="24" text-anchor="middle" fill="#94a3b8" font-size="6.5">MLP Classifier / Cosine Similarity</text>
+
+      <!-- Gene embeddings below -->
+      <g transform="translate(0, 38)">
+        <rect x="0" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+        <text x="27" y="12" text-anchor="middle" fill="#38bdf8" font-size="7">h_AR (문맥)</text>
+        <rect x="60" y="0" width="55" height="18" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+        <text x="87" y="12" text-anchor="middle" fill="#fbbf24" font-size="7">h_EZH2 (문맥)</text>
+        <text x="125" y="12" fill="#64748b" font-size="8">➔ 유전자 기능 클러스터링</text>
+      </g>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단일세포 전역 표현 (Cell-Level Representation):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">시퀀스 선두 [CLS] 토큰 또는 전체 유전자 벡터 평균 풀링</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 동적 유전자 임베딩 (Contextual Gene Embeddings):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">동일한 EZH2 유전자라도 t-NEPC 문맥과 루미날 문맥에서 벡터 변이</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 다목적 전이 학습 역량 (Generalizability):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">512차원 잠재 공간에서 세포 상태 분류 및 약물 스크리닝 즉시 수행</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="287" height="22" rx="4" fill="#047857" fill-opacity="0.22"/>
+    <text x="157" y="257" text-anchor="middle" fill="#34d399" font-size="9.5" font-weight="600">차원: d_model = 512, Layer = 12 층의 다층 인코더 심층 표현</text>
+  </g>
+</svg>

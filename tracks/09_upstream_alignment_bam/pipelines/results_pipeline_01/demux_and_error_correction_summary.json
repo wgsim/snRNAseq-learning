@@ -1,0 +1,30 @@
+{
+  "simulation_metadata": {
+    "num_simulated_reads": 20000,
+    "num_whitelist_barcodes": 50,
+    "total_ground_truth_molecules": 4431,
+    "mean_sequencing_depth_per_molecule": 4.51
+  },
+  "demux_and_error_correction": {
+    "total_input_reads": 20000,
+    "total_demultiplexed_reads": 19702,
+    "exact_matches": 17087,
+    "corrected_1hamming_matches": 2615,
+    "collision_discards": 65,
+    "unmapped_discards": 233,
+    "total_1bp_mutated_reads_input": 2689,
+    "correctly_recovered_mutants": 2613,
+    "false_recovered_mutants": 2,
+    "mutant_recovery_rate_pct": 97.17
+  },
+  "umi_deduplication_benchmarks": {
+    "total_reads_processed": 19702,
+    "total_naive_unique_umis": 5623,
+    "total_cluster_umis": 4012,
+    "total_adjacency_umis": 4025,
+    "total_directional_umis": 4017,
+    "overall_inflation_reduction_pct": 28.56,
+    "cluster_overcollapse_events": 5,
+    "execution_time_seconds": 0.1698
+  }
+}

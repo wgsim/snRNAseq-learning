@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad04" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrowRose" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">NicheNet 세포 내 리간드-표적 유전자 인과 조절 네트워크</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">3단계 사전 지식 그래프(L-R, 신호전달 PPI, GRN-TF), 랜덤 워크(RWR), 및 표적 유전자 귀속</text>
+
+  <!-- Panel 1: 3-Layer Graph -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. 3단계 통합 사전 지식망 (Prior Graph)</text>
+
+    <!-- Schematic: 3 Layers -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Layer 1 -->
+    <rect x="25" y="48" width="70" height="18" rx="3" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="60" y="61" text-anchor="middle" fill="#38bdf8" font-size="8" font-weight="700">L-R 결합층</text>
+    <!-- Arrow -->
+    <line x1="95" y1="57" x2="115" y2="57" stroke="#38bdf8" stroke-width="1.5"/>
+    <!-- Layer 2 -->
+    <rect x="115" y="48" width="70" height="18" rx="3" fill="#d97706" fill-opacity="0.3"/>
+    <text x="150" y="61" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700">신호 PPI층</text>
+    <!-- Arrow -->
+    <line x1="185" y1="57" x2="205" y2="57" stroke="#fbbf24" stroke-width="1.5"/>
+    <!-- Layer 3 -->
+    <rect x="205" y="48" width="70" height="18" rx="3" fill="#9333ea" fill-opacity="0.3"/>
+    <text x="240" y="61" text-anchor="middle" fill="#c084fc" font-size="8" font-weight="700">GRN-TF층</text>
+    <!-- Subtext inside schematic -->
+    <text x="150" y="88" text-anchor="middle" fill="#cbd5e1" font-size="8.5">리간드 ➔ 인산화 캐스케이드 ➔ TF (AR, FOXA1)</text>
+    <text x="150" y="102" text-anchor="middle" fill="#34d399" font-size="8" font-weight="600">Track 01 유전자 조절망(GRN) 직접 연계</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 단순 발현 상관관계를 넘는 인과성:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">단순 L-R 존재 여부가 아닌 수신세포 반응 유전자 추적</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 방대한 분자 생물학 데이터 통합:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">STRING, SignaLink, ChIP-seq, RegNetwork 융합</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 전사인자(TF) 결합 부위 매핑:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">프로모터/인핸서 모티프 기반 최종 표적 유전자 연결</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">혁신: 세포 외 신호와 핵 내 유전자 발현 변화의 결합</text>
+  </g>
+
+  <!-- Panel 2: Random Walk with Restart -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#fbbf24" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">2. 재시작 랜덤 워크 (RWR Potential)</text>
+
+    <!-- Schematic: RWR Equation & Matrix W -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#d97706" stroke-width="1"/>
+    <!-- Matrix W -->
+    <rect x="30" y="52" width="55" height="54" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="57" y="75" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">W</text>
+    <text x="57" y="92" text-anchor="middle" fill="#94a3b8" font-size="7">L × Target</text>
+    <!-- RWR Flow -->
+    <path d="M95,79 L125,79" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowRose)"/>
+    <g transform="translate(135, 52)">
+      <text x="0" y="16" fill="#fbbf24" font-size="8.5" font-weight="700">p_(t+1) = (1-r) M p_t + r e_L</text>
+      <text x="0" y="32" fill="#cbd5e1" font-size="8">r = 재시작 확률 (0.50)</text>
+      <text x="0" y="46" fill="#34d399" font-size="8">정상상태(Steady-state) 수렴</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 조절 잠재력 행렬 (Regulatory Potential W):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">리간드 L이 표적 유전자 G에 미치는 사전 확률 정량화</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 다중 분기 경로의 전파 감쇠 반영:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">네트워크 거리 및 노드 차수에 따른 신호 확산 계산</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 허브 단백질 편향 제거 (Degree Normalization):</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">과도한 연결을 가진 단백질에 의한 인위적 점수 왜곡 방지</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#d97706" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">수학: 마르코프 연쇄(Markov Chain) 기반 신호 유전</text>
+  </g>
+
+  <!-- Panel 3: Ligand Activity Scoring -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad04)" stroke="#f43f5e" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="700">3. 리간드 활성도 평가 (Ligand Activity)</text>
+
+    <!-- Schematic: Pearson & AUROC Bar -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#be123c" stroke-width="1"/>
+    <!-- Top Ranked Ligand Bars -->
+    <g transform="translate(25, 50)">
+      <text x="0" y="12" fill="#cbd5e1" font-size="8" font-weight="600">TGFB1</text>
+      <rect x="45" y="3" width="128" height="11" rx="2" fill="#f43f5e"/>
+      <text x="183" y="12" fill="#f43f5e" font-size="8" font-weight="700">AUROC 0.96</text>
+
+      <text x="0" y="29" fill="#cbd5e1" font-size="8" font-weight="600">CXCL12</text>
+      <rect x="45" y="20" width="122" height="11" rx="2" fill="#fbbf24"/>
+      <text x="177" y="29" fill="#fbbf24" font-size="8" font-weight="700">AUROC 0.92</text>
+
+      <text x="0" y="46" fill="#cbd5e1" font-size="8" font-weight="600">TNFSF11</text>
+      <rect x="45" y="37" width="131" height="11" rx="2" fill="#34d399"/>
+      <text x="186" y="46" fill="#34d399" font-size="8" font-weight="700">AUROC 0.99</text>
+
+      <text x="0" y="60" fill="#94a3b8" font-size="6">※ toy 합성 데이터 산출값 (pipelines/results_pipeline_02)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 수신 세포 DEG 예측력 검증:</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">CD8+ T 세포 고갈 유전자(PDCD1, TOX) 발현 예측</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• AUROC &amp; Pearson 상관분석:</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">조절 잠재력과 실제 발현 차이 간의 일치도 검정</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 핵심 업스트림 드라이버 도출:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">TGFB1(EMT/고갈 유도), CXCL12(기질 장벽 형성)</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#be123c" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="600">결과: 표현형 변화를 직접 촉발한 원인 리간드 규명</text>
+  </g>
+</svg>

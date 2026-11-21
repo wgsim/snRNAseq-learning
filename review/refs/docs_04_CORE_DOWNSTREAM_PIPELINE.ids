@@ -1,0 +1,11 @@
+[cited]
+PMID:31217225  # "Luecken & Theis 2019", L75  [Luecken MD 2019 Mol Syst Biol]
+PMID:30914743  # "Traag et al. 2019", L107,L186  [Traag VA 2019 Sci Rep]
+
+[evidence]
+PMID:31870423  # Hafemeister C 2019 Genome Biol: Normalization and variance stabilization of single-cell RNA-seq data using regularized negative  [근거: SCI-00-038; SCI-00-039; ledger L22]
+PMID:34488842  # Lause J 2021 Genome Biol: Analytic Pearson residuals for normalization of single-cell RNA-seq UMI data.  [근거: SCI-00-038; SCI-00-039; ledger L22]
+PMID:34584091  # Squair JW 2021 Nat Commun: Confronting false discoveries in single-cell differential expression.  [근거: SCI-00-044; SCI-00-045]
+
+[software]
+SW:scanpy

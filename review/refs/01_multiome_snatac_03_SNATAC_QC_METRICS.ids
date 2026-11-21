@@ -1,0 +1,12 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:24097267  # Buenrostro JD 2013 Nat Methods: Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin  [근거: SCI-01-014; ledger L3, 57]
+PMID:33633365  # Granja JM 2021 Nat Genet: ArchR is a scalable software package for integrative single-cell chromatin accessibility analys  [근거: SCI-01-016]
+PMID:34725479  # Stuart T 2021 Nat Methods: Single-cell chromatin state analysis with Signac.  [근거: SCI-01-016]
+
+[software]
+SW:matplotlib
+SW:muon
+SW:snapatac2

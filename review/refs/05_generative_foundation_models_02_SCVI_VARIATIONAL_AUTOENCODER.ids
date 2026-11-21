@@ -1,0 +1,13 @@
+[cited]
+PMID:30504886  # Lopez 2018 Nat Methods (scVI)
+PMID:34949812  # Luecken 2022 Nat Methods (scIB)
+ARXIV:1312.6114  # "Kingma & Welling, 2013" (L93)
+
+[evidence]
+
+
+[software]
+SW:matplotlib
+SW:scanpy
+SW:scvi-tools
+SW:torch

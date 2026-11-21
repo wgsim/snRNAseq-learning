@@ -1,0 +1,10 @@
+[cited]
+PMID:30566875  # Henry 2018 Cell Rep
+PMID:35549404  # Tabula Sapiens 2022 Science
+
+[evidence]
+
+
+[software]
+SW:anndata
+SW:torch

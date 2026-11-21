@@ -1,0 +1,15 @@
+[cited]
+PMID:29909985  # "Viswanathan 2018", L98,L282  [Viswanathan SR 2018 Cell]
+PMID:29909987  # "Takeda 2018", L282  [Takeda DY 2018 Cell]
+PMID:16951139  # "Perner 2006", L131  [Perner S 2006 Cancer Res]
+PMID:26544944  # "TCGA 원발 (Cell 2015)", L79,L87  [Cancer Genome Atlas Research Network 2015 Cell]
+PMID:26000489  # "SU2C 2015", L79,L87,L98,L282  [Robinson D 2015 Cell]
+PMID:31061129  # "SU2C 2019", L79,L87,L98  [Abida W 2019 Proc Natl Acad Sci U S A]
+
+[evidence]
+# (본문에 이름이 나오지 않는 검수 근거 문헌 없음)
+
+[software]
+SW:anndata
+SW:numpy
+SW:pandas

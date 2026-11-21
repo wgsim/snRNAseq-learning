@@ -1,0 +1,12 @@
+[cited]
+PMID:34949812  # Luecken 2022 Nat Methods (scIB)
+ARXIV:2307.08691  # "Dao et al. (2023)" FlashAttention-2 (L48)
+
+[evidence]
+
+
+[software]
+SW:numpy
+SW:pandas
+SW:scikit-learn
+SW:torch

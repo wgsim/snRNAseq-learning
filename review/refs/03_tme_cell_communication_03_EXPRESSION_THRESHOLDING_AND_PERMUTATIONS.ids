@@ -1,0 +1,11 @@
+[cited]
+PMID:21044043  # Phipson & Smyth 2010 SAGMB
+
+[evidence]
+
+
+[software]
+SW:numpy
+SW:pandas
+SW:scanpy
+SW:scipy

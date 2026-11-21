@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrAmber02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">STARsolo 스플라이싱 정렬: 접미사 배열(Suffix Array) BWT 색인 및 MMP 시드 확장</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">O(L log N) 접미사 배열 탐색 ➔ 최대 매핑 접두사(MMP) 분할 ➔ 정밀 동적 계획법(DP) 스플라이스 인트론 스코어링</text>
+
+  <!-- Panel 1: Suffix Array Indexing -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. Suffix Array (SA) &amp; BWT 유전체 색인</text>
+
+    <!-- Schematic: Suffix Array Table -->
+    <rect x="15" y="42" width="270" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="12" fill="#64748b" font-size="7.5" font-weight="700">Idx</text>
+      <text x="25" y="12" fill="#64748b" font-size="7.5" font-weight="700">SA[i]</text>
+      <text x="65" y="12" fill="#64748b" font-size="7.5" font-weight="700">Suffix String (사전순 정렬)</text>
+
+      <line x1="0" y1="16" x2="250" y2="16" stroke="#334155" stroke-width="0.8"/>
+      <text x="0" y="28" fill="#94a3b8" font-size="7.5">0</text>
+      <text x="25" y="28" fill="#38bdf8" font-size="7.5">14,208</text>
+      <text x="65" y="28" fill="#cbd5e1" font-size="7.5">AAGCTTGACGT...</text>
+
+      <text x="0" y="42" fill="#94a3b8" font-size="7.5">1</text>
+      <text x="25" y="42" fill="#38bdf8" font-size="7.5">892,104</text>
+      <text x="65" y="42" fill="#34d399" font-size="7.5">ACGTTAGCTA... (MMP Match)</text>
+
+      <text x="0" y="56" fill="#94a3b8" font-size="7.5">2</text>
+      <text x="25" y="42" fill="#38bdf8" font-size="7.5">3,110,4</text>
+      <text x="65" y="56" fill="#cbd5e1" font-size="7.5">AGCTAGGTCC...</text>
+
+      <text x="0" y="70" fill="#94a3b8" font-size="7.5">...</text>
+      <text x="25" y="70" fill="#64748b" font-size="7.5">3.2 × 10^9</text>
+      <text x="65" y="70" fill="#64748b" font-size="7.5">TTTTTT...$ (GRCh38 인간 유전체)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 메모리 상주 접미사 배열 (~32 GB RAM):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">BWT 압축 없이 전체 SA를 RAM에 적재해 즉각 탐색</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 이진 탐색 속도 O(L log N):</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">100 bp cDNA 리드를 수 마이크로초 내에 전역 조회</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 접미사 길이 k-mer 프리픽스 캐싱:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">첫 14bp의 SA 범위를 O(1) 직접 참조 테이블로 가속</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">전역 색인 기반 무제한 갭 스플라이스 시드 발굴</text>
+  </g>
+
+  <!-- Panel 2: Maximal Mappable Prefix (MMP) -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">2. Maximal Mappable Prefix (MMP) 시드 분할</text>
+
+    <!-- MMP Split Diagram -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Full Read -->
+    <rect x="25" y="52" width="260" height="18" rx="3" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+    <text x="155" y="64" text-anchor="middle" fill="#94a3b8" font-size="8">100 bp Spliced RNA Read</text>
+
+    <!-- MMP 1 (Exon A) -->
+    <rect x="25" y="78" width="95" height="18" rx="3" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1.2"/>
+    <text x="72" y="90" text-anchor="middle" fill="#34d399" font-size="7.5" font-weight="700">MMP 1 (38bp)</text>
+    <!-- Intron Gap -->
+    <line x1="120" y1="87" x2="180" y2="87" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="150" y="82" text-anchor="middle" fill="#fbbf24" font-size="7.5">Intron 12 kb</text>
+    <!-- MMP 2 (Exon B) -->
+    <rect x="180" y="78" width="105" height="18" rx="3" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1.2"/>
+    <text x="232" y="90" text-anchor="middle" fill="#38bdf8" font-size="7.5" font-weight="700">MMP 2 (62bp)</text>
+
+    <!-- Split Arrow -->
+    <path d="M120,68 L120,76" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrCyan02)"/>
+    <text x="120" y="112" text-anchor="middle" fill="#f43f5e" font-size="7">불일치 지점에서 분할</text>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• 순차적 접두사 연장(Prefix Extension):</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">유전체와 완벽 일치하는 최장 부분 서열을 연속 탐색</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• 엑손-엑손 접합부(Junction) 자동 검출:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">스플라이스 사이트에서 미스매치 시 즉각 차기 시드 생성</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• 초장거리 키메라/구조 변이 포착:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">수십 kb 인트론뿐 아니라 염색체 간 융합 시드 동시 포섭</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#065f46" fill-opacity="0.25"/>
+    <text x="155" y="259" text-anchor="middle" fill="#34d399" font-size="9" font-weight="600">주석(Annotation) 없는 신규 스플라이싱 접합부 발굴</text>
+  </g>
+
+  <!-- Panel 3: Spliced DP Scoring -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">3. 동적 계획법(DP) 스플라이스 스코어링</text>
+
+    <!-- Motifs & Scoring Box -->
+    <rect x="15" y="42" width="280" height="88" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <text x="0" y="14" fill="#fbbf24" font-size="8.5" font-weight="700">정규 모티프:</text>
+      <text x="70" y="14" fill="#34d399" font-size="8.5" font-weight="700">GT (Donor) ... AG (Acceptor) [+20점]</text>
+      
+      <text x="0" y="32" fill="#fbbf24" font-size="8.5" font-weight="700">비정규 모티프:</text>
+      <text x="70" y="32" fill="#cbd5e1" font-size="8.5">GC...AG [+15점] / AT...AC [+10점]</text>
+
+      <text x="0" y="50" fill="#fbbf24" font-size="8.5" font-weight="700">인트론 페널티:</text>
+      <text x="70" y="50" fill="#f43f5e" font-size="8.5">Score -= log(L_intron) × Penalty</text>
+
+      <text x="0" y="68" fill="#fbbf24" font-size="8.5" font-weight="700">STARsolo 출력:</text>
+      <text x="70" y="68" fill="#38bdf8" font-size="8.5" font-weight="700">Gene / GeneFull / SJ.out.tab 매트릭스</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="148" fill="#cbd5e1" font-size="10" font-weight="600">• Needleman-Wunsch 변형 정밀 정렬:</text>
+    <text x="24" y="163" fill="#94a3b8" font-size="9">시드 간 공백을 정규 스플라이스 시그널로 보정 연결</text>
+    <text x="14" y="181" fill="#cbd5e1" font-size="10" font-weight="600">• --soloType CB_UMI_Simple 네이티브 통합:</text>
+    <text x="24" y="196" fill="#94a3b8" font-size="9">BAM 중간 파일 없이 단일세포 카운트 매트릭스 직출력</text>
+    <text x="14" y="214" fill="#cbd5e1" font-size="10" font-weight="600">• CellRanger 대비 10배 정렬 속도:</text>
+    <text x="24" y="229" fill="#94a3b8" font-size="9">1억 리드 정렬 및 CB/UMI 카운팅을 20분 내 완료</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#78350f" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">미세 엑손 및 대형 인트론 고정밀 스플라이싱 정량화</text>
+  </g>
+</svg>

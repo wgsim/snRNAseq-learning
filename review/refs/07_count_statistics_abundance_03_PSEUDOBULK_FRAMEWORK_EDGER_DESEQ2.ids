@@ -1,0 +1,16 @@
+[cited]
+PMID:34719426  # "Kfoury et al.", L84,L163,L168  [Kfoury Y 2021 Cancer Cell]
+PMID:33420488  # "Chen et al.", L84,L163,L173,L378,L379  [Chen S 2021 Nat Cell Biol]
+
+[evidence]
+PMID:25516281  # Love MI 2014 Genome Biol: Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.  [근거: SCI-07-024; ledger L120-130]
+PMID:34584091  # Squair JW 2021 Nat Commun: Confronting false discoveries in single-cell differential expression.  [근거: SCI-07-025]
+
+[software]
+SW:anndata
+SW:decoupler
+SW:edger
+SW:limma
+SW:numpy
+SW:scanpy
+SW:pandas

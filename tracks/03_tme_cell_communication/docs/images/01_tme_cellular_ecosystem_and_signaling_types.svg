@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cyanPill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="rosePill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+    <linearGradient id="emeraldPill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <marker id="arrowCyan" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowEmerald" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#38bdf8" font-size="18" font-weight="700">종양 미세환경(TME) 세포 생태계 &amp; 4대 세포 간 신호전달 모드</text>
+  <text x="500" y="49" text-anchor="middle" fill="#94a3b8" font-size="11.5">mCRPC 이종 세포 생태계, 거리별 신호전달 물리적 분류, 및 다중 소단위체(Heterodimer) 화학량론</text>
+
+  <!-- Panel 1: Cellular Diversity -->
+  <g transform="translate(25, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">1. TME 이종 세포 생태계 (Cellular Diversity)</text>
+
+    <!-- Schematic: Heterogeneous Cells -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <!-- Cells icons -->
+    <circle cx="45" cy="65" r="14" fill="#f43f5e" fill-opacity="0.8" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="45" y="69" text-anchor="middle" fill="#ffffff" font-size="8.5" font-weight="700">Tumor</text>
+    <circle cx="85" cy="88" r="12" fill="#fbbf24" fill-opacity="0.8" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="85" y="92" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">myCAF</text>
+    <circle cx="130" cy="62" r="11" fill="#38bdf8" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="130" y="66" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">Endo</text>
+    <circle cx="175" cy="85" r="13" fill="#a855f7" fill-opacity="0.8" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="175" y="89" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">TAM M2</text>
+    <circle cx="225" cy="66" r="12" fill="#34d399" fill-opacity="0.8" stroke="#34d399" stroke-width="1.5"/>
+    <text x="225" y="70" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="700">CD8 T</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 종양 세포 (Luminal AR+ vs t-NEPC):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">AR 의존성 선암에서 신경내분비계(NEPC) 역분화</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 기질 및 면역 틈새 (Stromal &amp; Immune):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">myCAF(CXCL12 장벽), M2 대식세포(면역 억제)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 혈관 및 림프 침윤 구획:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">내피세포(VEGFA 반응) 및 고갈된 CD8+ T세포</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#0284c7" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="600">특징: 단일세포 전사체 기반 세포 상호작용 지도화</text>
+  </g>
+
+  <!-- Panel 2: 4 Signaling Modes -->
+  <g transform="translate(350, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#34d399" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">2. 4대 신호전달 모드 (Signaling Modes)</text>
+
+    <!-- Grid of 4 modes -->
+    <g transform="translate(15, 42)">
+      <!-- Autocrine -->
+      <rect x="0" y="0" width="130" height="40" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+      <text x="10" y="16" fill="#34d399" font-size="10" font-weight="700">자가분비 (Autocrine)</text>
+      <text x="10" y="30" fill="#94a3b8" font-size="8.5">자체 자극 루프 (TGFB1)</text>
+
+      <!-- Juxtacrine -->
+      <rect x="140" y="0" width="130" height="40" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+      <text x="150" y="16" fill="#fbbf24" font-size="10" font-weight="700">접촉분비 (Juxtacrine)</text>
+      <text x="150" y="30" fill="#94a3b8" font-size="8.5">막접촉 (&lt;15µm, Notch/PD1)</text>
+
+      <!-- Paracrine -->
+      <rect x="0" y="46" width="130" height="40" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+      <text x="10" y="62" fill="#38bdf8" font-size="10" font-weight="700">방분비 (Paracrine)</text>
+      <text x="10" y="76" fill="#94a3b8" font-size="8.5">국소 확산 (10~250µm)</text>
+
+      <!-- Endocrine -->
+      <rect x="140" y="46" width="130" height="40" rx="5" fill="#0f172a" stroke="#f43f5e" stroke-width="1"/>
+      <text x="150" y="62" fill="#f43f5e" font-size="10" font-weight="700">내분비 (Endocrine)</text>
+      <text x="150" y="76" fill="#94a3b8" font-size="8.5">혈류 순환계 원거리 (&gt;1cm)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="15" y="142" fill="#cbd5e1" font-size="11" font-weight="600">• 접촉 분비 (Juxtacrine):</text>
+    <text x="25" y="158" fill="#94a3b8" font-size="10">리간드-수용체 세포막 직접 결합 (PD-L1/PD-1)</text>
+
+    <text x="15" y="178" fill="#cbd5e1" font-size="11" font-weight="600">• 방분비 확산 필드 (Paracrine Field):</text>
+    <text x="25" y="194" fill="#94a3b8" font-size="10">조직 간극 농도 구배 및 기질 결합(CXCL12-CXCR4)</text>
+
+    <text x="15" y="214" fill="#cbd5e1" font-size="11" font-weight="600">• 공간 거리 감쇠 (Distance Decay):</text>
+    <text x="25" y="230" fill="#94a3b8" font-size="10">유효 신호 도달 거리에 따른 통신 확률 보정</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#059669" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">거리 법칙: 국소 미세환경과 원격 골전이 신호의 분리</text>
+  </g>
+
+  <!-- Panel 3: Complex Stoichiometry -->
+  <g transform="translate(675, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#c084fc" stroke-width="1.5"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#c084fc" fill-opacity="0.18"/>
+    <text x="150" y="21" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">3. 복합체 화학량론 (Complex Stoichiometry)</text>
+
+    <!-- Schematic: Heterodimer Complex -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#9333ea" stroke-width="1"/>
+    <!-- Heterodimer schematic -->
+    <circle cx="50" cy="79" r="16" fill="#38bdf8" fill-opacity="0.7"/>
+    <text x="50" y="83" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="700">IL6</text>
+    <line x1="68" y1="79" x2="105" y2="79" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3,2"/>
+    <!-- Receptor subunits -->
+    <rect x="110" y="58" width="55" height="42" rx="6" fill="#c084fc" fill-opacity="0.3" stroke="#c084fc" stroke-width="1"/>
+    <text x="137" y="73" text-anchor="middle" fill="#c084fc" font-size="8.5" font-weight="700">IL6R</text>
+    <text x="137" y="90" text-anchor="middle" fill="#34d399" font-size="8.5" font-weight="700">IL6ST</text>
+    <text x="195" y="72" fill="#cbd5e1" font-size="9" font-weight="700">기하평균 공식</text>
+    <text x="195" y="88" fill="#fbbf24" font-size="9">R = √(R₁ · R₂)</text>
+
+    <!-- Bullets -->
+    <text x="15" y="132" fill="#cbd5e1" font-size="11" font-weight="600">• 다중 소단위체 필수성 (Subunit Law):</text>
+    <text x="25" y="148" fill="#94a3b8" font-size="10">하나라도 결손 시 결합 불가: S = min(R₁, R₂) 또는 GM</text>
+
+    <text x="15" y="168" fill="#cbd5e1" font-size="11" font-weight="600">• 핵심 이종복합체 (Key Heterodimers):</text>
+    <text x="25" y="184" fill="#94a3b8" font-size="10">TGFB1 (TGFBR1+TGFBR2), IL6 (IL6R+IL6ST)</text>
+
+    <text x="15" y="204" fill="#cbd5e1" font-size="11" font-weight="600">• 단일 유전자 과발현 오류 배제:</text>
+    <text x="25" y="220" fill="#94a3b8" font-size="10">공동수용체 부재 시 위양성 상호작용 필터링</text>
+
+    <!-- Badge -->
+    <rect x="15" y="242" width="270" height="22" rx="4" fill="#9333ea" fill-opacity="0.25"/>
+    <text x="150" y="257" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="600">원리: 생물학적 실제 결합 구조를 반영한 엄밀 계산</text>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+======================================================================
+Track 06 - Pipeline 01: Diffusion Pseudotime & Splicing Velocity Summary
+======================================================================
+
+Cohort Size: 1500 Single Cells
+Analyzed Regulators: 50 Genes
+Mean Velocity Coherence: 0.161
+
+Lineage Latent Time Progression:
+  - AR_Adeno    : Cells = 500 | Mean DPT = 0.2677 | Mean Latent Time = 0.2415 | Coherence = 0.1048
+  - Amphicrine  : Cells = 350 | Mean DPT = 0.9124 | Mean Latent Time = 0.8643 | Coherence = 0.2635
+  - DNPC        : Cells = 300 | Mean DPT = 0.7195 | Mean Latent Time = 0.6568 | Coherence = 0.0808
+  - t_NEPC      : Cells = 350 | Mean DPT = 0.9160 | Mean Latent Time = 0.8520 | Coherence = 0.2078
+
+Key Kinetics Parameters:
+  - AR      : gamma = 0.4729, R2 = 0.2882
+  - KLK3    : gamma = 0.4495, R2 = 0.3246
+  - ASCL1   : gamma = 0.5110, R2 = 0.4955
+  - EZH2    : gamma = 0.4852, R2 = 0.5166
+  - ETV4    : gamma = 0.5950, R2 = 0.5368
+  - KRT5    : gamma = 0.5926, R2 = 0.4697

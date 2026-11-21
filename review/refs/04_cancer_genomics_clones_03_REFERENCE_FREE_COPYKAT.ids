@@ -1,0 +1,11 @@
+[cited]
+PMID:33462507  # "Gao et al. 2021 (CopyKAT)", L58,L180,L192  [Gao R 2021 Nat Biotechnol]
+
+[evidence]
+PMID:34719426  # Kfoury Y 2021 Cancer Cell: Human prostate cancer bone metastases have an actionable immunosuppressive microenvironment.  [근거: SCI-04-020]
+
+[software]
+SW:anndata
+SW:numpy
+SW:pandas
+SW:scikit-learn

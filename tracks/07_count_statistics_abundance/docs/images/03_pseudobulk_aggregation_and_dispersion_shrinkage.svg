@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad03" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrPurple03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrEmerald03" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">의사벌크(Pseudobulk) 텐서 집계 &amp; 경험적 베이즈 산포 수축(Dispersion Shrinkage)</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">단일세포 희소 행렬 ➔ 공여자×세포형 요약 ➔ edgeR/DESeq2 경험적 베이즈 사전분포(Shrinkage)</text>
+
+  <!-- Panel 1: Single-Cell 3D Tensor Aggregation -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad03)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">1. 단일세포 텐서 집계 (Pseudobulk Tensor)</text>
+
+    <!-- Schematic: Sparse Matrix to 3D Tensor -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Sparse 2D Matrix -->
+      <rect x="5" y="8" width="55" height="48" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+      <text x="32" y="34" text-anchor="middle" fill="#94a3b8" font-size="7">Cells × Genes (85% 0)</text>
+
+      <path d="M 68 32 L 95 32" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan03)"/>
+      <text x="81" y="24" text-anchor="middle" fill="#fbbf24" font-size="6.5">Σ_{c ∈ (d,k)}</text>
+
+      <!-- 3D Pseudobulk Tensor Blocks -->
+      <rect x="105" y="14" width="70" height="42" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+      <rect x="115" y="8" width="70" height="42" rx="3" fill="#334155" fill-opacity="0.4" stroke="#c084fc" stroke-width="1"/>
+      <text x="140" y="32" text-anchor="middle" fill="#34d399" font-size="7" font-weight="700">Genes × Donors</text>
+      <text x="150" y="44" text-anchor="middle" fill="#c084fc" font-size="6.5">by CellType k</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 3차원 텐서 계수 집계:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Z_{g,d,k} = Σ_{c ∈ C_{d,k}} Y_{g,c} (정수 카운트 합산 보존)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 희소 드롭아웃(Dropout)의 극적 해소:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">환자당 수백 세포 합산으로 벌크 수준의 깊은 시퀀싱 확보</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 라이브러리 크기 인자(Size Factor) 정규화:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">TMM / RLE 기반으로 세포 수 및 시퀀싱 깊이 차이 보정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포형 고유의 신호는 보존하고 기술적 노이즈만 소멸</text>
+  </g>
+
+  <!-- Panel 2: Mean-Dispersion Trend Line Estimation -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12.5" font-weight="700">2. 평균-산포 공통 추세선 (Trend Estimation)</text>
+
+    <!-- Schematic: Raw MLE scatter vs smooth trend line -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#7e22ce" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Axes -->
+      <line x1="20" y1="58" x2="255" y2="58" stroke="#475569" stroke-width="1"/>
+      <line x1="20" y1="58" x2="20" y2="6" stroke="#475569" stroke-width="1"/>
+      <text x="20" y="4" fill="#64748b" font-size="6">Dispersion (α)</text>
+      <text x="235" y="65" fill="#64748b" font-size="6">Mean (μ)</text>
+
+      <!-- Raw MLE noisy scatter -->
+      <circle cx="45" cy="18" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+      <circle cx="55" cy="40" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+      <circle cx="80" cy="22" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+      <circle cx="110" cy="48" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+      <circle cx="150" cy="35" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+      <circle cx="200" cy="52" r="2" fill="#94a3b8" fill-opacity="0.7"/>
+
+      <!-- Smooth Trend Curve alpha_0(mu) -->
+      <path d="M 30 15 Q 80 32 150 44 T 245 50" fill="none" stroke="#c084fc" stroke-width="2.2"/>
+      <text x="145" y="32" fill="#c084fc" font-size="7.5" font-weight="700">α_0(μ) = A/μ + B (Trend)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전자별 산포 MLE의 한계:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">소수 환자(N=3~6) 조건에서 개별 산포 추정값의 높은 분산</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 전체 전사체 정보 공유 (Information Sharing):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">수만 개 유전자의 평균 발현 수준별 공통 산포 추세 모델링</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 국소 회귀(Loess / Spline) 적합:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">저발현의 높은 산포와 고발현의 점근적 생물학적 편차 포착</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#7e22ce" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#c084fc" font-size="9.2" font-weight="600">공통 사전분포(Empirical Bayes Prior)의 기준 앵커 수립</text>
+  </g>
+
+  <!-- Panel 3: Empirical Bayes Shrinkage -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad03)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. 경험적 베이즈 사후 수축 (EB Shrinkage)</text>
+
+    <!-- Schematic: Shrinkage Arrows toward Trend -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Trend line -->
+      <path d="M 25 20 Q 110 38 245 48" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <text x="195" y="42" fill="#c084fc" font-size="6">Prior Trend</text>
+
+      <!-- Shrunk point 1 (pulled down) -->
+      <circle cx="65" cy="10" r="2.5" fill="#f43f5e"/>
+      <path d="M 65 13 L 65 24" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald03)"/>
+      <circle cx="65" cy="26" r="3" fill="#34d399"/>
+
+      <!-- Shrunk point 2 (pulled up) -->
+      <circle cx="140" cy="52" r="2.5" fill="#38bdf8"/>
+      <path d="M 140 49 L 140 42" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrEmerald03)"/>
+      <circle cx="140" cy="40" r="3" fill="#34d399"/>
+
+      <text x="80" y="16" fill="#f43f5e" font-size="6">Raw MLE (Over-disp)</text>
+      <text x="145" y="58" fill="#38bdf8" font-size="6">Raw MLE (Under-disp)</text>
+      <text x="100" y="32" fill="#34d399" font-size="7" font-weight="700">Shrunk α~</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 경험적 베이즈 사후 산포 추정:</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">α~_g = [ df_prior·α_0(μ_g) + df_data·α^_g ] / (df_prior + df_data)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 산포 과소추정으로 인한 위양성 차단:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">우연히 작은 분산을 보인 유전자가 극단적 p-값을 얻는 오류 방지</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 이상치(Outlier) 유전자의 강건성 유지:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">강력한 생물학적 근거가 있는 유전자는 데이터의 자유도로 방어</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">결과: 소표본 임상 전사체 분석의 통계적 검정력 및 안정성 극대화</text>
+  </g>
+</svg>

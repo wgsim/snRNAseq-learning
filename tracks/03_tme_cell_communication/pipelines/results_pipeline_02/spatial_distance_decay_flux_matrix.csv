@@ -1,0 +1,9 @@
+sender,receiver,pathway,mean_spatial_distance_um,distance_decay_weight,raw_expression_flux,effective_spatial_flux
+Osteoblast,Osteoclast,TNFSF11_TNFRSF11A,194.65,0.03454,13.32,0.46006
+TAM_M2,CD8_T,CD274_PDCD1,320.79,0.0126,9.92,0.12496
+Luminal_AR_Pos,TAM_M2,CD47_SIRPA,351.63,0.01046,8.96,0.09369
+Luminal_AR_Pos,Osteoblast,PTHLH_PTH1R,331.2,0.01061,8.5,0.09017
+myCAF,CD8_T,CXCL12_CXCR4,384.5,0.00719,11.78,0.08466
+Osteoclast,Luminal_AR_Pos,TGFB1_TGFBR,359.71,0.01015,7.48,0.07596
+myCAF,Endothelial,VEGFA_KDR,377.66,0.00933,7.5,0.06997
+myCAF,CD8_T,TGFB1_TGFBR,384.5,0.00719,7.56,0.05433

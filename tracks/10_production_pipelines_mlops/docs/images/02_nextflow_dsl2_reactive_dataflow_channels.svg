@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad02" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrPurple02" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16" font-weight="700">Nextflow DSL2 반응형 데이터플로우 채널 및 비동기 동시성 엔진</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">Dataflow 패러다임: Queue/Value 채널 분리, 선언적 고차 오퍼레이터 및 이벤트 기반 프로세스 스케줄링</text>
+
+  <!-- Panel 1: Queue vs. Value Channels -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad02)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">1. 채널 유형: Queue vs. Value 채널</text>
+
+    <!-- Schematic: Queue & Value channels -->
+    <rect x="15" y="42" width="270" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Queue Channel Box -->
+    <rect x="22" y="48" width="256" height="38" rx="4" fill="#0369a1" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1"/>
+    <text x="30" y="60" fill="#38bdf8" font-size="8" font-weight="700">Queue Channel (FIFO, 일회성 소비):</text>
+    
+    <!-- Packets in Queue -->
+    <rect x="30" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="64" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_01</text>
+    <rect x="103" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="137" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_02</text>
+    <rect x="176" y="65" width="68" height="16" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+    <text x="210" y="76" text-anchor="middle" fill="#bae6fd" font-size="7">Sample_03</text>
+
+    <!-- Value Channel Box -->
+    <rect x="22" y="92" width="256" height="38" rx="4" fill="#581c87" fill-opacity="0.25" stroke="#c084fc" stroke-width="1"/>
+    <text x="30" y="104" fill="#c084fc" font-size="8" font-weight="700">Value Channel (영구 브로드캐스트):</text>
+    <rect x="30" y="109" width="120" height="16" rx="3" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+    <text x="90" y="120" text-anchor="middle" fill="#e9d5ff" font-size="7">Reference Genome (GRCh38)</text>
+    <text x="160" y="120" fill="#c084fc" font-size="6.5">➔ 모든 태스크에 무한 재사용</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• Queue Channel (Channel.fromPath):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">선입선출(FIFO) 비동기 버퍼, 요소 도착 즉시 다운스트림 트리거</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• Value Channel (Channel.value):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">소진되지 않는 단일 상태 유지, 공통 참조 인덱스 공유</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 반응형 데이터 바인딩:</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">폴링 없는 이벤트 기반 통신으로 스레드 락 및 블로킹 제거</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="272" height="22" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="150" y="259" text-anchor="middle" fill="#38bdf8" font-size="9" font-weight="600">생산자-소비자(Producer-Consumer) 비동기 큐잉</text>
+  </g>
+
+  <!-- Panel 2: DSL2 Reactive Operators -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#fbbf24" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#fbbf24" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">2. DSL2 선언적 채널 오퍼레이터</text>
+
+    <!-- Operators Schema -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Operator block 1: map & filter -->
+    <rect x="22" y="49" width="125" height="36" rx="3" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="28" y="60" fill="#fbbf24" font-family="monospace" font-size="7.5" font-weight="700">.map { id, r1, r2 -&gt; }</text>
+    <text x="28" y="72" fill="#94a3b8" font-family="monospace" font-size="7">  [meta(id), [r1, r2]]</text>
+    <text x="28" y="80" fill="#fde68a" font-size="6.5">메타데이터 튜플 주입</text>
+
+    <!-- Operator block 2: combine & groupTuple -->
+    <rect x="155" y="49" width="132" height="36" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+    <text x="160" y="60" fill="#34d399" font-family="monospace" font-size="7.5" font-weight="700">.combine(genome_idx)</text>
+    <text x="160" y="72" fill="#94a3b8" font-family="monospace" font-size="7">.groupTuple(by: 0)</text>
+    <text x="160" y="80" fill="#6ee7b7" font-size="6.5">데카르트 곱 &amp; 샘플 병합</text>
+
+    <!-- Operator block 3: branch & multi-ch -->
+    <rect x="22" y="90" width="265" height="42" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="28" y="102" fill="#38bdf8" font-family="monospace" font-size="7.5" font-weight="700">reads.branch {</text>
+    <text x="35" y="113" fill="#94a3b8" font-family="monospace" font-size="7">  pass: it.reads &gt; 50000 ➔ FASTQC | fail: ➔ DISCARD }</text>
+    <text x="28" y="125" fill="#bae6fd" font-size="6.5">조건부 데이터플로우 분기(Branching) 제어</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 스트림 함수형 조작 (Functional Stream):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">map, filter, flatMap을 통한 비파괴적 데이터 스트림 가공</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 백프레셔(Backpressure) 자동 조절:</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">소비 속도에 맞추어 업스트림 생성 속도를 제어하여 OOM 방지</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 모듈식 재사용 (DSL2 Modules):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">프로세스와 워크플로우를 독립 모듈로 캡슐화 및 재사용</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#b45309" fill-opacity="0.3"/>
+    <text x="155" y="259" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="600">선언적 함수형 합성으로 복잡한 파이프라인 단순화</text>
+  </g>
+
+  <!-- Panel 3: Asynchronous Parallel Process Execution -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad02)" stroke="#c084fc" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#c084fc" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="700">3. 비동기 병렬 프로세스 실행 엔진</text>
+
+    <!-- Execution graphic -->
+    <rect x="15" y="42" width="280" height="96" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+
+    <!-- Process A -->
+    <rect x="22" y="48" width="76" height="36" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text x="60" y="60" text-anchor="middle" fill="#38bdf8" font-size="7" font-weight="700">FASTQC</text>
+    <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/a1/3b4c</text>
+    <text x="60" y="78" text-anchor="middle" fill="#34d399" font-size="6.5">COMPLETED</text>
+
+    <!-- Process B -->
+    <rect x="108" y="48" width="82" height="36" rx="4" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text x="149" y="60" text-anchor="middle" fill="#fbbf24" font-size="7" font-weight="700">STARSOLO</text>
+    <text x="149" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/f2/89de</text>
+    <text x="149" y="78" text-anchor="middle" fill="#fbbf24" font-size="6.5">RUNNING (48 cores)</text>
+
+    <!-- Process C -->
+    <rect x="200" y="48" width="85" height="36" rx="4" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+    <text x="242" y="60" text-anchor="middle" fill="#c084fc" font-size="7" font-weight="700">EMPTYDROPS</text>
+    <text x="242" y="70" text-anchor="middle" fill="#94a3b8" font-size="6">work/7c/11aa</text>
+    <text x="242" y="78" text-anchor="middle" fill="#94a3b8" font-size="6.5">WAITING (Ch input)</text>
+
+    <!-- Dynamic Retry & workdir isolation -->
+    <rect x="22" y="90" width="263" height="42" rx="3" fill="#3b0764" fill-opacity="0.4" stroke="#a855f7" stroke-width="1"/>
+    <text x="30" y="103" fill="#e9d5ff" font-size="7.5" font-weight="700">🔄 동적 실패 복구 (Dynamic Error Strategy):</text>
+    <text x="30" y="114" fill="#c084fc" font-family="monospace" font-size="7">errorStrategy 'retry', maxRetries 3, memory { 16.GB * task.attempt }</text>
+    <text x="30" y="125" fill="#d8b4fe" font-size="6.5">OOM 137 에러 감지 시 메모리 2배 자동 증설 후 재시도</text>
+
+    <!-- Bullets -->
+    <text x="14" y="152" fill="#cbd5e1" font-size="10" font-weight="600">• 작업 디렉토리 완전 격리 (Workdir Sandbox):</text>
+    <text x="24" y="167" fill="#94a3b8" font-size="9">프로세스마다 독립적 고유 해시 디렉토리에서 I/O 실행</text>
+    <text x="14" y="185" fill="#cbd5e1" font-size="10" font-weight="600">• 스마트 캐싱 (-resume):</text>
+    <text x="24" y="200" fill="#94a3b8" font-size="9">입력 파일 해시 + 스크립트 코드 검증으로 기연산 작업 100% 스킵</text>
+    <text x="14" y="218" fill="#cbd5e1" font-size="10" font-weight="600">• 무제한 스케일아웃 (Scale-out):</text>
+    <text x="24" y="233" fill="#94a3b8" font-size="9">로컬 스레드 풀, SLURM 노드, AWS Batch 워커로 투명 확장</text>
+
+    <!-- Badge -->
+    <rect x="14" y="244" width="282" height="22" rx="4" fill="#581c87" fill-opacity="0.4"/>
+    <text x="155" y="259" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="600">자가 치유(Self-Healing) 및 대규모 분산 스케일아웃</text>
+  </g>
+</svg>

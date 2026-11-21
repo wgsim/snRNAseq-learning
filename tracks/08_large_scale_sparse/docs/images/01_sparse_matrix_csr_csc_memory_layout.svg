@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad01" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrEmerald01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrRose01" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">희소 행렬 메모리 레이아웃: COO vs CSR vs CSC 및 CPU 캐시 라인(64B) 적중률 기하학</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">포인터 배열(indptr, indices, data) ➔ 행(세포) vs 열(유전자) 슬라이싱 성능 격차 ➔ L1/L2 캐시 스트리밍</text>
+
+  <!-- Panel 1: COO Format -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad01)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12.5" font-weight="700">1. COO 형식 (Coordinate Format)</text>
+
+    <!-- Schematic: COO 3 Arrays -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#e11d48" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- Row array -->
+      <text x="0" y="14" fill="#94a3b8" font-size="7.5" font-weight="700">row :</text>
+      <rect x="35" y="4" width="26" height="14" rx="2" fill="#1e293b" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="48" y="14" text-anchor="middle" fill="#f43f5e" font-size="7.5">0</text>
+      <rect x="65" y="4" width="26" height="14" rx="2" fill="#1e293b" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="78" y="14" text-anchor="middle" fill="#f43f5e" font-size="7.5">0</text>
+      <rect x="95" y="4" width="26" height="14" rx="2" fill="#1e293b" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="108" y="14" text-anchor="middle" fill="#f43f5e" font-size="7.5">1</text>
+      <rect x="125" y="4" width="26" height="14" rx="2" fill="#1e293b" stroke="#e11d48" stroke-width="0.8"/>
+      <text x="138" y="14" text-anchor="middle" fill="#f43f5e" font-size="7.5">2</text>
+      <text x="165" y="14" fill="#64748b" font-size="7.5">... (NNZ개)</text>
+
+      <!-- Col array -->
+      <text x="0" y="34" fill="#94a3b8" font-size="7.5" font-weight="700">col :</text>
+      <rect x="35" y="24" width="26" height="14" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="48" y="34" text-anchor="middle" fill="#38bdf8" font-size="7.5">1</text>
+      <rect x="65" y="24" width="26" height="14" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="78" y="34" text-anchor="middle" fill="#38bdf8" font-size="7.5">3</text>
+      <rect x="95" y="24" width="26" height="14" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="108" y="34" text-anchor="middle" fill="#38bdf8" font-size="7.5">2</text>
+      <rect x="125" y="24" width="26" height="14" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="138" y="34" text-anchor="middle" fill="#38bdf8" font-size="7.5">0</text>
+      <text x="165" y="34" fill="#64748b" font-size="7.5">... (NNZ개)</text>
+
+      <!-- Data array -->
+      <text x="0" y="54" fill="#94a3b8" font-size="7.5" font-weight="700">data:</text>
+      <rect x="35" y="44" width="26" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="48" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">4.2</text>
+      <rect x="65" y="44" width="26" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="78" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">1.8</text>
+      <rect x="95" y="44" width="26" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="108" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">9.1</text>
+      <rect x="125" y="44" width="26" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="138" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">3.5</text>
+      <text x="165" y="54" fill="#64748b" font-size="7.5">... (NNZ개)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 단순 튜플 저장소 (Triplets):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">(row, col, value) 3개 벡터를 비압축 나열</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 메모리 오버헤드: 3 × NNZ × 8 B</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">행 번호가 반복 저장되어 심각한 메모리 낭비</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• CPU 캐시 라인 미스 (Cache Miss):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">연속 인덱스 부재로 64B 캐시 프리페치 적중률 &lt; 20%</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="9.2" font-weight="600">용도: 10x Genomics 로우 파일 적재 전용 (연산 부적합)</text>
+  </g>
+
+  <!-- Panel 2: CSR Format -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">2. CSR 형식 (행/세포 슬라이싱 최적화)</text>
+
+    <!-- Schematic: CSR Structure -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- indptr array -->
+      <text x="0" y="14" fill="#94a3b8" font-size="7.5" font-weight="700">indptr :</text>
+      <rect x="38" y="4" width="24" height="14" rx="2" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="50" y="14" text-anchor="middle" fill="#38bdf8" font-size="7.5">0</text>
+      <rect x="66" y="4" width="24" height="14" rx="2" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="78" y="14" text-anchor="middle" fill="#38bdf8" font-size="7.5">2</text>
+      <rect x="94" y="4" width="24" height="14" rx="2" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="106" y="14" text-anchor="middle" fill="#38bdf8" font-size="7.5">3</text>
+      <rect x="122" y="4" width="24" height="14" rx="2" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8" stroke-width="0.8"/>
+      <text x="134" y="14" text-anchor="middle" fill="#38bdf8" font-size="7.5">5</text>
+      <text x="155" y="14" fill="#64748b" font-size="7.5">... (M+1)</text>
+
+      <!-- indices array -->
+      <text x="0" y="34" fill="#94a3b8" font-size="7.5" font-weight="700">indices:</text>
+      <rect x="38" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="50" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5">1</text>
+      <rect x="66" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="78" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5">3</text>
+      <rect x="94" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="106" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5">2</text>
+      <rect x="122" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="134" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5">0</text>
+      <rect x="150" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#fbbf24" stroke-width="0.8"/>
+      <text x="162" y="34" text-anchor="middle" fill="#fbbf24" font-size="7.5">3</text>
+
+      <!-- data array -->
+      <text x="0" y="54" fill="#94a3b8" font-size="7.5" font-weight="700">data   :</text>
+      <rect x="38" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="50" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">4.2</text>
+      <rect x="66" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="78" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">1.8</text>
+      <rect x="94" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="106" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">9.1</text>
+      <rect x="122" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="134" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">3.5</text>
+      <rect x="150" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="162" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">7.0</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 압축 포인터: indptr [0, 2, 3, 5, ...]</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">i번째 세포의 0이 아닌 값 범위: indptr[i] ~ indptr[i+1]</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 세포별 슬라이싱: O(1) 포인터 즉시 접근</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">연속 메모리 블록 스트리밍 ➔ 64B 캐시 적중률 &gt; 96%</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 유전자별 슬라이싱 병목 (Catastrophe):</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">단일 유전자 추출 시 M개 모든 행 순회 ➔ 50x 지연!</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">세포 필터링 / 라이브러리 크기 / 세포 간 거리 계산의 제왕</text>
+  </g>
+
+  <!-- Panel 3: CSC Format -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad01)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. CSC 형식 (열/유전자 슬라이싱 최적화)</text>
+
+    <!-- Schematic: CSC Structure -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 48)">
+      <!-- indptr col array -->
+      <text x="0" y="14" fill="#94a3b8" font-size="7.5" font-weight="700">indptr :</text>
+      <rect x="38" y="4" width="24" height="14" rx="2" fill="#059669" fill-opacity="0.4" stroke="#34d399" stroke-width="0.8"/>
+      <text x="50" y="14" text-anchor="middle" fill="#34d399" font-size="7.5">0</text>
+      <rect x="66" y="4" width="24" height="14" rx="2" fill="#059669" fill-opacity="0.4" stroke="#34d399" stroke-width="0.8"/>
+      <text x="78" y="14" text-anchor="middle" fill="#34d399" font-size="7.5">1</text>
+      <rect x="94" y="4" width="24" height="14" rx="2" fill="#059669" fill-opacity="0.4" stroke="#34d399" stroke-width="0.8"/>
+      <text x="106" y="14" text-anchor="middle" fill="#34d399" font-size="7.5">2</text>
+      <rect x="122" y="4" width="24" height="14" rx="2" fill="#059669" fill-opacity="0.4" stroke="#34d399" stroke-width="0.8"/>
+      <text x="134" y="14" text-anchor="middle" fill="#34d399" font-size="7.5">3</text>
+      <text x="155" y="14" fill="#64748b" font-size="7.5">... (N+1)</text>
+
+      <!-- indices row array -->
+      <text x="0" y="34" fill="#94a3b8" font-size="7.5" font-weight="700">indices:</text>
+      <rect x="38" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+      <text x="50" y="34" text-anchor="middle" fill="#c084fc" font-size="7.5">2</text>
+      <rect x="66" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+      <text x="78" y="34" text-anchor="middle" fill="#c084fc" font-size="7.5">0</text>
+      <rect x="94" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+      <text x="106" y="34" text-anchor="middle" fill="#c084fc" font-size="7.5">1</text>
+      <rect x="122" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+      <text x="134" y="34" text-anchor="middle" fill="#c084fc" font-size="7.5">0</text>
+      <rect x="150" y="24" width="24" height="14" rx="2" fill="#1e293b" stroke="#c084fc" stroke-width="0.8"/>
+      <text x="162" y="34" text-anchor="middle" fill="#c084fc" font-size="7.5">2</text>
+
+      <!-- data array -->
+      <text x="0" y="54" fill="#94a3b8" font-size="7.5" font-weight="700">data   :</text>
+      <rect x="38" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="50" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">3.5</text>
+      <rect x="66" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="78" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">4.2</text>
+      <rect x="94" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="106" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">9.1</text>
+      <rect x="122" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="134" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">1.8</text>
+      <rect x="150" y="44" width="24" height="14" rx="2" fill="#1e293b" stroke="#34d399" stroke-width="0.8"/>
+      <text x="162" y="54" text-anchor="middle" fill="#34d399" font-size="7.5">7.0</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 열 압축 포인터: indptr 크기 N + 1</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">j번째 유전자의 발현 벡터를 O(1) 시간에 즉각 슬라이싱</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 고변동성 유전자(HVG) 선별 최적화:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">유전자별 분산/평균 계산 시 연속 메모리 고속 스캔</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 형식 변환 비용: CSR ↔ CSC</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">O(NNZ) 전치 소요 ➔ 파이프라인 단계별 사전 변환 필수</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">유전자별 마커 탐색 / DEG 회귀 분석 / HVG 선별의 핵심</text>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:37443338  # Bravo González-Blas C 2023 Nat Methods: SCENIC+: single-cell multiomic inference of enhancers and gene regulatory networks.  [근거: SCI-01-040; SCI-01-041]
+
+[software]
+SW:scenicplus

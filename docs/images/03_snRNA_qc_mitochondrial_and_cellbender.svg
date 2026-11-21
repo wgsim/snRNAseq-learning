@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 350" width="1000" height="350" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <text x="500" y="32" text-anchor="middle" fill="#38bdf8" font-size="19" font-weight="700">종양 snRNA-seq 특화 QC: 미토콘드리아 기준 &amp; Ambient RNA 메커니즘</text>
+
+  <!-- Panel 1: Mito QC -->
+  <g transform="translate(50, 60)">
+    <rect width="420" height="260" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <text x="20" y="30" fill="#38bdf8" font-size="15" font-weight="700">1. 미토콘드리아 비율(Mito%) 인지 전환</text>
+    
+    <!-- scRNA box -->
+    <rect x="20" y="55" width="380" height="85" rx="6" fill="#0f172a"/>
+    <text x="35" y="78" fill="#e2e8f0" font-size="12" font-weight="700">• 단일 세포 (scRNA-seq):</text>
+    <text x="45" y="98" fill="#94a3b8" font-size="11">세포막 파열 시 세포질 탈출 ➔ 미토콘드리아 잔류 (사멸 지표)</text>
+    <text x="45" y="118" fill="#fbbf24" font-size="11" font-weight="600">허용 임계치: 5% ~ 20% 이하 (암 조직 허용 범위 넓음)</text>
+    
+    <!-- snRNA box -->
+    <rect x="20" y="155" width="380" height="90" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="35" y="178" fill="#10b981" font-size="12" font-weight="700">• 단일 핵 (snRNA-seq):</text>
+    <text x="45" y="198" fill="#94a3b8" font-size="11">미토콘드리아는 세포질 소기관 ➔ 순수 핵에는 없어야 정상!</text>
+    <text x="45" y="218" fill="#f43f5e" font-size="11" font-weight="600">엄격한 임계치: 1.0% ~ 2.0% 미만 (초과 시 세포질 오염 탈락)</text>
+  </g>
+
+  <!-- Panel 2: Ambient RNA & CellBender -->
+  <g transform="translate(520, 60)">
+    <rect width="430" height="260" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <text x="20" y="30" fill="#38bdf8" font-size="15" font-weight="700">2. Ambient RNA 오염과 CellBender VAE 분해</text>
+    
+    <text x="20" y="60" fill="#cbd5e1" font-size="12">• 전립선 분비성 단백질 전사체: <tspan fill="#f43f5e" font-weight="700">KLK3(PSA), ACPP, MSMB</tspan></text>
+    <text x="20" y="80" fill="#94a3b8" font-size="11">조직 균질화 시 액체 버퍼(Soup) 전체로 초고농도 누출</text>
+
+    <!-- Formula Box -->
+    <rect x="20" y="100" width="390" height="50" rx="6" fill="#0f172a" stroke="#0284c7"/>
+    <text x="35" y="122" fill="#38bdf8" font-size="11" font-family="monospace">Observed Count = True_Nucleus(λ) + Droplet_Soup(ρ·μ)</text>
+    <text x="35" y="140" fill="#94a3b8" font-size="10">CellBender VAE가 액적별 배경 오염(ρ·μ)을 정밀 감산 추정</text>
+
+    <text x="20" y="175" fill="#cbd5e1" font-size="12">• 미보정 방치 시:</text>
+    <text x="35" y="193" fill="#f43f5e" font-size="11">T세포, 대식세포, CAF가 KLK3·AR을 발현하는 가짜 잡종세포 출현</text>
+    
+    <text x="20" y="218" fill="#10b981" font-size="12">• CellBender 보정 후:</text>
+    <text x="35" y="236" fill="#34d399" font-size="11">면역/기질세포의 배경 신호 소멸 ➔ 순수 종양 상피세포만 KLK3 보존</text>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+[cited]
+PMID:29909985  # "Viswanathan 2018", L135,L143,L184  [Viswanathan SR 2018 Cell]
+
+[evidence]
+PMID:30078726  # Pliner HA 2018 Mol Cell: Cicero Predicts cis-Regulatory DNA Interactions from Single-Cell Chromatin Accessibility Data.  [근거: SCI-01-029]
+
+[software]
+SW:muon
+SW:numpy
+SW:pandas
+SW:scipy
+SW:statsmodels

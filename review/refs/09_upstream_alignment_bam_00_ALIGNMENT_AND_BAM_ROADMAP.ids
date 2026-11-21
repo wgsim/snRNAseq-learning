@@ -1,0 +1,15 @@
+[cited]
+# (본문에 저자·연도·데이터셋으로 이름을 밝힌 연구 없음)
+
+[evidence]
+PMID:19117982  # Hu R 2009 Cancer Res: Ligand-independent androgen receptor variants derived from splicing of cryptic exons signify ho  [근거: SCI-09-003; SCI-09-007]
+PMID:21612468  # de Bono JS 2011 N Engl J Med: Abiraterone and increased survival in metastatic prostate cancer.  [근거: SCI-09-004; ledger L94]
+PMID:35354805  # Hong R 2022 Nat Commun: Comprehensive generation, visualization, and reporting of quality control metrics for single-ce  [근거: SCI-09-001; ledger L138]
+PMID:38671451  # Curion F 2024 Genome Biol: hadge: a comprehensive pipeline for donor deconvolution in single-cell studies.  [근거: SCI-09-001]
+
+[software]
+SW:alevin-fry
+SW:samtools
+SW:star
+SW:salmon
+SW:umi-tools

@@ -1,0 +1,8 @@
+[cited]
+PMID:36163550  # "Gao et al. 2023 (Numbat)", L140,L163  [Gao T 2023 Nat Biotechnol]
+
+[evidence]
+PMID:36376909  # Kaufmann TL 2022 Genome Biol: MEDICC2: whole-genome doubling aware copy-number phylogenies for cancer evolution.  [근거: SCI-04-026]
+
+[software]
+SW:pandas

@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" style="background:#0f172a; border-radius:12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad06" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arrCyan06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrEmerald06" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="500" y="28" text-anchor="middle" fill="#38bdf8" font-size="16.5" font-weight="700">조성 데이터(CoDa) 심플렉스 제약 &amp; scCODA 베이지안 회귀 분석</text>
+  <text x="500" y="47" text-anchor="middle" fill="#94a3b8" font-size="11.5">합 = 1 심플렉스 제약의 허위 음의 상관관계 ➔ 중심 로그비(CLR) 유클리드 투영 ➔ 희소 디리클레-다항 회귀</text>
+
+  <!-- Panel 1: The Simplex Constraint & Spurious Depletion -->
+  <g transform="translate(20, 65)">
+    <rect width="300" height="275" rx="10" fill="url(#cardGrad06)" stroke="#f43f5e" stroke-width="1.4"/>
+    <rect x="0" y="0" width="300" height="32" rx="10" fill="#f43f5e" fill-opacity="0.16"/>
+    <text x="150" y="21" text-anchor="middle" fill="#f43f5e" font-size="12.5" font-weight="700">1. 심플렉스 제약과 허위 감소 참사</text>
+
+    <!-- Schematic: Proportional Stacked Bars Collapse -->
+    <rect x="15" y="42" width="270" height="74" rx="6" fill="#0f172a" stroke="#e11d48" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Baseline Patient A -->
+      <rect x="20" y="8" width="35" height="24" fill="#38bdf8"/>
+      <rect x="20" y="32" width="35" height="24" fill="#fbbf24"/>
+      <text x="37" y="22" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">50% T</text>
+      <text x="37" y="46" text-anchor="middle" fill="#0f172a" font-size="6" font-weight="700">50% M</text>
+      <text x="37" y="65" text-anchor="middle" fill="#94a3b8" font-size="6">Patient A (100 T, 100 M)</text>
+
+      <!-- Arrow -->
+      <path d="M 68 32 L 95 32" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arrCyan06)"/>
+      <text x="82" y="24" text-anchor="middle" fill="#f43f5e" font-size="6.5">+900 T!</text>
+
+      <!-- Patient B (T expanded 10x, M unchanged at 100) -->
+      <rect x="110" y="8" width="35" height="42" fill="#38bdf8"/>
+      <rect x="110" y="50" width="35" height="6" fill="#fbbf24"/>
+      <text x="127" y="28" text-anchor="middle" fill="#0f172a" font-size="6.5" font-weight="700">91% T</text>
+      <text x="127" y="55" text-anchor="middle" fill="#0f172a" font-size="5" font-weight="700">9%</text>
+      <text x="127" y="65" text-anchor="middle" fill="#f43f5e" font-size="6">M depleted?! (False!)</text>
+
+      <!-- Warning text -->
+      <text x="185" y="25" fill="#f43f5e" font-size="7" font-weight="700">Σ p_k = 1</text>
+      <text x="185" y="37" fill="#cbd5e1" font-size="6">스퓨리어스 음의 상관</text>
+      <text x="185" y="47" fill="#fbbf24" font-size="6">t-test 시 위양성</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 심플렉스 닫힘 제약 (Closure Constraint):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">S^D = { p ∈ R^D : p_k &gt; 0, Σ_{k=1}^D p_k = 1 } (자유도 D-1)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 허위 음의 상관관계 (Spurious Correlation):</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">한 세포형의 진정한 팽창이 다른 무변화 세포형의 비율 급감 초래</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 원시 비율(Percentage) 검정의 위험성:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">t-test나 ANOVA를 비율에 직접 적용 시 수많은 가짜 감소 세포 식별</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="272" height="22" rx="4" fill="#e11d48" fill-opacity="0.22"/>
+    <text x="150" y="257" text-anchor="middle" fill="#f43f5e" font-size="9.2" font-weight="600">세포 비율의 독립성 가정을 전제하는 표준 통계학의 완전한 붕괴</text>
+  </g>
+
+  <!-- Panel 2: Aitchison Geometry & CLR Projection -->
+  <g transform="translate(340, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#38bdf8" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#38bdf8" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#38bdf8" font-size="12.5" font-weight="700">2. 아치슨 기하학과 중심 로그비(CLR)</text>
+
+    <!-- Schematic: Simplex to Euclidean Plane Projection -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Ternary Simplex Triangle -->
+      <polygon points="40,55 75,12 110,55" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+      <circle cx="75" cy="38" r="3" fill="#f43f5e"/>
+      <text x="75" y="8" text-anchor="middle" fill="#fbbf24" font-size="6">S³ Simplex</text>
+
+      <!-- Projection Arrow -->
+      <line x1="125" y1="34" x2="155" y2="34" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrCyan06)"/>
+      <text x="140" y="26" text-anchor="middle" fill="#38bdf8" font-size="6.5">CLR / ilr</text>
+
+      <!-- Euclidean 2D Plane -->
+      <rect x="170" y="10" width="85" height="46" rx="3" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+      <line x1="175" y1="33" x2="250" y2="33" stroke="#475569" stroke-width="0.8"/>
+      <line x1="212" y1="12" x2="212" y2="53" stroke="#475569" stroke-width="0.8"/>
+      <circle cx="230" cy="22" r="3" fill="#34d399"/>
+      <text x="212" y="62" text-anchor="middle" fill="#34d399" font-size="6">R^(D-1) Euclidean Space</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 중심 로그비 공식 (Centered Log-Ratio):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">CLR(p) = [ log(p_1 / g(p)), ..., log(p_D / g(p)) ], g(p) = (Π p_k)^(1/D)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 아치슨 기하학(Aitchison Geometry)의 해방:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">심플렉스 곡면을 유클리드 무제약 공간 R^(D-1)으로 선형 사상</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 참조 세포형(Reference Cell Type) 선택:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">안정적 기저 세포형(예: 섬유아세포)을 분모로 설정하여 왜곡 해소</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#0284c7" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#38bdf8" font-size="9.2" font-weight="600">조성 데이터를 위한 유일한 수학적으로 엄밀한 변환 프레임워크</text>
+  </g>
+
+  <!-- Panel 3: scCODA Sparse Bayesian Regression -->
+  <g transform="translate(670, 65)">
+    <rect width="310" height="275" rx="10" fill="url(#cardGrad06)" stroke="#34d399" stroke-width="1.4"/>
+    <rect x="0" y="0" width="310" height="32" rx="10" fill="#34d399" fill-opacity="0.16"/>
+    <text x="155" y="21" text-anchor="middle" fill="#34d399" font-size="12.5" font-weight="700">3. scCODA 희소 베이지안 회귀 분석</text>
+
+    <!-- Schematic: Forest plot of scCODA effects -->
+    <rect x="15" y="42" width="280" height="74" rx="6" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+    <g transform="translate(25, 46)">
+      <!-- Zero effect axis -->
+      <line x1="140" y1="8" x2="140" y2="58" stroke="#475569" stroke-width="1"/>
+      <text x="140" y="65" text-anchor="middle" fill="#64748b" font-size="6">Effect β = 0</text>
+
+      <!-- Cell Type 1: CD8 Exhausted (True Expansion, Credible) -->
+      <text x="20" y="18" fill="#f43f5e" font-size="6.5" font-weight="700">CD8 Exhausted</text>
+      <line x1="170" y1="16" x2="230" y2="16" stroke="#f43f5e" stroke-width="1.5"/>
+      <circle cx="200" cy="16" r="3.5" fill="#f43f5e"/>
+      <text x="235" y="19" fill="#f43f5e" font-size="6" font-weight="700">Credible (+)</text>
+
+      <!-- Cell Type 2: CD8 Effector (Shrunk to 0 by spike prior) -->
+      <text x="20" y="32" fill="#94a3b8" font-size="6.5">CD8 Effector</text>
+      <circle cx="140" cy="30" r="3" fill="#94a3b8"/>
+      <text x="150" y="33" fill="#94a3b8" font-size="6">β = 0 (Shrunk)</text>
+
+      <!-- Cell Type 3: Macrophages (Unchanged, Shrunk to 0) -->
+      <text x="20" y="46" fill="#34d399" font-size="6.5">Macrophage</text>
+      <circle cx="140" cy="44" r="3" fill="#34d399"/>
+      <text x="150" y="47" fill="#34d399" font-size="6">β = 0 (Ref/Invariant)</text>
+    </g>
+
+    <!-- Bullets -->
+    <text x="14" y="132" fill="#cbd5e1" font-size="10.5" font-weight="600">• 디리클레-다항 분포 (Dirichlet-Multinomial):</text>
+    <text x="24" y="148" fill="#94a3b8" font-size="9.5">Y_d ~ Multinomial(N_d, π_d), π_d ~ Dirichlet(α_d)</text>
+
+    <text x="14" y="168" fill="#cbd5e1" font-size="10.5" font-weight="600">• 스파이크 앤 슬랩(Spike-and-Slab) 희소 사전분포:</text>
+    <text x="24" y="184" fill="#94a3b8" font-size="9.5">유의하지 않은 미세 변화를 사후 확률적으로 정확히 0으로 수축</text>
+
+    <text x="14" y="204" fill="#cbd5e1" font-size="10.5" font-weight="600">• 최적 참조 세포형 자동 탐색:</text>
+    <text x="24" y="220" fill="#94a3b8" font-size="9.5">환자 간 변동성이 가장 낮은 불변 세포형을 기준선으로 확정</text>
+
+    <!-- Badge -->
+    <rect x="14" y="242" width="282" height="22" rx="4" fill="#059669" fill-opacity="0.22"/>
+    <text x="155" y="257" text-anchor="middle" fill="#34d399" font-size="9.2" font-weight="600">소표본(N=5~10) 코호트에서 조성 변화를 규명하는 궁극의 베이지안 해법</text>
+  </g>
+</svg>

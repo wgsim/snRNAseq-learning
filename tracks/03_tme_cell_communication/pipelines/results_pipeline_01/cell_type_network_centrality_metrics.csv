@@ -1,0 +1,9 @@
+cell_type,out_degree_sender,in_degree_receiver,betweenness_mediator,pagerank_influencer,role_archetype
+TAM_M2,9.3096,6.4376,0.14286,0.14361,Balanced Communicator
+myCAF,11.5168,3.7564,0.11905,0.12696,Dominant Sender (Signal Source)
+Luminal_AR_Pos,6.3525,3.0665,0.02381,0.11594,Dominant Sender (Signal Source)
+Osteoblast,2.8124,4.6814,0.04762,0.1185,Dominant Receiver (Signal Target)
+Endothelial,0.0,7.3383,0.0,0.15266,Dominant Receiver (Signal Target)
+t_NEPC,5.5596,0.94,0.0,0.07563,Dominant Sender (Signal Source)
+CD8_T,0.0,5.6018,0.0,0.13184,Dominant Receiver (Signal Target)
+Osteoclast,0.0,3.7288,0.0,0.13485,Dominant Receiver (Signal Target)
